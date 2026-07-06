@@ -51,7 +51,7 @@
 </head>
 <body>
 
-    <!-- Navigation -->
+    
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 border-b border-gray-100">
@@ -84,7 +84,7 @@
         </div>
     </nav>
 
-    <!-- Breadcrumb & Header -->
+    
     <section class="pt-28 pb-6 bg-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="flex items-center gap-2 text-sm text-gray-400 mb-4 flex-wrap">
@@ -105,18 +105,17 @@
         </div>
     </section>
 
-    <!-- Subcategories -->
+   
     <section class="bg-white pb-4" id="subcatsSection" style="display:none">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div id="subcatsList" class="flex flex-wrap gap-2"></div>
         </div>
     </section>
 
-    <!-- Filters -->
+  
     <section class="bg-white border-b border-gray-100 sticky top-16 z-40">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
             <div class="flex flex-col gap-4">
-                <!-- Top row: search + sort -->
                 <div class="flex flex-col md:flex-row md:items-center gap-4">
                     <div class="relative flex-1 max-w-md">
                         <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
@@ -129,25 +128,21 @@
                         <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="brand">По бренду</button>
                     </div>
                 </div>
-                <!-- Attribute filters row -->
+               
                 <div id="attrFilters" class="flex flex-wrap gap-3"></div>
             </div>
         </div>
     </section>
 
-    <!-- Products Grid -->
     <section class="py-10 bg-gray-50 min-h-[60vh]">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <!-- Loading skeleton -->
             <div id="loadingSkeleton" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
                 <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
                 <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
                 <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
             </div>
-            <!-- Products grid -->
             <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 hidden"></div>
-            <!-- Empty state -->
             <div id="emptyState" class="hidden text-center py-20">
                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i data-lucide="search-x" class="w-8 h-8 text-gray-300"></i>
@@ -155,7 +150,6 @@
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Товары не найдены</h3>
                 <p class="text-gray-500 text-sm">Попробуйте изменить фильтры или поисковый запрос</p>
             </div>
-            <!-- Pagination -->
             <div id="pagination" class="hidden mt-10 flex items-center justify-center gap-2">
                 <button id="prevPage" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary-500 hover:text-primary-600 transition-colors disabled:opacity-40 disabled:pointer-events-none">
                     <i data-lucide="chevron-left" class="w-4 h-4 inline"></i> Назад
@@ -167,8 +161,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -201,16 +193,11 @@
             </div>
         </div>
     </footer>
-
-    <script>
+      <script>
         lucide.createIcons();
 
         const API = 'https://osuz.uz/api/catalog';
         const IMG_BASE = 'https://osuz.uz';
-
-        // ========================
-        // State
-        // ========================
         let allCategories = [];
         let currentCategory = null;
         let parentCategory = null;
@@ -221,21 +208,12 @@
         let searchQuery = '';
         let sortMode = '';
         let searchTimeout = null;
-
-        // ========================
-        // URL params
-        // ========================
         const params = new URLSearchParams(window.location.search);
         const categoryId = params.get('id');
         const categoryName = params.get('name');
-
         if (!categoryId && !categoryName) {
             window.location.href = 'index.html#catalog';
         }
-
-        // ========================
-        // API helpers
-        // ========================
         async function apiFetch(path, query = {}) {
             const qs = new URLSearchParams(query).toString();
             const url = API + path + (qs ? '?' + qs : '');
@@ -243,10 +221,6 @@
             if (!res.ok) throw new Error(`API ${res.status}: ${url}`);
             return res.json();
         }
-
-        // ========================
-        // Init
-        // ========================
         async function init() {
             try {
                 allCategories = await apiFetch('/categories');
@@ -268,13 +242,13 @@
                 return;
             }
 
-            // Update page
+            
             const catName = currentCategory.names?.ru || categoryName || '';
             document.title = catName + ' — OSUZ';
             document.getElementById('categoryTitle').textContent = catName;
             document.getElementById('breadcrumbCategory').textContent = catName;
 
-            // Build tree info
+           
             if (currentCategory.parent_id) {
                 parentCategory = allCategories.find(c => c.id === currentCategory.parent_id);
                 if (parentCategory) {
@@ -296,13 +270,9 @@
                 ).join('');
             }
 
-            // Load attributes & products
+           
             await Promise.all([loadAttributes(), loadProducts()]);
         }
-
-        // ========================
-        // Attributes (filters)
-        // ========================
         async function loadAttributes() {
             if (!currentCategory) return;
             try {
@@ -356,10 +326,6 @@
                 }
             });
         }
-
-        // ========================
-        // Products
-        // ========================
         async function loadProducts() {
             const grid = document.getElementById('productsGrid');
             const skeleton = document.getElementById('loadingSkeleton');
@@ -393,7 +359,6 @@
 
                 document.getElementById('productCount').textContent = `Найдено: ${data.total} товаров`;
 
-                // Client-side sort
                 let sorted = items;
                 if (sortMode === 'name') {
                     sorted = [...items].sort((a, b) => (a.name_ru || '').localeCompare(b.name_ru || ''));
@@ -432,8 +397,6 @@
                 });
 
                 grid.classList.remove('hidden');
-
-                // Pagination
                 if (totalPages > 1) {
                     pag.classList.remove('hidden');
                     document.getElementById('pageInfo').textContent = `${currentPage} / ${totalPages}`;
@@ -449,10 +412,6 @@
                 document.getElementById('productCount').textContent = 'Ошибка загрузки';
             }
         }
-
-        // ========================
-        // Events
-        // ========================
         document.getElementById('searchInput').addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {

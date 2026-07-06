@@ -46,9 +46,7 @@
     </style>
 </head>
 <body>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+ <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 border-b border-gray-100">
                 <a href="index.html" class="flex items-center gap-3">
@@ -78,10 +76,7 @@
             </div>
         </div>
     </nav>
-
-    <!-- Main Content -->
     <main class="pt-28 pb-16">
-        <!-- Breadcrumb -->
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-6">
             <div class="flex items-center gap-2 text-sm text-gray-400 flex-wrap">
                 <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
@@ -93,8 +88,6 @@
                 <span id="crumbProduct" class="text-gray-900 font-medium max-w-[200px] truncate"></span>
             </div>
         </div>
-
-        <!-- Loading skeleton -->
         <div id="loadingSkeleton" class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-10">
                 <div class="bg-white rounded-2xl p-8"><div class="w-full h-80 skeleton"></div></div>
@@ -107,11 +100,9 @@
                 </div>
             </div>
         </div>
-
-        <!-- Product content (hidden until loaded) -->
         <div id="productContent" class="max-w-[1400px] mx-auto px-6 lg:px-8 hidden">
             <div class="grid lg:grid-cols-2 gap-10">
-                <!-- Left: Image -->
+             
                 <div class="bg-white rounded-2xl p-6 lg:p-8 flex items-center justify-center">
                     <div id="productImageWrap" class="w-full h-80 flex items-center justify-center cursor-zoom-in">
                         <div id="productImagePlaceholder" class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center">
@@ -120,8 +111,6 @@
                         <img id="productImage" class="max-h-80 max-w-full object-contain hidden" alt="">
                     </div>
                 </div>
-
-                <!-- Right: Info -->
                 <div>
                     <div class="bg-white rounded-2xl p-6 lg:p-8">
                         <div class="text-xs text-primary-600 font-semibold mb-2" id="pBrand"></div>
@@ -139,46 +128,34 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Specification -->
                     <div class="bg-white rounded-2xl p-6 lg:p-8 mt-4" id="specSection">
                         <h3 class="font-bold text-gray-900 mb-3">Описание</h3>
                         <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line" id="pSpec"></p>
                     </div>
                 </div>
             </div>
-
-            <!-- Tabs: Attributes / Analogs / Complements -->
             <div class="mt-10">
                 <div class="flex gap-6 border-b border-gray-200 mb-6">
                     <button class="tab-btn tab-active pb-3 text-sm font-semibold text-gray-500 transition-colors" data-tab="attrs">Характеристики</button>
                     <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="analogs">Аналоги</button>
                     <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="complements">Дополняющие</button>
                 </div>
-
-                <!-- Attributes tab -->
                 <div id="tab-attrs" class="tab-content">
                     <div class="bg-white rounded-2xl overflow-hidden">
                         <div id="attrsTable"></div>
                         <div id="attrsEmpty" class="hidden text-center py-10 text-gray-400 text-sm">Характеристики не указаны</div>
                     </div>
                 </div>
-
-                <!-- Analogs tab -->
                 <div id="tab-analogs" class="tab-content hidden">
                     <div id="analogsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
                     <div id="analogsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Аналоги не найдены</div>
                 </div>
-
-                <!-- Complements tab -->
                 <div id="tab-complements" class="tab-content hidden">
                     <div id="complementsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
                     <div id="complementsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Дополняющие товары не найдены</div>
                 </div>
             </div>
         </div>
-
-        <!-- Error state -->
         <div id="errorState" class="hidden text-center py-20">
             <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i data-lucide="alert-circle" class="w-8 h-8 text-red-300"></i>
@@ -188,8 +165,6 @@
             <a href="index.html#catalog" class="text-primary-600 hover:text-primary-700 font-medium text-sm">← Вернуться в каталог</a>
         </div>
     </main>
-
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -222,18 +197,14 @@
             </div>
         </div>
     </footer>
-
-    <!-- Lightbox -->
     <div id="lightbox" class="lightbox">
         <img id="lightboxImg" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" alt="">
     </div>
 
     <script>
         lucide.createIcons();
-
         const API = 'https://osuz.uz/api/catalog';
         const IMG_BASE = 'https://osuz.uz';
-
         const params = new URLSearchParams(window.location.search);
         const productId = params.get('id');
 
@@ -274,16 +245,16 @@
             const p = productData;
             document.title = (p.name_ru || 'Товар') + ' — OSUZ';
 
-            // Breadcrumb
+           
             document.getElementById('crumbCategory').textContent = p.category_name || '';
             document.getElementById('crumbCategory').href = p.category_id ? `category.html?id=${p.category_id}` : '#';
             document.getElementById('crumbProduct').textContent = p.name_ru || '';
 
-            // Brand & name
+           
             document.getElementById('pBrand').textContent = p.brand || '';
             document.getElementById('pName').textContent = p.name_ru || '';
 
-            // Order code
+            
             const orderEl = document.getElementById('pOrderCode');
             if (p.order_code) {
                 orderEl.textContent = `Артикул: ${p.order_code}`;
@@ -291,7 +262,7 @@
                 orderEl.style.display = 'none';
             }
 
-            // Barcode
+          
             const barcodeEl = document.getElementById('pBarcode');
             if (p.barcode) {
                 barcodeEl.textContent = `Штрихкод: ${p.barcode}`;
@@ -299,7 +270,6 @@
                 barcodeEl.style.display = 'none';
             }
 
-            // Series
             const seriesEl = document.getElementById('pSeries');
             if (p.series) {
                 seriesEl.innerHTML = `<span class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">Серия: ${p.series}</span>`;
@@ -307,7 +277,7 @@
                 seriesEl.style.display = 'none';
             }
 
-            // Photo
+            
             if (p.photo_url) {
                 const img = document.getElementById('productImage');
                 img.src = IMG_BASE + p.photo_url;
@@ -323,7 +293,7 @@
                 document.getElementById('productImageLetter').textContent = (p.brand || '?').charAt(0).toUpperCase();
             }
 
-            // Datasheet
+          
             if (p.datasheet_url) {
                 const link = document.getElementById('pDatasheetLink');
                 link.href = IMG_BASE + p.datasheet_url;
@@ -332,7 +302,7 @@
                 link.classList.add('flex');
             }
 
-            // Specification
+           
             const specSection = document.getElementById('specSection');
             const specEl = document.getElementById('pSpec');
             if (p.specification) {
@@ -344,7 +314,6 @@
             lucide.createIcons();
         }
 
-        // Attributes
         async function loadAttributes() {
             if (!productData || !productData.category_id) return;
 
@@ -381,8 +350,6 @@
                 </div>`;
             }).join('');
         }
-
-        // Analogs
         async function loadAnalogs() {
             const grid = document.getElementById('analogsGrid');
             const empty = document.getElementById('analogsEmpty');
@@ -397,8 +364,6 @@
                 empty.classList.remove('hidden');
             }
         }
-
-        // Complements
         async function loadComplements() {
             const grid = document.getElementById('complementsGrid');
             const empty = document.getElementById('complementsEmpty');
@@ -438,8 +403,6 @@
             requestAnimationFrame(() => card.classList.add('visible'));
             return card;
         }
-
-        // Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => {
@@ -452,8 +415,6 @@
                 document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
             });
         });
-
-        // Lightbox
         document.getElementById('lightbox').addEventListener('click', () => {
             document.getElementById('lightbox').classList.remove('active');
         });
