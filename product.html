@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар — OSUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa', 100: '#b2ebf2', 200: '#80deea', 300: '#4dd0e1',
+                            400: '#26c6da', 500: '#00bcd4', 600: '#00acc1', 700: '#0097a7',
+                            800: '#00838f', 900: '#006064',
+                        },
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f9fafb; color: #111827; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
+        .nav-link { position: relative; transition: color 0.2s; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
+        .nav-link:hover { color: #0097a7; }
+        .nav-link:hover::after { width: 100%; }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
+        .gradient-text { background: linear-gradient(135deg, #00bcd4, #0097a7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .tab-active { color: #0097a7; border-bottom: 2px solid #00bcd4; }
+        .fade-in { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .lightbox { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; cursor: zoom-out; }
+        .lightbox.active { display: flex; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 border-b border-gray-100">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
+                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
+                </a>
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <a href="javascript:history.back()" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>Назад</span>
+                    </a>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <a href="#" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span>Войти</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center h-12 gap-8">
+                <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
+                <a href="index.html#catalog" class="nav-link text-sm font-medium text-gray-600">Категории</a>
+                <a href="#" class="nav-link text-sm font-medium text-gray-600">Решения</a>
+                <a href="#" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-16">
+        <!-- Breadcrumb -->
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-6">
+            <div class="flex items-center gap-2 text-sm text-gray-400 flex-wrap">
+                <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">Каталог</a>
+                <i data-lucide="chevron-right" class="w-3 h-3" id="crumbSep2"></i>
+                <a href="#" id="crumbCategory" class="hover:text-primary-600 transition-colors"></a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <span id="crumbProduct" class="text-gray-900 font-medium max-w-[200px] truncate"></span>
+            </div>
+        </div>
+
+        <!-- Loading skeleton -->
+        <div id="loadingSkeleton" class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-10">
+                <div class="bg-white rounded-2xl p-8"><div class="w-full h-80 skeleton"></div></div>
+                <div class="bg-white rounded-2xl p-8">
+                    <div class="h-4 skeleton w-20 mb-3"></div>
+                    <div class="h-8 skeleton w-3/4 mb-4"></div>
+                    <div class="h-4 skeleton w-1/2 mb-6"></div>
+                    <div class="h-10 skeleton w-40 mb-4"></div>
+                    <div class="h-20 skeleton w-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product content (hidden until loaded) -->
+        <div id="productContent" class="max-w-[1400px] mx-auto px-6 lg:px-8 hidden">
+            <div class="grid lg:grid-cols-2 gap-10">
+                <!-- Left: Image -->
+                <div class="bg-white rounded-2xl p-6 lg:p-8 flex items-center justify-center">
+                    <div id="productImageWrap" class="w-full h-80 flex items-center justify-center cursor-zoom-in">
+                        <div id="productImagePlaceholder" class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center">
+                            <span id="productImageLetter" class="text-3xl font-bold text-gray-300"></span>
+                        </div>
+                        <img id="productImage" class="max-h-80 max-w-full object-contain hidden" alt="">
+                    </div>
+                </div>
+
+                <!-- Right: Info -->
+                <div>
+                    <div class="bg-white rounded-2xl p-6 lg:p-8">
+                        <div class="text-xs text-primary-600 font-semibold mb-2" id="pBrand"></div>
+                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2" id="pName"></h1>
+                        <p class="text-sm text-gray-400 mb-1" id="pOrderCode"></p>
+                        <p class="text-sm text-gray-400 mb-4" id="pBarcode"></p>
+                        <div class="flex items-center gap-3 mb-6" id="pSeries"></div>
+
+                        <div class="flex gap-3 mb-6">
+                            <a href="#" id="pDatasheetLink" class="hidden items-center gap-2 px-5 py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg transition-all text-sm">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Даташит
+                            </a>
+                            <button class="flex items-center gap-2 px-5 py-3 border-2 border-gray-200 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-medium rounded-lg transition-all text-sm">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Запросить цену
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Specification -->
+                    <div class="bg-white rounded-2xl p-6 lg:p-8 mt-4" id="specSection">
+                        <h3 class="font-bold text-gray-900 mb-3">Описание</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line" id="pSpec"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs: Attributes / Analogs / Complements -->
+            <div class="mt-10">
+                <div class="flex gap-6 border-b border-gray-200 mb-6">
+                    <button class="tab-btn tab-active pb-3 text-sm font-semibold text-gray-500 transition-colors" data-tab="attrs">Характеристики</button>
+                    <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="analogs">Аналоги</button>
+                    <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="complements">Дополняющие</button>
+                </div>
+
+                <!-- Attributes tab -->
+                <div id="tab-attrs" class="tab-content">
+                    <div class="bg-white rounded-2xl overflow-hidden">
+                        <div id="attrsTable"></div>
+                        <div id="attrsEmpty" class="hidden text-center py-10 text-gray-400 text-sm">Характеристики не указаны</div>
+                    </div>
+                </div>
+
+                <!-- Analogs tab -->
+                <div id="tab-analogs" class="tab-content hidden">
+                    <div id="analogsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+                    <div id="analogsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Аналоги не найдены</div>
+                </div>
+
+                <!-- Complements tab -->
+                <div id="tab-complements" class="tab-content hidden">
+                    <div id="complementsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+                    <div id="complementsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Дополняющие товары не найдены</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="errorState" class="hidden text-center py-20">
+            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="alert-circle" class="w-8 h-8 text-red-300"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Товар не найден</h3>
+            <p class="text-gray-500 text-sm mb-4">Возможно, товар был удалён или не опубликован</p>
+            <a href="index.html#catalog" class="text-primary-600 hover:text-primary-700 font-medium text-sm">← Вернуться в каталог</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
+                        <span class="text-xl font-black tracking-wider">OSUZ</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Компания</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Контакты</h4>
+                    <ul class="space-y-2">
+                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
+                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
+                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-10 pt-6 text-center">
+                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <img id="lightboxImg" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" alt="">
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const API = 'https://osuz.uz/api/catalog';
+        const IMG_BASE = 'https://osuz.uz';
+
+        const params = new URLSearchParams(window.location.search);
+        const productId = params.get('id');
+
+        if (!productId) { window.location.href = 'index.html#catalog'; }
+
+        let productData = null;
+        let categoriesCache = [];
+
+        async function apiFetch(path) {
+            const res = await fetch(API + path);
+            if (!res.ok) throw new Error(`API ${res.status}`);
+            return res.json();
+        }
+
+        async function init() {
+            try {
+                categoriesCache = await apiFetch('/categories');
+            } catch (e) { categoriesCache = []; }
+
+            try {
+                productData = await apiFetch(`/products/${productId}`);
+            } catch (e) {
+                document.getElementById('loadingSkeleton').classList.add('hidden');
+                document.getElementById('errorState').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('loadingSkeleton').classList.add('hidden');
+            document.getElementById('productContent').classList.remove('hidden');
+
+            renderProduct();
+            loadAttributes();
+            loadAnalogs();
+            loadComplements();
+        }
+
+        function renderProduct() {
+            const p = productData;
+            document.title = (p.name_ru || 'Товар') + ' — OSUZ';
+
+            // Breadcrumb
+            document.getElementById('crumbCategory').textContent = p.category_name || '';
+            document.getElementById('crumbCategory').href = p.category_id ? `category.html?id=${p.category_id}` : '#';
+            document.getElementById('crumbProduct').textContent = p.name_ru || '';
+
+            // Brand & name
+            document.getElementById('pBrand').textContent = p.brand || '';
+            document.getElementById('pName').textContent = p.name_ru || '';
+
+            // Order code
+            const orderEl = document.getElementById('pOrderCode');
+            if (p.order_code) {
+                orderEl.textContent = `Артикул: ${p.order_code}`;
+            } else {
+                orderEl.style.display = 'none';
+            }
+
+            // Barcode
+            const barcodeEl = document.getElementById('pBarcode');
+            if (p.barcode) {
+                barcodeEl.textContent = `Штрихкод: ${p.barcode}`;
+            } else {
+                barcodeEl.style.display = 'none';
+            }
+
+            // Series
+            const seriesEl = document.getElementById('pSeries');
+            if (p.series) {
+                seriesEl.innerHTML = `<span class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">Серия: ${p.series}</span>`;
+            } else {
+                seriesEl.style.display = 'none';
+            }
+
+            // Photo
+            if (p.photo_url) {
+                const img = document.getElementById('productImage');
+                img.src = IMG_BASE + p.photo_url;
+                img.alt = p.name_ru || '';
+                img.classList.remove('hidden');
+                document.getElementById('productImagePlaceholder').style.display = 'none';
+                document.getElementById('productImageWrap').addEventListener('click', () => {
+                    const lb = document.getElementById('lightbox');
+                    document.getElementById('lightboxImg').src = img.src;
+                    lb.classList.add('active');
+                });
+            } else {
+                document.getElementById('productImageLetter').textContent = (p.brand || '?').charAt(0).toUpperCase();
+            }
+
+            // Datasheet
+            if (p.datasheet_url) {
+                const link = document.getElementById('pDatasheetLink');
+                link.href = IMG_BASE + p.datasheet_url;
+                link.target = '_blank';
+                link.classList.remove('hidden');
+                link.classList.add('flex');
+            }
+
+            // Specification
+            const specSection = document.getElementById('specSection');
+            const specEl = document.getElementById('pSpec');
+            if (p.specification) {
+                specEl.textContent = p.specification;
+            } else {
+                specSection.style.display = 'none';
+            }
+
+            lucide.createIcons();
+        }
+
+        // Attributes
+        async function loadAttributes() {
+            if (!productData || !productData.category_id) return;
+
+            let attrs = [];
+            try {
+                attrs = await apiFetch(`/categories/${productData.category_id}/attributes`);
+            } catch (e) { return }
+
+            let values = {};
+            try {
+                values = await apiFetch(`/products/${productId}/attribute-values`);
+            } catch (e) { return }
+
+            const table = document.getElementById('attrsTable');
+            const empty = document.getElementById('attrsEmpty');
+
+            const rows = attrs.filter(a => values[a.id] !== undefined && values[a.id] !== null && values[a.id] !== '');
+            if (rows.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            table.innerHTML = rows.map((a, i) => {
+                let val = values[a.id];
+                if (typeof val === 'object' && val !== null && 'min' in val) {
+                    val = `${val.min} – ${val.max} ${a.default_unit || ''}`;
+                } else {
+                    val = String(val);
+                    if (a.default_unit && !val.includes(a.default_unit)) val += ' ' + a.default_unit;
+                }
+                return `<div class="flex items-center px-6 py-3 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}">
+                    <span class="text-sm text-gray-500 w-2/5">${a.name_ru}</span>
+                    <span class="text-sm text-gray-900 font-medium">${val}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // Analogs
+        async function loadAnalogs() {
+            const grid = document.getElementById('analogsGrid');
+            const empty = document.getElementById('analogsEmpty');
+            try {
+                const items = await apiFetch(`/products/${productId}/analogs`);
+                if (!items || items.length === 0) { empty.classList.remove('hidden'); return; }
+                items.forEach(p => {
+                    grid.appendChild(createProductCard(p));
+                });
+                lucide.createIcons();
+            } catch (e) {
+                empty.classList.remove('hidden');
+            }
+        }
+
+        // Complements
+        async function loadComplements() {
+            const grid = document.getElementById('complementsGrid');
+            const empty = document.getElementById('complementsEmpty');
+            try {
+                const items = await apiFetch(`/products/${productId}/complements`);
+                if (!items || items.length === 0) { empty.classList.remove('hidden'); return; }
+                items.forEach(p => {
+                    grid.appendChild(createProductCard(p, true));
+                });
+                lucide.createIcons();
+            } catch (e) {
+                empty.classList.remove('hidden');
+            }
+        }
+
+        function createProductCard(p, showCategory = false) {
+            const card = document.createElement('div');
+            card.className = 'product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in';
+            const photoSrc = p.photo_url ? IMG_BASE + p.photo_url : '';
+            const brandLetter = (p.brand || '?').charAt(0).toUpperCase();
+            card.innerHTML = `
+                <a href="product.html?id=${p.id}" class="block">
+                    <div class="h-32 bg-gray-50 flex items-center justify-center p-3 overflow-hidden">
+                        ${photoSrc
+                            ? `<img src="${photoSrc}" alt="${p.name_ru || ''}" class="max-h-full max-w-full object-contain" loading="lazy">`
+                            : `<div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center"><span class="text-sm font-bold text-gray-400">${brandLetter}</span></div>`
+                        }
+                    </div>
+                    <div class="p-3">
+                        <div class="text-xs text-primary-600 font-semibold mb-1">${p.brand || ''}</div>
+                        <h4 class="font-semibold text-gray-900 text-xs mb-1 line-clamp-2">${p.name_ru || ''}</h4>
+                        <p class="text-[11px] text-gray-400">${p.order_code || ''}</p>
+                        ${showCategory && p.category_name ? `<p class="text-[11px] text-gray-400 mt-1">${p.category_name}</p>` : ''}
+                    </div>
+                </a>
+            `;
+            requestAnimationFrame(() => card.classList.add('visible'));
+            return card;
+        }
+
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('tab-active');
+                    b.classList.add('border-transparent');
+                });
+                btn.classList.add('tab-active');
+                btn.classList.remove('border-transparent');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+            });
+        });
+
+        // Lightbox
+        document.getElementById('lightbox').addEventListener('click', () => {
+            document.getElementById('lightbox').classList.remove('active');
+        });
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSUZ — Промышленные решения</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; color: #111827; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
+
+        .nav-link { position: relative; transition: color 0.2s; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
+        .nav-link:hover { color: #0097a7; }
+        .nav-link:hover::after { width: 100%; }
+
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+        .category-card { transition: all 0.3s ease; }
+        .category-card:hover { transform: translateY(-4px); background: #e0f7fa; border-color: #00bcd4; }
+        .category-card:hover .cat-icon { background: #00bcd4; }
+        .category-card:hover .cat-icon svg { color: #fff; }
+
+        .news-card { transition: all 0.3s ease; overflow: hidden; }
+        .news-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .news-card:hover .news-img { transform: scale(1.05); }
+        .news-img { transition: transform 0.5s ease; }
+
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
+
+        .cta-link { transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .cta-link:hover { gap: 12px; }
+
+        .gradient-text { background: linear-gradient(135deg, #00bcd4, #0097a7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .section-reveal { opacity: 0; transform: translateY(40px); }
+
+        .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .carousel-dot { transition: all 0.3s; }
+        .carousel-dot.active { background: #00bcd4 !important; width: 24px; }
+        .carousel-btn { transition: all 0.2s; }
+        .carousel-btn:hover { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+
+        .infinity-shape { animation: rotate 20s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .brand-item { transition: all 0.3s; }
+        .brand-item:hover { border-color: #00bcd4; background: #e0f7fa; }
+        .brand-item:hover span { color: #0097a7; }
+
+        .tag-pill { transition: all 0.2s; }
+        .tag-pill:hover { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 border-b border-gray-100">
+                <a href="#solutions" class="flex items-center gap-3">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
+                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
+                </a>
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <button id="languageToggle" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        <span id="languageLabel">UZ | RU</span>
+                    </button>
+                    <a href="#contacts" class="hidden md:flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <span>Поддержка</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                    </a>
+                    <div class="w-px h-5 bg-gray-200 hidden md:block"></div>
+                    <a href="#products" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Cart">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-gray-500"></i>
+                    </a>
+                    <a href="#contacts" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span>Войти</span>
+                    </a>
+                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-gray-700">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center h-12 gap-8">
+                <a href="#catalog" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
+                <a href="#partners" class="nav-link text-sm font-medium text-gray-600">Партнёры</a>
+                <a href="#products" class="nav-link text-sm font-medium text-gray-600">Товары</a>
+                <a href="#about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-50 lg:hidden opacity-0 pointer-events-none transition-opacity"></div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed top-0 right-0 w-80 h-full bg-white z-50 lg:hidden overflow-y-auto transform translate-x-full transition-transform duration-300 shadow-2xl">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold text-gray-900">Меню</span>
+                <button id="mobileCloseBtn" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                </button>
+            </div>
+            <button id="mobileLanguageToggle" class="w-full mb-4 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+                <i data-lucide="globe" class="w-4 h-4"></i>
+                <span id="mobileLanguageLabel">UZ | RU</span>
+            </button>
+            <nav class="space-y-1">
+                <a href="#catalog" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Каталог</a>
+                <a href="#solutions" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Решения</a>
+                <a href="#industries" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Отрасли</a>
+                <a href="#partners" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Партнёры</a>
+                <a href="#brands" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Бренды</a>
+                <a href="#products" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Товары</a>
+            </nav>
+            <div class="mt-8 pt-6 border-t border-gray-100 space-y-3">
+                <a href="tel:+998918401405" class="flex items-center gap-3 text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                    <i data-lucide="phone" class="w-4 h-4 text-primary-500"></i>
+                    +998-91-840-14-05
+                </a>
+                <a href="mailto:info@osuz.uz" class="flex items-center gap-3 text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                    <i data-lucide="mail" class="w-4 h-4 text-primary-500"></i>
+                    info@osuz.uz
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Carousel -->
+    <section id="solutions" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden pt-28">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/4 opacity-15">
+                <svg class="infinity-shape w-[500px] h-[500px]" viewBox="0 0 200 100" fill="none">
+                    <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00bcd4"/><stop offset="100%" style="stop-color:#00acc1"/></linearGradient></defs>
+                    <path d="M100,50 C100,25 130,10 155,10 C180,10 200,30 200,50 C200,70 180,90 155,90 C130,90 100,75 100,50 Z" stroke="url(#g1)" stroke-width="3" fill="none"/>
+                    <path d="M100,50 C100,25 70,10 45,10 C20,10 0,30 0,50 C0,70 20,90 45,90 C70,90 100,75 100,50 Z" stroke="url(#g1)" stroke-width="3" fill="none"/>
+                    <ellipse cx="100" cy="50" rx="18" ry="18" fill="url(#g1)" opacity="0.6"/>
+                </svg>
+            </div>
+                    <div class="absolute top-20 left-20 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div id="heroCarousel" class="relative z-10">
+            <div class="carousel-track" id="heroTrack">
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">OSUZ Platform</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Индустриальные решения<br><span class="gradient-text">для вашего бизнеса</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#catalog" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Перейти в каталог <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                    <a href="#contacts" class="inline-flex items-center gap-3 px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-lg transition-all">Связаться</a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700&q=80" alt="Industrial automation" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Автоматизация</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Умные решения<br><span class="gradient-text">для производства</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Современные системы автоматизации для оптимизации производственных процессов.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#industries" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Узнать больше <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=700&q=80" alt="Factory automation" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Доставка</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Быстрая доставка<br><span class="gradient-text">по всему региону</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Экспресс-доставка оборудования и запчастей в кратчайшие сроки.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#products" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Оформить заказ <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" alt="Logistics" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
+                <button id="heroPrev" class="carousel-btn w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                <div class="flex gap-2">
+                    <button class="hero-dot carousel-dot active w-6 h-2 rounded-full bg-white/40" data-index="0"></button>
+                    <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="1"></button>
+                    <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="2"></button>
+                </div>
+                <button id="heroNext" class="carousel-btn w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+            </div>
+        </div>
+
+        <!-- Hero Search Bar -->
+        <div class="relative z-10 -mt-16 pb-10">
+            <div class="max-w-[900px] mx-auto px-6">
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="flex items-center">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-5 flex-shrink-0"></i>
+                        <input type="text" id="heroSearchInput" placeholder="Поиск товаров, брендов, артикулов..." class="flex-1 px-4 py-5 text-gray-900 text-lg placeholder-gray-400 outline-none bg-transparent min-w-0">
+                        <label id="heroPhotoBtn" class="p-3 mr-2 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
+                            <i data-lucide="camera" class="w-5 h-5 text-primary-500"></i>
+                        </label>
+                        <input type="file" id="heroPhotoInput" accept="image/*" class="hidden">
+                        <button id="heroSearchBtn" class="px-8 py-5 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold transition-colors flex items-center gap-2 flex-shrink-0">
+                            Найти <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Search Results Dropdown -->
+                <div id="heroSearchResults" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden mt-2">
+                    <div class="max-h-80 overflow-y-auto p-2" id="heroResultsList"></div>
+                </div>
+                <!-- Photo Preview Dropdown -->
+                <div id="heroPhotoPreview" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden mt-2">
+                    <div class="flex items-center gap-4 p-5">
+                        <div class="relative flex-shrink-0">
+                            <img id="heroPreviewImg" class="w-20 h-20 object-cover rounded-xl border border-gray-200">
+                            <button id="heroRemovePhoto" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">
+                                <i data-lucide="x" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div id="heroAnalysisDot" class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                                <span id="heroAnalysisText" class="text-sm font-medium text-gray-700">Анализ фото...</span>
+                            </div>
+                            <p class="text-xs text-gray-500">Поиск похожих товаров в каталоге</p>
+                        </div>
+                        <button id="heroAnalyzeBtn" class="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-xl transition-colors flex-shrink-0">
+                            Найти товар
+                        </button>
+                    </div>
+                </div>
+                <!-- Popular Tags -->
+                <div class="mt-4 flex flex-wrap items-center gap-3 justify-center">
+                    <span class="text-gray-400 text-sm">Популярные:</span>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">SIEMENS S7-1200</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">ABB ACS580</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">OMRON E5CC</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">Festo VUVS</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="py-16 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Каталог</span>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">Категории товаров</h2>
+                <p class="text-gray-500 mt-2">Опубликованные товары по категориям</p>
+            </div>
+
+            <div id="categoriesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                <!-- Skeleton -->
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Products -->
+    <section id="products" class="py-16 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Хиты продаж</span>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900">Популярные товары</h2>
+                </div>
+                <a href="#products" id="showAllProductsBtn" class="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm cta-link">Все товары <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <div id="popularProductsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+   
+
+
+
+    <!-- Brands -->
+    <section id="partners" class="py-12 bg-white border-y border-gray-100 overflow-hidden">
+        <div id="brands" class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-8">
+            <div class="text-center">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Партнёры</span>
+                <h2 class="text-2xl font-bold text-gray-900">Ведущие бренды</h2>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div class="flex gap-5" style="animation: marquee 25s linear infinite;">
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section id="industries" class="py-20 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Преимущества</span>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">Почему выбирают OSUZ</h2>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="clock" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Быстрая доставка</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Доставка от 24 часов по Узбекистану. Работаем с ведущими транспортными компаниями для максимальной скорости.</p>
+                </div>
+
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Гарантия подлинности</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.</p>
+                </div>
+
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="search" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Умный поиск</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.</p>
+                </div>
+
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="headphones" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Поддержка 24/7</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.</p>
+                </div>
+
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="banknote" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Лучшие цены</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.</p>
+                </div>
+
+                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
+                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                        <i data-lucide="package-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Широкий ассортимент</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="section-reveal">
+                    <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">О нас</span>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">OSUZ — платформа промышленного оборудования</h2>
+                    <p class="text-gray-500 text-base leading-relaxed mb-5">
+                        OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.
+                    </p>
+                    <p class="text-gray-500 text-base leading-relaxed mb-8">
+                        Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.
+                    </p>
+                    </div>
+                </div>
+                <div class="section-reveal">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900 min-h-[360px]">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=900&q=80" alt="OSUZ industrial platform" class="absolute inset-0 w-full h-full object-cover opacity-80">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/30 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-7">
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-sm px-4 py-2 rounded-full mb-4">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-primary-400"></i>
+                                Надёжный B2B-партнёр
+                            </div>
+                            <h3 class="text-white text-2xl font-bold mb-2">Оборудование для бизнеса</h3>
+                            <p class="text-white/70 text-sm leading-relaxed">Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 section-reveal">Начните работу <span class="gradient-text">с OSUZ</span></h2>
+            <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto section-reveal">Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center section-reveal">
+                <a href="#products" class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Смотреть товары <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                <a href="#contacts" class="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-gray-200 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-medium rounded-lg transition-all">Связаться с нами</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacts" class="bg-gray-900 text-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10  rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
+                        <span class="text-xl font-black tracking-wider">OSUZ</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="phone" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="mail" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="map-pin" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="send" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Компания</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
+                        <li><a href="#solutions" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
+                        <li><a href="#contacts" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
+                        <li><a href="#contacts" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Вакансии</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Контакты</h4>
+                    <ul class="space-y-2">
+                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
+                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
+                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Политика</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Условия</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+        function openMobileMenu() {
+            mobileMenu.style.transform = 'translateX(0)';
+            mobileOverlay.style.opacity = '1';
+            mobileOverlay.style.pointerEvents = 'auto';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenu() {
+            mobileMenu.style.transform = 'translateX(100%)';
+            mobileOverlay.style.opacity = '0';
+            mobileOverlay.style.pointerEvents = 'none';
+            document.body.style.overflow = '';
+        }
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        // Hero Search
+        const heroSearchInput = document.getElementById('heroSearchInput');
+        const heroSearchBtn = document.getElementById('heroSearchBtn');
+        const heroPhotoBtn = document.getElementById('heroPhotoBtn');
+        const heroPhotoInput = document.getElementById('heroPhotoInput');
+        const heroSearchResults = document.getElementById('heroSearchResults');
+        const heroResultsList = document.getElementById('heroResultsList');
+        const heroPhotoPreview = document.getElementById('heroPhotoPreview');
+        const heroPreviewImg = document.getElementById('heroPreviewImg');
+        const heroRemovePhoto = document.getElementById('heroRemovePhoto');
+        const heroAnalyzeBtn = document.getElementById('heroAnalyzeBtn');
+        const heroAnalysisDot = document.getElementById('heroAnalysisDot');
+        const heroAnalysisText = document.getElementById('heroAnalysisText');
+
+        const API_ORIGIN = 'https://osuz.uz';
+        const CATALOG_API_BASE = `${API_ORIGIN}/api/catalog`;
+        let currentLang = localStorage.getItem('osuzLang') || 'ru';
+        let productDatabase = [];
+        let searchTimer = null;
+
+        const translations = {
+            uz: {
+                'UZ | RU': 'RU | UZ',
+                'Поддержка': 'Qo‘llab-quvvatlash',
+                'Войти': 'Kirish',
+                'Каталог': 'Katalog',
+                'Партнёры': 'Hamkorlar',
+                'Товары': 'Mahsulotlar',
+                'О нас': 'Biz haqimizda',
+                'Меню': 'Menyu',
+                'Решения': 'Yechimlar',
+                'Отрасли': 'Sohalar',
+                'Бренды': 'Brendlar',
+                'OSUZ Platform': 'OSUZ platformasi',
+                'Индустриальные решения': 'Sanoat yechimlari',
+                'для вашего бизнеса': 'biznesingiz uchun',
+                'Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.': 'Yetakchi jahon brendlaridan 2 500 000 dan ortiq sanoat uskunalari pozitsiyalari.',
+                'Перейти в каталог': 'Katalogga o‘tish',
+                'Связаться': 'Bog‘lanish',
+                'Автоматизация': 'Avtomatlashtirish',
+                'Умные решения': 'Aqlli yechimlar',
+                'для производства': 'ishlab chiqarish uchun',
+                'Современные системы автоматизации для оптимизации производственных процессов.': 'Ishlab chiqarish jarayonlarini optimallashtirish uchun zamonaviy avtomatlashtirish tizimlari.',
+                'Узнать больше': 'Batafsil',
+                'Доставка': 'Yetkazib berish',
+                'Быстрая доставка': 'Tez yetkazib berish',
+                'по всему региону': 'butun hudud bo‘ylab',
+                'Экспресс-доставка оборудования и запчастей в кратчайшие сроки.': 'Uskunalar va ehtiyot qismlarni qisqa muddatlarda yetkazib berish.',
+                'Оформить заказ': 'Buyurtma berish',
+                'Найти': 'Topish',
+                'Анализ фото...': 'Rasm tahlil qilinmoqda...',
+                'Поиск похожих товаров в каталоге': 'Katalogdan o‘xshash mahsulotlarni qidirish',
+                'Найти товар': 'Mahsulotni topish',
+                'Популярные:': 'Mashhur:',
+                'Категории товаров': 'Mahsulot kategoriyalari',
+                'Опубликованные товары по категориям': 'Kategoriyalar bo‘yicha chop etilgan mahsulotlar',
+                'Просмотреть каталог →': 'Katalogni ko‘rish →',
+                'Хиты продаж': 'Ko‘p sotiladiganlar',
+                'Популярные товары': 'Mashhur mahsulotlar',
+                'Все товары': 'Barcha mahsulotlar',
+                'Ведущие бренды': 'Yetakchi brendlar',
+                'Преимущества': 'Afzalliklar',
+                'Почему выбирают OSUZ': 'Nega OSUZ tanlanadi',
+                'Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.': 'Biz biznesingiz uchun ishonchli hamkormiz. Mana bizni boshqalardan ajratib turadigan jihatlar.',
+                'Гарантия подлинности': 'Asllik kafolati',
+                'Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.': 'Faqat sertifikatlangan yetkazib beruvchilardan original mahsulotlar. Har bir mahsulot sifat sertifikatiga ega.',
+                'Умный поиск': 'Aqlli qidiruv',
+                'Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.': 'Mahsulotlarni artikul, nom, brend yoki analoglar orqali toping. Bazada 2 500 000+ pozitsiya mavjud.',
+                'Поддержка 24/7': '24/7 qo‘llab-quvvatlash',
+                'Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.': 'Malakali muhandislar uskunani tanlashda yordam beradi va savollaringizga javob beradi.',
+                'Лучшие цены': 'Eng yaxshi narxlar',
+                'Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.': 'Ishlab chiqaruvchilardan vositachilarsiz to‘g‘ridan-to‘g‘ri yetkazib berish. Doimiy mijozlar uchun moslashuvchan chegirmalar.',
+                'Широкий ассортимент': 'Keng assortiment',
+                'Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.': 'Elektrotexnika, pnevmatika, gidravlika, datchiklar va privodlar — ishlab chiqarishingiz uchun hammasi bir joyda.',
+                'OSUZ — платформа промышленного оборудования': 'OSUZ — sanoat uskunalari platformasi',
+                'OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.': 'OSUZ korxonalarga yetakchi brendlardan sanoat uskunalari, butlovchi qismlar va ehtiyot qismlarni tez topishga yordam beradi. Biz katalog, qulay qidiruv, kategoriyalar va mutaxassislar yordamini bir joyda birlashtiramiz.',
+                'Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.': 'Maqsadimiz — O‘zbekistondagi ishlab chiqarishlar, servis kompaniyalari va muhandislik jamoalari uchun xarid jarayonini soddalashtirish: kerakli pozitsiyani topishdan maslahat va yetkazib berishgacha.',
+                'позиций в каталоге': 'katalogdagi pozitsiyalar',
+                'брендов-партнёров': 'hamkor brendlar',
+                'поддержка клиентов': 'mijozlarni qo‘llab-quvvatlash',
+                'Надёжный B2B-партнёр': 'Ishonchli B2B hamkor',
+                'Оборудование для бизнеса': 'Biznes uchun uskunalar',
+                'Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.': 'Ishlab chiqarish uchun avtomatlashtirish, elektrika, pnevmatika, gidravlika, datchiklar, privodlar va komponentlar.',
+                'Начните работу': 'Ishni boshlang',
+                'с OSUZ': 'OSUZ bilan',
+                'Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.': 'Ro‘yxatdan o‘ting va to‘liq katalog hamda shaxsiy narxlarga kirish imkoniyatiga ega bo‘ling.',
+                'Смотреть товары': 'Mahsulotlarni ko‘rish',
+                'Связаться с нами': 'Biz bilan bog‘lanish',
+                'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'O‘zbekistondagi sanoat uskunalari va ehtiyot qismlar bo‘yicha yirik platforma.',
+                'Компания': 'Kompaniya',
+                'Оплата': 'To‘lov',
+                'Вакансии': 'Vakansiyalar',
+                'Контакты': 'Kontaktlar',
+                'Ташкент, Узбекистан': 'Toshkent, O‘zbekiston',
+                'Все права защищены.': 'Barcha huquqlar himoyalangan.',
+                'Политика': 'Siyosat',
+                'Условия': 'Shartlar',
+                'Товары не найдены': 'Mahsulotlar topilmadi',
+                'Не удалось загрузить товары': 'Mahsulotlarni yuklab bo‘lmadi',
+                'Поиск...': 'Qidirilmoqda...',
+                'Попробуйте другой запрос или загрузите фото': 'Boshqa so‘rov kiriting yoki rasm yuklang',
+                'Ошибка поиска товаров': 'Mahsulotlarni qidirishda xatolik',
+                'Категория': 'Kategoriya',
+                'Без названия': 'Nomsiz',
+                'Без бренда': 'Brendsiz',
+                'Товар из каталога': 'Katalogdagi mahsulot',
+                'Запросить цену': 'Narx so‘rash',
+                'Артикул': 'Artikul',
+                'Найдено': 'Topildi'
+            }
+        };
+
+        function t(text) {
+            if (currentLang === 'ru') return text;
+            return translations[currentLang]?.[text] || text;
+        }
+
+        function localizeStaticText() {
+            document.documentElement.lang = currentLang;
+            const label = document.getElementById('languageLabel');
+            const mobileLabel = document.getElementById('mobileLanguageLabel');
+            if (label) label.textContent = currentLang === 'ru' ? 'UZ | RU' : 'RU | UZ';
+            if (mobileLabel) mobileLabel.textContent = currentLang === 'ru' ? 'UZ | RU' : 'RU | UZ';
+
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+                acceptNode(node) {
+                    const value = node.nodeValue.trim();
+                    if (!value) return NodeFilter.FILTER_REJECT;
+                    if (node.parentElement && ['SCRIPT', 'STYLE'].includes(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            });
+
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+
+            nodes.forEach(node => {
+                if (!node.__ruText) node.__ruText = node.nodeValue;
+                const original = node.__ruText;
+                const trimmed = original.trim();
+                const translated = currentLang === 'ru' ? trimmed : t(trimmed);
+                const leading = original.match(/^\s*/)[0];
+                const trailing = original.match(/\s*$/)[0];
+                node.nodeValue = leading + translated + trailing;
+            });
+
+            heroSearchInput.placeholder = currentLang === 'ru'
+                ? 'Поиск товаров, брендов, артикулов...'
+                : 'Mahsulotlar, brendlar, artikullarni qidirish...';
+            heroPhotoBtn.title = currentLang === 'ru' ? 'Поиск по фото' : 'Rasm orqali qidirish';
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'uz' : 'ru';
+            localStorage.setItem('osuzLang', currentLang);
+            localizeStaticText();
+            if (productDatabase.length) {
+                productDatabase = productDatabase.map(p => p.raw ? normalizeProduct(p.raw) : p);
+                renderPopularProducts(productDatabase);
+            }
+            loadCategories();
+        }
+
+        function buildFileUrl(url) {
+            if (!url) return '';
+            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+            return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
+        }
+
+        function normalizeProduct(p) {
+            const name = (currentLang === 'uz' ? (p.name_uz || p.name_ru || p.name_en) : (p.name_ru || p.name_uz || p.name_en)) || t('Без названия');
+            const code = p.order_code ? `${t('Артикул')}: ${p.order_code}` : '';
+            const category = p.category_name || '';
+            return {
+                id: p.id,
+                raw: p,
+                brand: p.brand || t('Без бренда'),
+                name,
+                desc: [code, category].filter(Boolean).join(' · '),
+                category,
+                orderCode: p.order_code || '',
+                img: buildFileUrl(p.photo_url),
+                datasheet: buildFileUrl(p.datasheet_url),
+            };
+        }
+
+        function productCardTemplate(p) {
+            return `
+                <div class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
+                        ${p.img
+                            ? `<img src="${p.img}" alt="${p.name}" class="max-h-full max-w-full object-contain" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'text-gray-400 font-bold text-sm\'>${p.brand}</div>'">`
+                            : `<div class="text-gray-400 font-bold text-sm">${p.brand}</div>`
+                        }
+                    </div>
+                    <div class="p-4">
+                        <div class="text-xs text-primary-600 font-semibold mb-1">${p.brand}</div>
+                        <h3 class="font-semibold text-gray-900 text-sm mb-1">${p.name}</h3>
+                        <p class="text-xs text-gray-500 mb-3">${p.desc || p.category || t('Товар из каталога')}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-400">${t('Запросить цену')}</span>
+                            <button class="w-8 h-8 bg-primary-50 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors group">
+                                <i data-lucide="shopping-cart" class="w-4 h-4 text-primary-600 group-hover:text-white"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderPopularProducts(products, showAll = false) {
+            const grid = document.getElementById('popularProductsGrid');
+            if (!grid) return;
+
+            if (!products.length) {
+                grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Товары не найдены')}</div>`;
+                return;
+            }
+
+            grid.innerHTML = (showAll ? products : products.slice(0, 4)).map(productCardTemplate).join('');
+            lucide.createIcons();
+        }
+
+        async function loadProducts({ q = '', page = 1, limit = 48 } = {}) {
+            const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+            if (q.trim()) params.set('q', q.trim());
+
+            const res = await fetch(`${CATALOG_API_BASE}/products?${params.toString()}`);
+            if (!res.ok) throw new Error(`Products API error: ${res.status}`);
+
+            const data = await res.json();
+            const items = Array.isArray(data.items) ? data.items : [];
+            return items.map(normalizeProduct);
+        }
+
+        async function initProducts() {
+            try {
+                productDatabase = await loadProducts({ limit: 48 });
+                renderPopularProducts(productDatabase);
+            } catch (e) {
+                console.error('Failed to load products:', e);
+                const grid = document.getElementById('popularProductsGrid');
+                if (grid) grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Не удалось загрузить товары')}</div>`;
+            }
+        }
+
+        async function searchProducts(query) {
+            if (!query || query.length < 2) return [];
+            return await loadProducts({ q: query, limit: 12 });
+        }
+
+        async function heroSearch(query) {
+            if (!query || query.length < 2) {
+                heroSearchResults.classList.add('hidden');
+                return;
+            }
+
+            heroSearchResults.classList.remove('hidden');
+            heroPhotoPreview.classList.add('hidden');
+            heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Поиск...')}</p></div>`;
+
+            try {
+                const results = await searchProducts(query);
+                if (results.length === 0) {
+                    heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
+                } else {
+                    heroResultsList.innerHTML = results.map(p => `
+                        <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
+                            <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
+                                <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
+                                <div class="text-xs text-gray-500 truncate">${p.desc}</div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors"></i>
+                        </a>
+                    `).join('');
+                }
+                lucide.createIcons();
+            } catch (e) {
+                console.error('Search failed:', e);
+                heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Ошибка поиска товаров')}</p></div>`;
+            }
+        }
+
+        heroSearchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => heroSearch(e.target.value), 350);
+        });
+        heroSearchBtn.addEventListener('click', () => heroSearch(heroSearchInput.value));
+
+        heroPhotoBtn.addEventListener('click', () => heroPhotoInput.click());
+
+        heroPhotoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                heroPreviewImg.src = ev.target.result;
+                heroPhotoPreview.classList.remove('hidden');
+                heroSearchResults.classList.add('hidden');
+                heroAnalysisDot.className = 'w-2 h-2 bg-primary-500 rounded-full animate-pulse';
+                heroAnalysisText.textContent = t('Анализ фото...');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        heroRemovePhoto.addEventListener('click', () => {
+            heroPhotoPreview.classList.add('hidden');
+            heroPhotoInput.value = '';
+            heroPreviewImg.src = '';
+        });
+
+        heroAnalyzeBtn.addEventListener('click', () => {
+            heroAnalyzeBtn.innerHTML = '<span class="animate-spin">⟳</span>';
+            heroAnalyzeBtn.disabled = true;
+
+            setTimeout(() => {
+                const results = productDatabase.slice(0, 6);
+                heroAnalysisDot.className = 'w-2 h-2 bg-green-500 rounded-full';
+                heroAnalysisText.textContent = `${t('Найдено')} ${results.length} ${t('Товары').toLowerCase()}`;
+                heroSearchResults.classList.remove('hidden');
+                heroResultsList.innerHTML = results.length ? results.map(p => `
+                    <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
+                        <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
+                            <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
+                            <div class="text-xs text-gray-500 truncate">${p.desc}</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors"></i>
+                    </a>
+                `).join('') :  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p></div>`;
+                lucide.createIcons();
+                heroAnalyzeBtn.innerHTML = t('Найти товар');
+                heroAnalyzeBtn.disabled = false;
+            }, 1500);
+        });
+
+        document.addEventListener('click', (e) => {
+            const searchContainer = e.target.closest('#heroSearchInput, #heroSearchBtn, #heroPhotoBtn, #heroSearchResults, #heroPhotoPreview, #heroAnalyzeBtn, #heroRemovePhoto');
+            if (!searchContainer) {
+                heroSearchResults.classList.add('hidden');
+            }
+        });
+
+        // Hero Carousel
+        const heroTrack = document.getElementById('heroTrack');
+        const heroDots = document.querySelectorAll('.hero-dot');
+        let heroIndex = 0;
+
+        function updateHero() {
+            heroTrack.style.transform = `translateX(-${heroIndex * 100}%)`;
+            heroDots.forEach((d, i) => { d.classList.toggle('active', i === heroIndex); d.style.width = i === heroIndex ? '24px' : '8px'; });
+        }
+
+        document.getElementById('heroNext').addEventListener('click', () => { heroIndex = (heroIndex + 1) % 3; updateHero(); });
+        document.getElementById('heroPrev').addEventListener('click', () => { heroIndex = (heroIndex - 1 + 3) % 3; updateHero(); });
+        heroDots.forEach(d => d.addEventListener('click', () => { heroIndex = parseInt(d.dataset.index); updateHero(); }));
+        setInterval(() => { heroIndex = (heroIndex + 1) % 3; updateHero(); }, 6000);
+
+        // Scroll reveal
+        gsap.utils.toArray('.section-reveal').forEach(item => {
+            gsap.to(item, { scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none none' }, opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
+        });
+
+        // Dynamic categories from API
+        const catImages = {
+            'электротехника': 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&q=80',
+            'механика': 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900&q=80',
+            'промышленная автоматизация': 'https://images.unsplash.com/photo-1565043666747-69f6646db940?w=900&q=80',
+            'пневматика': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80',
+            'гидравлика': 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=900&q=80',
+            'кип и измерения': 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=900&q=80',
+            'приводы и двигатели': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80',
+            'инструменты и сервис': 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&q=80',
+            'расходные материалы': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80',
+           'безопасность': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80',
+          'электронные компоненты': 'https://electronicaplus.ru/images/554654544849.jpeg',
+            'default': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80'
+        };
+        const catColors = ['#00bcd4','#0097a7','#00acc1','#26c6da','#4dd0e1','#80deea','#b2ebf2','#e0f7fa'];
+
+        function getCategoryImage(name) {
+            const key = (name || '').trim().toLowerCase();
+            return catImages[key] || catImages.default;
+        }
+
+        async function loadCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            try {
+                const res = await fetch(`${CATALOG_API_BASE}/categories`);
+                const categories = await res.json();
+                const topLevel = categories.filter(c => !c.parent_id);
+                if (topLevel.length === 0) { grid.innerHTML = ''; return; }
+                grid.innerHTML = topLevel.map((c, i) => {
+                    const name = (currentLang === 'uz' ? (c.names?.uz || c.names?.ru || c.names?.en) : (c.names?.ru || c.names?.uz || c.names?.en)) || t('Категория');
+                    const ruName = c.names?.ru || c.names?.en || name;
+                    const color = catColors[i % catColors.length];
+                    const imageUrl = getCategoryImage(ruName);
+                    return `<a href="category.html?id=${c.id}" target="_blank" class="group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                        <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
+                        <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
+                        <div class="absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-md" style="background: ${color}35;">
+                            <i data-lucide="package" class="w-5 h-5" style="color: ${color};"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <h3 class="text-white font-bold text-base drop-shadow">${name}</h3>
+                            <p class="text-white/75 text-xs mt-1">${t('Просмотреть каталог →')}</p>
+                        </div>
+                    </a>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+                grid.innerHTML = '';
+            }
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                if (!targetId || targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (!target) return;
+                e.preventDefault();
+                closeMobileMenu();
+                const navOffset = 116;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
+                window.scrollTo({ top, behavior: 'smooth' });
+            });
+        });
+
+        const showAllProductsBtn = document.getElementById('showAllProductsBtn');
+        if (showAllProductsBtn) {
+            showAllProductsBtn.addEventListener('click', () => {
+                renderPopularProducts(productDatabase, true);
+            });
+        }
+
+        const languageToggle = document.getElementById('languageToggle');
+        const mobileLanguageToggle = document.getElementById('mobileLanguageToggle');
+        if (languageToggle) languageToggle.addEventListener('click', toggleLanguage);
+        if (mobileLanguageToggle) mobileLanguageToggle.addEventListener('click', toggleLanguage);
+
+        localizeStaticText();
+        initProducts();
+        loadCategories();
+    </script>
+</body>
+</html>

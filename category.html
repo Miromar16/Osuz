@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Категория — OSUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa', 100: '#b2ebf2', 200: '#80deea', 300: '#4dd0e1',
+                            400: '#26c6da', 500: '#00bcd4', 600: '#00acc1', 700: '#0097a7',
+                            800: '#00838f', 900: '#006064',
+                        },
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; color: #111827; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f3f4f6; }
+        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
+        .nav-link { position: relative; transition: color 0.2s; }
+        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
+        .nav-link:hover { color: #0097a7; }
+        .nav-link:hover::after { width: 100%; }
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
+        .filter-btn { transition: all 0.2s; }
+        .filter-btn.active { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+        .filter-btn:hover:not(.active) { border-color: #00bcd4; color: #0097a7; }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .fade-in { opacity: 0; transform: translateY(16px); transition: all 0.4s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .subcat-link { transition: all 0.2s; }
+        .subcat-link:hover { background: #e0f7fa; border-color: #00bcd4; color: #00838f; }
+        .attr-checkbox:checked + label { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+        .sort-btn { transition: all 0.2s; }
+        .sort-btn.active { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 border-b border-gray-100">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
+                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
+                </a>
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <a href="index.html" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>На главную</span>
+                    </a>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <a href="#" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span>Войти</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hidden lg:flex items-center h-12 gap-8">
+                <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
+                <a href="index.html#catalog" class="nav-link text-sm font-medium text-primary-600 font-semibold">Категории</a>
+                <a href="#" class="nav-link text-sm font-medium text-gray-600">Решения</a>
+                <a href="#" class="nav-link text-sm font-medium text-gray-600">Бренды</a>
+                <a href="#" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb & Header -->
+    <section class="pt-28 pb-6 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-center gap-2 text-sm text-gray-400 mb-4 flex-wrap">
+                <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">Каталог</a>
+                <i data-lucide="chevron-right" class="w-3 h-3" id="crumbSep2"></i>
+                <span id="crumbParent" class="hidden hover:text-primary-600 transition-colors cursor-pointer"></span>
+                <i data-lucide="chevron-right" class="w-3 h-3 hidden" id="crumbSep3"></i>
+                <span id="breadcrumbCategory" class="text-gray-900 font-medium"></span>
+            </div>
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div>
+                    <h1 id="categoryTitle" class="text-3xl lg:text-4xl font-bold text-gray-900"></h1>
+                </div>
+                <div id="productCount" class="text-sm text-gray-400"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subcategories -->
+    <section class="bg-white pb-4" id="subcatsSection" style="display:none">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div id="subcatsList" class="flex flex-wrap gap-2"></div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="bg-white border-b border-gray-100 sticky top-16 z-40">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
+            <div class="flex flex-col gap-4">
+                <!-- Top row: search + sort -->
+                <div class="flex flex-col md:flex-row md:items-center gap-4">
+                    <div class="relative flex-1 max-w-md">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="searchInput" placeholder="Поиск по названию, артикулу, бренду..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary-500 transition-colors">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-400">Сортировка:</span>
+                        <button class="sort-btn active text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="">По умолчанию</button>
+                        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="name">По названию</button>
+                        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="brand">По бренду</button>
+                    </div>
+                </div>
+                <!-- Attribute filters row -->
+                <div id="attrFilters" class="flex flex-wrap gap-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="py-10 bg-gray-50 min-h-[60vh]">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <!-- Loading skeleton -->
+            <div id="loadingSkeleton" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
+                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
+                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
+                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
+            </div>
+            <!-- Products grid -->
+            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 hidden"></div>
+            <!-- Empty state -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="search-x" class="w-8 h-8 text-gray-300"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Товары не найдены</h3>
+                <p class="text-gray-500 text-sm">Попробуйте изменить фильтры или поисковый запрос</p>
+            </div>
+            <!-- Pagination -->
+            <div id="pagination" class="hidden mt-10 flex items-center justify-center gap-2">
+                <button id="prevPage" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary-500 hover:text-primary-600 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+                    <i data-lucide="chevron-left" class="w-4 h-4 inline"></i> Назад
+                </button>
+                <span id="pageInfo" class="text-sm text-gray-500 px-4"></span>
+                <button id="nextPage" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary-500 hover:text-primary-600 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+                    Далее <i data-lucide="chevron-right" class="w-4 h-4 inline"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
+                        <span class="text-xl font-black tracking-wider">OSUZ</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Компания</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Контакты</h4>
+                    <ul class="space-y-2">
+                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
+                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
+                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-10 pt-6 text-center">
+                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const API = 'https://osuz.uz/api/catalog';
+        const IMG_BASE = 'https://osuz.uz';
+
+        // ========================
+        // State
+        // ========================
+        let allCategories = [];
+        let currentCategory = null;
+        let parentCategory = null;
+        let childCategories = [];
+        let categoryAttributes = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        let searchQuery = '';
+        let sortMode = '';
+        let searchTimeout = null;
+
+        // ========================
+        // URL params
+        // ========================
+        const params = new URLSearchParams(window.location.search);
+        const categoryId = params.get('id');
+        const categoryName = params.get('name');
+
+        if (!categoryId && !categoryName) {
+            window.location.href = 'index.html#catalog';
+        }
+
+        // ========================
+        // API helpers
+        // ========================
+        async function apiFetch(path, query = {}) {
+            const qs = new URLSearchParams(query).toString();
+            const url = API + path + (qs ? '?' + qs : '');
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`API ${res.status}: ${url}`);
+            return res.json();
+        }
+
+        // ========================
+        // Init
+        // ========================
+        async function init() {
+            try {
+                allCategories = await apiFetch('/categories');
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+                allCategories = [];
+            }
+
+            if (categoryId) {
+                currentCategory = allCategories.find(c => c.id === Number(categoryId));
+            }
+            if (!currentCategory && categoryName) {
+                currentCategory = allCategories.find(c => c.names?.ru === categoryName);
+            }
+            if (!currentCategory) {
+                document.getElementById('categoryTitle').textContent = categoryName || 'Категория';
+                document.getElementById('breadcrumbCategory').textContent = categoryName || 'Категория';
+                loadProducts();
+                return;
+            }
+
+            // Update page
+            const catName = currentCategory.names?.ru || categoryName || '';
+            document.title = catName + ' — OSUZ';
+            document.getElementById('categoryTitle').textContent = catName;
+            document.getElementById('breadcrumbCategory').textContent = catName;
+
+            // Build tree info
+            if (currentCategory.parent_id) {
+                parentCategory = allCategories.find(c => c.id === currentCategory.parent_id);
+                if (parentCategory) {
+                    const crumbParent = document.getElementById('crumbParent');
+                    crumbParent.textContent = parentCategory.names?.ru || '';
+                    crumbParent.classList.remove('hidden');
+                    crumbParent.href = 'category.html?id=' + parentCategory.id;
+                    document.getElementById('crumbSep3').classList.remove('hidden');
+                }
+            }
+
+            childCategories = allCategories.filter(c => c.parent_id === currentCategory.id);
+            if (childCategories.length > 0) {
+                const section = document.getElementById('subcatsSection');
+                const list = document.getElementById('subcatsList');
+                section.style.display = '';
+                list.innerHTML = childCategories.map(c =>
+                    `<a href="category.html?id=${c.id}" class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white">${c.names?.ru || c.names?.en || 'Категория'}</a>`
+                ).join('');
+            }
+
+            // Load attributes & products
+            await Promise.all([loadAttributes(), loadProducts()]);
+        }
+
+        // ========================
+        // Attributes (filters)
+        // ========================
+        async function loadAttributes() {
+            if (!currentCategory) return;
+            try {
+                categoryAttributes = await apiFetch(`/categories/${currentCategory.id}/attributes`);
+            } catch (e) {
+                categoryAttributes = [];
+            }
+            renderAttrFilters();
+        }
+
+        function renderAttrFilters() {
+            const container = document.getElementById('attrFilters');
+            container.innerHTML = '';
+            categoryAttributes.forEach(attr => {
+                if (attr.type === 'select' && attr.options.length > 0) {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'flex items-center gap-1.5';
+                    const label = document.createElement('span');
+                    label.className = 'text-xs text-gray-400';
+                    label.textContent = attr.name_ru + ':';
+                    wrap.appendChild(label);
+                    const sel = document.createElement('select');
+                    sel.className = 'text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:border-primary-500';
+                    sel.dataset.attrId = attr.id;
+                    sel.innerHTML = `<option value="">Все</option>` + attr.options.map(o =>
+                        `<option value="${o.value}">${o.value}</option>`
+                    ).join('');
+                    sel.addEventListener('change', () => { currentPage = 1; loadProducts(); });
+                    wrap.appendChild(sel);
+                    container.appendChild(wrap);
+                } else if (attr.type === 'number_range') {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'flex items-center gap-1.5';
+                    const label = document.createElement('span');
+                    label.className = 'text-xs text-gray-400';
+                    label.textContent = attr.name_ru + ':';
+                    wrap.appendChild(label);
+                    const min = document.createElement('input');
+                    min.type = 'number';
+                    min.placeholder = 'от';
+                    min.className = 'w-16 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
+                    min.dataset.attrMin = attr.id;
+                    const max = document.createElement('input');
+                    max.type = 'number';
+                    max.placeholder = 'до';
+                    max.className = 'w-16 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
+                    max.dataset.attrMax = attr.id;
+                    wrap.appendChild(min);
+                    wrap.appendChild(max);
+                    container.appendChild(wrap);
+                }
+            });
+        }
+
+        // ========================
+        // Products
+        // ========================
+        async function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            const skeleton = document.getElementById('loadingSkeleton');
+            const empty = document.getElementById('emptyState');
+            const pag = document.getElementById('pagination');
+
+            skeleton.classList.remove('hidden');
+            grid.classList.add('hidden');
+            empty.classList.add('hidden');
+            pag.classList.add('hidden');
+            grid.innerHTML = '';
+
+            const query = {};
+            if (currentCategory) query.category_id = currentCategory.id;
+            if (searchQuery) query.q = searchQuery;
+            query.page = currentPage;
+            query.limit = 48;
+
+            try {
+                const data = await apiFetch('/products', query);
+                const items = data.items || [];
+                totalPages = Math.ceil((data.total || 0) / (data.limit || 48));
+
+                skeleton.classList.add('hidden');
+
+                if (items.length === 0) {
+                    empty.classList.remove('hidden');
+                    document.getElementById('productCount').textContent = 'Найдено: 0';
+                    return;
+                }
+
+                document.getElementById('productCount').textContent = `Найдено: ${data.total} товаров`;
+
+                // Client-side sort
+                let sorted = items;
+                if (sortMode === 'name') {
+                    sorted = [...items].sort((a, b) => (a.name_ru || '').localeCompare(b.name_ru || ''));
+                } else if (sortMode === 'brand') {
+                    sorted = [...items].sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
+                }
+
+                sorted.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in';
+                    const photoSrc = p.photo_url ? IMG_BASE + p.photo_url : '';
+                    const brandLetter = (p.brand || '?').charAt(0).toUpperCase();
+                    card.innerHTML = `
+                        <a href="product.html?id=${p.id}" class="block">
+                            <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
+                                ${photoSrc
+                                    ? `<img src="${photoSrc}" alt="${p.name_ru || ''}" class="max-h-full max-w-full object-contain" loading="lazy">`
+                                    : `<div class="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center"><span class="text-lg font-bold text-gray-400">${brandLetter}</span></div>`
+                                }
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-xs text-primary-600 font-semibold">${p.brand || ''}</span>
+                                </div>
+                                <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">${p.name_ru || ''}</h3>
+                                <p class="text-xs text-gray-500 mb-2">${p.order_code || ''}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400">${p.category_name || ''}</span>
+                                    <span class="text-xs text-primary-600 font-medium">Подробнее →</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    grid.appendChild(card);
+                    requestAnimationFrame(() => card.classList.add('visible'));
+                });
+
+                grid.classList.remove('hidden');
+
+                // Pagination
+                if (totalPages > 1) {
+                    pag.classList.remove('hidden');
+                    document.getElementById('pageInfo').textContent = `${currentPage} / ${totalPages}`;
+                    document.getElementById('prevPage').disabled = currentPage <= 1;
+                    document.getElementById('nextPage').disabled = currentPage >= totalPages;
+                }
+
+                lucide.createIcons();
+            } catch (e) {
+                console.error('Failed to load products:', e);
+                skeleton.classList.add('hidden');
+                empty.classList.remove('hidden');
+                document.getElementById('productCount').textContent = 'Ошибка загрузки';
+            }
+        }
+
+        // ========================
+        // Events
+        // ========================
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = e.target.value.trim();
+                currentPage = 1;
+                loadProducts();
+            }, 400);
+        });
+
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                sortMode = btn.dataset.sort;
+                currentPage = 1;
+                loadProducts();
+            });
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) { currentPage--; loadProducts(); window.scrollTo(0, 0); }
+        });
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) { currentPage++; loadProducts(); window.scrollTo(0, 0); }
+        });
+
+        // Init
+        init();
+    </script>
+</body>
+</html>
