@@ -86,6 +86,106 @@
         .tag-pill:hover { background: #00bcd4; color: #fff; border-color: #00bcd4; }
 
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    
+        body {
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        body.dark-mode {
+            background: #070b12;
+            color: #f3f4f6;
+        }
+
+        body.dark-mode nav {
+            background: rgba(7, 11, 18, 0.95) !important;
+            border-color: #1f2937 !important;
+        }
+
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-white\/95 {
+            background-color: #0f1722 !important;
+        }
+
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100 {
+            background-color: #111b28 !important;
+        }
+
+        body.dark-mode .border-gray-100,
+        body.dark-mode .border-gray-200 {
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 {
+            color: #f3f4f6 !important;
+        }
+
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 {
+            color: #aeb9c7 !important;
+        }
+
+        body.dark-mode input {
+            color: #f3f4f6 !important;
+        }
+
+        body.dark-mode input::placeholder {
+            color: #7f8a99 !important;
+        }
+
+        body.dark-mode #languageMenu,
+        body.dark-mode #mobileLanguageMenu,
+        body.dark-mode #mobileMenu,
+        body.dark-mode #heroSearchResults,
+        body.dark-mode #heroPhotoPreview,
+        body.dark-mode .product-card,
+        body.dark-mode .brand-item {
+            background: #0f1722 !important;
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .product-card .bg-white {
+            background: #0f1722 !important;
+        }
+
+        body.dark-mode .language-option {
+            color: #d8e0ea !important;
+        }
+
+        body.dark-mode .language-option:hover {
+            background: #162333 !important;
+        }
+
+        body.dark-mode footer {
+            background: #05080d !important;
+        }
+
+        body.dark-mode #mobileOverlay {
+            background: rgba(0, 0, 0, 0.72) !important;
+        }
+
+        body.dark-mode .shadow-sm,
+        body.dark-mode .shadow-lg,
+        body.dark-mode .shadow-xl,
+        body.dark-mode .shadow-2xl {
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
+        }
+
+        .theme-icon-sun {
+            display: none;
+        }
+
+        body.dark-mode .theme-icon-moon {
+            display: none;
+        }
+
+        body.dark-mode .theme-icon-sun {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -97,14 +197,26 @@
                     <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
                 </a>
                 <div class="flex items-center gap-4 lg:gap-6">
-                    <button id="languageToggle" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="globe" class="w-4 h-4"></i>
-                        <span id="languageLabel">UZ | RU</span>
-                    </button>
+                    <div class="relative hidden md:block">
+                        <button id="languageToggle" class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                            <i data-lucide="globe" class="w-4 h-4"></i>
+                            <span id="languageLabel">RU</span>
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </button>
+                        <div id="languageMenu" class="hidden absolute right-0 top-full mt-3 w-40 rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                            <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">Русский</button>
+                            <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">O‘zbekcha</button>
+                            <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
+                        </div>
+                    </div>
                     <a href="#contacts" class="hidden md:flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">
                         <span>Поддержка</span>
                         <i data-lucide="chevron-down" class="w-3 h-3"></i>
                     </a>
+                    <button id="themeToggle" type="button" class="hidden md:flex p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
+                    </button>
                     <div class="w-px h-5 bg-gray-200 hidden md:block"></div>
                     <a href="#products" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Cart">
                         <i data-lucide="shopping-bag" class="w-5 h-5 text-gray-500"></i>
@@ -136,9 +248,22 @@
                     <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
                 </button>
             </div>
-            <button id="mobileLanguageToggle" class="w-full mb-4 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
-                <i data-lucide="globe" class="w-4 h-4"></i>
-                <span id="mobileLanguageLabel">UZ | RU</span>
+            <div class="relative mb-4">
+                <button id="mobileLanguageToggle" class="w-full flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span id="mobileLanguageLabel">RU</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div id="mobileLanguageMenu" class="hidden mt-2 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
+                    <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">Русский</button>
+                    <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">O‘zbekcha</button>
+                    <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
+                </div>
+            </div>
+            <button id="mobileThemeToggle" type="button" class="w-full mb-4 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+                <i data-lucide="moon" class="theme-icon-moon w-4 h-4"></i>
+                <i data-lucide="sun" class="theme-icon-sun w-4 h-4"></i>
+                <span id="mobileThemeLabel">Тёмная тема</span>
             </button>
             <nav class="space-y-1">
                 <a href="#catalog" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Каталог</a>
@@ -550,6 +675,41 @@
         const heroAnalysisDot = document.getElementById('heroAnalysisDot');
         const heroAnalysisText = document.getElementById('heroAnalysisText');
 
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const mobileThemeLabel = document.getElementById('mobileThemeLabel');
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+
+        function applyTheme() {
+            const isDark = currentTheme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+
+            if (themeToggle) {
+                themeToggle.setAttribute(
+                    'aria-label',
+                    isDark ? 'Включить светлую тему' : 'Включить тёмную тему'
+                );
+                themeToggle.title = isDark ? 'Светлая тема' : 'Тёмная тема';
+            }
+
+            if (mobileThemeLabel) {
+                mobileThemeLabel.textContent = isDark
+                    ? (currentLang === 'uz' ? 'Yorug‘ mavzu' : currentLang === 'en' ? 'Light theme' : 'Светлая тема')
+                    : (currentLang === 'uz' ? 'Qorong‘i mavzu' : currentLang === 'en' ? 'Dark theme' : 'Тёмная тема');
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        }
+
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
+
         const API_ORIGIN = 'https://osuz.uz';
         const CATALOG_API_BASE = `${API_ORIGIN}/api/catalog`;
         let currentLang = localStorage.getItem('osuzLang') || 'ru';
@@ -645,6 +805,95 @@
                 'Запросить цену': 'Narx so‘rash',
                 'Артикул': 'Artikul',
                 'Найдено': 'Topildi'
+            },
+            en: {
+                'UZ | RU': 'RU | UZ | EN',
+                'Поддержка': 'Support',
+                'Войти': 'Sign in',
+                'Каталог': 'Catalog',
+                'Партнёры': 'Partners',
+                'Товары': 'Products',
+                'О нас': 'About us',
+                'Меню': 'Menu',
+                'Решения': 'Solutions',
+                'Отрасли': 'Industries',
+                'Бренды': 'Brands',
+                'OSUZ Platform': 'OSUZ Platform',
+                'Индустриальные решения': 'Industrial solutions',
+                'для вашего бизнеса': 'for your business',
+                'Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.': 'More than 2,500,000 industrial equipment items from leading global brands.',
+                'Перейти в каталог': 'Go to catalog',
+                'Связаться': 'Contact us',
+                'Автоматизация': 'Automation',
+                'Умные решения': 'Smart solutions',
+                'для производства': 'for manufacturing',
+                'Современные системы автоматизации для оптимизации производственных процессов.': 'Modern automation systems for optimizing production processes.',
+                'Узнать больше': 'Learn more',
+                'Доставка': 'Delivery',
+                'Быстрая доставка': 'Fast delivery',
+                'по всему региону': 'throughout the region',
+                'Экспресс-доставка оборудования и запчастей в кратчайшие сроки.': 'Express delivery of equipment and spare parts in the shortest possible time.',
+                'Оформить заказ': 'Place an order',
+                'Найти': 'Search',
+                'Анализ фото...': 'Analyzing photo...',
+                'Поиск похожих товаров в каталоге': 'Searching for similar products in the catalog',
+                'Найти товар': 'Find product',
+                'Популярные:': 'Popular:',
+                'Категории товаров': 'Product categories',
+                'Опубликованные товары по категориям': 'Published products by category',
+                'Просмотреть каталог →': 'View catalog →',
+                'Хиты продаж': 'Best sellers',
+                'Популярные товары': 'Popular products',
+                'Все товары': 'All products',
+                'Ведущие бренды': 'Leading brands',
+                'Преимущества': 'Advantages',
+                'Почему выбирают OSUZ': 'Why choose OSUZ',
+                'Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.': 'We are a reliable partner for your business. Here is what makes us stand out.',
+                'Гарантия подлинности': 'Authenticity guarantee',
+                'Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.': 'Only original products from certified suppliers. Every product has a quality certificate.',
+                'Умный поиск': 'Smart search',
+                'Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.': 'Find products by part number, name, brand, or alternatives. A database of 2,500,000+ items.',
+                'Поддержка 24/7': '24/7 support',
+                'Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.': 'Qualified engineers will help you select equipment and answer any questions.',
+                'Лучшие цены': 'Best prices',
+                'Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.': 'Direct supplies from manufacturers without intermediaries. A flexible discount system for regular customers.',
+                'Широкий ассортимент': 'Wide range',
+                'Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.': 'Electrical equipment, pneumatics, hydraulics, sensors, drives — everything your production needs in one place.',
+                'OSUZ — платформа промышленного оборудования': 'OSUZ — industrial equipment platform',
+                'OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.': 'OSUZ helps companies quickly find industrial equipment, components, and spare parts from leading brands. We bring together a product catalog, convenient search, categories, and expert support in one place.',
+                'Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.': 'Our goal is to simplify procurement for manufacturers, service companies, and engineering teams in Uzbekistan: from finding the right item to consultation and delivery.',
+                'позиций в каталоге': 'catalog items',
+                'брендов-партнёров': 'partner brands',
+                'поддержка клиентов': 'customer support',
+                'Надёжный B2B-партнёр': 'Reliable B2B partner',
+                'Оборудование для бизнеса': 'Equipment for business',
+                'Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.': 'Automation, electrical equipment, pneumatics, hydraulics, sensors, drives, and manufacturing components.',
+                'Начните работу': 'Get started',
+                'с OSUZ': 'with OSUZ',
+                'Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.': 'Sign up and get access to the full catalog and personalized prices.',
+                'Смотреть товары': 'View products',
+                'Связаться с нами': 'Contact us',
+                'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'Uzbekistan’s largest platform for industrial equipment and spare parts.',
+                'Компания': 'Company',
+                'Оплата': 'Payment',
+                'Вакансии': 'Careers',
+                'Контакты': 'Contacts',
+                'Ташкент, Узбекистан': 'Tashkent, Uzbekistan',
+                'Все права защищены.': 'All rights reserved.',
+                'Политика': 'Privacy policy',
+                'Условия': 'Terms',
+                'Товары не найдены': 'Products not found',
+                'Не удалось загрузить товары': 'Failed to load products',
+                'Поиск...': 'Searching...',
+                'Попробуйте другой запрос или загрузите фото': 'Try another query or upload a photo',
+                'Ошибка поиска товаров': 'Product search error',
+                'Категория': 'Category',
+                'Без названия': 'Untitled',
+                'Без бренда': 'No brand',
+                'Товар из каталога': 'Catalog product',
+                'Запросить цену': 'Request price',
+                'Артикул': 'Part number',
+                'Найдено': 'Found'
             }
         };
 
@@ -657,8 +906,21 @@
             document.documentElement.lang = currentLang;
             const label = document.getElementById('languageLabel');
             const mobileLabel = document.getElementById('mobileLanguageLabel');
-            if (label) label.textContent = currentLang === 'ru' ? 'UZ | RU' : 'RU | UZ';
-            if (mobileLabel) mobileLabel.textContent = currentLang === 'ru' ? 'UZ | RU' : 'RU | UZ';
+            const currentLanguageLabel = currentLang.toUpperCase();
+            if (label) label.textContent = currentLanguageLabel;
+            if (mobileLabel) mobileLabel.textContent = currentLanguageLabel;
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                const isActive = option.dataset.language === currentLang;
+                option.classList.toggle('bg-primary-50', isActive);
+                option.classList.toggle('text-primary-700', isActive);
+                option.classList.toggle('font-semibold', isActive);
+            });
+            document.title = currentLang === 'ru'
+                ? 'OSUZ — Промышленные решения'
+                : currentLang === 'uz'
+                    ? 'OSUZ — Sanoat yechimlari'
+                    : 'OSUZ — Industrial Solutions';
 
             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
                 acceptNode(node) {
@@ -684,19 +946,34 @@
 
             heroSearchInput.placeholder = currentLang === 'ru'
                 ? 'Поиск товаров, брендов, артикулов...'
-                : 'Mahsulotlar, brendlar, artikullarni qidirish...';
-            heroPhotoBtn.title = currentLang === 'ru' ? 'Поиск по фото' : 'Rasm orqali qidirish';
+                : currentLang === 'uz'
+                    ? 'Mahsulotlar, brendlar, artikullarni qidirish...'
+                    : 'Search products, brands, and part numbers...';
+            heroPhotoBtn.title = currentLang === 'ru'
+                ? 'Поиск по фото'
+                : currentLang === 'uz'
+                    ? 'Rasm orqali qidirish'
+                    : 'Search by photo';
+            applyTheme();
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'ru' ? 'uz' : 'ru';
+        function setLanguage(language) {
+            if (!['ru', 'uz', 'en'].includes(language)) return;
+            currentLang = language;
             localStorage.setItem('osuzLang', currentLang);
             localizeStaticText();
+
             if (productDatabase.length) {
                 productDatabase = productDatabase.map(p => p.raw ? normalizeProduct(p.raw) : p);
                 renderPopularProducts(productDatabase);
             }
+
             loadCategories();
+
+            const languageMenu = document.getElementById('languageMenu');
+            const mobileLanguageMenu = document.getElementById('mobileLanguageMenu');
+            if (languageMenu) languageMenu.classList.add('hidden');
+            if (mobileLanguageMenu) mobileLanguageMenu.classList.add('hidden');
         }
 
         function buildFileUrl(url) {
@@ -706,9 +983,19 @@
         }
 
         function normalizeProduct(p) {
-            const name = (currentLang === 'uz' ? (p.name_uz || p.name_ru || p.name_en) : (p.name_ru || p.name_uz || p.name_en)) || t('Без названия');
+            const name = (
+                currentLang === 'uz'
+                    ? (p.name_uz || p.name_ru || p.name_en)
+                    : currentLang === 'en'
+                        ? (p.name_en || p.name_ru || p.name_uz)
+                        : (p.name_ru || p.name_uz || p.name_en)
+            ) || t('Без названия');
             const code = p.order_code ? `${t('Артикул')}: ${p.order_code}` : '';
-            const category = p.category_name || '';
+            const category = currentLang === 'uz'
+                ? (p.category_name_uz || p.category_name || '')
+                : currentLang === 'en'
+                    ? (p.category_name_en || p.category_name || '')
+                    : (p.category_name || '');
             return {
                 id: p.id,
                 raw: p,
@@ -935,7 +1222,13 @@
                 const topLevel = categories.filter(c => !c.parent_id);
                 if (topLevel.length === 0) { grid.innerHTML = ''; return; }
                 grid.innerHTML = topLevel.map((c, i) => {
-                    const name = (currentLang === 'uz' ? (c.names?.uz || c.names?.ru || c.names?.en) : (c.names?.ru || c.names?.uz || c.names?.en)) || t('Категория');
+                    const name = (
+                        currentLang === 'uz'
+                            ? (c.names?.uz || c.names?.ru || c.names?.en)
+                            : currentLang === 'en'
+                                ? (c.names?.en || c.names?.ru || c.names?.uz)
+                                : (c.names?.ru || c.names?.uz || c.names?.en)
+                    ) || t('Категория');
                     const ruName = c.names?.ru || c.names?.en || name;
                     const color = catColors[i % catColors.length];
                     const imageUrl = getCategoryImage(ruName);
@@ -982,10 +1275,45 @@
 
         const languageToggle = document.getElementById('languageToggle');
         const mobileLanguageToggle = document.getElementById('mobileLanguageToggle');
-        if (languageToggle) languageToggle.addEventListener('click', toggleLanguage);
-        if (mobileLanguageToggle) mobileLanguageToggle.addEventListener('click', toggleLanguage);
+        const languageMenu = document.getElementById('languageMenu');
+        const mobileLanguageMenu = document.getElementById('mobileLanguageMenu');
+
+        if (languageToggle && languageMenu) {
+            languageToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                languageMenu.classList.toggle('hidden');
+                if (mobileLanguageMenu) mobileLanguageMenu.classList.add('hidden');
+            });
+        }
+
+        if (mobileLanguageToggle && mobileLanguageMenu) {
+            mobileLanguageToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                mobileLanguageMenu.classList.toggle('hidden');
+                if (languageMenu) languageMenu.classList.add('hidden');
+            });
+        }
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', () => setLanguage(option.dataset.language));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (languageMenu && !event.target.closest('#languageToggle') && !event.target.closest('#languageMenu')) {
+                languageMenu.classList.add('hidden');
+            }
+
+            if (
+                mobileLanguageMenu &&
+                !event.target.closest('#mobileLanguageToggle') &&
+                !event.target.closest('#mobileLanguageMenu')
+            ) {
+                mobileLanguageMenu.classList.add('hidden');
+            }
+        });
 
         localizeStaticText();
+        applyTheme();
         initProducts();
         loadCategories();
     </script>
