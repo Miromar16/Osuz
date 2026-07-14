@@ -33,6 +33,8 @@
         .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
         .nav-link:hover { color: #0097a7; }
         .nav-link:hover::after { width: 100%; }
+        .nav-link.active { color: #00bcd4 !important; }
+        .nav-link.active::after { width: 100%; }
         .product-card { transition: all 0.3s ease; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
         .filter-btn { transition: all 0.2s; }
@@ -47,6 +49,284 @@
         .attr-checkbox:checked + label { background: #00bcd4; color: #fff; border-color: #00bcd4; }
         .sort-btn { transition: all 0.2s; }
         .sort-btn.active { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+    
+        body {
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        body.dark-mode {
+            background: #070b12;
+            color: #f3f4f6;
+        }
+
+        body.dark-mode nav {
+            background: rgba(7, 11, 18, 0.95) !important;
+            border-color: #1f2937 !important;
+        }
+
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-white\/95 {
+            background-color: #0f1722 !important;
+        }
+
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100,
+        body.dark-mode .bg-gray-200 {
+            background-color: #111b28 !important;
+        }
+
+        body.dark-mode .border-gray-100,
+        body.dark-mode .border-gray-200 {
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 {
+            color: #f3f4f6 !important;
+        }
+
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400,
+        body.dark-mode .text-gray-300 {
+            color: #aeb9c7 !important;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select {
+            background: #0f1722 !important;
+            color: #f3f4f6 !important;
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode input::placeholder {
+            color: #7f8a99 !important;
+        }
+
+        body.dark-mode .product-card,
+        body.dark-mode .subcat-link {
+            background: #0f1722 !important;
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .skeleton {
+            background: linear-gradient(90deg, #182231 25%, #223044 50%, #182231 75%);
+            background-size: 200% 100%;
+        }
+
+        body.dark-mode footer {
+            background: #05080d !important;
+        }
+
+        .theme-icon-sun {
+            display: none;
+        }
+
+        body.dark-mode .theme-icon-moon {
+            display: none;
+        }
+
+        body.dark-mode .theme-icon-sun {
+            display: block;
+        }
+
+    
+        .header-brand {
+            gap: 7px !important;
+        }
+
+        .header-top-row {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-nav-row {
+            align-items: flex-end !important;
+            height: 56px !important;
+            padding-bottom: 0 !important;
+        }
+
+        .header-nav-row .nav-link {
+            height: 100%;
+            display: inline-flex;
+            align-items: flex-end;
+            padding-bottom: 15px;
+        }
+
+        .header-nav-row .nav-link::after {
+            bottom: -1px;
+            height: 3px;
+            border-radius: 999px 999px 0 0;
+        }
+
+        .product-card {
+            border-color: #e5e7eb !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.055);
+        }
+
+        .product-card:hover {
+            border-color: #00bcd4 !important;
+            box-shadow: 0 12px 32px rgba(0, 188, 212, 0.12);
+        }
+
+        .pagination-control {
+            min-width: 42px;
+            height: 42px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s ease;
+            background: #fff;
+        }
+
+        .pagination-control:hover:not(:disabled) {
+            border-color: #00bcd4;
+            color: #0097a7;
+            background: #e0f7fa;
+        }
+
+        .pagination-control:disabled {
+            opacity: 0.38;
+            cursor: not-allowed;
+        }
+
+        .pagination-selector {
+            position: relative;
+        }
+
+        .pagination-selector-button {
+            min-width: 132px;
+            justify-content: space-between;
+            padding: 0 14px;
+        }
+
+        .pagination-selector-button.open {
+            border-color: #00bcd4;
+            color: #0097a7;
+            background: #e0f7fa;
+        }
+
+        .pagination-selector-menu {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 10px);
+            z-index: 60;
+            width: 190px;
+            max-height: 270px;
+            overflow-y: auto;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+            transform: translateX(-50%);
+        }
+
+        .pagination-selector-menu.hidden {
+            display: none;
+        }
+
+        .pagination-page-option {
+            width: 100%;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 11px;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.18s ease;
+        }
+
+        .pagination-page-option:hover {
+            background: #f0fdff;
+            color: #0097a7;
+        }
+
+        .pagination-page-option.active {
+            background: #00bcd4;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .pagination-current-mark {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: currentColor;
+        }
+
+        body.dark-mode .header-top-row {
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .product-card {
+            border-color: #263241 !important;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22);
+        }
+
+        body.dark-mode .product-card:hover {
+            border-color: #00bcd4 !important;
+        }
+
+        body.dark-mode .pagination-control {
+            background: #0f1722;
+            border-color: #263241;
+            color: #d8e0ea;
+        }
+
+        body.dark-mode .pagination-control:hover:not(:disabled),
+        body.dark-mode .pagination-selector-button.open {
+            background: #12303a;
+            border-color: #00bcd4;
+            color: #4dd0e1;
+        }
+
+        body.dark-mode .pagination-selector-menu {
+            background: #0f1722;
+            border-color: #263241;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
+        }
+
+        body.dark-mode .pagination-page-option {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .pagination-page-option:hover {
+            background: #162333;
+            color: #4dd0e1;
+        }
+
+        body.dark-mode .pagination-page-option.active {
+            background: #00bcd4;
+            color: #fff;
+        }
+
+    
+        #breadcrumbCategory {
+            display: inline-block;
+            position: relative;
+            padding-bottom: 7px;
+        }
+
+        #breadcrumbCategory::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px;
+            border-radius: 999px;
+            background: #00bcd4;
+        }
+
     </style>
 </head>
 <body>
@@ -54,8 +334,8 @@
     
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 border-b border-gray-100">
-                <a href="index.html" class="flex items-center gap-3">
+            <div class="header-top-row flex items-center justify-between h-16">
+                <a href="index.html" class="header-brand flex items-center gap-2">
                     <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
                     <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
                 </a>
@@ -64,6 +344,10 @@
                         <i data-lucide="arrow-left" class="w-4 h-4"></i>
                         <span>На главную</span>
                     </a>
+                    <button id="themeToggle" type="button" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
+                    </button>
                     <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
                         <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
                         <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
@@ -74,9 +358,9 @@
                     </a>
                 </div>
             </div>
-            <div class="hidden lg:flex items-center h-12 gap-8">
+            <div class="header-nav-row hidden lg:flex gap-8">
                 <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
-                <a href="index.html#catalog" class="nav-link text-sm font-medium text-primary-600 font-semibold">Категории</a>
+                <a href="index.html#catalog" class="nav-link active text-sm font-semibold text-primary-600">Категории</a>
                 <a href="#" class="nav-link text-sm font-medium text-gray-600">Решения</a>
                 <a href="#" class="nav-link text-sm font-medium text-gray-600">Бренды</a>
                 <a href="#" class="nav-link text-sm font-medium text-gray-600">О нас</a>
@@ -85,9 +369,9 @@
     </nav>
 
     
-    <section class="pt-28 pb-6 bg-white">
+    <section class="pt-36 pb-8 bg-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="flex items-center gap-2 text-sm text-gray-400 mb-4 flex-wrap">
+            <div class="flex items-center gap-2 text-sm text-gray-400 mb-6 flex-wrap">
                 <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
                 <i data-lucide="chevron-right" class="w-3 h-3"></i>
                 <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">Каталог</a>
@@ -150,13 +434,35 @@
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Товары не найдены</h3>
                 <p class="text-gray-500 text-sm">Попробуйте изменить фильтры или поисковый запрос</p>
             </div>
-            <div id="pagination" class="hidden mt-10 flex items-center justify-center gap-2">
-                <button id="prevPage" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary-500 hover:text-primary-600 transition-colors disabled:opacity-40 disabled:pointer-events-none">
-                    <i data-lucide="chevron-left" class="w-4 h-4 inline"></i> Назад
+            <div id="pagination" class="hidden mt-10 flex flex-wrap items-center justify-center gap-3">
+                <button id="prevPage" class="pagination-control px-4 gap-1">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    <span>Назад</span>
                 </button>
-                <span id="pageInfo" class="text-sm text-gray-500 px-4"></span>
-                <button id="nextPage" class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary-500 hover:text-primary-600 transition-colors disabled:opacity-40 disabled:pointer-events-none">
-                    Далее <i data-lucide="chevron-right" class="w-4 h-4 inline"></i>
+
+                <div class="pagination-selector">
+                    <button
+                        id="paginationSelectorButton"
+                        type="button"
+                        class="pagination-control pagination-selector-button"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                    >
+                        <span id="paginationSelectorLabel">Страница 1 из 1</span>
+                        <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                    </button>
+
+                    <div
+                        id="paginationSelectorMenu"
+                        class="pagination-selector-menu hidden"
+                        role="listbox"
+                        aria-label="Выбор страницы"
+                    ></div>
+                </div>
+
+                <button id="nextPage" class="pagination-control px-4 gap-1">
+                    <span>Далее</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
@@ -194,7 +500,35 @@
         </div>
     </footer>
       <script>
-        lucide.createIcons();
+        const themeToggle = document.getElementById('themeToggle');
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+
+        function applyTheme() {
+            const isDark = currentTheme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+
+            if (themeToggle) {
+                themeToggle.setAttribute(
+                    'aria-label',
+                    isDark ? 'Включить светлую тему' : 'Включить тёмную тему'
+                );
+                themeToggle.title = isDark ? 'Светлая тема' : 'Тёмная тема';
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        }
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        applyTheme();
 
         const API = 'https://osuz.uz/api/catalog';
         const IMG_BASE = 'https://osuz.uz';
@@ -399,7 +733,7 @@
                 grid.classList.remove('hidden');
                 if (totalPages > 1) {
                     pag.classList.remove('hidden');
-                    document.getElementById('pageInfo').textContent = `${currentPage} / ${totalPages}`;
+                    renderPagination();
                     document.getElementById('prevPage').disabled = currentPage <= 1;
                     document.getElementById('nextPage').disabled = currentPage >= totalPages;
                 }
@@ -412,6 +746,101 @@
                 document.getElementById('productCount').textContent = 'Ошибка загрузки';
             }
         }
+
+        const paginationSelectorButton = document.getElementById('paginationSelectorButton');
+        const paginationSelectorLabel = document.getElementById('paginationSelectorLabel');
+        const paginationSelectorMenu = document.getElementById('paginationSelectorMenu');
+
+        function closePaginationSelector() {
+            if (!paginationSelectorButton || !paginationSelectorMenu) return;
+            paginationSelectorMenu.classList.add('hidden');
+            paginationSelectorButton.classList.remove('open');
+            paginationSelectorButton.setAttribute('aria-expanded', 'false');
+        }
+
+        function openPaginationSelector() {
+            if (!paginationSelectorButton || !paginationSelectorMenu) return;
+            paginationSelectorMenu.classList.remove('hidden');
+            paginationSelectorButton.classList.add('open');
+            paginationSelectorButton.setAttribute('aria-expanded', 'true');
+
+            const activeOption = paginationSelectorMenu.querySelector('.pagination-page-option.active');
+            if (activeOption) {
+                activeOption.scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function goToPage(page) {
+            const selectedPage = Number(page);
+            if (!selectedPage || selectedPage < 1 || selectedPage > totalPages) return;
+
+            closePaginationSelector();
+
+            if (selectedPage === currentPage) return;
+
+            currentPage = selectedPage;
+            loadProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderPagination() {
+            if (!paginationSelectorLabel || !paginationSelectorMenu) return;
+
+            paginationSelectorLabel.textContent = `Страница ${currentPage} из ${totalPages}`;
+
+            paginationSelectorMenu.innerHTML = Array.from(
+                { length: totalPages },
+                (_, index) => index + 1
+            ).map(page => `
+                <button
+                    type="button"
+                    class="pagination-page-option ${page === currentPage ? 'active' : ''}"
+                    data-page="${page}"
+                    role="option"
+                    aria-selected="${page === currentPage}"
+                >
+                    <span>Страница ${page}</span>
+                    ${page === currentPage
+                        ? '<span class="pagination-current-mark" aria-hidden="true"></span>'
+                        : ''
+                    }
+                </button>
+            `).join('');
+
+            paginationSelectorMenu.querySelectorAll('[data-page]').forEach(button => {
+                button.addEventListener('click', () => goToPage(button.dataset.page));
+            });
+
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+
+            lucide.createIcons();
+        }
+
+        if (paginationSelectorButton) {
+            paginationSelectorButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+
+                if (paginationSelectorMenu.classList.contains('hidden')) {
+                    openPaginationSelector();
+                } else {
+                    closePaginationSelector();
+                }
+            });
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.pagination-selector')) {
+                closePaginationSelector();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closePaginationSelector();
+            }
+        });
+
         document.getElementById('searchInput').addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -432,10 +861,11 @@
         });
 
         document.getElementById('prevPage').addEventListener('click', () => {
-            if (currentPage > 1) { currentPage--; loadProducts(); window.scrollTo(0, 0); }
+            if (currentPage > 1) goToPage(currentPage - 1);
         });
+
         document.getElementById('nextPage').addEventListener('click', () => {
-            if (currentPage < totalPages) { currentPage++; loadProducts(); window.scrollTo(0, 0); }
+            if (currentPage < totalPages) goToPage(currentPage + 1);
         });
 
         // Init

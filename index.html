@@ -186,13 +186,178 @@
             display: block;
         }
 
+    
+        .header-brand {
+            gap: 7px !important;
+        }
+
+        .header-brand img {
+            display: block;
+            flex: 0 0 auto;
+        }
+
+        .header-top-row {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header-nav-row {
+            align-items: flex-end !important;
+            height: 56px !important;
+        }
+
+        .header-nav-row .nav-link {
+            height: 100%;
+            display: inline-flex;
+            align-items: flex-end;
+            padding-bottom: 15px;
+        }
+
+        .nav-link.active {
+            color: #00bcd4 !important;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+            bottom: -1px;
+            height: 3px;
+            border-radius: 999px 999px 0 0;
+        }
+
+        .feature-card {
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.045);
+            transform: none !important;
+        }
+
+        .feature-card:hover {
+            border-color: #00bcd4 !important;
+            box-shadow: 0 12px 32px rgba(0, 188, 212, 0.11);
+            transform: translateY(-3px) !important;
+        }
+
+        .feature-card .feature-icon {
+            box-shadow: none !important;
+        }
+
+        .search-result-item {
+            padding: 16px 18px;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result-item:not(:last-child) {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .search-result-item:hover {
+            background: #f8fafc;
+        }
+
+        .search-result-item .result-image {
+            width: 58px;
+            height: 58px;
+        }
+
+        .search-result-item .result-arrow {
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .search-result-item:hover .result-arrow {
+            color: #00bcd4 !important;
+            transform: translateX(4px);
+        }
+
+        #heroSearchBtn {
+            align-self: stretch;
+            min-height: 64px;
+            border-radius: 0 16px 16px 0;
+            margin: 0;
+        }
+
+        #heroSearchInput {
+            min-height: 64px;
+        }
+
+        .product-card {
+            border-color: #e5e7eb !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+        }
+
+        .product-card:hover {
+            border-color: #00bcd4 !important;
+            box-shadow: 0 12px 32px rgba(0, 188, 212, 0.12);
+        }
+
+        body.dark-mode .header-top-row {
+            border-color: #263241 !important;
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .product-card {
+            border-color: #263241 !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .feature-card:hover,
+        body.dark-mode .product-card:hover {
+            border-color: #00bcd4 !important;
+            box-shadow: 0 14px 34px rgba(0, 188, 212, 0.12);
+        }
+
+        body.dark-mode .search-result-item:not(:last-child) {
+            border-color: #263241;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #162333;
+        }
+
+    
+        .feature-card,
+        .feature-card:hover {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04) !important;
+            transform: none !important;
+            cursor: default;
+        }
+
+        .feature-card .feature-icon,
+        .feature-card:hover .feature-icon {
+            background: #e0f7fa !important;
+            box-shadow: none !important;
+        }
+
+        .feature-card .feature-icon svg,
+        .feature-card:hover .feature-icon svg {
+            color: #00acc1 !important;
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .feature-card:hover {
+            background: #0f1722 !important;
+            border-color: #263241 !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
+            transform: none !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon,
+        body.dark-mode .feature-card:hover .feature-icon {
+            background: #12303a !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon svg,
+        body.dark-mode .feature-card:hover .feature-icon svg {
+            color: #4dd0e1 !important;
+        }
+
     </style>
 </head>
 <body>
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 border-b border-gray-100">
-                <a href="#solutions" class="flex items-center gap-3">
+            <div class="header-top-row flex items-center justify-between h-16">
+                <a href="#solutions" class="header-brand flex items-center gap-2">
                     <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
                     <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
                 </a>
@@ -230,11 +395,11 @@
                     </button>
                 </div>
             </div>
-            <div class="hidden lg:flex items-center h-12 gap-8">
-                <a href="#catalog" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
-                <a href="#partners" class="nav-link text-sm font-medium text-gray-600">Партнёры</a>
-                <a href="#products" class="nav-link text-sm font-medium text-gray-600">Товары</a>
-                <a href="#about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+            <div class="header-nav-row hidden lg:flex gap-8">
+                <a href="#catalog" data-section-link="catalog" class="nav-link active text-sm font-medium text-gray-600">Каталог</a>
+                <a href="#partners" data-section-link="partners" class="nav-link text-sm font-medium text-gray-600">Партнёры</a>
+                <a href="#products" data-section-link="products" class="nav-link text-sm font-medium text-gray-600">Товары</a>
+                <a href="#about" data-section-link="about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
             </div>
         </div>
     </nav>
@@ -493,48 +658,48 @@
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="clock" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Быстрая доставка</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">Доставка от 24 часов по Узбекистану. Работаем с ведущими транспортными компаниями для максимальной скорости.</p>
                 </div>
 
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="shield-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Гарантия подлинности</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.</p>
                 </div>
 
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="search" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Умный поиск</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.</p>
                 </div>
 
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="headphones" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Поддержка 24/7</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.</p>
                 </div>
 
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="banknote" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Лучшие цены</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.</p>
                 </div>
 
-                <div class="p-7 rounded-2xl border border-gray-100 hover:border-primary-200 hover:shadow-lg transition-all group">
-                    <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-primary-500 transition-colors">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
                         <i data-lucide="package-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">Широкий ассортимент</h3>
@@ -1089,8 +1254,8 @@
                     heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
                 } else {
                     heroResultsList.innerHTML = results.map(p => `
-                        <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
-                            <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        <a href="#" class="search-result-item flex items-center gap-4 rounded-xl group">
+                            <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                                 ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
                             </div>
                             <div class="flex-1 min-w-0">
@@ -1098,7 +1263,7 @@
                                 <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
                                 <div class="text-xs text-gray-500 truncate">${p.desc}</div>
                             </div>
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors"></i>
+                            <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
                         </a>
                     `).join('');
                 }
@@ -1147,8 +1312,8 @@
                 heroAnalysisText.textContent = `${t('Найдено')} ${results.length} ${t('Товары').toLowerCase()}`;
                 heroSearchResults.classList.remove('hidden');
                 heroResultsList.innerHTML = results.length ? results.map(p => `
-                    <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-gray-50 rounded-xl transition-colors group">
-                        <div class="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <a href="#" class="search-result-item flex items-center gap-4 rounded-xl group">
+                        <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                             ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
                         </div>
                         <div class="flex-1 min-w-0">
@@ -1156,7 +1321,7 @@
                             <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
                             <div class="text-xs text-gray-500 truncate">${p.desc}</div>
                         </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-primary-500 transition-colors"></i>
+                        <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
                     </a>
                 `).join('') :  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p></div>`;
                 lucide.createIcons();
@@ -1314,6 +1479,33 @@
 
         localizeStaticText();
         applyTheme();
+
+        const desktopSectionLinks = [...document.querySelectorAll('[data-section-link]')];
+        const observedSections = desktopSectionLinks
+            .map(link => document.getElementById(link.dataset.sectionLink))
+            .filter(Boolean);
+
+        function setActiveNavigation(sectionId) {
+            desktopSectionLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.sectionLink === sectionId);
+            });
+        }
+
+        if (observedSections.length) {
+            const navigationObserver = new IntersectionObserver(entries => {
+                const visible = entries
+                    .filter(entry => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visible) setActiveNavigation(visible.target.id);
+            }, {
+                rootMargin: '-125px 0px -55% 0px',
+                threshold: [0.08, 0.2, 0.4]
+            });
+
+            observedSections.forEach(section => navigationObserver.observe(section));
+        }
+
         initProducts();
         loadCategories();
     </script>
