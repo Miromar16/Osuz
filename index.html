@@ -740,9 +740,9 @@
                     <a href="#products" data-tooltip-key="cart" data-tooltip="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Корзина">
                         <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
                     </a>
-                    <a href="#contacts" data-tooltip-key="login" data-tooltip="Войти" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                        <span>Войти</span>
+                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="hidden md:flex max-w-[180px] items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
                     </a>
                     <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="lg:hidden p-2 text-gray-700">
                         <i data-lucide="menu" class="w-5 h-5"></i>
@@ -779,11 +779,15 @@
                     <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
                 </div>
             </div>
-            <button id="mobileThemeToggle" type="button" class="w-full mb-4 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+            <button id="mobileThemeToggle" type="button" class="w-full mb-3 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
                 <i data-lucide="moon" class="theme-icon-moon w-4 h-4"></i>
                 <i data-lucide="sun" class="theme-icon-sun w-4 h-4"></i>
                 <span id="mobileThemeLabel">Тёмная тема</span>
             </button>
+            <a href="auth.html" data-customer-account-link class="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-50 px-3 py-3 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-100">
+                <i data-lucide="user" class="w-4 h-4"></i>
+                <span data-customer-account-text>Войти</span>
+            </a>
             <nav class="space-y-1">
                 <a href="#catalog" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Каталог</a>
                 <a href="#solutions" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Решения</a>
@@ -1257,6 +1261,7 @@
         let currentLang = localStorage.getItem('osuzLang') || 'ru';
         let productDatabase = [];
         let searchTimer = null;
+        let synonymGroups = [];
 
         const translations = {
             uz: {
@@ -1576,6 +1581,7 @@
             currentLang = language;
             localStorage.setItem('osuzLang', currentLang);
             localizeStaticText();
+            window.updateCustomerHeader?.();
 
             if (productDatabase.length) {
                 productDatabase = productDatabase.map(p => p.raw ? normalizeProduct(p.raw) : p);
@@ -1596,6 +1602,81 @@
             return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
         }
 
+
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function formatPrice(value) {
+            const number = Number(value);
+            if (!Number.isFinite(number) || number <= 0) {
+                return currentLang === 'uz'
+                    ? 'Narx so‘rash'
+                    : currentLang === 'en'
+                        ? 'Request price'
+                        : 'Запросить цену';
+            }
+
+            const formatted = new Intl.NumberFormat(
+                currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-US' : 'ru-RU',
+                { maximumFractionDigits: 0 }
+            ).format(number);
+
+            return currentLang === 'uz'
+                ? `${formatted} so‘mdan`
+                : currentLang === 'en'
+                    ? `from ${formatted} UZS`
+                    : `от ${formatted} сум`;
+        }
+
+        function normalizeSearchWord(value) {
+            return String(value || '')
+                .toLocaleLowerCase('ru-RU')
+                .replace(/[.,/#!$%^&*;:{}=\-_`~()"'«»]/g, '')
+                .trim();
+        }
+
+        async function loadSynonyms() {
+            try {
+                const response = await fetch(`${CATALOG_API_BASE}/synonyms`);
+                if (!response.ok) throw new Error(`Synonyms API error: ${response.status}`);
+                const data = await response.json();
+                synonymGroups = Array.isArray(data) ? data : [];
+            } catch (error) {
+                console.warn('Synonyms are unavailable:', error);
+                synonymGroups = [];
+            }
+        }
+
+        function expandSearchQuery(query) {
+            if (!synonymGroups.length) return query.trim();
+
+            return query
+                .trim()
+                .split(/\s+/)
+                .map(word => {
+                    const normalizedWord = normalizeSearchWord(word);
+                    if (!normalizedWord) return word;
+
+                    const group = synonymGroups.find(item =>
+                        Array.isArray(item.terms) &&
+                        item.terms.some(term => {
+                            const normalizedTerm = normalizeSearchWord(term?.term);
+                            return normalizedTerm === normalizedWord ||
+                                normalizedTerm.startsWith(normalizedWord);
+                        })
+                    );
+
+                    return group?.canonical || word;
+                })
+                .join(' ');
+        }
+
         function normalizeProduct(p) {
             const name = (
                 currentLang === 'uz'
@@ -1604,14 +1685,12 @@
                         ? (p.name_en || p.name_ru || p.name_uz)
                         : (p.name_ru || p.name_uz || p.name_en)
             ) || t('Без названия');
+
+            const category = p.category_name || '';
             const code = p.order_code ? `${t('Артикул')}: ${p.order_code}` : '';
-            const category = currentLang === 'uz'
-                ? (p.category_name_uz || p.category_name || '')
-                : currentLang === 'en'
-                    ? (p.category_name_en || p.category_name || '')
-                    : (p.category_name || '');
+
             return {
-                id: p.id,
+                id: Number(p.id),
                 raw: p,
                 brand: p.brand || t('Без бренда'),
                 name,
@@ -1620,30 +1699,40 @@
                 orderCode: p.order_code || '',
                 img: buildFileUrl(p.photo_url),
                 datasheet: buildFileUrl(p.datasheet_url),
+                priceFrom: p.price_from,
+                priceLabel: formatPrice(p.price_from),
             };
         }
 
         function productCardTemplate(p) {
+            const safeName = escapeHTML(p.name);
+            const safeBrand = escapeHTML(p.brand);
+            const safeDescription = escapeHTML(p.desc || p.category || t('Товар из каталога'));
+            const safePrice = escapeHTML(p.priceLabel);
+            const safeImage = escapeHTML(p.img);
+
             return `
-                <div class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                    <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
-                        ${p.img
-                            ? `<img src="${p.img}" alt="${p.name}" class="max-h-full max-w-full object-contain" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'text-gray-400 font-bold text-sm\'>${p.brand}</div>'">`
-                            : `<div class="text-gray-400 font-bold text-sm">${p.brand}</div>`
-                        }
-                    </div>
-                    <div class="p-4">
-                        <div class="text-xs text-primary-600 font-semibold mb-1">${p.brand}</div>
-                        <h3 class="font-semibold text-gray-900 text-sm mb-1">${p.name}</h3>
-                        <p class="text-xs text-gray-500 mb-3">${p.desc || p.category || t('Товар из каталога')}</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-gray-400">${t('Запросить цену')}</span>
-                            <button class="w-8 h-8 bg-primary-50 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-colors group">
-                                <i data-lucide="shopping-cart" class="w-4 h-4 text-primary-600 group-hover:text-white"></i>
-                            </button>
+                <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                    <a href="product.html?id=${encodeURIComponent(p.id)}" class="block h-full">
+                        <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
+                            ${safeImage
+                                ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
+                                : `<div class="text-gray-400 font-bold text-sm">${safeBrand}</div>`
+                            }
                         </div>
-                    </div>
-                </div>`;
+                        <div class="p-4">
+                            <div class="text-xs text-primary-600 font-semibold mb-1">${safeBrand}</div>
+                            <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">${safeName}</h3>
+                            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${safeDescription}</p>
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-sm font-bold text-gray-900">${safePrice}</span>
+                                <span class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary-600"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </article>`;
         }
 
         function renderPopularProducts(products, showAll = false) {
@@ -1684,7 +1773,7 @@
 
         async function searchProducts(query) {
             if (!query || query.length < 2) return [];
-            return await loadProducts({ q: query, limit: 12 });
+            return await loadProducts({ q: expandSearchQuery(query), limit: 12 });
         }
 
         async function heroSearch(query) {
@@ -1703,14 +1792,15 @@
                     heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
                 } else {
                     heroResultsList.innerHTML = results.map(p => `
-                        <a href="#" class="search-result-item flex items-center gap-4 rounded-xl group">
+                        <a href="product.html?id=${encodeURIComponent(p.id)}" class="search-result-item flex items-center gap-4 rounded-xl group">
                             <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                                 ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
                                 <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
-                                <div class="text-xs text-gray-500 truncate">${p.desc}</div>
+                                <div class="text-xs text-gray-500 truncate">${escapeHTML(p.desc)}</div>
+                                <div class="text-xs font-bold text-gray-900 mt-1">${escapeHTML(p.priceLabel)}</div>
                             </div>
                             <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
                         </a>
@@ -1761,14 +1851,15 @@
                 heroAnalysisText.textContent = `${t('Найдено')} ${results.length} ${t('Товары').toLowerCase()}`;
                 heroSearchResults.classList.remove('hidden');
                 heroResultsList.innerHTML = results.length ? results.map(p => `
-                    <a href="#" class="search-result-item flex items-center gap-4 rounded-xl group">
+                    <a href="product.html?id=${encodeURIComponent(p.id)}" class="search-result-item flex items-center gap-4 rounded-xl group">
                         <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                             ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
                             <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
-                            <div class="text-xs text-gray-500 truncate">${p.desc}</div>
+                            <div class="text-xs text-gray-500 truncate">${escapeHTML(p.desc)}</div>
+                                <div class="text-xs font-bold text-gray-900 mt-1">${escapeHTML(p.priceLabel)}</div>
                         </div>
                         <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
                     </a>
@@ -1955,8 +2046,61 @@
             observedSections.forEach(section => navigationObserver.observe(section));
         }
 
-        initProducts();
-        loadCategories();
+        Promise.all([
+            loadSynonyms(),
+            initProducts(),
+            loadCategories()
+        ]).catch(error => console.error('Initial loading failed:', error));
     </script>
+
+    <script>
+        (() => {
+            const labels = {
+                ru: { login: 'Войти', account: 'Аккаунт' },
+                uz: { login: 'Kirish', account: 'Akkaunt' },
+                en: { login: 'Sign in', account: 'Account' }
+            };
+
+            function readCustomer() {
+                try {
+                    return JSON.parse(localStorage.getItem('osuzCustomer') || 'null');
+                } catch {
+                    return null;
+                }
+            }
+
+            function getLanguage() {
+                const value = localStorage.getItem('osuzLang');
+                return ['ru', 'uz', 'en'].includes(value) ? value : 'ru';
+            }
+
+            window.updateCustomerHeader = function updateCustomerHeader() {
+                const customer = readCustomer();
+                const lang = getLanguage();
+                const fallback = labels[lang] || labels.ru;
+                const displayName = customer
+                    ? [customer.name, customer.surname].filter(Boolean).join(' ').trim()
+                        || customer.phone
+                        || fallback.account
+                    : fallback.login;
+
+                document.querySelectorAll('[data-customer-account-link]').forEach(link => {
+                    link.href = 'auth.html';
+                    const textNode = link.querySelector('[data-customer-account-text]');
+                    if (textNode) textNode.textContent = displayName;
+                    link.dataset.tooltip = customer ? fallback.account : fallback.login;
+                    link.title = customer ? fallback.account : fallback.login;
+                });
+            };
+
+            window.updateCustomerHeader();
+            window.addEventListener('storage', event => {
+                if (['osuzCustomer', 'osuzLang'].includes(event.key)) {
+                    window.updateCustomerHeader();
+                }
+            });
+        })();
+    </script>
+
 </body>
 </html>

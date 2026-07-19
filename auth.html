@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход и регистрация — OSUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, sans-serif;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(0,188,212,.15), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(0,151,167,.12), transparent 28%),
+                #f8fafc;
+            color: #0f172a;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .auth-shell {
+            border: 1px solid #cbd5e1;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 30px 90px rgba(15,23,42,.14);
+        }
+        .auth-input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            background: #fff;
+            padding: 0 14px 0 44px;
+            color: #0f172a;
+            outline: none;
+            transition: .2s ease;
+        }
+        .auth-input.no-icon { padding-left: 14px; }
+        .auth-input:focus {
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 4px rgba(0,188,212,.12);
+        }
+        .auth-input.invalid {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239,68,68,.09);
+        }
+        .auth-tab {
+            position: relative;
+            color: #64748b;
+            transition: .2s ease;
+        }
+        .auth-tab.active {
+            color: #0f172a;
+            font-weight: 800;
+        }
+        .auth-tab.active::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: -1px;
+            height: 3px;
+            border-radius: 999px;
+            background: #00bcd4;
+        }
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #94a3b8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+        }
+        .step-dot.active,
+        .step-dot.done {
+            border-color: #00bcd4;
+            background: #00bcd4;
+            color: #fff;
+        }
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: #e2e8f0;
+        }
+        .step-line.done { background: #00bcd4; }
+        .notice {
+            border: 1px solid transparent;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .notice.error {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+        .notice.success {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+        .notice.warning {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+        .primary-button {
+            min-height: 50px;
+            border-radius: 14px;
+            background: #00bcd4;
+            color: #07111d;
+            font-weight: 900;
+            transition: .2s ease;
+        }
+        .primary-button:hover:not(:disabled) {
+            background: #00acc1;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(0,188,212,.2);
+        }
+        .primary-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+        .secondary-button {
+            min-height: 46px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            background: #fff;
+            color: #475569;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+        .secondary-button:hover:not(:disabled) {
+            border-color: #00bcd4;
+            color: #00838f;
+            background: #f0fdff;
+        }
+        .account-card {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+        }
+        body.dark-mode {
+            background:
+                radial-gradient(circle at 10% 10%, rgba(0,188,212,.13), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(0,151,167,.1), transparent 28%),
+                #070b12;
+            color: #f8fafc;
+        }
+        body.dark-mode .auth-shell,
+        body.dark-mode .account-card,
+        body.dark-mode .auth-input,
+        body.dark-mode .secondary-button {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 {
+            color: #f8fafc !important;
+        }
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 {
+            color: #aeb9c7 !important;
+        }
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100 {
+            background: #0f1722 !important;
+        }
+        body.dark-mode .border-gray-100,
+        body.dark-mode .border-gray-200 {
+            border-color: #344256 !important;
+        }
+        body.dark-mode .auth-tab.active { color: #f8fafc; }
+        body.dark-mode .step-dot {
+            background: #0f1722;
+            border-color: #344256;
+        }
+        body.dark-mode .step-line { background: #263241; }
+        body.dark-mode .step-line.done { background: #00bcd4; }
+        body.dark-mode .notice.error {
+            background: rgba(127,29,29,.22);
+            border-color: rgba(248,113,113,.38);
+            color: #fecaca;
+        }
+        body.dark-mode .notice.success {
+            background: rgba(20,83,45,.23);
+            border-color: rgba(74,222,128,.35);
+            color: #bbf7d0;
+        }
+        body.dark-mode .notice.warning {
+            background: rgba(120,53,15,.22);
+            border-color: rgba(251,191,36,.35);
+            color: #fde68a;
+        }
+        .theme-icon-sun { display: none; }
+        body.dark-mode .theme-icon-moon { display: none; }
+        body.dark-mode .theme-icon-sun { display: block; }
+        @media (max-width: 767px) {
+            .auth-shell { border-radius: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="border-b border-gray-200 bg-white/90 backdrop-blur-md">
+        <div class="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-5">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                <span class="text-xl font-black tracking-wide text-gray-900">OSUZ</span>
+            </a>
+            <div class="flex items-center gap-2">
+                <select id="languageSelect" class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-600 outline-none">
+                    <option value="ru">RU</option>
+                    <option value="uz">UZ</option>
+                    <option value="en">EN</option>
+                </select>
+                <button id="themeToggle" type="button" class="rounded-xl p-2.5 text-gray-500 transition hover:bg-gray-100" aria-label="Сменить тему">
+                    <i data-lucide="moon" class="theme-icon-moon h-5 w-5"></i>
+                    <i data-lucide="sun" class="theme-icon-sun h-5 w-5"></i>
+                </button>
+                <a href="index.html" class="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-gray-500 transition hover:bg-gray-100 hover:text-primary-700 sm:flex">
+                    <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                    <span id="homeLinkText">На главную</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="mx-auto flex min-h-[calc(100vh-73px)] max-w-[1200px] items-center justify-center px-4 py-10">
+        <section id="authCard" class="auth-shell w-full max-w-[520px] overflow-hidden rounded-[28px]">
+            <div class="border-b border-gray-200 px-5 pt-5">
+                <div class="grid grid-cols-2">
+                    <button id="loginTab" type="button" class="auth-tab active px-4 pb-4 pt-2 text-sm">
+                        Вход
+                    </button>
+                    <button id="registerTab" type="button" class="auth-tab px-4 pb-4 pt-2 text-sm">
+                        Регистрация
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-5 sm:p-7">
+                <div id="globalNotice" class="notice hidden mb-5"></div>
+
+                <form id="loginForm" class="space-y-5" novalidate>
+                    <div>
+                        <span id="loginEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Аккаунт покупателя</span>
+                        <h1 id="loginTitle" class="mt-2 text-3xl font-black text-gray-900">Вход в OSUZ</h1>
+                        <p id="loginDescription" class="mt-2 text-sm leading-6 text-gray-500">Введите номер телефона и пароль, которые использовали при регистрации.</p>
+                    </div>
+
+                    <div>
+                        <label id="loginPhoneLabel" for="loginPhone" class="mb-2 block text-sm font-bold text-gray-700">Номер телефона</label>
+                        <div class="relative">
+                            <i data-lucide="phone" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                            <input id="loginPhone" type="tel" inputmode="tel" autocomplete="tel" class="auth-input" placeholder="+998 90 123 45 67">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label id="loginPasswordLabel" for="loginPassword" class="mb-2 block text-sm font-bold text-gray-700">Пароль</label>
+                        <div class="relative">
+                            <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                            <input id="loginPassword" type="password" autocomplete="current-password" class="auth-input pr-12" placeholder="Введите пароль">
+                            <button type="button" data-password-toggle="loginPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                <i data-lucide="eye" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="loginGuardNotice" class="notice warning hidden"></div>
+
+                    <button id="loginButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                        <span id="loginButtonText">Войти</span>
+                        <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                    </button>
+
+                    <button id="goRegisterButton" type="button" class="w-full text-center text-sm font-semibold text-primary-700 hover:text-primary-800">
+                        Нет аккаунта? Зарегистрироваться
+                    </button>
+                </form>
+
+                <div id="registerFlow" class="hidden">
+                    <div class="mb-6 flex items-center">
+                        <span id="stepDot1" class="step-dot active">1</span>
+                        <span id="stepLine1" class="step-line"></span>
+                        <span id="stepDot2" class="step-dot">2</span>
+                        <span id="stepLine2" class="step-line"></span>
+                        <span id="stepDot3" class="step-dot">3</span>
+                    </div>
+
+                    <form id="registerPhoneForm" class="space-y-5" novalidate>
+                        <div>
+                            <span id="registerEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 1 из 3</span>
+                            <h1 id="registerPhoneTitle" class="mt-2 text-3xl font-black text-gray-900">Подтвердите номер</h1>
+                            <p id="registerPhoneDescription" class="mt-2 text-sm leading-6 text-gray-500">Мы отправим SMS с шестизначным кодом подтверждения.</p>
+                        </div>
+
+                        <div>
+                            <label id="registerPhoneLabel" for="registerPhone" class="mb-2 block text-sm font-bold text-gray-700">Номер телефона</label>
+                            <div class="relative">
+                                <i data-lucide="phone" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="registerPhone" type="tel" inputmode="tel" autocomplete="tel" class="auth-input" placeholder="+998 90 123 45 67">
+                            </div>
+                        </div>
+
+                        <button id="requestOtpButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="requestOtpText">Получить код</span>
+                            <i data-lucide="message-square-text" class="h-5 w-5"></i>
+                        </button>
+
+                        <button id="goLoginButton" type="button" class="w-full text-center text-sm font-semibold text-primary-700 hover:text-primary-800">
+                            Уже зарегистрированы? Войти
+                        </button>
+                    </form>
+
+                    <form id="verifyOtpForm" class="hidden space-y-5" novalidate>
+                        <div>
+                            <span id="verifyEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 2 из 3</span>
+                            <h1 id="verifyTitle" class="mt-2 text-3xl font-black text-gray-900">Введите код из SMS</h1>
+                            <p id="verifyDescription" class="mt-2 text-sm leading-6 text-gray-500"></p>
+                        </div>
+
+                        <div>
+                            <label id="otpLabel" for="otpCode" class="mb-2 block text-sm font-bold text-gray-700">Код подтверждения</label>
+                            <input id="otpCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="auth-input no-icon text-center text-2xl font-black tracking-[.42em]" placeholder="000000">
+                        </div>
+
+                        <button id="verifyOtpButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="verifyOtpText">Подтвердить код</span>
+                            <i data-lucide="shield-check" class="h-5 w-5"></i>
+                        </button>
+
+                        <div class="flex flex-col gap-3 sm:flex-row">
+                            <button id="changePhoneButton" type="button" class="secondary-button flex-1 px-4">Изменить номер</button>
+                            <button id="resendOtpButton" type="button" class="secondary-button flex-1 px-4" disabled>Отправить снова</button>
+                        </div>
+                    </form>
+
+                    <form id="completeRegisterForm" class="hidden space-y-5" novalidate>
+                        <div>
+                            <span id="completeEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 3 из 3</span>
+                            <h1 id="completeTitle" class="mt-2 text-3xl font-black text-gray-900">Создайте аккаунт</h1>
+                            <p id="completeDescription" class="mt-2 text-sm leading-6 text-gray-500">Придумайте пароль. Остальные поля можно заполнить по желанию.</p>
+                        </div>
+
+                        <div class="grid gap-4 sm:grid-cols-2">
+                            <div>
+                                <label id="nameLabel" for="customerName" class="mb-2 block text-sm font-bold text-gray-700">Имя</label>
+                                <input id="customerName" type="text" autocomplete="given-name" class="auth-input no-icon" placeholder="Имя">
+                            </div>
+                            <div>
+                                <label id="surnameLabel" for="customerSurname" class="mb-2 block text-sm font-bold text-gray-700">Фамилия</label>
+                                <input id="customerSurname" type="text" autocomplete="family-name" class="auth-input no-icon" placeholder="Фамилия">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label id="emailLabel" for="customerEmail" class="mb-2 block text-sm font-bold text-gray-700">Email</label>
+                            <div class="relative">
+                                <i data-lucide="mail" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="customerEmail" type="email" autocomplete="email" class="auth-input" placeholder="name@example.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label id="birthDateLabel" for="customerBirthDate" class="mb-2 block text-sm font-bold text-gray-700">Дата рождения</label>
+                            <div class="relative">
+                                <i data-lucide="calendar-days" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="customerBirthDate" type="date" autocomplete="bday" class="auth-input">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label id="registerPasswordLabel" for="registerPassword" class="mb-2 block text-sm font-bold text-gray-700">Пароль</label>
+                            <div class="relative">
+                                <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="registerPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Минимум 6 символов">
+                                <button type="button" data-password-toggle="registerPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                    <i data-lucide="eye" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label id="confirmPasswordLabel" for="confirmPassword" class="mb-2 block text-sm font-bold text-gray-700">Повторите пароль</label>
+                            <div class="relative">
+                                <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="confirmPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Повторите пароль">
+                                <button type="button" data-password-toggle="confirmPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                    <i data-lucide="eye" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="registerButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="registerButtonText">Завершить регистрацию</span>
+                            <i data-lucide="user-check" class="h-5 w-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="accountPanel" class="hidden w-full max-w-[620px]">
+            <div class="account-card overflow-hidden rounded-[28px]">
+                <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-7 text-white">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <span id="accountEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-300">Аккаунт покупателя</span>
+                            <h1 id="accountName" class="mt-2 text-3xl font-black"></h1>
+                            <p id="accountPhone" class="mt-2 text-sm text-white/65"></p>
+                        </div>
+                        <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
+                            <i data-lucide="circle-user-round" class="h-8 w-8 text-primary-300"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-7">
+                    <dl class="grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-2xl bg-gray-50 p-4">
+                            <dt id="accountEmailLabel" class="text-xs font-bold uppercase tracking-wider text-gray-400">Email</dt>
+                            <dd id="accountEmail" class="mt-2 break-all font-bold text-gray-900">—</dd>
+                        </div>
+                        <div class="rounded-2xl bg-gray-50 p-4">
+                            <dt id="accountBirthLabel" class="text-xs font-bold uppercase tracking-wider text-gray-400">Дата рождения</dt>
+                            <dd id="accountBirthDate" class="mt-2 font-bold text-gray-900">—</dd>
+                        </div>
+                        <div class="rounded-2xl bg-gray-50 p-4 sm:col-span-2">
+                            <dt id="accountLocationLabel" class="text-xs font-bold uppercase tracking-wider text-gray-400">Сохранённая локация</dt>
+                            <dd id="accountLocation" class="mt-2 font-bold text-gray-900">—</dd>
+                        </div>
+                    </dl>
+
+                    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <a href="index.html" id="continueShoppingButton" class="primary-button flex flex-1 items-center justify-center gap-2 px-5">
+                            <span>Продолжить покупки</span>
+                            <i data-lucide="arrow-right" class="h-5 w-5"></i>
+                        </a>
+                        <button id="logoutButton" type="button" class="secondary-button flex flex-1 items-center justify-center gap-2 px-5">
+                            <i data-lucide="log-out" class="h-5 w-5"></i>
+                            <span>Выйти</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const AUTH_API = 'https://osuz.uz/api/site-auth';
+        const LOGIN_ATTEMPT_LIMIT = 5;
+        const LOGIN_BLOCK_MS = 10 * 60 * 1000;
+        const OTP_RESEND_SECONDS = 60;
+
+        const storageKeys = {
+            accessToken: 'osuzCustomerAccessToken',
+            refreshToken: 'osuzCustomerRefreshToken',
+            customer: 'osuzCustomer'
+        };
+
+        let currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+            ? localStorage.getItem('osuzLang')
+            : 'ru';
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+        let registrationPhone = sessionStorage.getItem('osuzRegistrationPhone') || '';
+        let registrationTicket = sessionStorage.getItem('osuzRegistrationTicket') || '';
+        let registrationStep = registrationTicket ? 3 : registrationPhone ? 2 : 1;
+        let resendTimer = null;
+        let loginGuardTimer = null;
+
+        const messages = {
+            ru: {
+                title: 'Вход и регистрация — OSUZ',
+                home: 'На главную',
+                loginTab: 'Вход',
+                registerTab: 'Регистрация',
+                accountEyebrow: 'Аккаунт покупателя',
+                loginTitle: 'Вход в OSUZ',
+                loginDescription: 'Введите номер телефона и пароль, которые использовали при регистрации.',
+                phone: 'Номер телефона',
+                password: 'Пароль',
+                login: 'Войти',
+                goRegister: 'Нет аккаунта? Зарегистрироваться',
+                step1: 'Шаг 1 из 3',
+                step2: 'Шаг 2 из 3',
+                step3: 'Шаг 3 из 3',
+                phoneTitle: 'Подтвердите номер',
+                phoneDescription: 'Мы отправим SMS с шестизначным кодом подтверждения.',
+                getCode: 'Получить код',
+                goLogin: 'Уже зарегистрированы? Войти',
+                verifyTitle: 'Введите код из SMS',
+                verifyDescription: 'Код отправлен на {phone}. Он действителен 5 минут.',
+                otp: 'Код подтверждения',
+                verifyCode: 'Подтвердить код',
+                changePhone: 'Изменить номер',
+                resend: 'Отправить снова',
+                resendIn: 'Повторно через {seconds} с',
+                completeTitle: 'Создайте аккаунт',
+                completeDescription: 'Придумайте пароль. Остальные поля можно заполнить по желанию.',
+                name: 'Имя',
+                surname: 'Фамилия',
+                email: 'Email',
+                birthDate: 'Дата рождения',
+                confirmPassword: 'Повторите пароль',
+                passwordHint: 'Минимум 6 символов',
+                completeRegistration: 'Завершить регистрацию',
+                invalidPhone: 'Введите корректный номер в формате +998901234567.',
+                invalidPassword: 'Пароль должен содержать минимум 6 символов.',
+                passwordsMismatch: 'Пароли не совпадают.',
+                invalidOtp: 'Введите шестизначный код.',
+                invalidEmail: 'Проверьте правильность email.',
+                invalidCredentials: 'Неверный номер телефона или пароль.',
+                tooManyAttempts: 'Вы использовали слишком много неудачных попыток входа. Попробуйте снова через {time}.',
+                tooManyOtp: 'Слишком много запросов кода. Попробуйте позже.',
+                registeredAlready: 'Этот номер уже зарегистрирован. Войдите в аккаунт.',
+                codeSent: 'Код подтверждения отправлен по SMS.',
+                codeVerified: 'Номер подтверждён. Теперь создайте пароль.',
+                registrationSuccess: 'Регистрация успешно завершена.',
+                loginSuccess: 'Вход выполнен.',
+                ticketExpired: 'Время регистрации истекло. Запросите новый код.',
+                genericError: 'Не удалось выполнить запрос. Попробуйте ещё раз.',
+                networkError: 'Не удалось связаться с сервером. Проверьте подключение и настройки CORS.',
+                timeoutError: 'Сервер слишком долго не отвечает. Попробуйте ещё раз позже.',
+                accountEmail: 'Email',
+                accountBirth: 'Дата рождения',
+                accountLocation: 'Сохранённая локация',
+                continueShopping: 'Продолжить покупки',
+                logout: 'Выйти',
+                logoutError: 'Не удалось завершить сессию на сервере, но локальные данные удалены.',
+                loading: 'Загрузка...'
+            },
+            uz: {
+                title: 'Kirish va ro‘yxatdan o‘tish — OSUZ',
+                home: 'Bosh sahifa',
+                loginTab: 'Kirish',
+                registerTab: 'Ro‘yxatdan o‘tish',
+                accountEyebrow: 'Xaridor akkaunti',
+                loginTitle: 'OSUZ tizimiga kirish',
+                loginDescription: 'Ro‘yxatdan o‘tishda ishlatgan telefon raqamingiz va parolingizni kiriting.',
+                phone: 'Telefon raqami',
+                password: 'Parol',
+                login: 'Kirish',
+                goRegister: 'Akkauntingiz yo‘qmi? Ro‘yxatdan o‘ting',
+                step1: '3 bosqichdan 1-bosqich',
+                step2: '3 bosqichdan 2-bosqich',
+                step3: '3 bosqichdan 3-bosqich',
+                phoneTitle: 'Raqamni tasdiqlang',
+                phoneDescription: 'SMS orqali olti xonali tasdiqlash kodi yuboramiz.',
+                getCode: 'Kod olish',
+                goLogin: 'Ro‘yxatdan o‘tganmisiz? Kirish',
+                verifyTitle: 'SMS kodini kiriting',
+                verifyDescription: 'Kod {phone} raqamiga yuborildi. U 5 daqiqa amal qiladi.',
+                otp: 'Tasdiqlash kodi',
+                verifyCode: 'Kodni tasdiqlash',
+                changePhone: 'Raqamni o‘zgartirish',
+                resend: 'Qayta yuborish',
+                resendIn: '{seconds} soniyadan so‘ng',
+                completeTitle: 'Akkaunt yarating',
+                completeDescription: 'Parol o‘ylab toping. Qolgan maydonlar ixtiyoriy.',
+                name: 'Ism',
+                surname: 'Familiya',
+                email: 'Email',
+                birthDate: 'Tug‘ilgan sana',
+                confirmPassword: 'Parolni takrorlang',
+                passwordHint: 'Kamida 6 ta belgi',
+                completeRegistration: 'Ro‘yxatdan o‘tishni yakunlash',
+                invalidPhone: 'Raqamni +998901234567 formatida kiriting.',
+                invalidPassword: 'Parol kamida 6 ta belgidan iborat bo‘lishi kerak.',
+                passwordsMismatch: 'Parollar bir xil emas.',
+                invalidOtp: 'Olti xonali kodni kiriting.',
+                invalidEmail: 'Email manzilini tekshiring.',
+                invalidCredentials: 'Telefon raqami yoki parol noto‘g‘ri.',
+                tooManyAttempts: 'Juda ko‘p muvaffaqiyatsiz kirish urinishlaridan foydalandingiz. {time} dan keyin qayta urinib ko‘ring.',
+                tooManyOtp: 'Kod juda ko‘p marta so‘raldi. Keyinroq urinib ko‘ring.',
+                registeredAlready: 'Bu raqam allaqachon ro‘yxatdan o‘tgan. Akkauntga kiring.',
+                codeSent: 'Tasdiqlash kodi SMS orqali yuborildi.',
+                codeVerified: 'Raqam tasdiqlandi. Endi parol yarating.',
+                registrationSuccess: 'Ro‘yxatdan o‘tish muvaffaqiyatli yakunlandi.',
+                loginSuccess: 'Tizimga muvaffaqiyatli kirildi.',
+                ticketExpired: 'Ro‘yxatdan o‘tish vaqti tugadi. Yangi kod so‘rang.',
+                genericError: 'So‘rovni bajarib bo‘lmadi. Qayta urinib ko‘ring.',
+                networkError: 'Server bilan bog‘lanib bo‘lmadi. Internet va CORS sozlamalarini tekshiring.',
+                timeoutError: 'Server juda uzoq javob bermoqda. Keyinroq qayta urinib ko‘ring.',
+                accountEmail: 'Email',
+                accountBirth: 'Tug‘ilgan sana',
+                accountLocation: 'Saqlangan joylashuv',
+                continueShopping: 'Xaridni davom ettirish',
+                logout: 'Chiqish',
+                logoutError: 'Serverdagi sessiyani yakunlab bo‘lmadi, ammo lokal ma’lumotlar o‘chirildi.',
+                loading: 'Yuklanmoqda...'
+            },
+            en: {
+                title: 'Sign in and registration — OSUZ',
+                home: 'Home',
+                loginTab: 'Sign in',
+                registerTab: 'Register',
+                accountEyebrow: 'Customer account',
+                loginTitle: 'Sign in to OSUZ',
+                loginDescription: 'Enter the phone number and password used during registration.',
+                phone: 'Phone number',
+                password: 'Password',
+                login: 'Sign in',
+                goRegister: 'No account? Register',
+                step1: 'Step 1 of 3',
+                step2: 'Step 2 of 3',
+                step3: 'Step 3 of 3',
+                phoneTitle: 'Verify your phone',
+                phoneDescription: 'We will send a six-digit confirmation code by SMS.',
+                getCode: 'Get code',
+                goLogin: 'Already registered? Sign in',
+                verifyTitle: 'Enter the SMS code',
+                verifyDescription: 'The code was sent to {phone}. It is valid for 5 minutes.',
+                otp: 'Confirmation code',
+                verifyCode: 'Verify code',
+                changePhone: 'Change phone',
+                resend: 'Send again',
+                resendIn: 'Again in {seconds}s',
+                completeTitle: 'Create your account',
+                completeDescription: 'Create a password. The remaining fields are optional.',
+                name: 'First name',
+                surname: 'Last name',
+                email: 'Email',
+                birthDate: 'Birth date',
+                confirmPassword: 'Confirm password',
+                passwordHint: 'At least 6 characters',
+                completeRegistration: 'Complete registration',
+                invalidPhone: 'Enter a valid phone number in the +998901234567 format.',
+                invalidPassword: 'The password must contain at least 6 characters.',
+                passwordsMismatch: 'Passwords do not match.',
+                invalidOtp: 'Enter the six-digit code.',
+                invalidEmail: 'Check the email address.',
+                invalidCredentials: 'Incorrect phone number or password.',
+                tooManyAttempts: 'You have used too many unsuccessful sign-in attempts. Try again in {time}.',
+                tooManyOtp: 'Too many code requests. Try again later.',
+                registeredAlready: 'This phone number is already registered. Sign in instead.',
+                codeSent: 'The confirmation code was sent by SMS.',
+                codeVerified: 'Phone verified. Now create a password.',
+                registrationSuccess: 'Registration completed successfully.',
+                loginSuccess: 'Signed in successfully.',
+                ticketExpired: 'The registration session expired. Request a new code.',
+                genericError: 'The request could not be completed. Try again.',
+                networkError: 'Could not connect to the server. Check the connection and CORS settings.',
+                timeoutError: 'The server is taking too long to respond. Try again later.',
+                accountEmail: 'Email',
+                accountBirth: 'Birth date',
+                accountLocation: 'Saved location',
+                continueShopping: 'Continue shopping',
+                logout: 'Sign out',
+                logoutError: 'The server session could not be closed, but local data was removed.',
+                loading: 'Loading...'
+            }
+        };
+
+        function text(key) {
+            return messages[currentLang]?.[key] || messages.ru[key] || key;
+        }
+
+        function normalizePhone(value) {
+            let digits = String(value || '').replace(/\D/g, '');
+
+            if (digits.startsWith('998')) {
+                digits = digits.slice(0, 12);
+            } else if (digits.startsWith('0')) {
+                digits = `998${digits.slice(1)}`;
+            } else if (digits.length <= 9) {
+                digits = `998${digits}`;
+            }
+
+            return digits.length === 12 ? `+${digits}` : `+${digits}`;
+        }
+
+        function isValidPhone(phone) {
+            return /^\+998\d{9}$/.test(phone);
+        }
+
+        function formatPhoneInput(value) {
+            const normalized = normalizePhone(value).replace('+', '').slice(0, 12);
+            const local = normalized.startsWith('998') ? normalized.slice(3) : normalized;
+            const parts = ['+998'];
+
+            if (local.length) parts.push(` ${local.slice(0, 2)}`);
+            if (local.length > 2) parts.push(` ${local.slice(2, 5)}`);
+            if (local.length > 5) parts.push(` ${local.slice(5, 7)}`);
+            if (local.length > 7) parts.push(` ${local.slice(7, 9)}`);
+
+            return parts.join('');
+        }
+
+        function applyPhoneMask(input) {
+            input.addEventListener('input', () => {
+                input.value = formatPhoneInput(input.value);
+            });
+            input.addEventListener('focus', () => {
+                if (!input.value) input.value = '+998 ';
+            });
+        }
+
+        function setLoading(button, isLoading, defaultText) {
+            button.disabled = isLoading;
+            const span = button.querySelector('span');
+            if (span) span.textContent = isLoading ? text('loading') : defaultText;
+        }
+
+        function showNotice(message, type = 'error') {
+            const notice = document.getElementById('globalNotice');
+            notice.textContent = message;
+            notice.className = `notice ${type} mb-5`;
+        }
+
+        function hideNotice() {
+            const notice = document.getElementById('globalNotice');
+            notice.className = 'notice hidden mb-5';
+            notice.textContent = '';
+        }
+
+        function clearFieldErrors() {
+            document.querySelectorAll('.auth-input.invalid').forEach(input => {
+                input.classList.remove('invalid');
+            });
+        }
+
+        function markInvalid(input, message) {
+            input.classList.add('invalid');
+            showNotice(message, 'error');
+            input.focus();
+        }
+
+        async function parseResponse(response) {
+            const raw = await response.text();
+            let data = {};
+
+            if (raw) {
+                try {
+                    data = JSON.parse(raw);
+                } catch {
+                    data = { message: raw };
+                }
+            }
+
+            if (!response.ok) {
+                const error = new Error(
+                    Array.isArray(data.message)
+                        ? data.message.join('. ')
+                        : data.message || data.error || text('genericError')
+                );
+                error.status = response.status;
+                error.data = data;
+                error.retryAfter = Number(response.headers.get('Retry-After')) || 0;
+                throw error;
+            }
+
+            return data;
+        }
+
+        async function authRequest(path, options = {}) {
+            const controller = new AbortController();
+            const timeoutMs = Number(options.timeoutMs) || 15000;
+            const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+            try {
+                const response = await fetch(`${AUTH_API}${path}`, {
+                    method: options.method || 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        ...(options.token ? { Authorization: `Bearer ${options.token}` } : {})
+                    },
+                    body: options.body ? JSON.stringify(options.body) : undefined,
+                    signal: controller.signal,
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+
+                return await parseResponse(response);
+            } catch (error) {
+                if (error?.name === 'AbortError') {
+                    const timeoutError = new Error(text('timeoutError'));
+                    timeoutError.code = 'REQUEST_TIMEOUT';
+                    timeoutError.status = 0;
+                    throw timeoutError;
+                }
+
+                if (error instanceof TypeError) {
+                    const networkError = new Error(text('networkError'));
+                    networkError.code = 'NETWORK_ERROR';
+                    networkError.status = 0;
+                    throw networkError;
+                }
+
+                throw error;
+            } finally {
+                window.clearTimeout(timeoutId);
+            }
+        }
+
+        function saveSession(data) {
+            if (data.accessToken) localStorage.setItem(storageKeys.accessToken, data.accessToken);
+            if (data.refreshToken) localStorage.setItem(storageKeys.refreshToken, data.refreshToken);
+            if (data.customer) localStorage.setItem(storageKeys.customer, JSON.stringify(data.customer));
+        }
+
+        function clearSession() {
+            Object.values(storageKeys).forEach(key => localStorage.removeItem(key));
+        }
+
+        function getStoredCustomer() {
+            try {
+                return JSON.parse(localStorage.getItem(storageKeys.customer) || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        async function refreshAccessToken() {
+            const refreshToken = localStorage.getItem(storageKeys.refreshToken);
+            if (!refreshToken) return null;
+
+            try {
+                const result = await authRequest('/refresh', {
+                    method: 'POST',
+                    body: { refreshToken }
+                });
+                localStorage.setItem(storageKeys.accessToken, result.accessToken);
+                return result.accessToken;
+            } catch {
+                clearSession();
+                return null;
+            }
+        }
+
+        async function loadCurrentCustomer() {
+            let token = localStorage.getItem(storageKeys.accessToken);
+            if (!token) return getStoredCustomer();
+
+            try {
+                const customer = await authRequest('/me', { token });
+                localStorage.setItem(storageKeys.customer, JSON.stringify(customer));
+                return customer;
+            } catch (error) {
+                if (error.status !== 401) return getStoredCustomer();
+
+                token = await refreshAccessToken();
+                if (!token) return null;
+
+                try {
+                    const customer = await authRequest('/me', { token });
+                    localStorage.setItem(storageKeys.customer, JSON.stringify(customer));
+                    return customer;
+                } catch {
+                    clearSession();
+                    return null;
+                }
+            }
+        }
+
+        function guardKey(phone) {
+            return `osuzLoginGuard:${phone}`;
+        }
+
+        function getLoginGuard(phone) {
+            try {
+                const guard = JSON.parse(localStorage.getItem(guardKey(phone)) || 'null');
+                if (!guard) return { count: 0, blockedUntil: 0 };
+
+                if (guard.blockedUntil && guard.blockedUntil <= Date.now()) {
+                    localStorage.removeItem(guardKey(phone));
+                    return { count: 0, blockedUntil: 0 };
+                }
+
+                return {
+                    count: Number(guard.count || 0),
+                    blockedUntil: Number(guard.blockedUntil || 0)
+                };
+            } catch {
+                return { count: 0, blockedUntil: 0 };
+            }
+        }
+
+        function saveLoginGuard(phone, guard) {
+            localStorage.setItem(guardKey(phone), JSON.stringify(guard));
+        }
+
+        function clearLoginGuard(phone) {
+            localStorage.removeItem(guardKey(phone));
+        }
+
+        function recordFailedLogin(phone) {
+            const current = getLoginGuard(phone);
+            const nextCount = current.count + 1;
+            const next = {
+                count: nextCount,
+                blockedUntil: nextCount >= LOGIN_ATTEMPT_LIMIT
+                    ? Date.now() + LOGIN_BLOCK_MS
+                    : 0
+            };
+            saveLoginGuard(phone, next);
+            return next;
+        }
+
+        function forceLoginBlock(phone, milliseconds) {
+            const guard = {
+                count: LOGIN_ATTEMPT_LIMIT,
+                blockedUntil: Date.now() + milliseconds
+            };
+            saveLoginGuard(phone, guard);
+            return guard;
+        }
+
+        function formatRemaining(milliseconds) {
+            const totalSeconds = Math.max(1, Math.ceil(milliseconds / 1000));
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+
+            if (minutes > 0) return `${minutes}:${String(seconds).padStart(2, '0')}`;
+            return `${seconds} сек.`;
+        }
+
+        function updateLoginGuardUI() {
+            clearInterval(loginGuardTimer);
+
+            const phone = normalizePhone(document.getElementById('loginPhone').value);
+            const guard = isValidPhone(phone) ? getLoginGuard(phone) : { count: 0, blockedUntil: 0 };
+            const notice = document.getElementById('loginGuardNotice');
+            const button = document.getElementById('loginButton');
+
+            if (!guard.blockedUntil || guard.blockedUntil <= Date.now()) {
+                notice.classList.add('hidden');
+                button.disabled = false;
+                return;
+            }
+
+            const render = () => {
+                const remaining = guard.blockedUntil - Date.now();
+
+                if (remaining <= 0) {
+                    clearLoginGuard(phone);
+                    notice.classList.add('hidden');
+                    button.disabled = false;
+                    clearInterval(loginGuardTimer);
+                    return;
+                }
+
+                notice.textContent = text('tooManyAttempts').replace('{time}', formatRemaining(remaining));
+                notice.classList.remove('hidden');
+                button.disabled = true;
+            };
+
+            render();
+            loginGuardTimer = setInterval(render, 1000);
+        }
+
+        function showTab(tab) {
+            hideNotice();
+            const isLogin = tab === 'login';
+
+            document.getElementById('loginTab').classList.toggle('active', isLogin);
+            document.getElementById('registerTab').classList.toggle('active', !isLogin);
+            document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
+            document.getElementById('registerFlow').classList.toggle('hidden', isLogin);
+
+            if (!isLogin) renderRegistrationStep();
+            if (isLogin) updateLoginGuardUI();
+        }
+
+        function renderRegistrationStep() {
+            const forms = [
+                document.getElementById('registerPhoneForm'),
+                document.getElementById('verifyOtpForm'),
+                document.getElementById('completeRegisterForm')
+            ];
+
+            forms.forEach((form, index) => {
+                form.classList.toggle('hidden', registrationStep !== index + 1);
+            });
+
+            for (let step = 1; step <= 3; step++) {
+                const dot = document.getElementById(`stepDot${step}`);
+                dot.classList.toggle('active', registrationStep === step);
+                dot.classList.toggle('done', registrationStep > step);
+            }
+
+            document.getElementById('stepLine1').classList.toggle('done', registrationStep > 1);
+            document.getElementById('stepLine2').classList.toggle('done', registrationStep > 2);
+
+            if (registrationStep === 2) {
+                document.getElementById('verifyDescription').textContent =
+                    text('verifyDescription').replace('{phone}', registrationPhone);
+                startResendTimer();
+                document.getElementById('otpCode').focus();
+            }
+
+            if (registrationStep === 3) {
+                document.getElementById('registerPassword').focus();
+            }
+        }
+
+        function resetRegistration() {
+            registrationPhone = '';
+            registrationTicket = '';
+            registrationStep = 1;
+            sessionStorage.removeItem('osuzRegistrationPhone');
+            sessionStorage.removeItem('osuzRegistrationTicket');
+            document.getElementById('otpCode').value = '';
+            renderRegistrationStep();
+        }
+
+        function startResendTimer() {
+            clearInterval(resendTimer);
+            let seconds = OTP_RESEND_SECONDS;
+            const button = document.getElementById('resendOtpButton');
+
+            const render = () => {
+                if (seconds <= 0) {
+                    button.disabled = false;
+                    button.textContent = text('resend');
+                    clearInterval(resendTimer);
+                    return;
+                }
+
+                button.disabled = true;
+                button.textContent = text('resendIn').replace('{seconds}', seconds);
+                seconds -= 1;
+            };
+
+            render();
+            resendTimer = setInterval(render, 1000);
+        }
+
+        async function requestOtp(phone) {
+            return authRequest('/otp/request', {
+                method: 'POST',
+                body: { phone }
+            });
+        }
+
+        async function handleOtpRequest(phone, button) {
+            setLoading(button, true, text('getCode'));
+
+            try {
+                await requestOtp(phone);
+                registrationPhone = phone;
+                registrationStep = 2;
+                sessionStorage.setItem('osuzRegistrationPhone', phone);
+                showNotice(text('codeSent'), 'success');
+                renderRegistrationStep();
+            } catch (error) {
+                if (error.status === 409) {
+                    document.getElementById('loginPhone').value = formatPhoneInput(phone);
+                    showTab('login');
+                    showNotice(text('registeredAlready'), 'warning');
+                    return;
+                }
+
+                if (error.status === 429) {
+                    showNotice(text('tooManyOtp'), 'warning');
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('getCode'));
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const phoneInput = document.getElementById('loginPhone');
+            const passwordInput = document.getElementById('loginPassword');
+            const phone = normalizePhone(phoneInput.value);
+            const password = passwordInput.value;
+            const button = document.getElementById('loginButton');
+
+            if (!isValidPhone(phone)) {
+                markInvalid(phoneInput, text('invalidPhone'));
+                return;
+            }
+
+            if (password.length < 6) {
+                markInvalid(passwordInput, text('invalidPassword'));
+                return;
+            }
+
+            const guard = getLoginGuard(phone);
+            if (guard.blockedUntil > Date.now()) {
+                updateLoginGuardUI();
+                return;
+            }
+
+            setLoading(button, true, text('login'));
+
+            try {
+                const result = await authRequest('/login', {
+                    method: 'POST',
+                    body: { phone, password }
+                });
+
+                clearLoginGuard(phone);
+                saveSession(result);
+                showNotice(text('loginSuccess'), 'success');
+                setTimeout(() => showAccount(result.customer), 450);
+            } catch (error) {
+                if (error.status === 401) {
+                    const nextGuard = recordFailedLogin(phone);
+
+                    if (nextGuard.blockedUntil) {
+                        updateLoginGuardUI();
+                    } else {
+                        const attemptsLeft = LOGIN_ATTEMPT_LIMIT - nextGuard.count;
+                        showNotice(
+                            `${text('invalidCredentials')} ${attemptsLeft > 0 ? `(${attemptsLeft})` : ''}`,
+                            'error'
+                        );
+                    }
+                    return;
+                }
+
+                if (error.status === 429) {
+                    const milliseconds = (error.retryAfter > 0 ? error.retryAfter * 1000 : LOGIN_BLOCK_MS);
+                    forceLoginBlock(phone, milliseconds);
+                    updateLoginGuardUI();
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                if (!getLoginGuard(phone).blockedUntil) {
+                    setLoading(button, false, text('login'));
+                }
+            }
+        });
+
+        document.getElementById('registerPhoneForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const input = document.getElementById('registerPhone');
+            const phone = normalizePhone(input.value);
+
+            if (!isValidPhone(phone)) {
+                markInvalid(input, text('invalidPhone'));
+                return;
+            }
+
+            await handleOtpRequest(phone, document.getElementById('requestOtpButton'));
+        });
+
+        document.getElementById('verifyOtpForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const input = document.getElementById('otpCode');
+            const code = input.value.replace(/\D/g, '');
+            const button = document.getElementById('verifyOtpButton');
+
+            if (!/^\d{6}$/.test(code)) {
+                markInvalid(input, text('invalidOtp'));
+                return;
+            }
+
+            setLoading(button, true, text('verifyCode'));
+
+            try {
+                const result = await authRequest('/otp/verify', {
+                    method: 'POST',
+                    timeoutMs: 15000,
+                    body: {
+                        phone: registrationPhone,
+                        code
+                    }
+                });
+
+                registrationTicket = result.registrationTicket;
+                registrationStep = 3;
+                sessionStorage.setItem('osuzRegistrationTicket', registrationTicket);
+                showNotice(text('codeVerified'), 'success');
+                renderRegistrationStep();
+            } catch (error) {
+                const noticeType = ['REQUEST_TIMEOUT', 'NETWORK_ERROR'].includes(error.code)
+                    ? 'warning'
+                    : 'error';
+
+                showNotice(error.message || text('genericError'), noticeType);
+                console.error('OTP verification failed:', {
+                    endpoint: `${AUTH_API}/otp/verify`,
+                    status: error.status || 0,
+                    code: error.code || null,
+                    message: error.message
+                });
+            } finally {
+                setLoading(button, false, text('verifyCode'));
+            }
+        });
+
+        document.getElementById('completeRegisterForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const passwordInput = document.getElementById('registerPassword');
+            const confirmInput = document.getElementById('confirmPassword');
+            const emailInput = document.getElementById('customerEmail');
+            const password = passwordInput.value;
+            const confirmPassword = confirmInput.value;
+            const email = emailInput.value.trim();
+            const button = document.getElementById('registerButton');
+
+            if (!registrationTicket) {
+                resetRegistration();
+                showNotice(text('ticketExpired'), 'warning');
+                return;
+            }
+
+            if (password.length < 6) {
+                markInvalid(passwordInput, text('invalidPassword'));
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                markInvalid(confirmInput, text('passwordsMismatch'));
+                return;
+            }
+
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                markInvalid(emailInput, text('invalidEmail'));
+                return;
+            }
+
+            const body = {
+                registrationTicket,
+                password
+            };
+
+            const optionalFields = {
+                name: document.getElementById('customerName').value.trim(),
+                surname: document.getElementById('customerSurname').value.trim(),
+                email,
+                birthDate: document.getElementById('customerBirthDate').value
+            };
+
+            Object.entries(optionalFields).forEach(([key, value]) => {
+                if (value) body[key] = value;
+            });
+
+            setLoading(button, true, text('completeRegistration'));
+
+            try {
+                const result = await authRequest('/register', {
+                    method: 'POST',
+                    body
+                });
+
+                saveSession(result);
+                resetRegistration();
+                showNotice(text('registrationSuccess'), 'success');
+                setTimeout(() => showAccount(result.customer), 450);
+            } catch (error) {
+                if (error.status === 401) {
+                    resetRegistration();
+                    showNotice(text('ticketExpired'), 'warning');
+                    return;
+                }
+
+                if (error.status === 409) {
+                    document.getElementById('loginPhone').value = formatPhoneInput(registrationPhone);
+                    resetRegistration();
+                    showTab('login');
+                    showNotice(text('registeredAlready'), 'warning');
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('completeRegistration'));
+            }
+        });
+
+        document.getElementById('resendOtpButton').addEventListener('click', async () => {
+            if (!registrationPhone) return;
+            hideNotice();
+            await handleOtpRequest(registrationPhone, document.getElementById('resendOtpButton'));
+        });
+
+        document.getElementById('changePhoneButton').addEventListener('click', () => {
+            const previousPhone = registrationPhone;
+            resetRegistration();
+            document.getElementById('registerPhone').value = formatPhoneInput(previousPhone);
+        });
+
+        document.getElementById('loginTab').addEventListener('click', () => showTab('login'));
+        document.getElementById('registerTab').addEventListener('click', () => showTab('register'));
+        document.getElementById('goRegisterButton').addEventListener('click', () => showTab('register'));
+        document.getElementById('goLoginButton').addEventListener('click', () => showTab('login'));
+        document.getElementById('loginPhone').addEventListener('input', updateLoginGuardUI);
+
+        document.querySelectorAll('[data-password-toggle]').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = document.getElementById(button.dataset.passwordToggle);
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                button.innerHTML = `<i data-lucide="${show ? 'eye-off' : 'eye'}" class="h-4 w-4"></i>`;
+                lucide.createIcons();
+            });
+        });
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang;
+            document.title = text('title');
+            document.getElementById('homeLinkText').textContent = text('home');
+            document.getElementById('loginTab').textContent = text('loginTab');
+            document.getElementById('registerTab').textContent = text('registerTab');
+            document.getElementById('loginEyebrow').textContent = text('accountEyebrow');
+            document.getElementById('loginTitle').textContent = text('loginTitle');
+            document.getElementById('loginDescription').textContent = text('loginDescription');
+            document.getElementById('loginPhoneLabel').textContent = text('phone');
+            document.getElementById('loginPasswordLabel').textContent = text('password');
+            document.getElementById('loginButtonText').textContent = text('login');
+            document.getElementById('goRegisterButton').textContent = text('goRegister');
+            document.getElementById('registerEyebrow').textContent = text('step1');
+            document.getElementById('verifyEyebrow').textContent = text('step2');
+            document.getElementById('completeEyebrow').textContent = text('step3');
+            document.getElementById('registerPhoneTitle').textContent = text('phoneTitle');
+            document.getElementById('registerPhoneDescription').textContent = text('phoneDescription');
+            document.getElementById('registerPhoneLabel').textContent = text('phone');
+            document.getElementById('requestOtpText').textContent = text('getCode');
+            document.getElementById('goLoginButton').textContent = text('goLogin');
+            document.getElementById('verifyTitle').textContent = text('verifyTitle');
+            document.getElementById('otpLabel').textContent = text('otp');
+            document.getElementById('verifyOtpText').textContent = text('verifyCode');
+            document.getElementById('changePhoneButton').textContent = text('changePhone');
+            document.getElementById('resendOtpButton').textContent = text('resend');
+            document.getElementById('completeTitle').textContent = text('completeTitle');
+            document.getElementById('completeDescription').textContent = text('completeDescription');
+            document.getElementById('nameLabel').textContent = text('name');
+            document.getElementById('surnameLabel').textContent = text('surname');
+            document.getElementById('emailLabel').textContent = text('email');
+            document.getElementById('birthDateLabel').textContent = text('birthDate');
+            document.getElementById('registerPasswordLabel').textContent = text('password');
+            document.getElementById('confirmPasswordLabel').textContent = text('confirmPassword');
+            document.getElementById('registerPassword').placeholder = text('passwordHint');
+            document.getElementById('registerButtonText').textContent = text('completeRegistration');
+            document.getElementById('accountEyebrow').textContent = text('accountEyebrow');
+            document.getElementById('accountEmailLabel').textContent = text('accountEmail');
+            document.getElementById('accountBirthLabel').textContent = text('accountBirth');
+            document.getElementById('accountLocationLabel').textContent = text('accountLocation');
+            document.querySelector('#continueShoppingButton span').textContent = text('continueShopping');
+            document.querySelector('#logoutButton span').textContent = text('logout');
+            document.getElementById('languageSelect').value = currentLang;
+
+            if (registrationStep === 2) {
+                document.getElementById('verifyDescription').textContent =
+                    text('verifyDescription').replace('{phone}', registrationPhone);
+            }
+
+            updateLoginGuardUI();
+        }
+
+        function applyTheme() {
+            document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+            lucide.createIcons();
+        }
+
+        document.getElementById('languageSelect').addEventListener('change', event => {
+            currentLang = event.target.value;
+            localStorage.setItem('osuzLang', currentLang);
+            applyLanguage();
+            renderRegistrationStep();
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        });
+
+        function showAccount(customer) {
+            if (!customer) return;
+
+            hideNotice();
+            document.getElementById('authCard').classList.add('hidden');
+            document.getElementById('accountPanel').classList.remove('hidden');
+
+            const fullName = [customer.name, customer.surname].filter(Boolean).join(' ').trim();
+            document.getElementById('accountName').textContent = fullName || customer.phone;
+            document.getElementById('accountPhone').textContent = customer.phone || '';
+            document.getElementById('accountEmail').textContent = customer.email || '—';
+            document.getElementById('accountBirthDate').textContent = customer.birthDate || '—';
+
+            const location = customer.savedLocation;
+            document.getElementById('accountLocation').textContent =
+                location && Number.isFinite(Number(location.lat)) && Number.isFinite(Number(location.lng))
+                    ? `${Number(location.lat).toFixed(5)}, ${Number(location.lng).toFixed(5)}`
+                    : '—';
+
+            lucide.createIcons();
+        }
+
+        document.getElementById('logoutButton').addEventListener('click', async () => {
+            const token = localStorage.getItem(storageKeys.accessToken);
+            let warning = false;
+
+            if (token) {
+                try {
+                    await authRequest('/logout', {
+                        method: 'POST',
+                        token
+                    });
+                } catch {
+                    warning = true;
+                }
+            }
+
+            clearSession();
+            document.getElementById('accountPanel').classList.add('hidden');
+            document.getElementById('authCard').classList.remove('hidden');
+            showTab('login');
+
+            if (warning) showNotice(text('logoutError'), 'warning');
+        });
+
+        applyPhoneMask(document.getElementById('loginPhone'));
+        applyPhoneMask(document.getElementById('registerPhone'));
+
+        document.getElementById('otpCode').addEventListener('input', event => {
+            event.target.value = event.target.value.replace(/\D/g, '').slice(0, 6);
+        });
+
+        applyLanguage();
+        applyTheme();
+        showTab(registrationPhone || registrationTicket ? 'register' : 'login');
+
+        loadCurrentCustomer().then(customer => {
+            if (customer) showAccount(customer);
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

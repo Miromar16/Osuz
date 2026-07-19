@@ -465,9 +465,9 @@
                         <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
                     </button>
                     <button data-tooltip="Корзина" aria-label="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors"><i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i></button>
-                    <a href="#" data-tooltip="Войти" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                        <span>Войти</span>
+                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="hidden md:flex max-w-[180px] items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
                     </a>
                 </div>
             </div>
@@ -643,39 +643,16 @@
             </div>
         </div>
     </footer>
-      <script>
-        const themeToggle = document.getElementById('themeToggle');
-        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+  
+    <script>
+        lucide.createIcons();
 
-        function applyTheme() {
-            const isDark = currentTheme === 'dark';
-            document.body.classList.toggle('dark-mode', isDark);
+        const API_ORIGIN = 'https://osuz.uz';
+        const API = `${API_ORIGIN}/api/catalog`;
+        const currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+            ? localStorage.getItem('osuzLang')
+            : 'ru';
 
-            if (themeToggle) {
-                themeToggle.setAttribute(
-                    'aria-label',
-                    isDark ? 'Включить светлую тему' : 'Включить тёмную тему'
-                );
-                themeToggle.title = isDark ? 'Светлая тема' : 'Тёмная тема';
-            }
-
-            lucide.createIcons();
-        }
-
-        function toggleTheme() {
-            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            localStorage.setItem('osuzTheme', currentTheme);
-            applyTheme();
-        }
-
-        if (themeToggle) {
-            themeToggle.addEventListener('click', toggleTheme);
-        }
-
-        applyTheme();
-
-        const API = 'https://osuz.uz/api/catalog';
-        const IMG_BASE = 'https://osuz.uz';
         let allCategories = [];
         let currentCategory = null;
         let parentCategory = null;
@@ -686,208 +663,454 @@
         let searchQuery = '';
         let sortMode = '';
         let searchTimeout = null;
+
         const params = new URLSearchParams(window.location.search);
         const categoryId = params.get('id');
         const categoryName = params.get('name');
+
+        const ui = {
+            ru: {
+                home: 'Главная',
+                catalog: 'Каталог',
+                category: 'Категория',
+                found: 'Найдено',
+                products: 'товаров',
+                searchPlaceholder: 'Поиск по названию, артикулу, бренду...',
+                sorting: 'Сортировка:',
+                defaultSort: 'По умолчанию',
+                nameSort: 'По названию',
+                brandSort: 'По бренду',
+                all: 'Все',
+                from: 'от',
+                to: 'до',
+                details: 'Подробнее →',
+                emptyTitle: 'Товары не найдены',
+                emptyText: 'Попробуйте изменить фильтры или поисковый запрос',
+                loadingError: 'Ошибка загрузки',
+                page: 'Страница',
+                of: 'из',
+                back: 'Назад',
+                next: 'Далее',
+                priceRequest: 'Запросить цену',
+                priceFrom: 'от {price} сум'
+            },
+            uz: {
+                home: 'Bosh sahifa',
+                catalog: 'Katalog',
+                category: 'Kategoriya',
+                found: 'Topildi',
+                products: 'mahsulot',
+                searchPlaceholder: 'Nomi, artikuli yoki brendi bo‘yicha qidirish...',
+                sorting: 'Saralash:',
+                defaultSort: 'Standart',
+                nameSort: 'Nomi bo‘yicha',
+                brandSort: 'Brend bo‘yicha',
+                all: 'Barchasi',
+                from: 'dan',
+                to: 'gacha',
+                details: 'Batafsil →',
+                emptyTitle: 'Mahsulotlar topilmadi',
+                emptyText: 'Filtrlarni yoki qidiruv so‘rovini o‘zgartiring',
+                loadingError: 'Yuklashda xatolik',
+                page: 'Sahifa',
+                of: 'dan',
+                back: 'Orqaga',
+                next: 'Keyingi',
+                priceRequest: 'Narx so‘rash',
+                priceFrom: '{price} so‘mdan'
+            },
+            en: {
+                home: 'Home',
+                catalog: 'Catalog',
+                category: 'Category',
+                found: 'Found',
+                products: 'products',
+                searchPlaceholder: 'Search by name, order code or brand...',
+                sorting: 'Sort:',
+                defaultSort: 'Default',
+                nameSort: 'By name',
+                brandSort: 'By brand',
+                all: 'All',
+                from: 'min',
+                to: 'max',
+                details: 'Details →',
+                emptyTitle: 'No products found',
+                emptyText: 'Try changing the filters or search query',
+                loadingError: 'Loading error',
+                page: 'Page',
+                of: 'of',
+                back: 'Back',
+                next: 'Next',
+                priceRequest: 'Request price',
+                priceFrom: 'from {price} UZS'
+            }
+        }[currentLang];
+
         if (!categoryId && !categoryName) {
             window.location.href = 'index.html#catalog';
         }
+
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function buildFileUrl(url) {
+            if (!url) return '';
+            if (/^https?:\/\//i.test(url)) return url;
+            return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
+        }
+
+        function localizedObjectValue(values, fallback = '') {
+            if (!values || typeof values !== 'object') return fallback;
+            return currentLang === 'uz'
+                ? (values.uz || values.ru || values.en || fallback)
+                : currentLang === 'en'
+                    ? (values.en || values.ru || values.uz || fallback)
+                    : (values.ru || values.en || values.uz || fallback);
+        }
+
+        function localizedProductName(product) {
+            return currentLang === 'uz'
+                ? (product.name_uz || product.name_ru || product.name_en || ui.category)
+                : currentLang === 'en'
+                    ? (product.name_en || product.name_ru || product.name_uz || ui.category)
+                    : (product.name_ru || product.name_en || product.name_uz || ui.category);
+        }
+
+        function localizedAttributeName(attribute) {
+            return currentLang === 'uz'
+                ? (attribute.name_uz || attribute.name_ru || attribute.name_en || '')
+                : currentLang === 'en'
+                    ? (attribute.name_en || attribute.name_ru || attribute.name_uz || '')
+                    : (attribute.name_ru || attribute.name_en || attribute.name_uz || '');
+        }
+
+        function localizedOptionValue(option) {
+            return currentLang === 'uz'
+                ? (option.value_uz || option.value_ru || option.value_en || '')
+                : currentLang === 'en'
+                    ? (option.value_en || option.value_ru || option.value_uz || '')
+                    : (option.value_ru || option.value_en || option.value_uz || '');
+        }
+
+        function formatPrice(value) {
+            const number = Number(value);
+            if (!Number.isFinite(number) || number <= 0) return ui.priceRequest;
+
+            const formatted = new Intl.NumberFormat(
+                currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-US' : 'ru-RU',
+                { maximumFractionDigits: 0 }
+            ).format(number);
+
+            return ui.priceFrom.replace('{price}', formatted);
+        }
+
         async function apiFetch(path, query = {}) {
             const qs = new URLSearchParams(query).toString();
             const url = API + path + (qs ? '?' + qs : '');
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`API ${res.status}: ${url}`);
-            return res.json();
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`API ${response.status}: ${url}`);
+            return response.json();
         }
+
+        function applyStaticLanguage() {
+            document.documentElement.lang = currentLang;
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = ui.searchPlaceholder;
+
+            const sortingLabel = document.querySelector('.sort-btn')?.parentElement?.querySelector('span');
+            if (sortingLabel) sortingLabel.textContent = ui.sorting;
+
+            const sortButtons = document.querySelectorAll('.sort-btn');
+            if (sortButtons[0]) sortButtons[0].textContent = ui.defaultSort;
+            if (sortButtons[1]) sortButtons[1].textContent = ui.nameSort;
+            if (sortButtons[2]) sortButtons[2].textContent = ui.brandSort;
+
+            const emptyTitle = document.querySelector('#emptyState h3');
+            const emptyText = document.querySelector('#emptyState p');
+            if (emptyTitle) emptyTitle.textContent = ui.emptyTitle;
+            if (emptyText) emptyText.textContent = ui.emptyText;
+
+            const prevLabel = document.querySelector('#prevPage span');
+            const nextLabel = document.querySelector('#nextPage span');
+            if (prevLabel) prevLabel.textContent = ui.back;
+            if (nextLabel) nextLabel.textContent = ui.next;
+        }
+
         async function init() {
+            applyStaticLanguage();
+
             try {
                 allCategories = await apiFetch('/categories');
-            } catch (e) {
-                console.error('Failed to load categories:', e);
+            } catch (error) {
+                console.error('Failed to load categories:', error);
                 allCategories = [];
             }
 
             if (categoryId) {
-                currentCategory = allCategories.find(c => c.id === Number(categoryId));
+                currentCategory = allCategories.find(category => category.id === Number(categoryId));
             }
+
             if (!currentCategory && categoryName) {
-                currentCategory = allCategories.find(c => c.names?.ru === categoryName);
+                currentCategory = allCategories.find(category =>
+                    Object.values(category.names || {}).some(name => name === categoryName)
+                );
             }
+
             if (!currentCategory) {
-                document.getElementById('categoryTitle').textContent = categoryName || 'Категория';
-                document.getElementById('breadcrumbCategory').textContent = categoryName || 'Категория';
-                loadProducts();
+                const fallbackName = categoryName || ui.category;
+                document.getElementById('categoryTitle').textContent = fallbackName;
+                document.getElementById('breadcrumbCategory').textContent = fallbackName;
+                await loadProducts();
                 return;
             }
 
-            
-            const catName = currentCategory.names?.ru || categoryName || '';
-            document.title = catName + ' — OSUZ';
-            document.getElementById('categoryTitle').textContent = catName;
-            document.getElementById('breadcrumbCategory').textContent = catName;
+            const currentName = localizedObjectValue(currentCategory.names, ui.category);
+            document.title = `${currentName} — OSUZ`;
+            document.getElementById('categoryTitle').textContent = currentName;
+            document.getElementById('breadcrumbCategory').textContent = currentName;
 
-           
+            const breadcrumbLinks = document.querySelectorAll('section a[href="index.html"], section a[href="index.html#catalog"]');
+            if (breadcrumbLinks[0]) breadcrumbLinks[0].textContent = ui.home;
+            if (breadcrumbLinks[1]) breadcrumbLinks[1].textContent = ui.catalog;
+
             if (currentCategory.parent_id) {
-                parentCategory = allCategories.find(c => c.id === currentCategory.parent_id);
+                parentCategory = allCategories.find(category => category.id === currentCategory.parent_id);
                 if (parentCategory) {
                     const crumbParent = document.getElementById('crumbParent');
-                    crumbParent.textContent = parentCategory.names?.ru || '';
+                    crumbParent.textContent = localizedObjectValue(parentCategory.names, ui.category);
                     crumbParent.classList.remove('hidden');
-                    crumbParent.href = 'category.html?id=' + parentCategory.id;
+                    crumbParent.onclick = () => {
+                        window.location.href = `category.html?id=${parentCategory.id}`;
+                    };
                     document.getElementById('crumbSep3').classList.remove('hidden');
                 }
             }
 
-            childCategories = allCategories.filter(c => c.parent_id === currentCategory.id);
-            if (childCategories.length > 0) {
+            childCategories = allCategories
+                .filter(category => category.parent_id === currentCategory.id)
+                .sort((a, b) =>
+                    localizedObjectValue(a.names).localeCompare(localizedObjectValue(b.names))
+                );
+
+            if (childCategories.length) {
                 const section = document.getElementById('subcatsSection');
                 const list = document.getElementById('subcatsList');
                 section.style.display = '';
-                list.innerHTML = childCategories.map(c =>
-                    `<a href="category.html?id=${c.id}" class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white">${c.names?.ru || c.names?.en || 'Категория'}</a>`
-                ).join('');
+                list.innerHTML = childCategories.map(category => `
+                    <a
+                        href="category.html?id=${category.id}"
+                        class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white"
+                    >
+                        ${escapeHTML(localizedObjectValue(category.names, ui.category))}
+                    </a>
+                `).join('');
             }
 
-           
             await Promise.all([loadAttributes(), loadProducts()]);
         }
+
         async function loadAttributes() {
             if (!currentCategory) return;
+
             try {
                 categoryAttributes = await apiFetch(`/categories/${currentCategory.id}/attributes`);
-            } catch (e) {
+            } catch (error) {
+                console.warn('Attributes are unavailable:', error);
                 categoryAttributes = [];
             }
+
             renderAttrFilters();
+        }
+
+        function buildOptionTree(options, parentId = null, depth = 0) {
+            return options
+                .filter(option => (option.parent_id ?? null) === parentId)
+                .sort((a, b) =>
+                    Number(a.sort_order || 0) - Number(b.sort_order || 0) ||
+                    localizedOptionValue(a).localeCompare(localizedOptionValue(b))
+                )
+                .flatMap(option => {
+                    const label = localizedOptionValue(option);
+                    if (!label) return [];
+
+                    return [
+                        { option, label, depth },
+                        ...buildOptionTree(options, option.id, depth + 1)
+                    ];
+                });
         }
 
         function renderAttrFilters() {
             const container = document.getElementById('attrFilters');
             container.innerHTML = '';
-            categoryAttributes.forEach(attr => {
-                if (attr.type === 'select' && attr.options.length > 0) {
+
+            categoryAttributes.forEach(attribute => {
+                const attributeName = localizedAttributeName(attribute);
+                if (!attributeName) return;
+
+                if (attribute.type === 'select' && Array.isArray(attribute.options) && attribute.options.length) {
                     const wrap = document.createElement('div');
                     wrap.className = 'flex items-center gap-1.5';
+
                     const label = document.createElement('span');
                     label.className = 'text-xs text-gray-400';
-                    label.textContent = attr.name_ru + ':';
+                    label.textContent = `${attributeName}:`;
                     wrap.appendChild(label);
-                    const sel = document.createElement('select');
-                    sel.className = 'text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:border-primary-500';
-                    sel.dataset.attrId = attr.id;
-                    sel.innerHTML = `<option value="">Все</option>` + attr.options.map(o =>
-                        `<option value="${o.value}">${o.value}</option>`
-                    ).join('');
-                    sel.addEventListener('change', () => { currentPage = 1; loadProducts(); });
-                    wrap.appendChild(sel);
+
+                    const select = document.createElement('select');
+                    select.className = 'text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:border-primary-500';
+                    select.dataset.attrId = attribute.id;
+
+                    const allOption = document.createElement('option');
+                    allOption.value = '';
+                    allOption.textContent = ui.all;
+                    select.appendChild(allOption);
+
+                    buildOptionTree(attribute.options).forEach(item => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = String(item.option.id);
+                        optionElement.textContent = `${'— '.repeat(item.depth)}${item.label}`;
+                        select.appendChild(optionElement);
+                    });
+
+                    wrap.appendChild(select);
                     container.appendChild(wrap);
-                } else if (attr.type === 'number_range') {
+                    return;
+                }
+
+                if (attribute.type === 'number_range' || attribute.type === 'number') {
                     const wrap = document.createElement('div');
                     wrap.className = 'flex items-center gap-1.5';
+
                     const label = document.createElement('span');
                     label.className = 'text-xs text-gray-400';
-                    label.textContent = attr.name_ru + ':';
+                    label.textContent = `${attributeName}${attribute.default_unit ? ` (${attribute.default_unit})` : ''}:`;
                     wrap.appendChild(label);
+
                     const min = document.createElement('input');
                     min.type = 'number';
-                    min.placeholder = 'от';
-                    min.className = 'w-16 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
-                    min.dataset.attrMin = attr.id;
-                    const max = document.createElement('input');
-                    max.type = 'number';
-                    max.placeholder = 'до';
-                    max.className = 'w-16 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
-                    max.dataset.attrMax = attr.id;
+                    min.placeholder = ui.from;
+                    min.className = 'w-20 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
+
                     wrap.appendChild(min);
-                    wrap.appendChild(max);
+
+                    if (attribute.type === 'number_range') {
+                        const max = document.createElement('input');
+                        max.type = 'number';
+                        max.placeholder = ui.to;
+                        max.className = 'w-20 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
+                        wrap.appendChild(max);
+                    }
+
                     container.appendChild(wrap);
                 }
             });
         }
+
         async function loadProducts() {
             const grid = document.getElementById('productsGrid');
             const skeleton = document.getElementById('loadingSkeleton');
             const empty = document.getElementById('emptyState');
-            const pag = document.getElementById('pagination');
+            const pagination = document.getElementById('pagination');
 
             skeleton.classList.remove('hidden');
             grid.classList.add('hidden');
             empty.classList.add('hidden');
-            pag.classList.add('hidden');
+            pagination.classList.add('hidden');
             grid.innerHTML = '';
 
-            const query = {};
+            const query = {
+                page: currentPage,
+                limit: 48
+            };
+
             if (currentCategory) query.category_id = currentCategory.id;
             if (searchQuery) query.q = searchQuery;
-            query.page = currentPage;
-            query.limit = 48;
 
             try {
                 const data = await apiFetch('/products', query);
-                const items = data.items || [];
-                totalPages = Math.ceil((data.total || 0) / (data.limit || 48));
+                const items = Array.isArray(data.items) ? data.items : [];
+                totalPages = Math.max(1, Math.ceil(Number(data.total || 0) / Number(data.limit || 48)));
 
                 skeleton.classList.add('hidden');
 
-                if (items.length === 0) {
+                if (!items.length) {
                     empty.classList.remove('hidden');
-                    document.getElementById('productCount').textContent = 'Найдено: 0';
+                    document.getElementById('productCount').textContent = `${ui.found}: 0`;
                     return;
                 }
 
-                document.getElementById('productCount').textContent = `Найдено: ${data.total} товаров`;
+                document.getElementById('productCount').textContent =
+                    `${ui.found}: ${Number(data.total || items.length)} ${ui.products}`;
 
-                let sorted = items;
+                let sorted = [...items];
+
                 if (sortMode === 'name') {
-                    sorted = [...items].sort((a, b) => (a.name_ru || '').localeCompare(b.name_ru || ''));
+                    sorted.sort((a, b) =>
+                        localizedProductName(a).localeCompare(localizedProductName(b))
+                    );
                 } else if (sortMode === 'brand') {
-                    sorted = [...items].sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
+                    sorted.sort((a, b) =>
+                        String(a.brand || '').localeCompare(String(b.brand || ''))
+                    );
                 }
 
-                sorted.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in';
-                    const photoSrc = p.photo_url ? IMG_BASE + p.photo_url : '';
-                    const brandLetter = (p.brand || '?').charAt(0).toUpperCase();
-                    card.innerHTML = `
-                        <a href="product.html?id=${p.id}" class="block">
-                            <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
-                                ${photoSrc
-                                    ? `<img src="${photoSrc}" alt="${p.name_ru || ''}" class="max-h-full max-w-full object-contain" loading="lazy">`
-                                    : `<div class="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center"><span class="text-lg font-bold text-gray-400">${brandLetter}</span></div>`
-                                }
-                            </div>
-                            <div class="p-4">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-xs text-primary-600 font-semibold">${p.brand || ''}</span>
+                grid.innerHTML = sorted.map(product => {
+                    const name = localizedProductName(product);
+                    const photo = buildFileUrl(product.photo_url);
+                    const brand = product.brand || '';
+                    const brandLetter = (brand || '?').charAt(0).toUpperCase();
+                    const price = formatPrice(product.price_from);
+
+                    return `
+                        <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in">
+                            <a href="product.html?id=${encodeURIComponent(product.id)}" class="block h-full">
+                                <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
+                                    ${photo
+                                        ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
+                                        : `<div class="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center"><span class="text-lg font-bold text-gray-400">${escapeHTML(brandLetter)}</span></div>`
+                                    }
                                 </div>
-                                <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">${p.name_ru || ''}</h3>
-                                <p class="text-xs text-gray-500 mb-2">${p.order_code || ''}</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs text-gray-400">${p.category_name || ''}</span>
-                                    <span class="text-xs text-primary-600 font-medium">Подробнее →</span>
+                                <div class="p-4">
+                                    <span class="text-xs text-primary-600 font-semibold">${escapeHTML(brand)}</span>
+                                    <h3 class="font-semibold text-gray-900 text-sm mt-1 mb-1 line-clamp-2">${escapeHTML(name)}</h3>
+                                    <p class="text-xs text-gray-500 mb-3">${escapeHTML(product.order_code || '')}</p>
+                                    <div class="flex items-end justify-between gap-3">
+                                        <div>
+                                            <div class="text-sm font-bold text-gray-900">${escapeHTML(price)}</div>
+                                            <div class="text-[11px] text-gray-400 mt-1">${escapeHTML(product.category_name || '')}</div>
+                                        </div>
+                                        <span class="text-xs text-primary-600 font-medium whitespace-nowrap">${ui.details}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </article>
                     `;
-                    grid.appendChild(card);
+                }).join('');
+
+                grid.classList.remove('hidden');
+                grid.querySelectorAll('.fade-in').forEach(card => {
                     requestAnimationFrame(() => card.classList.add('visible'));
                 });
 
-                grid.classList.remove('hidden');
                 if (totalPages > 1) {
-                    pag.classList.remove('hidden');
+                    pagination.classList.remove('hidden');
                     renderPagination();
-                    document.getElementById('prevPage').disabled = currentPage <= 1;
-                    document.getElementById('nextPage').disabled = currentPage >= totalPages;
                 }
 
                 lucide.createIcons();
-            } catch (e) {
-                console.error('Failed to load products:', e);
+            } catch (error) {
+                console.error('Failed to load products:', error);
                 skeleton.classList.add('hidden');
                 empty.classList.remove('hidden');
-                document.getElementById('productCount').textContent = 'Ошибка загрузки';
+                document.getElementById('productCount').textContent = ui.loadingError;
             }
         }
 
@@ -896,22 +1119,21 @@
         const paginationSelectorMenu = document.getElementById('paginationSelectorMenu');
 
         function closePaginationSelector() {
-            if (!paginationSelectorButton || !paginationSelectorMenu) return;
-            paginationSelectorMenu.classList.add('hidden');
-            paginationSelectorButton.classList.remove('open');
-            paginationSelectorButton.setAttribute('aria-expanded', 'false');
+            paginationSelectorMenu?.classList.add('hidden');
+            paginationSelectorButton?.classList.remove('open');
+            paginationSelectorButton?.setAttribute('aria-expanded', 'false');
         }
 
         function openPaginationSelector() {
             if (!paginationSelectorButton || !paginationSelectorMenu) return;
+
             paginationSelectorMenu.classList.remove('hidden');
             paginationSelectorButton.classList.add('open');
             paginationSelectorButton.setAttribute('aria-expanded', 'true');
 
-            const activeOption = paginationSelectorMenu.querySelector('.pagination-page-option.active');
-            if (activeOption) {
-                activeOption.scrollIntoView({ block: 'nearest' });
-            }
+            paginationSelectorMenu
+                .querySelector('.pagination-page-option.active')
+                ?.scrollIntoView({ block: 'nearest' });
         }
 
         function goToPage(page) {
@@ -919,7 +1141,6 @@
             if (!selectedPage || selectedPage < 1 || selectedPage > totalPages) return;
 
             closePaginationSelector();
-
             if (selectedPage === currentPage) return;
 
             currentPage = selectedPage;
@@ -930,7 +1151,8 @@
         function renderPagination() {
             if (!paginationSelectorLabel || !paginationSelectorMenu) return;
 
-            paginationSelectorLabel.textContent = `Страница ${currentPage} из ${totalPages}`;
+            paginationSelectorLabel.textContent =
+                `${ui.page} ${currentPage} ${ui.of} ${totalPages}`;
 
             paginationSelectorMenu.innerHTML = Array.from(
                 { length: totalPages },
@@ -943,7 +1165,7 @@
                     role="option"
                     aria-selected="${page === currentPage}"
                 >
-                    <span>Страница ${page}</span>
+                    <span>${ui.page} ${page}</span>
                     ${page === currentPage
                         ? '<span class="pagination-current-mark" aria-hidden="true"></span>'
                         : ''
@@ -957,48 +1179,38 @@
 
             document.getElementById('prevPage').disabled = currentPage <= 1;
             document.getElementById('nextPage').disabled = currentPage >= totalPages;
-
             lucide.createIcons();
         }
 
-        if (paginationSelectorButton) {
-            paginationSelectorButton.addEventListener('click', (event) => {
-                event.stopPropagation();
-
-                if (paginationSelectorMenu.classList.contains('hidden')) {
-                    openPaginationSelector();
-                } else {
-                    closePaginationSelector();
-                }
-            });
-        }
-
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('.pagination-selector')) {
-                closePaginationSelector();
-            }
+        paginationSelectorButton?.addEventListener('click', event => {
+            event.stopPropagation();
+            paginationSelectorMenu.classList.contains('hidden')
+                ? openPaginationSelector()
+                : closePaginationSelector();
         });
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closePaginationSelector();
-            }
+        document.addEventListener('click', event => {
+            if (!event.target.closest('.pagination-selector')) closePaginationSelector();
         });
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closePaginationSelector();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', event => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                searchQuery = e.target.value.trim();
+                searchQuery = event.target.value.trim();
                 currentPage = 1;
                 loadProducts();
             }, 400);
         });
 
-        document.querySelectorAll('.sort-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                sortMode = btn.dataset.sort;
+        document.querySelectorAll('.sort-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(item => item.classList.remove('active'));
+                button.classList.add('active');
+                sortMode = button.dataset.sort;
                 currentPage = 1;
                 loadProducts();
             });
@@ -1012,8 +1224,58 @@
             if (currentPage < totalPages) goToPage(currentPage + 1);
         });
 
-        // Init
         init();
     </script>
+
+
+    <script>
+        (() => {
+            const labels = {
+                ru: { login: 'Войти', account: 'Аккаунт' },
+                uz: { login: 'Kirish', account: 'Akkaunt' },
+                en: { login: 'Sign in', account: 'Account' }
+            };
+
+            function readCustomer() {
+                try {
+                    return JSON.parse(localStorage.getItem('osuzCustomer') || 'null');
+                } catch {
+                    return null;
+                }
+            }
+
+            function getLanguage() {
+                const value = localStorage.getItem('osuzLang');
+                return ['ru', 'uz', 'en'].includes(value) ? value : 'ru';
+            }
+
+            window.updateCustomerHeader = function updateCustomerHeader() {
+                const customer = readCustomer();
+                const lang = getLanguage();
+                const fallback = labels[lang] || labels.ru;
+                const displayName = customer
+                    ? [customer.name, customer.surname].filter(Boolean).join(' ').trim()
+                        || customer.phone
+                        || fallback.account
+                    : fallback.login;
+
+                document.querySelectorAll('[data-customer-account-link]').forEach(link => {
+                    link.href = 'auth.html';
+                    const textNode = link.querySelector('[data-customer-account-text]');
+                    if (textNode) textNode.textContent = displayName;
+                    link.dataset.tooltip = customer ? fallback.account : fallback.login;
+                    link.title = customer ? fallback.account : fallback.login;
+                });
+            };
+
+            window.updateCustomerHeader();
+            window.addEventListener('storage', event => {
+                if (['osuzCustomer', 'osuzLang'].includes(event.key)) {
+                    window.updateCustomerHeader();
+                }
+            });
+        })();
+    </script>
+
 </body>
 </html>

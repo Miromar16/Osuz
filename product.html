@@ -13,413 +13,852 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#e0f7fa', 100: '#b2ebf2', 200: '#80deea', 300: '#4dd0e1',
-                            400: '#26c6da', 500: '#00bcd4', 600: '#00acc1', 700: '#0097a7',
-                            800: '#00838f', 900: '#006064',
-                        },
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064'
+                        }
                     },
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
                 }
             }
-        }
+        };
     </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: #f9fafb; color: #111827; }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background-color .25s ease, color .25s ease;
+        }
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f3f4f6; }
-        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
-        .nav-link { position: relative; transition: color 0.2s; }
-        .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
-        .nav-link:hover { color: #0097a7; }
-        .nav-link:hover::after { width: 100%; }
-        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .product-card { transition: all 0.3s ease; }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
-        .gradient-text { background: linear-gradient(135deg, #00bcd4, #0097a7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .tab-active { color: #0097a7; border-bottom: 2px solid #00bcd4; }
-        .fade-in { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        .lightbox { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; cursor: zoom-out; }
-        .lightbox.active { display: flex; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 999px; }
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -17px;
+            height: 3px;
+            border-radius: 999px;
+            background: #00bcd4;
+            transform: scaleX(0);
+            transition: transform .2s ease;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after { transform: scaleX(1); }
+        .surface {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 10px 30px rgba(15,23,42,.06);
+        }
+        .main-image {
+            width: 100%;
+            height: 430px;
+            object-fit: contain;
+        }
+        .thumb {
+            width: 78px;
+            height: 78px;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            background: #fff;
+            overflow: hidden;
+            transition: .2s ease;
+        }
+        .thumb.active,
+        .thumb:hover { border-color: #00bcd4; }
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 12px;
+            color: #475569;
+            background: #fff;
+        }
+        .info-row {
+            display: grid;
+            grid-template-columns: minmax(130px, .8fr) 1.2fr;
+            gap: 16px;
+            padding: 13px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .seller-card,
+        .related-card {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            transition: .2s ease;
+        }
+        .seller-card:hover,
+        .related-card:hover {
+            border-color: #00bcd4;
+            box-shadow: 0 12px 30px rgba(0,188,212,.11);
+            transform: translateY(-2px);
+        }
+        .skeleton {
+            background: linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+        }
+        @keyframes shimmer {
+            from { background-position: 200% 0; }
+            to { background-position: -200% 0; }
+        }
+        body.dark-mode {
+            background: #070b12;
+            color: #f8fafc;
+        }
+        body.dark-mode nav,
+        body.dark-mode .surface,
+        body.dark-mode .seller-card,
+        body.dark-mode .related-card,
+        body.dark-mode .chip,
+        body.dark-mode .thumb {
+            background: #0f1722 !important;
+            border-color: #344256 !important;
+        }
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100 {
+            background: #0f1722 !important;
+        }
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 {
+            color: #f8fafc !important;
+        }
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 {
+            color: #aeb9c7 !important;
+        }
+        body.dark-mode .border-gray-100,
+        body.dark-mode .border-gray-200,
+        body.dark-mode .border-gray-300 {
+            border-color: #344256 !important;
+        }
+        body.dark-mode .info-row {
+            border-color: #263241;
+        }
+        body.dark-mode .skeleton {
+            background: linear-gradient(90deg,#182231 25%,#223044 50%,#182231 75%);
+            background-size: 200% 100%;
+        }
+        .theme-icon-sun { display: none; }
+        body.dark-mode .theme-icon-moon { display: none; }
+        body.dark-mode .theme-icon-sun { display: block; }
+        @media (max-width: 767px) {
+            .main-image { height: 310px; }
+            .info-row { grid-template-columns: 1fr; gap: 4px; }
+        }
     </style>
 </head>
 <body>
- <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 border-b border-gray-100">
-                <a href="index.html" class="flex items-center gap-3">
-                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
-                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
+            <div class="h-[72px] flex items-center justify-between border-b border-gray-200">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                    <span class="text-xl font-black tracking-wide text-gray-900">OSUZ</span>
                 </a>
-                <div class="flex items-center gap-4 lg:gap-6">
-                    <a href="javascript:history.back()" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        <span>Назад</span>
-                    </a>
-                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
-                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
+                <div class="flex items-center gap-3 md:gap-5">
+                    <button id="languageButton" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 text-sm text-gray-500">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        <span id="languageLabel">RU</span>
                     </button>
-                    <a href="#" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                        <span>Войти</span>
+                    <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100" aria-label="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
+                    </button>
+                    <a href="auth.html" data-customer-account-link class="hidden md:flex max-w-[170px] items-center gap-2 text-sm text-gray-500 hover:text-primary-600">
+                        <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
+                    </a>
+                    <a href="index.html#products" class="hidden sm:flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span id="backLabel">В каталог</span>
                     </a>
                 </div>
             </div>
-            <div class="hidden lg:flex items-center h-12 gap-8">
-                <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
-                <a href="index.html#catalog" class="nav-link text-sm font-medium text-gray-600">Категории</a>
-                <a href="#" class="nav-link text-sm font-medium text-gray-600">Решения</a>
-                <a href="#" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+            <div class="h-12 hidden lg:flex items-center gap-8">
+                <a href="index.html#catalog" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
+                <a href="index.html#partners" class="nav-link text-sm font-medium text-gray-600">Партнёры</a>
+                <a href="index.html#products" class="nav-link active text-sm font-semibold text-primary-600">Товары</a>
+                <a href="index.html#about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
             </div>
         </div>
     </nav>
-    <main class="pt-28 pb-16">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-6">
-            <div class="flex items-center gap-2 text-sm text-gray-400 flex-wrap">
-                <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
-                <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">Каталог</a>
-                <i data-lucide="chevron-right" class="w-3 h-3" id="crumbSep2"></i>
-                <a href="#" id="crumbCategory" class="hover:text-primary-600 transition-colors"></a>
-                <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                <span id="crumbProduct" class="text-gray-900 font-medium max-w-[200px] truncate"></span>
-            </div>
-        </div>
-        <div id="loadingSkeleton" class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-10">
-                <div class="bg-white rounded-2xl p-8"><div class="w-full h-80 skeleton"></div></div>
-                <div class="bg-white rounded-2xl p-8">
-                    <div class="h-4 skeleton w-20 mb-3"></div>
-                    <div class="h-8 skeleton w-3/4 mb-4"></div>
-                    <div class="h-4 skeleton w-1/2 mb-6"></div>
-                    <div class="h-10 skeleton w-40 mb-4"></div>
-                    <div class="h-20 skeleton w-full"></div>
-                </div>
-            </div>
-        </div>
-        <div id="productContent" class="max-w-[1400px] mx-auto px-6 lg:px-8 hidden">
-            <div class="grid lg:grid-cols-2 gap-10">
-             
-                <div class="bg-white rounded-2xl p-6 lg:p-8 flex items-center justify-center">
-                    <div id="productImageWrap" class="w-full h-80 flex items-center justify-center cursor-zoom-in">
-                        <div id="productImagePlaceholder" class="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center">
-                            <span id="productImageLetter" class="text-3xl font-bold text-gray-300"></span>
-                        </div>
-                        <img id="productImage" class="max-h-80 max-w-full object-contain hidden" alt="">
-                    </div>
-                </div>
-                <div>
-                    <div class="bg-white rounded-2xl p-6 lg:p-8">
-                        <div class="text-xs text-primary-600 font-semibold mb-2" id="pBrand"></div>
-                        <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2" id="pName"></h1>
-                        <p class="text-sm text-gray-400 mb-1" id="pOrderCode"></p>
-                        <p class="text-sm text-gray-400 mb-4" id="pBarcode"></p>
-                        <div class="flex items-center gap-3 mb-6" id="pSeries"></div>
 
-                        <div class="flex gap-3 mb-6">
-                            <a href="#" id="pDatasheetLink" class="hidden items-center gap-2 px-5 py-3 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-lg transition-all text-sm">
-                                <i data-lucide="file-text" class="w-4 h-4"></i> Даташит
-                            </a>
-                            <button class="flex items-center gap-2 px-5 py-3 border-2 border-gray-200 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-medium rounded-lg transition-all text-sm">
-                                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Запросить цену
-                            </button>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-2xl p-6 lg:p-8 mt-4" id="specSection">
-                        <h3 class="font-bold text-gray-900 mb-3">Описание</h3>
-                        <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line" id="pSpec"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-10">
-                <div class="flex gap-6 border-b border-gray-200 mb-6">
-                    <button class="tab-btn tab-active pb-3 text-sm font-semibold text-gray-500 transition-colors" data-tab="attrs">Характеристики</button>
-                    <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="analogs">Аналоги</button>
-                    <button class="tab-btn pb-3 text-sm font-semibold text-gray-500 border-b-2 border-transparent transition-colors" data-tab="complements">Дополняющие</button>
-                </div>
-                <div id="tab-attrs" class="tab-content">
-                    <div class="bg-white rounded-2xl overflow-hidden">
-                        <div id="attrsTable"></div>
-                        <div id="attrsEmpty" class="hidden text-center py-10 text-gray-400 text-sm">Характеристики не указаны</div>
-                    </div>
-                </div>
-                <div id="tab-analogs" class="tab-content hidden">
-                    <div id="analogsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-                    <div id="analogsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Аналоги не найдены</div>
-                </div>
-                <div id="tab-complements" class="tab-content hidden">
-                    <div id="complementsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-                    <div id="complementsEmpty" class="hidden text-center py-10 text-gray-400 text-sm bg-white rounded-2xl">Дополняющие товары не найдены</div>
-                </div>
+    <main class="max-w-[1400px] mx-auto px-6 lg:px-8 py-8 lg:py-12">
+        <div id="loadingState" class="space-y-6">
+            <div class="h-5 w-80 skeleton rounded-lg"></div>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="h-[520px] skeleton rounded-3xl"></div>
+                <div class="h-[520px] skeleton rounded-3xl"></div>
             </div>
         </div>
-        <div id="errorState" class="hidden text-center py-20">
-            <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="alert-circle" class="w-8 h-8 text-red-300"></i>
+
+        <div id="errorState" class="hidden surface rounded-3xl p-10 text-center">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-red-50 flex items-center justify-center mb-5">
+                <i data-lucide="triangle-alert" class="w-8 h-8 text-red-500"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Товар не найден</h3>
-            <p class="text-gray-500 text-sm mb-4">Возможно, товар был удалён или не опубликован</p>
-            <a href="index.html#catalog" class="text-primary-600 hover:text-primary-700 font-medium text-sm">← Вернуться в каталог</a>
+            <h1 id="errorTitle" class="text-2xl font-black text-gray-900 mb-2">Товар не найден</h1>
+            <p id="errorText" class="text-gray-500 mb-6">Проверьте ссылку или вернитесь в каталог.</p>
+            <a href="index.html#catalog" id="errorButton" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 rounded-xl font-bold text-gray-900">
+                Вернуться в каталог
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <div id="productContent" class="hidden">
+            <div id="breadcrumbs" class="flex flex-wrap items-center gap-2 text-sm text-gray-400 mb-7"></div>
+
+            <section class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-start">
+                <div class="surface rounded-3xl p-4 lg:p-6">
+                    <div class="relative rounded-2xl bg-gray-50 overflow-hidden">
+                        <img id="mainProductImage" class="main-image" alt="">
+                        <button id="galleryPrev" class="hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                        </button>
+                        <button id="galleryNext" class="hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center">
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </button>
+                        <div id="imageFallback" class="hidden absolute inset-0 items-center justify-center text-6xl font-black text-gray-300">OSUZ</div>
+                    </div>
+                    <div id="galleryThumbs" class="mt-4 flex flex-wrap gap-3"></div>
+                </div>
+
+                <div class="surface rounded-3xl p-6 lg:p-8">
+                    <div id="productBrand" class="text-sm font-black uppercase tracking-widest text-primary-600 mb-3"></div>
+                    <h1 id="productTitle" class="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-4"></h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span id="orderCodeChip" class="chip hidden"></span>
+                        <span id="seriesChip" class="chip hidden"></span>
+                        <span id="barcodeChip" class="chip hidden"></span>
+                    </div>
+
+                    <div class="rounded-2xl bg-primary-50 border border-primary-100 p-5 mb-6">
+                        <div id="priceCaption" class="text-xs font-bold uppercase tracking-wider text-primary-700 mb-1">Минимальная цена</div>
+                        <div id="productPrice" class="text-3xl font-black text-gray-900"></div>
+                    </div>
+
+                    <p id="productSpecification" class="text-gray-500 leading-7 mb-7"></p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <a id="datasheetLink" href="#" target="_blank" rel="noopener" class="hidden inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                            <span id="datasheetLabel">Открыть даташит</span>
+                        </a>
+                        <a href="#sellers" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 font-bold text-gray-900">
+                            <i data-lucide="store" class="w-5 h-5"></i>
+                            <span id="sellersButtonLabel">Посмотреть продавцов</span>
+                        </a>
+                    </div>
+
+                    <div id="orderNotice" class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                        Оформление заказа на сайте пока недоступно. Ниже можно сравнить продавцов, цены и остатки.
+                    </div>
+                </div>
+            </section>
+
+            <section id="attributesSection" class="surface rounded-3xl p-6 lg:p-8 mt-8 hidden">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center">
+                        <i data-lucide="list-checks" class="w-5 h-5 text-primary-600"></i>
+                    </div>
+                    <h2 id="attributesTitle" class="text-2xl font-black text-gray-900">Характеристики</h2>
+                </div>
+                <div id="attributesList"></div>
+            </section>
+
+            <section id="sellers" class="mt-8">
+                <div class="flex items-end justify-between gap-4 mb-5">
+                    <div>
+                        <span id="sellersEyebrow" class="text-xs font-black uppercase tracking-widest text-primary-600">Предложения</span>
+                        <h2 id="sellersTitle" class="text-2xl lg:text-3xl font-black text-gray-900 mt-2">Продавцы и цены</h2>
+                    </div>
+                    <div id="sellersCount" class="text-sm text-gray-400"></div>
+                </div>
+                <div id="sellersList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+                <div id="sellersEmpty" class="hidden surface rounded-3xl p-8 text-center text-gray-500"></div>
+            </section>
+
+            <section id="analogsSection" class="mt-10 hidden">
+                <h2 id="analogsTitle" class="text-2xl lg:text-3xl font-black text-gray-900 mb-5">Аналоги</h2>
+                <div id="analogsGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+            </section>
+
+            <section id="complementsSection" class="mt-10 hidden">
+                <h2 id="complementsTitle" class="text-2xl lg:text-3xl font-black text-gray-900 mb-5">Дополняющие товары</h2>
+                <div id="complementsGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+            </section>
         </div>
     </main>
-    <footer class="bg-gray-900 text-white">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
-                        <span class="text-xl font-black tracking-wider">OSUZ</span>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Компания</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Контакты</h4>
-                    <ul class="space-y-2">
-                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
-                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
-                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
-                    </ul>
-                </div>
+
+    <footer class="bg-gray-900 text-white mt-14">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div class="flex items-center gap-2">
+                <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                <span class="font-black tracking-wider">OSUZ</span>
             </div>
-            <div class="border-t border-white/10 mt-10 pt-6 text-center">
-                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
-            </div>
+            <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
         </div>
     </footer>
-    <div id="lightbox" class="lightbox">
-        <img id="lightboxImg" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg" alt="">
-    </div>
 
     <script>
-        lucide.createIcons();
-        const API = 'https://osuz.uz/api/catalog';
-        const IMG_BASE = 'https://osuz.uz';
+        const API_ORIGIN = 'https://osuz.uz';
+        const API = `${API_ORIGIN}/api/catalog`;
+        const currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+            ? localStorage.getItem('osuzLang')
+            : 'ru';
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+
         const params = new URLSearchParams(window.location.search);
-        const productId = params.get('id');
+        const productId = Number(params.get('id'));
 
-        if (!productId) { window.location.href = 'index.html#catalog'; }
+        let product = null;
+        let productAttributes = [];
+        let attributeValues = {};
+        let galleryImages = [];
+        let galleryIndex = 0;
 
-        let productData = null;
-        let categoriesCache = [];
+        const ui = {
+            ru: {
+                back: 'В каталог',
+                catalog: 'Каталог',
+                products: 'Товары',
+                product: 'Товар',
+                orderCode: 'Артикул',
+                series: 'Серия',
+                barcode: 'Штрихкод',
+                minPrice: 'Минимальная цена',
+                requestPrice: 'Запросить цену',
+                fromPrice: 'от {price} сум',
+                datasheet: 'Открыть даташит',
+                sellersButton: 'Посмотреть продавцов',
+                notice: 'Оформление заказа на сайте пока недоступно. Ниже можно сравнить продавцов, цены и остатки.',
+                attributes: 'Характеристики',
+                offers: 'Предложения',
+                sellers: 'Продавцы и цены',
+                sellerCount: '{count} продавцов',
+                noSellers: 'Сейчас нет активных продавцов с ценой и остатком.',
+                stock: 'В наличии',
+                rating: 'Рейтинг',
+                location: 'Локация',
+                workTime: 'График',
+                everyDay: 'ежедневно',
+                roundClock: '24 часа',
+                analogs: 'Аналоги',
+                complements: 'Дополняющие товары',
+                details: 'Открыть',
+                notFound: 'Товар не найден',
+                errorText: 'Проверьте ссылку или вернитесь в каталог.',
+                errorButton: 'Вернуться в каталог'
+            },
+            uz: {
+                back: 'Katalogga',
+                catalog: 'Katalog',
+                products: 'Mahsulotlar',
+                product: 'Mahsulot',
+                orderCode: 'Artikul',
+                series: 'Seriya',
+                barcode: 'Shtrix-kod',
+                minPrice: 'Minimal narx',
+                requestPrice: 'Narx so‘rash',
+                fromPrice: '{price} so‘mdan',
+                datasheet: 'Datashitni ochish',
+                sellersButton: 'Sotuvchilarni ko‘rish',
+                notice: 'Saytda buyurtma berish hozircha mavjud emas. Quyida sotuvchilar, narxlar va qoldiqlarni solishtirish mumkin.',
+                attributes: 'Xususiyatlar',
+                offers: 'Takliflar',
+                sellers: 'Sotuvchilar va narxlar',
+                sellerCount: '{count} ta sotuvchi',
+                noSellers: 'Hozir narx va qoldiq ko‘rsatgan faol sotuvchilar yo‘q.',
+                stock: 'Omborda',
+                rating: 'Reyting',
+                location: 'Joylashuv',
+                workTime: 'Ish vaqti',
+                everyDay: 'har kuni',
+                roundClock: '24 soat',
+                analogs: 'Analoglar',
+                complements: 'Qo‘shimcha mahsulotlar',
+                details: 'Ochish',
+                notFound: 'Mahsulot topilmadi',
+                errorText: 'Havolani tekshiring yoki katalogga qayting.',
+                errorButton: 'Katalogga qaytish'
+            },
+            en: {
+                back: 'Back to catalog',
+                catalog: 'Catalog',
+                products: 'Products',
+                product: 'Product',
+                orderCode: 'Order code',
+                series: 'Series',
+                barcode: 'Barcode',
+                minPrice: 'Minimum price',
+                requestPrice: 'Request price',
+                fromPrice: 'from {price} UZS',
+                datasheet: 'Open datasheet',
+                sellersButton: 'View sellers',
+                notice: 'Website ordering is not available yet. You can compare sellers, prices and stock below.',
+                attributes: 'Specifications',
+                offers: 'Offers',
+                sellers: 'Sellers and prices',
+                sellerCount: '{count} sellers',
+                noSellers: 'There are no active sellers with price and stock at the moment.',
+                stock: 'In stock',
+                rating: 'Rating',
+                location: 'Location',
+                workTime: 'Working hours',
+                everyDay: 'daily',
+                roundClock: '24 hours',
+                analogs: 'Analogs',
+                complements: 'Complementary products',
+                details: 'Open',
+                notFound: 'Product not found',
+                errorText: 'Check the link or return to the catalog.',
+                errorButton: 'Return to catalog'
+            }
+        }[currentLang];
 
-        async function apiFetch(path) {
-            const res = await fetch(API + path);
-            if (!res.ok) throw new Error(`API ${res.status}`);
-            return res.json();
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
         }
 
-        async function init() {
-            try {
-                categoriesCache = await apiFetch('/categories');
-            } catch (e) { categoriesCache = []; }
-
-            try {
-                productData = await apiFetch(`/products/${productId}`);
-            } catch (e) {
-                document.getElementById('loadingSkeleton').classList.add('hidden');
-                document.getElementById('errorState').classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('loadingSkeleton').classList.add('hidden');
-            document.getElementById('productContent').classList.remove('hidden');
-
-            renderProduct();
-            loadAttributes();
-            loadAnalogs();
-            loadComplements();
+        function buildFileUrl(url) {
+            if (!url) return '';
+            if (/^https?:\/\//i.test(url)) return url;
+            return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
         }
 
-        function renderProduct() {
-            const p = productData;
-            document.title = (p.name_ru || 'Товар') + ' — OSUZ';
+        function localizedProductName(item) {
+            return currentLang === 'uz'
+                ? (item.name_uz || item.name_ru || item.name_en || ui.product)
+                : currentLang === 'en'
+                    ? (item.name_en || item.name_ru || item.name_uz || ui.product)
+                    : (item.name_ru || item.name_en || item.name_uz || ui.product);
+        }
 
-           
-            document.getElementById('crumbCategory').textContent = p.category_name || '';
-            document.getElementById('crumbCategory').href = p.category_id ? `category.html?id=${p.category_id}` : '#';
-            document.getElementById('crumbProduct').textContent = p.name_ru || '';
+        function localizedAttributeName(attribute) {
+            return currentLang === 'uz'
+                ? (attribute.name_uz || attribute.name_ru || attribute.name_en || '')
+                : currentLang === 'en'
+                    ? (attribute.name_en || attribute.name_ru || attribute.name_uz || '')
+                    : (attribute.name_ru || attribute.name_en || attribute.name_uz || '');
+        }
 
-           
-            document.getElementById('pBrand').textContent = p.brand || '';
-            document.getElementById('pName').textContent = p.name_ru || '';
+        function formatNumber(value) {
+            return new Intl.NumberFormat(
+                currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-US' : 'ru-RU',
+                { maximumFractionDigits: 2 }
+            ).format(Number(value));
+        }
 
-            
-            const orderEl = document.getElementById('pOrderCode');
-            if (p.order_code) {
-                orderEl.textContent = `Артикул: ${p.order_code}`;
-            } else {
-                orderEl.style.display = 'none';
-            }
+        function formatPrice(value) {
+            const number = Number(value);
+            if (!Number.isFinite(number) || number <= 0) return ui.requestPrice;
+            return ui.fromPrice.replace('{price}', formatNumber(number));
+        }
 
-          
-            const barcodeEl = document.getElementById('pBarcode');
-            if (p.barcode) {
-                barcodeEl.textContent = `Штрихкод: ${p.barcode}`;
-            } else {
-                barcodeEl.style.display = 'none';
-            }
-
-            const seriesEl = document.getElementById('pSeries');
-            if (p.series) {
-                seriesEl.innerHTML = `<span class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">Серия: ${p.series}</span>`;
-            } else {
-                seriesEl.style.display = 'none';
-            }
-
-            
-            if (p.photo_url) {
-                const img = document.getElementById('productImage');
-                img.src = IMG_BASE + p.photo_url;
-                img.alt = p.name_ru || '';
-                img.classList.remove('hidden');
-                document.getElementById('productImagePlaceholder').style.display = 'none';
-                document.getElementById('productImageWrap').addEventListener('click', () => {
-                    const lb = document.getElementById('lightbox');
-                    document.getElementById('lightboxImg').src = img.src;
-                    lb.classList.add('active');
-                });
-            } else {
-                document.getElementById('productImageLetter').textContent = (p.brand || '?').charAt(0).toUpperCase();
-            }
-
-          
-            if (p.datasheet_url) {
-                const link = document.getElementById('pDatasheetLink');
-                link.href = IMG_BASE + p.datasheet_url;
-                link.target = '_blank';
-                link.classList.remove('hidden');
-                link.classList.add('flex');
-            }
-
-           
-            const specSection = document.getElementById('specSection');
-            const specEl = document.getElementById('pSpec');
-            if (p.specification) {
-                specEl.textContent = p.specification;
-            } else {
-                specSection.style.display = 'none';
-            }
-
+        function applyTheme() {
+            const isDark = currentTheme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
             lucide.createIcons();
         }
 
-        async function loadAttributes() {
-            if (!productData || !productData.category_id) return;
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        });
 
-            let attrs = [];
+        document.getElementById('languageLabel').textContent = currentLang.toUpperCase();
+        document.getElementById('languageButton').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        function applyStaticLanguage() {
+            document.documentElement.lang = currentLang;
+            document.getElementById('backLabel').textContent = ui.back;
+            document.getElementById('priceCaption').textContent = ui.minPrice;
+            document.getElementById('datasheetLabel').textContent = ui.datasheet;
+            document.getElementById('sellersButtonLabel').textContent = ui.sellersButton;
+            document.getElementById('orderNotice').textContent = ui.notice;
+            document.getElementById('attributesTitle').textContent = ui.attributes;
+            document.getElementById('sellersEyebrow').textContent = ui.offers;
+            document.getElementById('sellersTitle').textContent = ui.sellers;
+            document.getElementById('analogsTitle').textContent = ui.analogs;
+            document.getElementById('complementsTitle').textContent = ui.complements;
+            document.getElementById('errorTitle').textContent = ui.notFound;
+            document.getElementById('errorText').textContent = ui.errorText;
+            document.getElementById('errorButton').childNodes[0].nodeValue = `${ui.errorButton} `;
+        }
+
+        async function apiFetch(path) {
+            const response = await fetch(`${API}${path}`);
+            if (!response.ok) throw new Error(`API ${response.status}: ${path}`);
+            return response.json();
+        }
+
+        async function loadProductPage() {
+            if (!Number.isInteger(productId) || productId <= 0) {
+                showError();
+                return;
+            }
+
             try {
-                attrs = await apiFetch(`/categories/${productData.category_id}/attributes`);
-            } catch (e) { return }
+                product = await apiFetch(`/products/${productId}`);
 
-            let values = {};
-            try {
-                values = await apiFetch(`/products/${productId}/attribute-values`);
-            } catch (e) { return }
+                const requests = await Promise.allSettled([
+                    apiFetch(`/categories/${product.category_id}/attributes`),
+                    apiFetch(`/products/${productId}/attribute-values`),
+                    apiFetch(`/products/${productId}/listings`),
+                    apiFetch(`/products/${productId}/analogs`),
+                    apiFetch(`/products/${productId}/complements`)
+                ]);
 
-            const table = document.getElementById('attrsTable');
-            const empty = document.getElementById('attrsEmpty');
+                productAttributes = requests[0].status === 'fulfilled' ? requests[0].value : [];
+                attributeValues = requests[1].status === 'fulfilled' ? requests[1].value : {};
+                const listings = requests[2].status === 'fulfilled' ? requests[2].value : [];
+                const analogs = requests[3].status === 'fulfilled' ? requests[3].value : [];
+                const complements = requests[4].status === 'fulfilled' ? requests[4].value : [];
 
-            const rows = attrs.filter(a => values[a.id] !== undefined && values[a.id] !== null && values[a.id] !== '');
-            if (rows.length === 0) {
+                renderProduct();
+                renderAttributes();
+                renderSellers(listings);
+                renderRelated('analogs', analogs);
+                renderRelated('complements', complements);
+
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('productContent').classList.remove('hidden');
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Product loading failed:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('productContent').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function renderProduct() {
+            const name = localizedProductName(product);
+            document.title = `${name} — OSUZ`;
+
+            document.getElementById('productBrand').textContent = product.brand || '';
+            document.getElementById('productTitle').textContent = name;
+            document.getElementById('productPrice').textContent = formatPrice(product.price_from);
+            document.getElementById('productSpecification').textContent =
+                product.specification || '';
+
+            renderChip('orderCodeChip', ui.orderCode, product.order_code);
+            renderChip('seriesChip', ui.series, product.series);
+            renderChip('barcodeChip', ui.barcode, product.barcode);
+
+            const datasheet = buildFileUrl(product.datasheet_url);
+            if (datasheet) {
+                const link = document.getElementById('datasheetLink');
+                link.href = datasheet;
+                link.classList.remove('hidden');
+            }
+
+            document.getElementById('breadcrumbs').innerHTML = `
+                <a href="index.html" class="hover:text-primary-600">${ui.catalog}</a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <a href="category.html?id=${encodeURIComponent(product.category_id)}" class="hover:text-primary-600">${escapeHTML(product.category_name || ui.products)}</a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <span class="text-gray-900 font-semibold">${escapeHTML(name)}</span>
+            `;
+
+            galleryImages = Array.isArray(product.photos)
+                ? product.photos
+                    .map(photo => buildFileUrl(photo.url))
+                    .filter(Boolean)
+                : [];
+
+            if (!galleryImages.length && product.photo_url) {
+                galleryImages = [buildFileUrl(product.photo_url)];
+            }
+
+            if (!galleryImages.length) galleryImages = [''];
+
+            galleryIndex = 0;
+            renderGallery();
+        }
+
+        function renderChip(id, label, value) {
+            if (!value) return;
+            const element = document.getElementById(id);
+            element.textContent = `${label}: ${value}`;
+            element.classList.remove('hidden');
+        }
+
+        function renderGallery() {
+            const image = document.getElementById('mainProductImage');
+            const fallback = document.getElementById('imageFallback');
+            const source = galleryImages[galleryIndex];
+
+            if (source) {
+                image.src = source;
+                image.alt = localizedProductName(product);
+                image.classList.remove('hidden');
+                fallback.classList.add('hidden');
+            } else {
+                image.classList.add('hidden');
+                fallback.classList.remove('hidden');
+                fallback.classList.add('flex');
+            }
+
+            document.getElementById('galleryThumbs').innerHTML = galleryImages.length > 1
+                ? galleryImages.map((url, index) => `
+                    <button class="thumb ${index === galleryIndex ? 'active' : ''}" data-index="${index}">
+                        ${url
+                            ? `<img src="${escapeHTML(url)}" alt="">`
+                            : '<span class="text-xs font-bold text-gray-400">OSUZ</span>'
+                        }
+                    </button>
+                `).join('')
+                : '';
+
+            document.querySelectorAll('.thumb[data-index]').forEach(button => {
+                button.addEventListener('click', () => {
+                    galleryIndex = Number(button.dataset.index);
+                    renderGallery();
+                });
+            });
+
+            const showControls = galleryImages.length > 1;
+            document.getElementById('galleryPrev').classList.toggle('hidden', !showControls);
+            document.getElementById('galleryNext').classList.toggle('hidden', !showControls);
+        }
+
+        document.getElementById('galleryPrev').addEventListener('click', () => {
+            galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+            renderGallery();
+        });
+
+        document.getElementById('galleryNext').addEventListener('click', () => {
+            galleryIndex = (galleryIndex + 1) % galleryImages.length;
+            renderGallery();
+        });
+
+        function formatAttributeValue(attribute, value) {
+            if (value === null || value === undefined || value === '') return '';
+
+            if (attribute.type === 'number_range' && typeof value === 'object') {
+                const min = value.min;
+                const max = value.max;
+                const unit = attribute.default_unit ? ` ${attribute.default_unit}` : '';
+
+                if (min !== null && min !== undefined && max !== null && max !== undefined) {
+                    return `${formatNumber(min)}–${formatNumber(max)}${unit}`;
+                }
+                if (min !== null && min !== undefined) return `${formatNumber(min)}${unit}`;
+                if (max !== null && max !== undefined) return `${formatNumber(max)}${unit}`;
+            }
+
+            const unit = attribute.type === 'number' && attribute.default_unit
+                ? ` ${attribute.default_unit}`
+                : '';
+
+            return `${String(value)}${unit}`;
+        }
+
+        function renderAttributes() {
+            const rows = productAttributes
+                .map(attribute => {
+                    const value = attributeValues[String(attribute.id)];
+                    const formatted = formatAttributeValue(attribute, value);
+                    const name = localizedAttributeName(attribute);
+                    if (!name || !formatted) return '';
+
+                    return `
+                        <div class="info-row">
+                            <div class="text-sm font-semibold text-gray-500">${escapeHTML(name)}</div>
+                            <div class="text-sm font-bold text-gray-900">${escapeHTML(formatted)}</div>
+                        </div>
+                    `;
+                })
+                .filter(Boolean);
+
+            if (!rows.length) return;
+
+            document.getElementById('attributesList').innerHTML = rows.join('');
+            document.getElementById('attributesSection').classList.remove('hidden');
+        }
+
+        function formatWorkingDays(value) {
+            if (value === '1111111') return ui.everyDay;
+            return value || '—';
+        }
+
+        function renderSellers(listings) {
+            const list = Array.isArray(listings) ? listings : [];
+            document.getElementById('sellersCount').textContent =
+                ui.sellerCount.replace('{count}', list.length);
+
+            if (!list.length) {
+                const empty = document.getElementById('sellersEmpty');
+                empty.textContent = ui.noSellers;
                 empty.classList.remove('hidden');
                 return;
             }
 
-            table.innerHTML = rows.map((a, i) => {
-                let val = values[a.id];
-                if (typeof val === 'object' && val !== null && 'min' in val) {
-                    val = `${val.min} – ${val.max} ${a.default_unit || ''}`;
-                } else {
-                    val = String(val);
-                    if (a.default_unit && !val.includes(a.default_unit)) val += ' ' + a.default_unit;
-                }
-                return `<div class="flex items-center px-6 py-3 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}">
-                    <span class="text-sm text-gray-500 w-2/5">${a.name_ru}</span>
-                    <span class="text-sm text-gray-900 font-medium">${val}</span>
-                </div>`;
+            document.getElementById('sellersList').innerHTML = list.map(listing => {
+                const city = [listing.tenant_city, listing.tenant_district]
+                    .filter(Boolean)
+                    .join(', ');
+
+                const workTime = Number(listing.is_24h) === 1
+                    ? ui.roundClock
+                    : [listing.open_time, listing.close_time]
+                        .filter(Boolean)
+                        .join('–') || '—';
+
+                return `
+                    <article class="seller-card rounded-2xl p-5">
+                        <div class="flex items-start justify-between gap-4 mb-4">
+                            <div>
+                                <h3 class="font-black text-gray-900">${escapeHTML(listing.tenant_name || '')}</h3>
+                                <p class="text-sm text-gray-500 mt-1">${escapeHTML(city || '—')}</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-black">
+                                ★ ${escapeHTML(listing.tenant_rating || '—')}
+                            </span>
+                        </div>
+                        <div class="text-2xl font-black text-gray-900 mb-4">
+                            ${escapeHTML(formatPrice(listing.price))}
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <div class="text-gray-400 mb-1">${ui.stock}</div>
+                                <div class="font-bold text-gray-900">${escapeHTML(formatNumber(listing.total_stock || 0))}</div>
+                            </div>
+                            <div class="rounded-xl bg-gray-50 p-3">
+                                <div class="text-gray-400 mb-1">${ui.workTime}</div>
+                                <div class="font-bold text-gray-900">${escapeHTML(workTime)}</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-3">${escapeHTML(formatWorkingDays(listing.work_days))}</div>
+                    </article>
+                `;
             }).join('');
         }
-        async function loadAnalogs() {
-            const grid = document.getElementById('analogsGrid');
-            const empty = document.getElementById('analogsEmpty');
-            try {
-                const items = await apiFetch(`/products/${productId}/analogs`);
-                if (!items || items.length === 0) { empty.classList.remove('hidden'); return; }
-                items.forEach(p => {
-                    grid.appendChild(createProductCard(p));
-                });
-                lucide.createIcons();
-            } catch (e) {
-                empty.classList.remove('hidden');
-            }
-        }
-        async function loadComplements() {
-            const grid = document.getElementById('complementsGrid');
-            const empty = document.getElementById('complementsEmpty');
-            try {
-                const items = await apiFetch(`/products/${productId}/complements`);
-                if (!items || items.length === 0) { empty.classList.remove('hidden'); return; }
-                items.forEach(p => {
-                    grid.appendChild(createProductCard(p, true));
-                });
-                lucide.createIcons();
-            } catch (e) {
-                empty.classList.remove('hidden');
-            }
-        }
 
-        function createProductCard(p, showCategory = false) {
-            const card = document.createElement('div');
-            card.className = 'product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in';
-            const photoSrc = p.photo_url ? IMG_BASE + p.photo_url : '';
-            const brandLetter = (p.brand || '?').charAt(0).toUpperCase();
-            card.innerHTML = `
-                <a href="product.html?id=${p.id}" class="block">
-                    <div class="h-32 bg-gray-50 flex items-center justify-center p-3 overflow-hidden">
-                        ${photoSrc
-                            ? `<img src="${photoSrc}" alt="${p.name_ru || ''}" class="max-h-full max-w-full object-contain" loading="lazy">`
-                            : `<div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center"><span class="text-sm font-bold text-gray-400">${brandLetter}</span></div>`
+        function relatedCard(item) {
+            const name = localizedProductName(item);
+            const image = buildFileUrl(item.photo_url);
+
+            return `
+                <a href="product.html?id=${encodeURIComponent(item.id)}" class="related-card rounded-2xl overflow-hidden block">
+                    <div class="h-40 bg-gray-50 flex items-center justify-center p-4">
+                        ${image
+                            ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain">`
+                            : '<span class="text-xl font-black text-gray-300">OSUZ</span>'
                         }
                     </div>
-                    <div class="p-3">
-                        <div class="text-xs text-primary-600 font-semibold mb-1">${p.brand || ''}</div>
-                        <h4 class="font-semibold text-gray-900 text-xs mb-1 line-clamp-2">${p.name_ru || ''}</h4>
-                        <p class="text-[11px] text-gray-400">${p.order_code || ''}</p>
-                        ${showCategory && p.category_name ? `<p class="text-[11px] text-gray-400 mt-1">${p.category_name}</p>` : ''}
+                    <div class="p-4">
+                        <div class="text-xs font-black text-primary-600">${escapeHTML(item.brand || '')}</div>
+                        <h3 class="font-bold text-sm text-gray-900 mt-1 line-clamp-2">${escapeHTML(name)}</h3>
+                        <p class="text-xs text-gray-400 mt-2">${escapeHTML(item.order_code || item.category_name || '')}</p>
+                        <div class="text-xs text-primary-600 font-bold mt-3">${ui.details} →</div>
                     </div>
                 </a>
             `;
-            requestAnimationFrame(() => card.classList.add('visible'));
-            return card;
         }
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('tab-active');
-                    b.classList.add('border-transparent');
-                });
-                btn.classList.add('tab-active');
-                btn.classList.remove('border-transparent');
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-                document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
-            });
-        });
-        document.getElementById('lightbox').addEventListener('click', () => {
-            document.getElementById('lightbox').classList.remove('active');
-        });
 
-        init();
+        function renderRelated(type, items) {
+            if (!Array.isArray(items) || !items.length) return;
+
+            const section = document.getElementById(`${type}Section`);
+            const grid = document.getElementById(`${type}Grid`);
+            grid.innerHTML = items.map(relatedCard).join('');
+            section.classList.remove('hidden');
+        }
+
+        applyStaticLanguage();
+        applyTheme();
+        loadProductPage();
     </script>
+
+    <script>
+        (() => {
+            const labels = {
+                ru: { login: 'Войти', account: 'Аккаунт' },
+                uz: { login: 'Kirish', account: 'Akkaunt' },
+                en: { login: 'Sign in', account: 'Account' }
+            };
+
+            function readCustomer() {
+                try {
+                    return JSON.parse(localStorage.getItem('osuzCustomer') || 'null');
+                } catch {
+                    return null;
+                }
+            }
+
+            function getLanguage() {
+                const value = localStorage.getItem('osuzLang');
+                return ['ru', 'uz', 'en'].includes(value) ? value : 'ru';
+            }
+
+            window.updateCustomerHeader = function updateCustomerHeader() {
+                const customer = readCustomer();
+                const lang = getLanguage();
+                const fallback = labels[lang] || labels.ru;
+                const displayName = customer
+                    ? [customer.name, customer.surname].filter(Boolean).join(' ').trim()
+                        || customer.phone
+                        || fallback.account
+                    : fallback.login;
+
+                document.querySelectorAll('[data-customer-account-link]').forEach(link => {
+                    link.href = 'auth.html';
+                    const textNode = link.querySelector('[data-customer-account-text]');
+                    if (textNode) textNode.textContent = displayName;
+                    link.dataset.tooltip = customer ? fallback.account : fallback.login;
+                    link.title = customer ? fallback.account : fallback.login;
+                });
+            };
+
+            window.updateCustomerHeader();
+            window.addEventListener('storage', event => {
+                if (['osuzCustomer', 'osuzLang'].includes(event.key)) {
+                    window.updateCustomerHeader();
+                }
+            });
+        })();
+    </script>
+
 </body>
 </html>
