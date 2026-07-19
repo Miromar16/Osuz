@@ -327,6 +327,122 @@
             background: #00bcd4;
         }
 
+    
+        .header-top-row {
+            height: 72px !important;
+            border-bottom-color: #d7dee7 !important;
+        }
+
+        .header-nav-row {
+            height: 52px !important;
+            align-items: center !important;
+        }
+
+        .header-nav-row .nav-link {
+            height: 100%;
+            align-items: center;
+            padding-bottom: 1px;
+        }
+
+        .header-nav-row .nav-link::after {
+            bottom: 0 !important;
+        }
+
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 50%;
+            top: calc(100% + 10px);
+            z-index: 120;
+            width: max-content;
+            max-width: 220px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, -4px);
+            transition: .16s ease;
+        }
+
+        [data-tooltip]:hover::after,
+        [data-tooltip]:focus-visible::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .product-card {
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 5px 18px rgba(15,23,42,.07) !important;
+        }
+
+        .product-card:hover {
+            border-color: #00bcd4 !important;
+        }
+
+        .footer-contact-card {
+            border: 1px solid rgba(77,208,225,.45);
+            background: rgba(255,255,255,.035);
+        }
+
+        .footer-contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #94a3b8;
+            transition: color .2s ease;
+        }
+
+        .footer-contact-link:hover {
+            color: #67e8f9;
+        }
+
+        .footer-contact-icon {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(255,255,255,.09);
+            transition: background-color .2s ease;
+        }
+
+        .footer-contact-link:hover .footer-contact-icon {
+            background: #00bcd4;
+        }
+
+        .footer-contact-icon svg {
+            color: #94a3b8;
+        }
+
+        .footer-contact-link:hover .footer-contact-icon svg {
+            color: #fff !important;
+        }
+
+        body.dark-mode .header-top-row {
+            border-bottom-color: #334155 !important;
+        }
+
+        body.dark-mode .product-card {
+            border-color: #3b4a5e !important;
+        }
+
+        body.dark-mode .product-card:hover {
+            border-color: #22d3ee !important;
+        }
+
     </style>
 </head>
 <body>
@@ -334,25 +450,22 @@
     
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="header-top-row flex items-center justify-between h-16">
+            <div class="header-top-row flex items-center justify-between h-[72px]">
                 <a href="index.html" class="header-brand flex items-center gap-2">
                     <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
                     <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
                 </a>
                 <div class="flex items-center gap-4 lg:gap-6">
-                    <a href="index.html" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    <a href="index.html" data-tooltip="Вернуться на главную" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i>
                         <span>На главную</span>
                     </a>
-                    <button id="themeToggle" type="button" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
+                    <button id="themeToggle" type="button" data-tooltip="Сменить тему" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
                         <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
                         <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
                     </button>
-                    <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors relative">
-                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
-                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center">3</span>
-                    </button>
-                    <a href="#" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    <button data-tooltip="Корзина" aria-label="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors"><i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i></button>
+                    <a href="#" data-tooltip="Войти" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
                         <i data-lucide="user" class="w-4 h-4"></i>
                         <span>Войти</span>
                     </a>
@@ -361,9 +474,9 @@
             <div class="header-nav-row hidden lg:flex gap-8">
                 <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
                 <a href="index.html#catalog" class="nav-link active text-sm font-semibold text-primary-600">Категории</a>
-                <a href="#" class="nav-link text-sm font-medium text-gray-600">Решения</a>
-                <a href="#" class="nav-link text-sm font-medium text-gray-600">Бренды</a>
-                <a href="#" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+                <a href="index.html#solutions" class="nav-link text-sm font-medium text-gray-600">Решения</a>
+                <a href="index.html#partners" class="nav-link text-sm font-medium text-gray-600">Бренды</a>
+                <a href="index.html#about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
             </div>
         </div>
     </nav>
@@ -435,7 +548,7 @@
                 <p class="text-gray-500 text-sm">Попробуйте изменить фильтры или поисковый запрос</p>
             </div>
             <div id="pagination" class="hidden mt-10 flex flex-wrap items-center justify-center gap-3">
-                <button id="prevPage" class="pagination-control px-4 gap-1">
+                <button id="prevPage" data-tooltip="Предыдущая страница" class="pagination-control px-4 gap-1">
                     <i data-lucide="chevron-left" class="w-4 h-4"></i>
                     <span>Назад</span>
                 </button>
@@ -444,6 +557,7 @@
                     <button
                         id="paginationSelectorButton"
                         type="button"
+                        data-tooltip="Выбрать страницу"
                         class="pagination-control pagination-selector-button"
                         aria-haspopup="listbox"
                         aria-expanded="false"
@@ -460,41 +574,71 @@
                     ></div>
                 </div>
 
-                <button id="nextPage" class="pagination-control px-4 gap-1">
+                <button id="nextPage" data-tooltip="Следующая страница" class="pagination-control px-4 gap-1">
                     <span>Далее</span>
                     <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
     </section>
-    <footer class="bg-gray-900 text-white">
+
+    <footer id="contacts" class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-[0.8fr_1.2fr_1.2fr_1.45fr] gap-9 lg:gap-10">
+                <div>
+                    <h4 class="font-semibold text-white mb-5">О нас</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#about" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Вакансии</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Новости компании</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-white mb-5">Покупателям</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Условия доставки и оплаты</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Правила возврата и обмена товара</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Часто задаваемые вопросы (FAQ)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-white mb-5">Для предпринимателей</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Продавать у нас</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Личный кабинет продавца</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Тарифы и комиссии</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact-card rounded-2xl p-5 lg:justify-self-end w-full">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
                         <span class="text-xl font-black tracking-wider">OSUZ</span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Компания</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Контакты</h4>
-                    <ul class="space-y-2">
-                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
-                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
-                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
-                    </ul>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
+                    <div class="space-y-3">
+                        <a href="tel:+998918401405" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="phone" class="w-4 h-4"></i></span>
+                            <span class="text-sm">+998-91-840-14-05</span>
+                        </a>
+                        <a href="mailto:info@osuz.uz" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
+                            <span class="text-sm">info@osuz.uz</span>
+                        </a>
+                        <a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="map-pin" class="w-4 h-4"></i></span>
+                            <span class="text-sm">Ташкент, Узбекистан</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="border-t border-white/10 mt-10 pt-6 text-center">
+
+            <div class="border-t border-white/10 mt-10 pt-6 flex flex-col-reverse md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Пользовательское соглашение</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Политика конфиденциальности</a>
+                </div>
                 <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
             </div>
         </div>

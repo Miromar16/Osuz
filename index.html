@@ -351,19 +351,372 @@
             color: #4dd0e1 !important;
         }
 
+    
+        section[id] {
+            scroll-margin-top: 128px;
+        }
+
+        .header-top-row {
+            height: 72px !important;
+            border-bottom-color: #d7dee7 !important;
+        }
+
+        .header-nav-row {
+            height: 52px !important;
+            align-items: center !important;
+        }
+
+        .header-nav-row .nav-link {
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 0 1px;
+        }
+
+        .header-nav-row .nav-link::after {
+            bottom: 0 !important;
+        }
+
+        .header-support-link {
+            min-width: 142px;
+            justify-content: center;
+        }
+
+        .header-language-control {
+            min-width: 74px;
+            justify-content: center;
+        }
+
+        .hero-copy {
+            min-height: 292px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-copy > span:first-child {
+            min-height: 20px;
+        }
+
+        .hero-copy h1 {
+            min-height: 132px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-copy > p {
+            min-height: 58px;
+        }
+
+        .hero-copy > div:last-child {
+            min-height: 56px;
+            align-items: center;
+        }
+
+        .hero-slide-image {
+            width: 100%;
+            height: 300px;
+            max-width: 620px;
+            object-fit: cover;
+        }
+
+        .hero-controls-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hero-controls-inner {
+            width: 100%;
+            max-width: 1480px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 clamp(10px, 1.5vw, 24px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-side-btn {
+            position: static;
+            width: 44px;
+            height: 64px;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 14px;
+            background: rgba(15,23,42,.62);
+            color: rgba(255,255,255,.82);
+            backdrop-filter: blur(10px);
+            transform: none;
+            transition: .2s ease;
+            pointer-events: auto;
+        }
+
+        .hero-side-btn:hover {
+            border-color: #00bcd4;
+            background: #00bcd4;
+            color: #07111d;
+        }
+
+        .popular-tag {
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .popular-label {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .popular-tag {
+            background: #162333 !important;
+            border-color: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .popular-tag:hover {
+            background: #123b46 !important;
+            border-color: #00bcd4 !important;
+            color: #67e8f9 !important;
+        }
+
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            position: absolute;
+            z-index: 120;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .16s ease, transform .16s ease;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            left: 50%;
+            top: calc(100% + 10px);
+            width: max-content;
+            max-width: 220px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            background: #0f172a;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.25;
+            white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(15,23,42,.2);
+            transform: translate(-50%, -4px);
+        }
+
+        [data-tooltip]::before {
+            content: "";
+            left: 50%;
+            top: calc(100% + 4px);
+            border: 5px solid transparent;
+            border-bottom-color: #0f172a;
+            transform: translate(-50%, -4px);
+        }
+
+        [data-tooltip]:hover::before,
+        [data-tooltip]:hover::after,
+        [data-tooltip]:focus-visible::before,
+        [data-tooltip]:focus-visible::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .category-tile,
+        .product-card,
+        .brand-item {
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        .product-card {
+            box-shadow: 0 5px 18px rgba(15,23,42,.07) !important;
+        }
+
+        .category-tile:hover,
+        .product-card:hover,
+        .brand-item:hover {
+            border-color: #00bcd4 !important;
+        }
+
+        .feature-card,
+        .feature-card:hover {
+            border: 1px solid #82dce6 !important;
+            box-shadow: 0 4px 16px rgba(0,188,212,.07) !important;
+            transform: none !important;
+            cursor: default;
+        }
+
+        .feature-card .feature-icon,
+        .feature-card:hover .feature-icon {
+            background: #e0f7fa !important;
+            box-shadow: none !important;
+        }
+
+        .feature-card .feature-icon svg,
+        .feature-card:hover .feature-icon svg {
+            color: #00acc1 !important;
+        }
+
+        #partners {
+            background:
+                linear-gradient(to bottom, #f8fafc 0%, #ffffff 18%, #ffffff 82%, #f8fafc 100%);
+        }
+
+        .brand-fade-left,
+        .brand-fade-right {
+            position: absolute;
+            top: -10px;
+            bottom: -10px;
+            z-index: 10;
+            width: 180px;
+            pointer-events: none;
+        }
+
+        .brand-fade-left {
+            left: 0;
+            background: linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,.92) 24%, rgba(255,255,255,.45) 62%, transparent 100%);
+        }
+
+        .brand-fade-right {
+            right: 0;
+            background: linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,.92) 24%, rgba(255,255,255,.45) 62%, transparent 100%);
+        }
+
+        .footer-contact-card {
+            border: 1px solid rgba(77,208,225,.45);
+            background: rgba(255,255,255,.035);
+        }
+
+        .footer-contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #94a3b8;
+            transition: color .2s ease;
+        }
+
+        .footer-contact-link:hover {
+            color: #67e8f9;
+        }
+
+        .footer-contact-icon {
+            width: 36px;
+            height: 36px;
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(255,255,255,.09);
+            transition: background-color .2s ease;
+        }
+
+        .footer-contact-link:hover .footer-contact-icon {
+            background: #00bcd4;
+        }
+
+        .footer-contact-icon svg {
+            color: #94a3b8;
+            transition: color .2s ease;
+        }
+
+        .footer-contact-link:hover .footer-contact-icon svg {
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .header-top-row {
+            border-bottom-color: #334155 !important;
+        }
+
+        body.dark-mode .category-tile,
+        body.dark-mode .product-card,
+        body.dark-mode .brand-item {
+            border-color: #3b4a5e !important;
+        }
+
+        body.dark-mode .category-tile:hover,
+        body.dark-mode .product-card:hover,
+        body.dark-mode .brand-item:hover {
+            border-color: #22d3ee !important;
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .feature-card:hover {
+            background: #0f1722 !important;
+            border-color: #2c7884 !important;
+            box-shadow: 0 4px 18px rgba(0,0,0,.24) !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon,
+        body.dark-mode .feature-card:hover .feature-icon {
+            background: #12303a !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon svg,
+        body.dark-mode .feature-card:hover .feature-icon svg {
+            color: #4dd0e1 !important;
+        }
+
+        body.dark-mode #partners {
+            background:
+                linear-gradient(to bottom, #0b111b 0%, #0f1722 18%, #0f1722 82%, #0b111b 100%) !important;
+        }
+
+        body.dark-mode .brand-fade-left {
+            background: linear-gradient(90deg, #0f1722 0%, rgba(15,23,34,.92) 24%, rgba(15,23,34,.48) 62%, transparent 100%);
+        }
+
+        body.dark-mode .brand-fade-right {
+            background: linear-gradient(270deg, #0f1722 0%, rgba(15,23,34,.92) 24%, rgba(15,23,34,.48) 62%, transparent 100%);
+        }
+
+        @media (max-width: 1023px) {
+            .hero-copy {
+                min-height: auto;
+            }
+
+            .hero-copy h1,
+            .hero-copy > p,
+            .hero-copy > div:last-child {
+                min-height: auto;
+            }
+
+            .hero-controls-inner {
+                padding: 0 8px;
+            }
+
+            .hero-side-btn {
+                width: 38px;
+                height: 52px;
+            }
+        }
+
     </style>
 </head>
 <body>
     <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="header-top-row flex items-center justify-between h-16">
+            <div class="header-top-row flex items-center justify-between h-[72px]">
                 <a href="#solutions" class="header-brand flex items-center gap-2">
                     <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
                     <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
                 </a>
                 <div class="flex items-center gap-4 lg:gap-6">
                     <div class="relative hidden md:block">
-                        <button id="languageToggle" class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <button id="languageToggle" data-tooltip-key="language" data-tooltip="Выбрать язык" class="header-language-control flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
                             <i data-lucide="globe" class="w-4 h-4"></i>
                             <span id="languageLabel">RU</span>
                             <i data-lucide="chevron-down" class="w-3 h-3"></i>
@@ -374,23 +727,24 @@
                             <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
                         </div>
                     </div>
-                    <a href="#contacts" class="hidden md:flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    <a href="#contacts" class="header-support-link hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                        <i data-lucide="headphones" class="w-4 h-4"></i>
                         <span>Поддержка</span>
                         <i data-lucide="chevron-down" class="w-3 h-3"></i>
                     </a>
-                    <button id="themeToggle" type="button" class="hidden md:flex p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
+                    <button id="themeToggle" type="button" data-tooltip-key="theme" data-tooltip="Сменить тему" class="hidden md:flex p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
                         <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
                         <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
                     </button>
                     <div class="w-px h-5 bg-gray-200 hidden md:block"></div>
-                    <a href="#products" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Cart">
-                        <i data-lucide="shopping-bag" class="w-5 h-5 text-gray-500"></i>
+                    <a href="#products" data-tooltip-key="cart" data-tooltip="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Корзина">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
                     </a>
-                    <a href="#contacts" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    <a href="#contacts" data-tooltip-key="login" data-tooltip="Войти" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
                         <i data-lucide="user" class="w-4 h-4"></i>
                         <span>Войти</span>
                     </a>
-                    <button id="mobileMenuBtn" class="lg:hidden p-2 text-gray-700">
+                    <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="lg:hidden p-2 text-gray-700">
                         <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -409,7 +763,7 @@
         <div class="p-6">
             <div class="flex items-center justify-between mb-8">
                 <span class="text-xl font-bold text-gray-900">Меню</span>
-                <button id="mobileCloseBtn" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <button id="mobileCloseBtn" data-tooltip-key="menuClose" data-tooltip="Закрыть меню" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
                     <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
                 </button>
             </div>
@@ -450,7 +804,7 @@
             </div>
         </div>
     </div>
-    <section id="solutions" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden pt-28">
+    <section id="solutions" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden pt-[124px]">
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/4 opacity-15">
                 <svg class="infinity-shape w-[500px] h-[500px]" viewBox="0 0 200 100" fill="none">
@@ -466,9 +820,9 @@
         <div id="heroCarousel" class="relative z-10">
             <div class="carousel-track" id="heroTrack">
                 <div class="min-w-full">
-                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
                         <div class="grid lg:grid-cols-2 gap-12 items-center">
-                            <div>
+                            <div class="hero-copy">
                                 <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">OSUZ Platform</span>
                                 <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Индустриальные решения<br><span class="gradient-text">для вашего бизнеса</span></h1>
                                 <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.</p>
@@ -478,15 +832,15 @@
                                 </div>
                             </div>
                             <div class="hidden lg:flex justify-center">
-                                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700&q=80" alt="Industrial automation" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700&q=80" alt="Industrial automation" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="min-w-full">
-                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
                         <div class="grid lg:grid-cols-2 gap-12 items-center">
-                            <div>
+                            <div class="hero-copy">
                                 <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Автоматизация</span>
                                 <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Умные решения<br><span class="gradient-text">для производства</span></h1>
                                 <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Современные системы автоматизации для оптимизации производственных процессов.</p>
@@ -495,15 +849,15 @@
                                 </div>
                             </div>
                             <div class="hidden lg:flex justify-center">
-                                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=700&q=80" alt="Factory automation" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=700&q=80" alt="Factory automation" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="min-w-full">
-                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-16 lg:py-24">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
                         <div class="grid lg:grid-cols-2 gap-12 items-center">
-                            <div>
+                            <div class="hero-copy">
                                 <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Доставка</span>
                                 <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Быстрая доставка<br><span class="gradient-text">по всему региону</span></h1>
                                 <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Экспресс-доставка оборудования и запчастей в кратчайшие сроки.</p>
@@ -512,29 +866,35 @@
                                 </div>
                             </div>
                             <div class="hidden lg:flex justify-center">
-                                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" alt="Logistics" class="rounded-2xl shadow-2xl max-h-[380px] object-cover" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" alt="Logistics" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
-                <button id="heroPrev" class="carousel-btn w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
-                <div class="flex gap-2">
-                    <button class="hero-dot carousel-dot active w-6 h-2 rounded-full bg-white/40" data-index="0"></button>
-                    <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="1"></button>
-                    <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="2"></button>
+            <div class="hero-controls-layer">
+                <div class="hero-controls-inner">
+                    <button id="heroPrev" data-tooltip-key="slidePrev" data-tooltip="Предыдущий слайд" class="hero-side-btn hero-prev-btn" aria-label="Предыдущий слайд">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button id="heroNext" data-tooltip-key="slideNext" data-tooltip="Следующий слайд" class="hero-side-btn hero-next-btn" aria-label="Следующий слайд">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
                 </div>
-                <button id="heroNext" class="carousel-btn w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+            </div>
+            <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+                <button class="hero-dot carousel-dot active w-6 h-2 rounded-full bg-white/40" data-index="0" aria-label="Слайд 1"></button>
+                <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="1" aria-label="Слайд 2"></button>
+                <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="2" aria-label="Слайд 3"></button>
             </div>
         </div>
-        <div class="relative z-10 -mt-16 pb-10">
+        <div class="relative z-10 -mt-8 pb-8">
             <div class="max-w-[900px] mx-auto px-6">
                 <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                     <div class="flex items-center">
                         <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-5 flex-shrink-0"></i>
                         <input type="text" id="heroSearchInput" placeholder="Поиск товаров, брендов, артикулов..." class="flex-1 px-4 py-5 text-gray-900 text-lg placeholder-gray-400 outline-none bg-transparent min-w-0">
-                        <label id="heroPhotoBtn" class="p-3 mr-2 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
+                        <label id="heroPhotoBtn" data-tooltip-key="photoSearch" data-tooltip="Поиск по фото" class="p-3 mr-2 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
                             <i data-lucide="camera" class="w-5 h-5 text-primary-500"></i>
                         </label>
                         <input type="file" id="heroPhotoInput" accept="image/*" class="hidden">
@@ -550,7 +910,7 @@
                     <div class="flex items-center gap-4 p-5">
                         <div class="relative flex-shrink-0">
                             <img id="heroPreviewImg" class="w-20 h-20 object-cover rounded-xl border border-gray-200">
-                            <button id="heroRemovePhoto" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">
+                            <button id="heroRemovePhoto" data-tooltip-key="photoRemove" data-tooltip="Удалить фото" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">
                                 <i data-lucide="x" class="w-3 h-3"></i>
                             </button>
                         </div>
@@ -567,17 +927,17 @@
                     </div>
                 </div>
                 <div class="mt-4 flex flex-wrap items-center gap-3 justify-center">
-                    <span class="text-gray-400 text-sm">Популярные:</span>
-                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">SIEMENS S7-1200</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">ABB ACS580</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">OMRON E5CC</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">Festo VUVS</a>
+                    <span class="popular-label text-gray-400 text-sm">Популярные:</span>
+                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">SIEMENS S7-1200</a>
+                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">ABB ACS580</a>
+                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">OMRON E5CC</a>
+                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">Festo VUVS</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="catalog" class="py-16 bg-white">
+    <section id="catalog" class="section-anchor py-16 bg-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="mb-10">
                 <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Каталог</span>
@@ -598,7 +958,7 @@
         </div>
     </section>
    
-    <section id="products" class="py-16 bg-white">
+    <section id="products" class="section-anchor py-16 bg-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="flex items-end justify-between mb-10">
                 <div>
@@ -617,7 +977,7 @@
         </div>
     </section>
 
-   <section id="partners" class="py-12 bg-white border-y border-gray-100 overflow-hidden">
+   <section id="partners" class="section-anchor py-16 border-y border-gray-100 overflow-hidden">
         <div id="brands" class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-8">
             <div class="text-center">
                 <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Партнёры</span>
@@ -625,8 +985,8 @@
             </div>
         </div>
         <div class="relative">
-            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
+            <div class="brand-fade-left"></div>
+            <div class="brand-fade-right"></div>
             <div class="flex gap-5" style="animation: marquee 25s linear infinite;">
                 <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
                 <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
@@ -711,7 +1071,7 @@
 
 
   
-    <section id="about" class="py-20 bg-gray-50">
+    <section id="about" class="section-anchor py-20 bg-gray-50">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div class="section-reveal">
@@ -755,47 +1115,64 @@
         </div>
     </section>
 
-
     <footer id="contacts" class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-                <div class="col-span-2 lg:col-span-2">
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="w-10 h-10  rounded-xl flex items-center justify-center p-1.5"><img src="osuz logo.png" alt="OSUZ" class="w-full h-full object-contain"></div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-[0.8fr_1.2fr_1.2fr_1.45fr] gap-9 lg:gap-10">
+                <div>
+                    <h4 class="font-semibold text-white mb-5">О нас</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Вакансии</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Новости компании</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-white mb-5">Покупателям</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Условия доставки и оплаты</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Правила возврата и обмена товара</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Часто задаваемые вопросы (FAQ)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-white mb-5">Для предпринимателей</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Продавать у нас</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Личный кабинет продавца</a></li>
+                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Тарифы и комиссии</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact-card rounded-2xl p-5 lg:justify-self-end w-full">
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
                         <span class="text-xl font-black tracking-wider">OSUZ</span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
-                    <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="phone" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="mail" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="map-pin" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
-                        <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary-500 rounded-lg flex items-center justify-center transition-all"><i data-lucide="send" class="w-5 h-5 text-gray-400 hover:text-white"></i></a>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
+                    <div class="space-y-3">
+                        <a href="tel:+998918401405" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="phone" class="w-4 h-4"></i></span>
+                            <span class="text-sm">+998-91-840-14-05</span>
+                        </a>
+                        <a href="mailto:info@osuz.uz" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
+                            <span class="text-sm">info@osuz.uz</span>
+                        </a>
+                        <a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link">
+                            <span class="footer-contact-icon"><i data-lucide="map-pin" class="w-4 h-4"></i></span>
+                            <span class="text-sm">Ташкент, Узбекистан</span>
+                        </a>
                     </div>
                 </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Компания</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#about" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">О нас</a></li>
-                        <li><a href="#solutions" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Доставка</a></li>
-                        <li><a href="#contacts" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Оплата</a></li>
-                        <li><a href="#contacts" class="text-sm text-gray-400 hover:text-primary-400 transition-colors">Вакансии</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Контакты</h4>
-                    <ul class="space-y-2">
-                        <li class="text-sm text-gray-400">Ташкент, Узбекистан</li>
-                        <li><a href="tel:+998918401405" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">+998-91-840-14-05</a></li>
-                        <li><a href="mailto:info@osuz.uz" class="text-sm text-primary-400 hover:text-primary-300 transition-colors">info@osuz.uz</a></li>
-                    </ul>
-                </div>
             </div>
-            <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
-                <div class="flex gap-6">
-                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Политика</a>
-                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Условия</a>
+
+            <div class="border-t border-white/10 mt-10 pt-6 flex flex-col-reverse md:flex-row justify-between items-center gap-4">
+                <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Пользовательское соглашение</a>
+                    <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">Политика конфиденциальности</a>
                 </div>
+                <p class="text-sm text-gray-500">&copy; 2026 OSUZ. Все права защищены.</p>
             </div>
         </div>
     </footer>
@@ -969,7 +1346,19 @@
                 'Товар из каталога': 'Katalogdagi mahsulot',
                 'Запросить цену': 'Narx so‘rash',
                 'Артикул': 'Artikul',
-                'Найдено': 'Topildi'
+                'Найдено': 'Topildi',
+                'Покупателям': 'Xaridorlarga',
+                'Новости компании': 'Kompaniya yangiliklari',
+                'Условия доставки и оплаты': 'Yetkazib berish va to‘lov shartlari',
+                'Правила возврата и обмена товара': 'Mahsulotni qaytarish va almashtirish qoidalari',
+                'Часто задаваемые вопросы (FAQ)': 'Ko‘p so‘raladigan savollar (FAQ)',
+                'Для предпринимателей': 'Tadbirkorlar uchun',
+                'Продавать у нас': 'Bizda sotish',
+                'Личный кабинет продавца': 'Sotuvchining shaxsiy kabineti',
+                'Тарифы и комиссии': 'Tariflar va komissiyalar',
+                'Новости компании': 'Kompaniya yangiliklari',
+                'Пользовательское соглашение': 'Foydalanuvchi kelishuvi',
+                'Политика конфиденциальности': 'Maxfiylik siyosati'
             },
             en: {
                 'UZ | RU': 'RU | UZ | EN',
@@ -1058,13 +1447,72 @@
                 'Товар из каталога': 'Catalog product',
                 'Запросить цену': 'Request price',
                 'Артикул': 'Part number',
-                'Найдено': 'Found'
+                'Найдено': 'Found',
+                'Покупателям': 'For buyers',
+                'Новости компании': 'Company news',
+                'Условия доставки и оплаты': 'Delivery and payment terms',
+                'Правила возврата и обмена товара': 'Return and exchange policy',
+                'Часто задаваемые вопросы (FAQ)': 'Frequently asked questions (FAQ)',
+                'Для предпринимателей': 'For entrepreneurs',
+                'Продавать у нас': 'Sell with us',
+                'Личный кабинет продавца': 'Seller account',
+                'Тарифы и комиссии': 'Plans and commissions',
+                'Пользовательское соглашение': 'User agreement',
+                'Политика конфиденциальности': 'Privacy policy'
             }
         };
 
         function t(text) {
             if (currentLang === 'ru') return text;
             return translations[currentLang]?.[text] || text;
+        }
+
+
+        const tooltipTexts = {
+            ru: {
+                language: 'Выбрать язык',
+                theme: 'Сменить тему',
+                cart: 'Корзина',
+                login: 'Войти',
+                menuOpen: 'Открыть меню',
+                menuClose: 'Закрыть меню',
+                slidePrev: 'Предыдущий слайд',
+                slideNext: 'Следующий слайд',
+                photoSearch: 'Поиск по фото',
+                photoRemove: 'Удалить фото'
+            },
+            uz: {
+                language: 'Tilni tanlash',
+                theme: 'Mavzuni almashtirish',
+                cart: 'Savat',
+                login: 'Kirish',
+                menuOpen: 'Menyuni ochish',
+                menuClose: 'Menyuni yopish',
+                slidePrev: 'Oldingi slayd',
+                slideNext: 'Keyingi slayd',
+                photoSearch: 'Rasm orqali qidirish',
+                photoRemove: 'Rasmni o‘chirish'
+            },
+            en: {
+                language: 'Choose language',
+                theme: 'Change theme',
+                cart: 'Cart',
+                login: 'Sign in',
+                menuOpen: 'Open menu',
+                menuClose: 'Close menu',
+                slidePrev: 'Previous slide',
+                slideNext: 'Next slide',
+                photoSearch: 'Search by photo',
+                photoRemove: 'Remove photo'
+            }
+        };
+
+        function updateTooltips() {
+            document.querySelectorAll('[data-tooltip-key]').forEach(element => {
+                const key = element.dataset.tooltipKey;
+                const value = tooltipTexts[currentLang]?.[key] || tooltipTexts.ru[key];
+                if (value) element.dataset.tooltip = value;
+            });
         }
 
         function localizeStaticText() {
@@ -1119,6 +1567,7 @@
                 : currentLang === 'uz'
                     ? 'Rasm orqali qidirish'
                     : 'Search by photo';
+            updateTooltips();
             applyTheme();
         }
 
@@ -1397,7 +1846,7 @@
                     const ruName = c.names?.ru || c.names?.en || name;
                     const color = catColors[i % catColors.length];
                     const imageUrl = getCategoryImage(ruName);
-                    return `<a href="category.html?id=${c.id}" target="_blank" class="group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                    return `<a href="category.html?id=${c.id}" target="_blank" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
                         <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
                         <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
@@ -1425,7 +1874,7 @@
                 if (!target) return;
                 e.preventDefault();
                 closeMobileMenu();
-                const navOffset = 116;
+                const navOffset = 126;
                 const top = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
                 window.scrollTo({ top, behavior: 'smooth' });
             });
