@@ -26,10 +26,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; color: #111827; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f3f4f6; }
-        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
-        .nav-link { position: relative; transition: color 0.2s; }
+.nav-link { position: relative; transition: color 0.2s; }
         .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
         .nav-link:hover { color: #0097a7; }
         .nav-link:hover::after { width: 100%; }
@@ -443,42 +440,44 @@
             border-color: #22d3ee !important;
         }
 
+    
+        html { color-scheme: light; } body.dark-mode { color-scheme: dark; }
+        .site-header { overflow: visible; background: transparent !important; border: 0 !important; }
+        .site-header-top { background:#00bcd4; border-bottom:1px solid rgba(255,255,255,.38); }
+        .site-header-nav { background:#0b1725; border-bottom:1px solid #263548; }
+        .site-logo-icon { filter:brightness(0) invert(1); }
+        .site-logo-text, .header-action, .header-action svg { color:#fff !important; }
+        .header-actions { gap:.5rem; } @media(min-width:1024px){.header-actions{gap:.75rem;}}
+        .header-action{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;border-radius:10px;font-size:13px;font-weight:600;transition:.2s;}
+        .header-action:hover{background:rgba(255,255,255,.16);}
+        .category-header-search{height:44px;max-width:620px;flex:1;display:flex;align-items:center;border:1px solid rgba(15,23,42,.38);border-radius:11px;background:#fff;overflow:hidden;}
+        .category-header-search input{height:100%;color:#111827!important;}
+        .category-header-search input::placeholder{color:#94a3b8!important;}
+        .header-nav-row{height:52px!important;align-items:stretch!important;}
+        .header-nav-row .nav-link{height:100%;display:inline-flex;align-items:center!important;padding:0 0 1px!important;color:#cbd5e1!important;}
+        .header-nav-row .nav-link:hover,.header-nav-row .nav-link.active{color:#fff!important;}
+        .header-nav-row .nav-link::after{bottom:0!important;}
+        .footer-contact-link{display:inline-flex;align-items:center;gap:10px;color:#94a3b8;font-size:14px;transition:.2s;}.footer-contact-link:hover{color:#67e8f9}.footer-contact-link svg{color:currentColor!important}
+        body.dark-mode .site-header-top{background:#00bcd4!important;border-color:rgba(255,255,255,.38)!important}body.dark-mode .site-header-nav{background:#071321!important;border-color:#263548!important}
+        body.dark-mode .category-header-search{background:#fff!important;border-color:#cbd5e1!important}body.dark-mode .category-header-search input{color:#111827!important}
+
     </style>
 </head>
 <body>
-
-    
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="header-top-row flex items-center justify-between h-[72px]">
-                <a href="index.html" class="header-brand flex items-center gap-2">
-                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
-                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
-                </a>
-                <div class="flex items-center gap-4 lg:gap-6">
-                    <a href="index.html" data-tooltip="Вернуться на главную" class="hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        <span>На главную</span>
-                    </a>
-                    <button id="themeToggle" type="button" data-tooltip="Сменить тему" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
-                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
-                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
-                    </button>
-                    <button data-tooltip="Корзина" aria-label="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors"><i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i></button>
-                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="hidden md:flex max-w-[180px] items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
-                        <span data-customer-account-text class="truncate">Войти</span>
-                    </a>
+    <nav class="site-header fixed top-0 left-0 right-0 z-50">
+        <div class="site-header-top">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6">
+                <a href="index.html" class="header-brand flex items-center gap-2 flex-shrink-0"><img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto"><span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span></a>
+                <div class="category-header-search hidden md:flex mx-2 lg:mx-5"><i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4"></i><input type="text" id="searchInput" placeholder="Поиск по названию, артикулу, бренду..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm"><button type="button" id="categoryHeaderSearchButton" class="h-full px-5 bg-gray-900 text-white font-semibold">Найти</button></div>
+                <div class="header-actions ml-auto flex items-center flex-shrink-0">
+                    <div class="relative hidden sm:block"><button id="categoryLanguageToggle" class="header-action"><span id="categoryLanguageFlag">🇷🇺</span><span id="categoryLanguageLabel">RU</span><i data-lucide="chevron-down" class="w-3 h-3"></i></button><div id="categoryLanguageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl"><button data-language="ru" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇷🇺 Русский</button><button data-language="uz" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇿 O‘zbekcha</button><button data-language="en" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇸 English</button></div></div>
+                    <button id="themeToggle" type="button" class="header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i><i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i></button>
+                    <a href="auth.html" data-customer-account-link class="header-action hidden lg:inline-flex max-w-[150px]"><i data-lucide="user" class="w-4 h-4"></i><span data-customer-account-text class="truncate">Войти</span></a>
+                    <a href="index.html#products" class="header-action hidden lg:inline-flex"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span></a>
                 </div>
             </div>
-            <div class="header-nav-row hidden lg:flex gap-8">
-                <a href="index.html" class="nav-link text-sm font-medium text-gray-600">Каталог</a>
-                <a href="index.html#catalog" class="nav-link active text-sm font-semibold text-primary-600">Категории</a>
-                <a href="index.html#solutions" class="nav-link text-sm font-medium text-gray-600">Решения</a>
-                <a href="index.html#partners" class="nav-link text-sm font-medium text-gray-600">Бренды</a>
-                <a href="index.html#about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
-            </div>
         </div>
+        <div class="site-header-nav"><div class="max-w-[1400px] mx-auto px-6 lg:px-8"><div class="header-nav-row hidden lg:flex gap-8"><a href="index.html" class="nav-link text-sm font-medium">Каталог</a><a href="index.html#catalog" class="nav-link active text-sm font-semibold">Категории</a><a href="index.html#solutions" class="nav-link text-sm font-medium">Решения</a><a href="index.html#partners" class="nav-link text-sm font-medium">Бренды</a><a href="index.html#about" class="nav-link text-sm font-medium">О нас</a></div></div></div>
     </nav>
 
     
@@ -514,10 +513,7 @@
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-col md:flex-row md:items-center gap-4">
-                    <div class="relative flex-1 max-w-md">
-                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-                        <input type="text" id="searchInput" placeholder="Поиск по названию, артикулу, бренду..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-primary-500 transition-colors">
-                    </div>
+
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-gray-400">Сортировка:</span>
                         <button class="sort-btn active text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="">По умолчанию</button>
@@ -581,10 +577,9 @@
             </div>
         </div>
     </section>
-
     <footer id="contacts" class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
-            <div class="grid sm:grid-cols-2 lg:grid-cols-[0.8fr_1.2fr_1.2fr_1.45fr] gap-9 lg:gap-10">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-16">
                 <div>
                     <h4 class="font-semibold text-white mb-5">О нас</h4>
                     <ul class="space-y-3">
@@ -594,11 +589,11 @@
                 </div>
 
                 <div>
-                    <h4 class="font-semibold text-white mb-5">Покупателям</h4>
+                    <h4 class="font-semibold text-white mb-5">Связаться с нами</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Условия доставки и оплаты</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Правила возврата и обмена товара</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Часто задаваемые вопросы (FAQ)</a></li>
+                        <li><a href="tel:+998918401405" class="footer-contact-link"><i data-lucide="phone" class="w-4 h-4"></i><span>+998-91-840-14-05</span></a></li>
+                        <li><a href="mailto:info@osuz.uz" class="footer-contact-link"><i data-lucide="mail" class="w-4 h-4"></i><span>info@osuz.uz</span></a></li>
+                        <li><a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link"><i data-lucide="map-pin" class="w-4 h-4"></i><span>Ташкент, Узбекистан</span></a></li>
                     </ul>
                 </div>
 
@@ -609,28 +604,6 @@
                         <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Личный кабинет продавца</a></li>
                         <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Тарифы и комиссии</a></li>
                     </ul>
-                </div>
-
-                <div class="footer-contact-card rounded-2xl p-5 lg:justify-self-end w-full">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
-                        <span class="text-xl font-black tracking-wider">OSUZ</span>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
-                    <div class="space-y-3">
-                        <a href="tel:+998918401405" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="phone" class="w-4 h-4"></i></span>
-                            <span class="text-sm">+998-91-840-14-05</span>
-                        </a>
-                        <a href="mailto:info@osuz.uz" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
-                            <span class="text-sm">info@osuz.uz</span>
-                        </a>
-                        <a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="map-pin" class="w-4 h-4"></i></span>
-                            <span class="text-sm">Ташкент, Узбекистан</span>
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -1274,6 +1247,22 @@
                     window.updateCustomerHeader();
                 }
             });
+        })();
+    </script>
+
+
+    <script>
+        (() => {
+            const toggle = document.getElementById('categoryLanguageToggle');
+            const menu = document.getElementById('categoryLanguageMenu');
+            const lang = ['ru','uz','en'].includes(localStorage.getItem('osuzLang')) ? localStorage.getItem('osuzLang') : 'ru';
+            const flags = {ru:'🇷🇺',uz:'🇺🇿',en:'🇺🇸'};
+            document.getElementById('categoryLanguageFlag').textContent = flags[lang];
+            document.getElementById('categoryLanguageLabel').textContent = lang.toUpperCase();
+            toggle?.addEventListener('click', e => { e.stopPropagation(); menu?.classList.toggle('hidden'); });
+            document.querySelectorAll('.category-language-option').forEach(btn => btn.addEventListener('click', () => { localStorage.setItem('osuzLang', btn.dataset.language); location.reload(); }));
+            document.addEventListener('click', e => { if (!e.target.closest('#categoryLanguageToggle') && !e.target.closest('#categoryLanguageMenu')) menu?.classList.add('hidden'); });
+            document.getElementById('categoryHeaderSearchButton')?.addEventListener('click', () => document.getElementById('searchInput')?.dispatchEvent(new Event('input', {bubbles:true})));
         })();
     </script>
 

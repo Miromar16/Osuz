@@ -37,11 +37,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; color: #111827; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f3f4f6; }
-        ::-webkit-scrollbar-thumb { background: #00bcd4; border-radius: 4px; }
-
-        .nav-link { position: relative; transition: color 0.2s; }
+.nav-link { position: relative; transition: color 0.2s; }
         .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
         .nav-link:hover { color: #0097a7; }
         .nav-link:hover::after { width: 100%; }
@@ -704,56 +700,152 @@
             }
         }
 
+    
+        html { color-scheme: light; }
+        body.dark-mode { color-scheme: dark; }
+
+        .site-header { overflow: visible; background: transparent !important; border: 0 !important; }
+        .site-header-top { background: #00bcd4; border-bottom: 1px solid rgba(255,255,255,.38); }
+        .site-header-nav { background: #0b1725; border-bottom: 1px solid #263548; }
+        .site-logo-icon { filter: brightness(0) invert(1); }
+        .site-logo-text, .header-action, .header-action svg { color: #fff !important; }
+        .header-actions { gap: .5rem; }
+        @media (min-width: 1024px) { .header-actions { gap: .75rem; } }
+        .header-action {
+            min-height: 42px; display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 0 10px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            transition: background-color .2s ease;
+        }
+        .header-action:hover { background: rgba(255,255,255,.16); }
+        .header-search-wrap { position: relative; flex: 1 1 auto; max-width: 720px; }
+        .header-search-bar {
+            height: 46px; display: flex; align-items: center; overflow: hidden;
+            border: 1px solid rgba(15,23,42,.38); border-radius: 11px; background: rgba(255,255,255,.96);
+            box-shadow: 0 5px 18px rgba(15,23,42,.08);
+        }
+        .header-search-bar input { height: 100%; color: #111827 !important; }
+        .header-search-bar input::placeholder { color: #94a3b8 !important; }
+        .header-search-dropdown {
+            position: absolute; left: 0; right: 0; top: calc(100% + 9px); z-index: 90;
+            background: #fff; border: 1px solid #d9e2ec; border-radius: 15px;
+            box-shadow: 0 20px 55px rgba(15,23,42,.19); overflow: hidden;
+        }
+        .header-nav-row { height: 52px !important; align-items: stretch !important; }
+        .header-nav-row .nav-link {
+            height: 100%; display: inline-flex; align-items: center !important; padding: 0 0 1px !important;
+            color: #cbd5e1 !important;
+        }
+        .header-nav-row .nav-link:hover, .header-nav-row .nav-link.active { color: #fff !important; }
+        .header-nav-row .nav-link::after { bottom: 0 !important; }
+        .gradient-text,
+        html[native-dark-active] .gradient-text,
+        html[data-darkreader-mode] .gradient-text {
+            background: none !important; background-image: none !important;
+            color: #00bcd4 !important; -webkit-text-fill-color: #00bcd4 !important;
+            -webkit-background-clip: border-box !important; background-clip: border-box !important;
+        }
+        .hero-controls-inner { padding: 0 !important; }
+        .hero-side-btn {
+            width: 44px !important; height: clamp(118px, 22vh, 164px) !important;
+            border: 1px solid rgba(255,255,255,.36) !important; border-radius: 4px !important;
+            background: transparent !important; color: #fff !important; backdrop-filter: none !important;
+        }
+        .hero-side-btn:hover { background: #2f3f54 !important; border-color: #2f3f54 !important; color: #fff !important; }
+        .hero-prev-btn { margin-left: 0; }
+        .hero-next-btn { margin-right: 0; }
+        .footer-contact-link { display: inline-flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 14px; transition: color .2s; }
+        .footer-contact-link:hover { color: #67e8f9; }
+        .footer-contact-link svg { color: currentColor !important; }
+        body.dark-mode .site-header-top { background: #00bcd4 !important; border-color: rgba(255,255,255,.38) !important; }
+        body.dark-mode .site-header-nav { background: #071321 !important; border-color: #263548 !important; }
+        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #fff !important; border-color: #cbd5e1 !important; }
+        body.dark-mode .header-search-bar input { color: #111827 !important; }
+        @media (max-width: 1023px) {
+            .site-header-top .max-w-\[1400px\] { min-height: 66px; }
+            .hero-side-btn { width: 36px !important; height: 108px !important; }
+        }
+
     </style>
 </head>
 <body>
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="header-top-row flex items-center justify-between h-[72px]">
-                <a href="#solutions" class="header-brand flex items-center gap-2">
-                    <img src="osuz logo.png" alt="OSUZ" class="h-7 w-auto">
-                    <span class="text-lg font-black tracking-wider text-gray-900">OSUZ</span>
+    <nav class="site-header fixed top-0 left-0 right-0 z-50">
+        <div class="site-header-top">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6">
+                <a href="#solutions" class="header-brand flex items-center gap-2 flex-shrink-0">
+                    <img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto">
+                    <span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span>
                 </a>
-                <div class="flex items-center gap-4 lg:gap-6">
-                    <div class="relative hidden md:block">
-                        <button id="languageToggle" data-tooltip-key="language" data-tooltip="Выбрать язык" class="header-language-control flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                            <i data-lucide="globe" class="w-4 h-4"></i>
+
+                <div class="header-search-wrap hidden md:block mx-2 lg:mx-5">
+                    <div class="header-search-bar">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4 flex-shrink-0"></i>
+                        <input type="text" id="heroSearchInput" placeholder="Поиск товаров, брендов, артикулов..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm lg:text-base">
+                        <label id="heroPhotoBtn" data-tooltip-key="photoSearch" data-tooltip="Поиск по фото" class="p-2.5 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
+                            <i data-lucide="camera" class="w-5 h-5 text-primary-600"></i>
+                        </label>
+                        <input type="file" id="heroPhotoInput" accept="image/*" class="hidden">
+                        <button id="heroSearchBtn" class="h-full px-4 lg:px-6 bg-gray-900 hover:bg-gray-800 text-white font-semibold transition-colors flex items-center gap-2 flex-shrink-0">
+                            <span>Найти</span><i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div id="heroSearchResults" class="header-search-dropdown hidden">
+                        <div class="max-h-80 overflow-y-auto p-2" id="heroResultsList"></div>
+                    </div>
+                    <div id="heroPhotoPreview" class="header-search-dropdown hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="relative flex-shrink-0">
+                                <img id="heroPreviewImg" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                                <button id="heroRemovePhoto" data-tooltip-key="photoRemove" data-tooltip="Удалить фото" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                                    <i data-lucide="x" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1"><div id="heroAnalysisDot" class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div><span id="heroAnalysisText" class="text-sm font-medium text-gray-700">Анализ фото...</span></div>
+                                <p class="text-xs text-gray-500">Поиск похожих товаров в каталоге</p>
+                            </div>
+                            <button id="heroAnalyzeBtn" class="px-4 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-xl transition-colors flex-shrink-0">Найти товар</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-actions ml-auto flex items-center flex-shrink-0">
+                    <div class="relative hidden sm:block">
+                        <button id="languageToggle" data-tooltip-key="language" data-tooltip="Выбрать язык" class="header-action">
+                            <span id="languageFlag" class="text-base leading-none">🇷🇺</span>
                             <span id="languageLabel">RU</span>
                             <i data-lucide="chevron-down" class="w-3 h-3"></i>
                         </button>
-                        <div id="languageMenu" class="hidden absolute right-0 top-full mt-3 w-40 rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
-                            <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">Русский</button>
-                            <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">O‘zbekcha</button>
-                            <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
+                        <div id="languageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                            <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇷🇺 Русский</button>
+                            <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇺🇿 O‘zbekcha</button>
+                            <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇺🇸 English</button>
                         </div>
                     </div>
-                    <a href="#contacts" class="header-support-link hidden md:flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                        <i data-lucide="headphones" class="w-4 h-4"></i>
-                        <span>Поддержка</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3"></i>
-                    </a>
-                    <button id="themeToggle" type="button" data-tooltip-key="theme" data-tooltip="Сменить тему" class="hidden md:flex p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Сменить тему" title="Сменить тему">
-                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5 text-gray-500"></i>
-                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5 text-gray-500"></i>
+                    <button id="themeToggle" type="button" data-tooltip-key="theme" data-tooltip="Сменить тему" class="header-action !px-3" aria-label="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i>
                     </button>
-                    <div class="w-px h-5 bg-gray-200 hidden md:block"></div>
-                    <a href="#products" data-tooltip-key="cart" data-tooltip="Корзина" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Корзина">
-                        <i data-lucide="shopping-cart" class="w-5 h-5 text-gray-500"></i>
-                    </a>
-                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="hidden md:flex max-w-[180px] items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="header-action hidden lg:inline-flex max-w-[150px]">
                         <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
                         <span data-customer-account-text class="truncate">Войти</span>
                     </a>
-                    <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="lg:hidden p-2 text-gray-700">
+                    <a href="#products" data-tooltip-key="cart" data-tooltip="Корзина" class="header-action hidden lg:inline-flex" aria-label="Корзина">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span>
+                    </a>
+                    <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="header-action lg:hidden !px-3">
                         <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
-            <div class="header-nav-row hidden lg:flex gap-8">
-                <a href="#catalog" data-section-link="catalog" class="nav-link active text-sm font-medium text-gray-600">Каталог</a>
-                <a href="#partners" data-section-link="partners" class="nav-link text-sm font-medium text-gray-600">Партнёры</a>
-                <a href="#products" data-section-link="products" class="nav-link text-sm font-medium text-gray-600">Товары</a>
-                <a href="#about" data-section-link="about" class="nav-link text-sm font-medium text-gray-600">О нас</a>
+        </div>
+        <div class="site-header-nav">
+            <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+                <div class="header-nav-row hidden lg:flex gap-8">
+                    <a href="#catalog" data-section-link="catalog" class="nav-link active text-sm font-medium">Каталог</a>
+                    <a href="#partners" data-section-link="partners" class="nav-link text-sm font-medium">Партнёры</a>
+                    <a href="#products" data-section-link="products" class="nav-link text-sm font-medium">Товары</a>
+                    <a href="#about" data-section-link="about" class="nav-link text-sm font-medium">О нас</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -769,7 +861,7 @@
             </div>
             <div class="relative mb-4">
                 <button id="mobileLanguageToggle" class="w-full flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
-                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span id="mobileLanguageFlag" class="text-base">🇷🇺</span>
                     <span id="mobileLanguageLabel">RU</span>
                     <i data-lucide="chevron-down" class="w-3 h-3"></i>
                 </button>
@@ -892,53 +984,7 @@
                 <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="2" aria-label="Слайд 3"></button>
             </div>
         </div>
-        <div class="relative z-10 -mt-8 pb-8">
-            <div class="max-w-[900px] mx-auto px-6">
-                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-                    <div class="flex items-center">
-                        <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-5 flex-shrink-0"></i>
-                        <input type="text" id="heroSearchInput" placeholder="Поиск товаров, брендов, артикулов..." class="flex-1 px-4 py-5 text-gray-900 text-lg placeholder-gray-400 outline-none bg-transparent min-w-0">
-                        <label id="heroPhotoBtn" data-tooltip-key="photoSearch" data-tooltip="Поиск по фото" class="p-3 mr-2 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
-                            <i data-lucide="camera" class="w-5 h-5 text-primary-500"></i>
-                        </label>
-                        <input type="file" id="heroPhotoInput" accept="image/*" class="hidden">
-                        <button id="heroSearchBtn" class="px-8 py-5 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold transition-colors flex items-center gap-2 flex-shrink-0">
-                            Найти <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="heroSearchResults" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden mt-2">
-                    <div class="max-h-80 overflow-y-auto p-2" id="heroResultsList"></div>
-                </div>
-                <div id="heroPhotoPreview" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden mt-2">
-                    <div class="flex items-center gap-4 p-5">
-                        <div class="relative flex-shrink-0">
-                            <img id="heroPreviewImg" class="w-20 h-20 object-cover rounded-xl border border-gray-200">
-                            <button id="heroRemovePhoto" data-tooltip-key="photoRemove" data-tooltip="Удалить фото" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600">
-                                <i data-lucide="x" class="w-3 h-3"></i>
-                            </button>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <div id="heroAnalysisDot" class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
-                                <span id="heroAnalysisText" class="text-sm font-medium text-gray-700">Анализ фото...</span>
-                            </div>
-                            <p class="text-xs text-gray-500">Поиск похожих товаров в каталоге</p>
-                        </div>
-                        <button id="heroAnalyzeBtn" class="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium rounded-xl transition-colors flex-shrink-0">
-                            Найти товар
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-4 flex flex-wrap items-center gap-3 justify-center">
-                    <span class="popular-label text-gray-400 text-sm">Популярные:</span>
-                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">SIEMENS S7-1200</a>
-                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">ABB ACS580</a>
-                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">OMRON E5CC</a>
-                    <a href="#" class="popular-tag text-sm text-gray-600 hover:text-primary-600 hover:bg-primary-50 transition-all font-medium bg-gray-100 px-3 py-1 rounded-full">Festo VUVS</a>
-                </div>
-            </div>
-        </div>
+
     </section>
 
     <section id="catalog" class="section-anchor py-16 bg-white">
@@ -1118,24 +1164,23 @@
             </div>
         </div>
     </section>
-
     <footer id="contacts" class="bg-gray-900 text-white">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
-            <div class="grid sm:grid-cols-2 lg:grid-cols-[0.8fr_1.2fr_1.2fr_1.45fr] gap-9 lg:gap-10">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-16">
                 <div>
                     <h4 class="font-semibold text-white mb-5">О нас</h4>
                     <ul class="space-y-3">
-                        <li><a href="#about" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Вакансии</a></li>
+                        <li><a href="index.html#about" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Вакансии</a></li>
                         <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Новости компании</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="font-semibold text-white mb-5">Покупателям</h4>
+                    <h4 class="font-semibold text-white mb-5">Связаться с нами</h4>
                     <ul class="space-y-3">
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Условия доставки и оплаты</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Правила возврата и обмена товара</a></li>
-                        <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Часто задаваемые вопросы (FAQ)</a></li>
+                        <li><a href="tel:+998918401405" class="footer-contact-link"><i data-lucide="phone" class="w-4 h-4"></i><span>+998-91-840-14-05</span></a></li>
+                        <li><a href="mailto:info@osuz.uz" class="footer-contact-link"><i data-lucide="mail" class="w-4 h-4"></i><span>info@osuz.uz</span></a></li>
+                        <li><a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link"><i data-lucide="map-pin" class="w-4 h-4"></i><span>Ташкент, Узбекистан</span></a></li>
                     </ul>
                 </div>
 
@@ -1146,28 +1191,6 @@
                         <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Личный кабинет продавца</a></li>
                         <li><a href="#" class="text-sm text-gray-400 hover:text-primary-300 transition-colors">Тарифы и комиссии</a></li>
                     </ul>
-                </div>
-
-                <div class="footer-contact-card rounded-2xl p-5 lg:justify-self-end w-full">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
-                        <span class="text-xl font-black tracking-wider">OSUZ</span>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-5">Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.</p>
-                    <div class="space-y-3">
-                        <a href="tel:+998918401405" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="phone" class="w-4 h-4"></i></span>
-                            <span class="text-sm">+998-91-840-14-05</span>
-                        </a>
-                        <a href="mailto:info@osuz.uz" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="mail" class="w-4 h-4"></i></span>
-                            <span class="text-sm">info@osuz.uz</span>
-                        </a>
-                        <a href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener" class="footer-contact-link">
-                            <span class="footer-contact-icon"><i data-lucide="map-pin" class="w-4 h-4"></i></span>
-                            <span class="text-sm">Ташкент, Узбекистан</span>
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -1268,6 +1291,7 @@
                 'UZ | RU': 'RU | UZ',
                 'Поддержка': 'Qo‘llab-quvvatlash',
                 'Войти': 'Kirish',
+                'Корзина': 'Savat',
                 'Каталог': 'Katalog',
                 'Партнёры': 'Hamkorlar',
                 'Товары': 'Mahsulotlar',
@@ -1369,6 +1393,7 @@
                 'UZ | RU': 'RU | UZ | EN',
                 'Поддержка': 'Support',
                 'Войти': 'Sign in',
+                'Корзина': 'Cart',
                 'Каталог': 'Catalog',
                 'Партнёры': 'Partners',
                 'Товары': 'Products',
@@ -1524,9 +1549,14 @@
             document.documentElement.lang = currentLang;
             const label = document.getElementById('languageLabel');
             const mobileLabel = document.getElementById('mobileLanguageLabel');
+            const languageFlag = document.getElementById('languageFlag');
+            const mobileLanguageFlag = document.getElementById('mobileLanguageFlag');
             const currentLanguageLabel = currentLang.toUpperCase();
+            const currentFlag = { ru: '🇷🇺', uz: '🇺🇿', en: '🇺🇸' }[currentLang] || '🇷🇺';
             if (label) label.textContent = currentLanguageLabel;
             if (mobileLabel) mobileLabel.textContent = currentLanguageLabel;
+            if (languageFlag) languageFlag.textContent = currentFlag;
+            if (mobileLanguageFlag) mobileLanguageFlag.textContent = currentFlag;
 
             document.querySelectorAll('.language-option').forEach(option => {
                 const isActive = option.dataset.language === currentLang;
@@ -1890,7 +1920,7 @@
         document.getElementById('heroNext').addEventListener('click', () => { heroIndex = (heroIndex + 1) % 3; updateHero(); });
         document.getElementById('heroPrev').addEventListener('click', () => { heroIndex = (heroIndex - 1 + 3) % 3; updateHero(); });
         heroDots.forEach(d => d.addEventListener('click', () => { heroIndex = parseInt(d.dataset.index); updateHero(); }));
-        setInterval(() => { heroIndex = (heroIndex + 1) % 3; updateHero(); }, 6000);
+        setInterval(() => { heroIndex = (heroIndex + 1) % 3; updateHero(); }, 12000);
 
        
         gsap.utils.toArray('.section-reveal').forEach(item => {

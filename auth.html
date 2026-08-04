@@ -233,29 +233,64 @@
         @media (max-width: 767px) {
             .auth-shell { border-radius: 22px; }
         }
+    
+        .auth-site-header{background:#00bcd4!important;border-bottom:1px solid rgba(255,255,255,.38)!important}.auth-site-logo{filter:brightness(0) invert(1)}.auth-site-title,.auth-header-action,.auth-header-action svg{color:#fff!important}.auth-header-action{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 10px;border-radius:10px;font-size:13px;font-weight:700;transition:.2s}.auth-header-action:hover{background:rgba(255,255,255,.16)}.auth-header-action select option{color:#111827;background:#fff}body.dark-mode .auth-site-header{background:#00bcd4!important;border-color:rgba(255,255,255,.38)!important}
+
+    
+        html {
+            background: #f8fafc;
+        }
+
+        html:has(body.dark-mode) {
+            background: #070b12 !important;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .auth-site-header {
+            background: #0b111b !important;
+            border-bottom-color: #263241 !important;
+            box-shadow: 0 1px 0 rgba(255,255,255,.03);
+        }
+
+        body.dark-mode .auth-site-header > div {
+            background: transparent !important;
+        }
+
+        body.dark-mode .auth-site-title,
+        body.dark-mode .auth-header-action,
+        body.dark-mode .auth-header-action svg {
+            color: #f8fafc !important;
+        }
+
+        body.dark-mode .auth-header-action:hover {
+            background: #162333 !important;
+        }
+
+        body.dark-mode .auth-header-action select {
+            color: #f8fafc !important;
+            background: transparent !important;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .auth-header-action select option {
+            color: #f8fafc !important;
+            background: #0f1722 !important;
+        }
+
+        body.dark-mode main {
+            background: transparent !important;
+        }
+
     </style>
 </head>
 <body>
-    <header class="border-b border-gray-200 bg-white/90 backdrop-blur-md">
+    <header class="auth-site-header">
         <div class="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-5">
-            <a href="index.html" class="flex items-center gap-2">
-                <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
-                <span class="text-xl font-black tracking-wide text-gray-900">OSUZ</span>
-            </a>
-            <div class="flex items-center gap-2">
-                <select id="languageSelect" class="rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-600 outline-none">
-                    <option value="ru">RU</option>
-                    <option value="uz">UZ</option>
-                    <option value="en">EN</option>
-                </select>
-                <button id="themeToggle" type="button" class="rounded-xl p-2.5 text-gray-500 transition hover:bg-gray-100" aria-label="Сменить тему">
-                    <i data-lucide="moon" class="theme-icon-moon h-5 w-5"></i>
-                    <i data-lucide="sun" class="theme-icon-sun h-5 w-5"></i>
-                </button>
-                <a href="index.html" class="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-gray-500 transition hover:bg-gray-100 hover:text-primary-700 sm:flex">
-                    <i data-lucide="arrow-left" class="h-4 w-4"></i>
-                    <span id="homeLinkText">На главную</span>
-                </a>
+            <a href="index.html" class="flex items-center gap-2"><img src="osuz logo.png" alt="OSUZ" class="auth-site-logo h-8 w-auto"><span class="auth-site-title text-xl font-black tracking-wide">OSUZ</span></a>
+            <div class="flex items-center gap-2 lg:gap-3">
+                <label class="auth-header-action"><span id="authLanguageFlag">🇷🇺</span><select id="languageSelect" class="bg-transparent text-white outline-none cursor-pointer"><option value="ru">RU</option><option value="uz">UZ</option><option value="en">EN</option></select></label>
+                <button id="themeToggle" type="button" class="auth-header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon h-5 w-5"></i><i data-lucide="sun" class="theme-icon-sun h-5 w-5"></i></button>
+                <a href="index.html" class="auth-header-action hidden sm:inline-flex"><i data-lucide="arrow-left" class="h-4 w-4"></i><span id="homeLinkText">На главную</span></a>
             </div>
         </div>
     </header>
@@ -1386,6 +1421,7 @@
             document.querySelector('#continueShoppingButton span').textContent = text('continueShopping');
             document.querySelector('#logoutButton span').textContent = text('logout');
             document.getElementById('languageSelect').value = currentLang;
+            document.getElementById('authLanguageFlag').textContent = { ru: '🇷🇺', uz: '🇺🇿', en: '🇺🇸' }[currentLang] || '🇷🇺';
 
             if (registrationStep === 2) {
                 document.getElementById('verifyDescription').textContent =
