@@ -269,11 +269,90 @@
             }
         }
 
+    
+        .seller-cart-button {
+            width: 100%;
+            min-height: 44px;
+            margin-top: 16px;
+            border-radius: 12px;
+            background: #00bcd4;
+            color: #07111d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 900;
+            transition: .2s ease;
+        }
+
+        .seller-cart-button:hover:not(:disabled) {
+            background: #00acc1;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(0, 188, 212, .2);
+        }
+
+        .seller-cart-button:disabled {
+            opacity: .58;
+            cursor: not-allowed;
+        }
+
+        .seller-cart-button.is-success {
+            background: #16a34a;
+            color: #fff;
+        }
+
+        .cart-toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 100;
+            width: min(390px, calc(100vw - 32px));
+            border: 1px solid #99e6ee;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 22px 60px rgba(15, 23, 42, .22);
+            padding: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: .22s ease;
+        }
+
+        .cart-toast.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .cart-toast {
+            background: #0f1722;
+            border-color: #2c7884;
+            color: #f8fafc;
+        }
+
+    
+        .product-preview-notice {
+            border: 1px solid #bae6fd;
+            background: #f0f9ff;
+            color: #075985;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        body.dark-mode .product-preview-notice {
+            border-color: #245c72;
+            background: #102937;
+            color: #bae6fd;
+        }
+
     </style>
 </head>
 <body>
     <nav class="site-header sticky top-0 z-50">
-        <div class="site-header-top"><div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6"><a href="index.html" class="flex items-center gap-2 flex-shrink-0"><img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto"><span class="site-logo-text text-xl font-black tracking-wide">OSUZ</span></a><div class="header-actions ml-auto flex items-center"><div class="relative"><button id="languageButton" class="header-action"><span id="productLanguageFlag">🇷🇺</span><span id="languageLabel">RU</span><i data-lucide="chevron-down" class="w-3 h-3"></i></button><div id="productLanguageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl"><button data-language="ru" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇷🇺 Русский</button><button data-language="uz" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇿 O‘zbekcha</button><button data-language="en" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇸 English</button></div></div><button id="themeToggle" class="header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i><i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i></button><a href="auth.html" data-customer-account-link class="header-action hidden md:inline-flex max-w-[150px]"><i data-lucide="user" class="w-4 h-4"></i><span data-customer-account-text class="truncate">Войти</span></a><a href="index.html#products" class="header-action hidden md:inline-flex"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span></a></div></div></div>
+        <div class="site-header-top"><div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6"><a href="index.html" class="flex items-center gap-2 flex-shrink-0"><img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto"><span class="site-logo-text text-xl font-black tracking-wide">OSUZ</span></a><div class="header-actions ml-auto flex items-center"><div class="relative"><button id="languageButton" class="header-action"><span id="languageLabel">RU</span><i data-lucide="chevron-down" class="w-3 h-3"></i></button><div id="productLanguageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl"><button data-language="ru" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇷🇺 Русский</button><button data-language="uz" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇿 O‘zbekcha</button><button data-language="en" class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇸 English</button></div></div><button id="themeToggle" class="header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i><i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i></button><a href="auth.html" data-customer-account-link class="header-action hidden md:inline-flex max-w-[150px]"><i data-lucide="user" class="w-4 h-4"></i><span data-customer-account-text class="truncate">Войти</span></a><a href="cart.html" class="header-action hidden md:inline-flex"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span><span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span></a></div></div></div>
         <div class="site-header-nav"><div class="max-w-[1400px] mx-auto px-6 lg:px-8"><div class="header-nav-row hidden lg:flex"><a href="index.html#catalog" class="nav-link text-sm font-medium">Каталог</a><a href="index.html#partners" class="nav-link text-sm font-medium">Партнёры</a><a href="index.html#products" class="nav-link active text-sm font-semibold">Товары</a><a href="index.html#about" class="nav-link text-sm font-medium">О нас</a></div></div></div>
     </nav>
 
@@ -299,6 +378,7 @@
         </div>
 
         <div id="productContent" class="hidden">
+            <div id="productPreviewNotice" class="product-preview-notice hidden mb-6"></div>
             <div id="breadcrumbs" class="flex flex-wrap items-center gap-2 text-sm text-gray-400 mb-7"></div>
 
             <section class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-start">
@@ -425,6 +505,10 @@
     <script>
         const API_ORIGIN = 'https://osuz.uz';
         const API = `${API_ORIGIN}/api/catalog`;
+        const CART_API = `${API_ORIGIN}/api/site/cart`;
+        const AUTH_API = `${API_ORIGIN}/api/site-auth`;
+        const CUSTOMER_ACCESS_KEY = 'osuzCustomerAccessToken';
+        const CUSTOMER_REFRESH_KEY = 'osuzCustomerRefreshToken';
         const currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
             ? localStorage.getItem('osuzLang')
             : 'ru';
@@ -470,6 +554,17 @@
                 details: 'Открыть',
                 notFound: 'Товар не найден',
                 errorText: 'Проверьте ссылку или вернитесь в каталог.',
+                addToCart: 'Добавить в корзину',
+                addingToCart: 'Добавление...',
+                addedToCart: 'Добавлено',
+                cartAddedMessage: 'Товар добавлен в корзину.',
+                openCart: 'Открыть корзину',
+                authRequired: 'Для добавления товара войдите в аккаунт.',
+                listingUnavailable: 'Предложение продавца больше недоступно.',
+                cartError: 'Не удалось добавить товар в корзину.',
+                outOfStock: 'Нет в наличии',
+                previewLoaded: 'Основная информация показана сразу. Предложения продавцов ещё загружаются.',
+                previewOnly: 'Основная информация загружена, но сервер не ответил на запрос предложений продавцов.',
                 errorButton: 'Вернуться в каталог'
             },
             uz: {
@@ -502,6 +597,17 @@
                 details: 'Ochish',
                 notFound: 'Mahsulot topilmadi',
                 errorText: 'Havolani tekshiring yoki katalogga qayting.',
+                addToCart: 'Savatga qo‘shish',
+                addingToCart: 'Qo‘shilmoqda...',
+                addedToCart: 'Qo‘shildi',
+                cartAddedMessage: 'Mahsulot savatga qo‘shildi.',
+                openCart: 'Savatni ochish',
+                authRequired: 'Mahsulotni savatga qo‘shish uchun akkauntga kiring.',
+                listingUnavailable: 'Sotuvchining taklifi endi mavjud emas.',
+                cartError: 'Mahsulotni savatga qo‘shib bo‘lmadi.',
+                outOfStock: 'Omborda yo‘q',
+                previewLoaded: 'Asosiy ma’lumot darhol ko‘rsatildi. Sotuvchilar takliflari hali yuklanmoqda.',
+                previewOnly: 'Asosiy ma’lumot yuklandi, ammo server sotuvchilar takliflariga javob bermadi.',
                 errorButton: 'Katalogga qaytish'
             },
             en: {
@@ -534,6 +640,17 @@
                 details: 'Open',
                 notFound: 'Product not found',
                 errorText: 'Check the link or return to the catalog.',
+                addToCart: 'Add to cart',
+                addingToCart: 'Adding...',
+                addedToCart: 'Added',
+                cartAddedMessage: 'The product was added to your cart.',
+                openCart: 'Open cart',
+                authRequired: 'Sign in to add this product to the cart.',
+                listingUnavailable: 'This seller offer is no longer available.',
+                cartError: 'Could not add the product to the cart.',
+                outOfStock: 'Out of stock',
+                previewLoaded: 'The main product information is shown immediately. Seller offers are still loading.',
+                previewOnly: 'The main product information is available, but the server did not return seller offers.',
                 errorButton: 'Return to catalog'
             }
         }[currentLang];
@@ -582,6 +699,19 @@
             return ui.fromPrice.replace('{price}', formatNumber(number));
         }
 
+        function formatListingPrice(value) {
+            const number = Number(value);
+            if (!Number.isFinite(number) || number <= 0) return ui.requestPrice;
+
+            const formatted = formatNumber(number);
+
+            return currentLang === 'uz'
+                ? `${formatted} so‘m`
+                : currentLang === 'en'
+                    ? `${formatted} UZS`
+                    : `${formatted} сум`;
+        }
+
         function applyTheme() {
             const isDark = currentTheme === 'dark';
             document.body.classList.toggle('dark-mode', isDark);
@@ -594,30 +724,98 @@
             applyTheme();
         });
 
-        document.getElementById('languageLabel').textContent = currentLang.toUpperCase();
+        function setTextById(id, value) {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        }
 
+        setTextById('languageLabel', currentLang.toUpperCase());
 
         function applyStaticLanguage() {
             document.documentElement.lang = currentLang;
-            document.getElementById('backLabel').textContent = ui.back;
-            document.getElementById('priceCaption').textContent = ui.minPrice;
-            document.getElementById('datasheetLabel').textContent = ui.datasheet;
-            document.getElementById('sellersButtonLabel').textContent = ui.sellersButton;
-            document.getElementById('orderNotice').textContent = ui.notice;
-            document.getElementById('attributesTitle').textContent = ui.attributes;
-            document.getElementById('sellersEyebrow').textContent = ui.offers;
-            document.getElementById('sellersTitle').textContent = ui.sellers;
-            document.getElementById('analogsTitle').textContent = ui.analogs;
-            document.getElementById('complementsTitle').textContent = ui.complements;
-            document.getElementById('errorTitle').textContent = ui.notFound;
-            document.getElementById('errorText').textContent = ui.errorText;
-            document.getElementById('errorButton').childNodes[0].nodeValue = `${ui.errorButton} `;
+
+            setTextById('backLabel', ui.back);
+            setTextById('priceCaption', ui.minPrice);
+            setTextById('datasheetLabel', ui.datasheet);
+            setTextById('sellersButtonLabel', ui.sellersButton);
+            setTextById('orderNotice', ui.notice);
+            setTextById('attributesTitle', ui.attributes);
+            setTextById('sellersEyebrow', ui.offers);
+            setTextById('sellersTitle', ui.sellers);
+            setTextById('analogsTitle', ui.analogs);
+            setTextById('complementsTitle', ui.complements);
+            setTextById('errorTitle', ui.notFound);
+            setTextById('errorText', ui.errorText);
+
+            const errorButton = document.getElementById('errorButton');
+            if (errorButton?.firstChild) {
+                errorButton.firstChild.nodeValue = `${ui.errorButton} `;
+            }
         }
 
-        async function apiFetch(path) {
-            const response = await fetch(`${API}${path}`);
-            if (!response.ok) throw new Error(`API ${response.status}: ${path}`);
-            return response.json();
+        async function apiFetch(path, timeoutMs = 12000) {
+            const controller = new AbortController();
+            const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+            try {
+                const response = await fetch(`${API}${path}`, {
+                    signal: controller.signal,
+                    cache: 'no-store',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API ${response.status}: ${path}`);
+                }
+
+                return await response.json();
+            } finally {
+                window.clearTimeout(timeoutId);
+            }
+        }
+
+        function getCachedProductPreview() {
+            try {
+                const raw = sessionStorage.getItem(`osuzProductPreview:${productId}`);
+                if (!raw) return null;
+
+                const preview = JSON.parse(raw);
+                return Number(preview?.id) === productId ? preview : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function showProductPreview(preview) {
+            if (!preview) return false;
+
+            product = preview;
+            renderProduct();
+
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('productContent').classList.remove('hidden');
+            document.getElementById('sellers').classList.add('hidden');
+            document.getElementById('sellersButtonLabel')?.closest('a')?.classList.add('hidden');
+
+            const notice = document.getElementById('productPreviewNotice');
+            notice.textContent = ui.previewLoaded;
+            notice.classList.remove('hidden');
+
+            lucide.createIcons();
+            return true;
+        }
+
+        function finishProductLoading() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('productContent').classList.remove('hidden');
+            document.getElementById('sellers').classList.remove('hidden');
+            document.getElementById('sellersButtonLabel')?.closest('a')?.classList.remove('hidden');
+            document.getElementById('productPreviewNotice').classList.add('hidden');
+            lucide.createIcons();
         }
 
         async function loadProductPage() {
@@ -626,34 +824,80 @@
                 return;
             }
 
+            const cachedPreview = getCachedProductPreview();
+            const previewVisible = showProductPreview(cachedPreview);
+
             try {
-                product = await apiFetch(`/products/${productId}`);
+                product = await apiFetch(`/products/${productId}`, 15000);
 
-                const requests = await Promise.allSettled([
-                    apiFetch(`/categories/${product.category_id}/attributes`),
-                    apiFetch(`/products/${productId}/attribute-values`),
-                    apiFetch(`/products/${productId}/listings`),
-                    apiFetch(`/products/${productId}/analogs`),
-                    apiFetch(`/products/${productId}/complements`)
-                ]);
-
-                productAttributes = requests[0].status === 'fulfilled' ? requests[0].value : [];
-                attributeValues = requests[1].status === 'fulfilled' ? requests[1].value : {};
-                const listings = requests[2].status === 'fulfilled' ? requests[2].value : [];
-                const analogs = requests[3].status === 'fulfilled' ? requests[3].value : [];
-                const complements = requests[4].status === 'fulfilled' ? requests[4].value : [];
+                sessionStorage.setItem(
+                    `osuzProductPreview:${productId}`,
+                    JSON.stringify({
+                        ...product,
+                        photos: Array.isArray(product.photos)
+                            ? [...product.photos].sort(
+                                (a, b) =>
+                                    Number(a?.sort_order || 0) -
+                                    Number(b?.sort_order || 0)
+                            )
+                            : []
+                    })
+                );
 
                 renderProduct();
+
+                const attributeRequest = product.category_id
+                    ? apiFetch(`/categories/${product.category_id}/attributes`, 10000)
+                    : Promise.resolve([]);
+
+                const requests = await Promise.allSettled([
+                    attributeRequest,
+                    apiFetch(`/products/${productId}/attribute-values`, 10000),
+                    apiFetch(`/products/${productId}/listings`, 12000),
+                    apiFetch(`/products/${productId}/analogs`, 10000),
+                    apiFetch(`/products/${productId}/complements`, 10000)
+                ]);
+
+                productAttributes =
+                    requests[0].status === 'fulfilled' && Array.isArray(requests[0].value)
+                        ? requests[0].value
+                        : [];
+
+                attributeValues =
+                    requests[1].status === 'fulfilled' && requests[1].value
+                        ? requests[1].value
+                        : {};
+
+                const listings =
+                    requests[2].status === 'fulfilled' && Array.isArray(requests[2].value)
+                        ? requests[2].value
+                        : [];
+
+                const analogs =
+                    requests[3].status === 'fulfilled' && Array.isArray(requests[3].value)
+                        ? requests[3].value
+                        : [];
+
+                const complements =
+                    requests[4].status === 'fulfilled' && Array.isArray(requests[4].value)
+                        ? requests[4].value
+                        : [];
+
                 renderAttributes();
                 renderSellers(listings);
                 renderRelated('analogs', analogs);
                 renderRelated('complements', complements);
-
-                document.getElementById('loadingState').classList.add('hidden');
-                document.getElementById('productContent').classList.remove('hidden');
-                lucide.createIcons();
+                finishProductLoading();
             } catch (error) {
                 console.error('Product loading failed:', error);
+
+                if (previewVisible) {
+                    const notice = document.getElementById('productPreviewNotice');
+                    notice.textContent = ui.previewOnly;
+                    notice.classList.remove('hidden');
+                    return;
+                }
+
                 showError();
             }
         }
@@ -695,9 +939,16 @@
             `;
 
             galleryImages = Array.isArray(product.photos)
-                ? product.photos
-                    .map(photo => buildFileUrl(photo.url))
+                ? [...product.photos]
+                    .sort((a, b) =>
+                        Number(a?.sort_order || 0) -
+                        Number(b?.sort_order || 0)
+                    )
+                    .map(photo => buildFileUrl(photo?.url))
                     .filter(Boolean)
+                    .filter((url, index, values) =>
+                        values.indexOf(url) === index
+                    )
                 : [];
 
             if (!galleryImages.length && product.photo_url) {
@@ -881,6 +1132,220 @@
             document.getElementById('attributesSection').classList.remove('hidden');
         }
 
+
+        let cartToastTimer = null;
+
+        function getCartItemCount(cart) {
+            return (cart?.sellers || []).reduce((total, seller) => {
+                return total + (seller.items || []).reduce((sum, item) => {
+                    return sum + Math.max(0, Number(item.quantity) || 0);
+                }, 0);
+            }, 0);
+        }
+
+        function updateProductCartBadge(cart) {
+            const count = getCartItemCount(cart);
+
+            document.querySelectorAll('[data-cart-count]').forEach(element => {
+                element.textContent = count > 99 ? '99+' : String(count);
+                element.classList.toggle('hidden', count <= 0);
+            });
+        }
+
+        async function parseAuthorizedResponse(response) {
+            const raw = await response.text();
+            let data = {};
+
+            if (raw) {
+                try {
+                    data = JSON.parse(raw);
+                } catch {
+                    data = { message: raw };
+                }
+            }
+
+            if (!response.ok) {
+                const error = new Error(
+                    Array.isArray(data.message)
+                        ? data.message.join('. ')
+                        : data.message || data.error || ui.cartError
+                );
+                error.status = response.status;
+                throw error;
+            }
+
+            return data;
+        }
+
+        async function refreshCustomerAccessToken() {
+            const refreshToken = localStorage.getItem(CUSTOMER_REFRESH_KEY);
+            if (!refreshToken) return '';
+
+            try {
+                const response = await fetch(`${AUTH_API}/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ refreshToken }),
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+
+                const data = await parseAuthorizedResponse(response);
+
+                if (!data.accessToken) return '';
+                localStorage.setItem(CUSTOMER_ACCESS_KEY, data.accessToken);
+                return data.accessToken;
+            } catch {
+                localStorage.removeItem(CUSTOMER_ACCESS_KEY);
+                localStorage.removeItem(CUSTOMER_REFRESH_KEY);
+                localStorage.removeItem('osuzCustomer');
+                return '';
+            }
+        }
+
+        async function authorizedCartRequest(path = '', options = {}, retry = true) {
+            let token = localStorage.getItem(CUSTOMER_ACCESS_KEY);
+
+            if (!token) {
+                const error = new Error(ui.authRequired);
+                error.status = 401;
+                throw error;
+            }
+
+            const response = await fetch(`${CART_API}${path}`, {
+                method: options.method || 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: options.body ? JSON.stringify(options.body) : undefined,
+                cache: 'no-store',
+                credentials: 'omit'
+            });
+
+            if (response.status === 401 && retry) {
+                token = await refreshCustomerAccessToken();
+
+                if (!token) {
+                    const error = new Error(ui.authRequired);
+                    error.status = 401;
+                    throw error;
+                }
+
+                return authorizedCartRequest(path, options, false);
+            }
+
+            return parseAuthorizedResponse(response);
+        }
+
+        function showCartToast(message, isError = false) {
+            let toast = document.getElementById('productCartToast');
+
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'productCartToast';
+                toast.className = 'cart-toast';
+                document.body.appendChild(toast);
+            }
+
+            toast.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="w-10 h-10 rounded-xl ${isError ? 'bg-red-50' : 'bg-primary-50'} flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="${isError ? 'triangle-alert' : 'circle-check'}" class="w-5 h-5 ${isError ? 'text-red-500' : 'text-primary-700'}"></i>
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-bold text-gray-900">${escapeHTML(message)}</p>
+                        ${isError ? '' : `<a href="cart.html" class="inline-flex mt-2 text-sm font-black text-primary-700 hover:text-primary-800">${escapeHTML(ui.openCart)} →</a>`}
+                    </div>
+                    <button type="button" data-close-cart-toast class="p-1 text-gray-400 hover:text-gray-700">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+
+            toast.classList.add('visible');
+            lucide.createIcons();
+
+            toast.querySelector('[data-close-cart-toast]')?.addEventListener('click', () => {
+                toast.classList.remove('visible');
+            });
+
+            clearTimeout(cartToastTimer);
+            cartToastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 4200);
+        }
+
+        function redirectToCustomerAuth() {
+            const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+            location.href = `auth.html?return=${encodeURIComponent(returnUrl)}`;
+        }
+
+        async function addListingToCart(button) {
+            const tenantId = Number(button.dataset.tenantId);
+
+            if (!Number.isInteger(tenantId) || tenantId <= 0) {
+                showCartToast(ui.listingUnavailable, true);
+                return;
+            }
+
+            const originalHtml = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = `<span>${escapeHTML(ui.addingToCart)}</span>`;
+
+            try {
+                const cart = await authorizedCartRequest('', {
+                    method: 'POST',
+                    body: {
+                        productId,
+                        tenantId
+                    }
+                });
+
+                updateProductCartBadge(cart);
+                window.updateOsuzCartBadge?.(cart);
+
+                button.classList.add('is-success');
+                button.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>${escapeHTML(ui.addedToCart)}</span>`;
+                showCartToast(ui.cartAddedMessage);
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    button.classList.remove('is-success');
+                    button.disabled = false;
+                    button.innerHTML = originalHtml;
+                    lucide.createIcons();
+                }, 1600);
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = originalHtml;
+                lucide.createIcons();
+
+                if (error.status === 401) {
+                    showCartToast(ui.authRequired, true);
+                    setTimeout(redirectToCustomerAuth, 650);
+                    return;
+                }
+
+                if (error.status === 404) {
+                    showCartToast(ui.listingUnavailable, true);
+                    return;
+                }
+
+                showCartToast(error.message || ui.cartError, true);
+            }
+        }
+
+        function bindSellerCartButtons() {
+            document.querySelectorAll('[data-add-listing-to-cart]').forEach(button => {
+                button.addEventListener('click', () => addListingToCart(button));
+            });
+        }
+
         function formatWorkingDays(value) {
             if (value === '1111111') return ui.everyDay;
             return value || '—';
@@ -921,7 +1386,7 @@
                             </span>
                         </div>
                         <div class="text-2xl font-black text-gray-900 mb-4">
-                            ${escapeHTML(formatPrice(listing.price))}
+                            ${escapeHTML(formatListingPrice(listing.price))}
                         </div>
                         <div class="grid grid-cols-2 gap-3 text-xs">
                             <div class="rounded-xl bg-gray-50 p-3">
@@ -934,9 +1399,22 @@
                             </div>
                         </div>
                         <div class="text-xs text-gray-400 mt-3">${escapeHTML(formatWorkingDays(listing.work_days))}</div>
+                        <button
+                            type="button"
+                            class="seller-cart-button"
+                            data-add-listing-to-cart
+                            data-tenant-id="${Number(listing.tenant_id)}"
+                            ${Number(listing.total_stock || 0) <= 0 ? 'disabled' : ''}
+                        >
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            <span>${escapeHTML(Number(listing.total_stock || 0) <= 0 ? ui.outOfStock : ui.addToCart)}</span>
+                        </button>
                     </article>
                 `;
             }).join('');
+
+            bindSellerCartButtons();
+            lucide.createIcons();
         }
 
         function relatedCard(item) {
@@ -970,9 +1448,14 @@
             section.classList.remove('hidden');
         }
 
-        applyStaticLanguage();
-        applyTheme();
-        loadProductPage();
+        try {
+            applyStaticLanguage();
+            applyTheme();
+            loadProductPage();
+        } catch (error) {
+            console.error('Product page initialization failed:', error);
+            showError();
+        }
     </script>
 
     <script>
@@ -1028,12 +1511,116 @@
     <script>
         (() => {
             const lang = ['ru','uz','en'].includes(localStorage.getItem('osuzLang')) ? localStorage.getItem('osuzLang') : 'ru';
-            const flags={ru:'🇷🇺',uz:'🇺🇿',en:'🇺🇸'};
-            document.getElementById('productLanguageFlag').textContent=flags[lang];
             const toggle=document.getElementById('languageButton'), menu=document.getElementById('productLanguageMenu');
             toggle?.addEventListener('click',e=>{e.stopPropagation();menu?.classList.toggle('hidden')});
             document.querySelectorAll('.product-language-option').forEach(btn=>btn.addEventListener('click',()=>{localStorage.setItem('osuzLang',btn.dataset.language);location.reload()}));
             document.addEventListener('click',e=>{if(!e.target.closest('#languageButton')&&!e.target.closest('#productLanguageMenu'))menu?.classList.add('hidden')});
+        })();
+    </script>
+
+
+    <script>
+        (() => {
+            const CART_API = 'https://osuz.uz/api/site/cart';
+            const AUTH_API = 'https://osuz.uz/api/site-auth';
+            const ACCESS_KEY = 'osuzCustomerAccessToken';
+            const REFRESH_KEY = 'osuzCustomerRefreshToken';
+
+            function setCartCount(count) {
+                const safeCount = Math.max(0, Number(count) || 0);
+
+                document.querySelectorAll('[data-cart-count]').forEach(element => {
+                    element.textContent = safeCount > 99 ? '99+' : String(safeCount);
+                    element.classList.toggle('hidden', safeCount <= 0);
+                });
+            }
+
+            function countCartItems(cart) {
+                return (cart?.sellers || []).reduce((total, seller) => {
+                    return total + (seller.items || []).reduce((sum, item) => {
+                        return sum + Math.max(0, Number(item.quantity) || 0);
+                    }, 0);
+                }, 0);
+            }
+
+            async function refreshAccessToken() {
+                const refreshToken = localStorage.getItem(REFRESH_KEY);
+                if (!refreshToken) return '';
+
+                try {
+                    const response = await fetch(`${AUTH_API}/refresh`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ refreshToken }),
+                        cache: 'no-store',
+                        credentials: 'omit'
+                    });
+
+                    if (!response.ok) throw new Error('Refresh failed');
+
+                    const data = await response.json();
+                    if (!data.accessToken) throw new Error('Access token missing');
+
+                    localStorage.setItem(ACCESS_KEY, data.accessToken);
+                    return data.accessToken;
+                } catch {
+                    localStorage.removeItem(ACCESS_KEY);
+                    localStorage.removeItem(REFRESH_KEY);
+                    localStorage.removeItem('osuzCustomer');
+                    return '';
+                }
+            }
+
+            async function fetchCart(token, retry = true) {
+                if (!token) return null;
+
+                const response = await fetch(CART_API, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+
+                if (response.status === 401 && retry) {
+                    const nextToken = await refreshAccessToken();
+                    return nextToken ? fetchCart(nextToken, false) : null;
+                }
+
+                if (!response.ok) return null;
+                return response.json();
+            }
+
+            window.updateOsuzCartBadge = async function updateOsuzCartBadge(cartData) {
+                if (cartData) {
+                    setCartCount(countCartItems(cartData));
+                    return;
+                }
+
+                const token = localStorage.getItem(ACCESS_KEY);
+                if (!token) {
+                    setCartCount(0);
+                    return;
+                }
+
+                try {
+                    const cart = await fetchCart(token);
+                    setCartCount(countCartItems(cart));
+                } catch {
+                    setCartCount(0);
+                }
+            };
+
+            window.updateOsuzCartBadge();
+            window.addEventListener('storage', event => {
+                if ([ACCESS_KEY, REFRESH_KEY].includes(event.key)) {
+                    window.updateOsuzCartBadge();
+                }
+            });
         })();
     </script>
 

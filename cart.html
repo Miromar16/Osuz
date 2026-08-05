@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина — OSUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .site-header-top { background: #00bcd4; }
+        .site-header-nav {
+            background: #0b1421;
+            border-top: 1px solid rgba(255,255,255,.18);
+        }
+        .header-action {
+            min-height: 44px;
+            padding: 0 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+        .header-action:hover { background: rgba(255,255,255,.15); }
+        .nav-link { color: #cbd5e1; }
+        .nav-link:hover { color: #67e8f9; }
+        .surface {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 8px 28px rgba(15,23,42,.055);
+        }
+        .seller-group {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 22px;
+            overflow: hidden;
+        }
+        .cart-row {
+            display: grid;
+            grid-template-columns: 34px minmax(0,1fr) auto;
+            gap: 14px;
+            align-items: center;
+            padding: 18px 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .quantity-control {
+            display: inline-grid;
+            grid-template-columns: 38px 56px 38px;
+            height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .quantity-control button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            transition: .18s ease;
+        }
+        .quantity-control button:hover { background: #e0f7fa; color: #00838f; }
+        .quantity-control input {
+            min-width: 0;
+            border-inline: 1px solid #e2e8f0;
+            text-align: center;
+            outline: none;
+            font-size: 13px;
+            font-weight: 800;
+            background: transparent;
+        }
+        .cart-checkbox {
+            width: 19px;
+            height: 19px;
+            accent-color: #00bcd4;
+            cursor: pointer;
+        }
+        .danger-button {
+            color: #ef4444;
+            transition: .18s ease;
+        }
+        .danger-button:hover { color: #b91c1c; background: #fef2f2; }
+        .cart-loading {
+            pointer-events: none;
+            opacity: .58;
+        }
+        .summary-card {
+            position: sticky;
+            top: 150px;
+        }
+        .primary-button {
+            min-height: 48px;
+            border-radius: 13px;
+            background: #00bcd4;
+            color: #07111d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 0 18px;
+            font-weight: 900;
+            transition: .2s ease;
+        }
+        .primary-button:hover:not(:disabled) {
+            background: #00acc1;
+            transform: translateY(-1px);
+        }
+        .primary-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .secondary-button {
+            min-height: 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+        .secondary-button:hover { border-color: #00bcd4; color: #00838f; }
+        .notice {
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            background: #fffbeb;
+            color: #92400e;
+            padding: 13px 14px;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+        .theme-icon-sun { display: none; }
+        body.dark-mode {
+            background: #070b12;
+            color: #f8fafc;
+        }
+        body.dark-mode .site-header-nav { background: #070d16; }
+        body.dark-mode .surface,
+        body.dark-mode .seller-group,
+        body.dark-mode .quantity-control,
+        body.dark-mode .secondary-button {
+            background: #0f1722;
+            border-color: #344256;
+        }
+        body.dark-mode .cart-row { border-color: #263241; }
+        body.dark-mode .quantity-control input { border-color: #344256; color: #f8fafc; }
+        body.dark-mode .quantity-control button { color: #cbd5e1; }
+        body.dark-mode .quantity-control button:hover { background: #123b46; color: #67e8f9; }
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 { color: #f8fafc !important; }
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 { color: #aeb9c7 !important; }
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100,
+        body.dark-mode .bg-white { background: #0f1722 !important; }
+        body.dark-mode .notice {
+            background: rgba(120,53,15,.22);
+            border-color: rgba(251,191,36,.35);
+            color: #fde68a;
+        }
+        body.dark-mode .danger-button:hover { background: rgba(127,29,29,.25); }
+        body.dark-mode .theme-icon-moon { display: none; }
+        body.dark-mode .theme-icon-sun { display: block; }
+        @media (max-width: 767px) {
+            .cart-row { grid-template-columns: 26px minmax(0,1fr); }
+            .cart-row-actions { grid-column: 2; justify-content: space-between; width: 100%; }
+            .summary-card { position: static; }
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <div class="site-header-top">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                    <span class="text-xl font-black tracking-wide text-white">OSUZ</span>
+                </a>
+
+                <div class="ml-auto flex items-center gap-1 lg:gap-3">
+                    <select id="languageSelect" class="header-action bg-transparent outline-none cursor-pointer">
+                        <option value="ru">RU</option>
+                        <option value="uz">UZ</option>
+                        <option value="en">EN</option>
+                    </select>
+                    <button id="themeToggle" class="header-action !px-3" aria-label="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i>
+                    </button>
+                    <a href="auth.html" data-customer-account-link class="header-action hidden sm:inline-flex max-w-[160px]">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
+                    </a>
+                    <a href="cart.html" class="header-action">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="headerCartText" class="hidden sm:inline">Корзина</span>
+                        <span id="headerCartCount" class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="site-header-nav">
+            <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
+                <a href="index.html#catalog" class="nav-link text-sm font-semibold">Каталог</a>
+                <a href="index.html#partners" class="nav-link text-sm font-semibold">Партнёры</a>
+                <a href="index.html#products" class="nav-link text-sm font-semibold">Товары</a>
+                <a href="index.html#about" class="nav-link text-sm font-semibold">О нас</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-14">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+            <div>
+                <span id="cartEyebrow" class="text-xs font-black uppercase tracking-[.18em] text-primary-600">Покупки</span>
+                <h1 id="cartTitle" class="text-3xl lg:text-4xl font-black text-gray-900 mt-2">Корзина</h1>
+                <p id="cartDescription" class="text-sm text-gray-500 mt-2">Товары сгруппированы по продавцам.</p>
+            </div>
+            <button id="clearCartButton" type="button" class="secondary-button hidden">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                <span>Очистить корзину</span>
+            </button>
+        </div>
+
+        <div id="authRequiredState" class="surface hidden rounded-3xl p-8 lg:p-12 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
+                <i data-lucide="log-in" class="w-8 h-8 text-primary-700"></i>
+            </div>
+            <h2 id="authRequiredTitle" class="text-2xl font-black text-gray-900">Войдите в аккаунт</h2>
+            <p id="authRequiredText" class="text-gray-500 mt-2 mb-6">Корзина доступна только авторизованным покупателям.</p>
+            <a id="authRequiredButton" href="auth.html?return=%2Fcart.html" class="primary-button">Войти</a>
+        </div>
+
+        <div id="loadingState" class="space-y-5">
+            <div class="surface rounded-3xl h-40 animate-pulse"></div>
+            <div class="surface rounded-3xl h-52 animate-pulse"></div>
+        </div>
+
+        <div id="emptyState" class="surface hidden rounded-3xl p-9 lg:p-14 text-center">
+            <div class="w-20 h-20 rounded-3xl bg-primary-50 flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="shopping-cart" class="w-10 h-10 text-primary-700"></i>
+            </div>
+            <h2 id="emptyTitle" class="text-2xl font-black text-gray-900">Корзина пуста</h2>
+            <p id="emptyText" class="text-gray-500 mt-2 mb-6">Добавьте товары у нужных продавцов.</p>
+            <a id="emptyButton" href="index.html#catalog" class="primary-button">
+                Перейти в каталог
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <div id="cartContent" class="hidden grid lg:grid-cols-[minmax(0,1fr)_350px] gap-7 items-start">
+            <div id="sellerGroups" class="space-y-5"></div>
+
+            <aside class="summary-card surface rounded-3xl p-6">
+                <div class="flex items-center justify-between gap-3 mb-5">
+                    <h2 id="summaryTitle" class="text-xl font-black text-gray-900">Итого</h2>
+                    <i data-lucide="receipt-text" class="w-5 h-5 text-primary-600"></i>
+                </div>
+
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between gap-4">
+                        <span id="selectedItemsLabel" class="text-gray-500">Выбрано товаров</span>
+                        <strong id="selectedItemsCount" class="text-gray-900">0</strong>
+                    </div>
+                    <div class="border-t border-gray-200 pt-4 flex items-end justify-between gap-4">
+                        <span id="grandTotalLabel" class="text-gray-500">Общая сумма</span>
+                        <strong id="grandTotalValue" class="text-2xl text-gray-900">0 сум</strong>
+                    </div>
+                </div>
+
+                <button id="checkoutButton" type="button" disabled class="primary-button w-full mt-6">
+                    <i data-lucide="credit-card" class="w-5 h-5"></i>
+                    <span>Оформить заказ</span>
+                </button>
+
+                <div id="checkoutNotice" class="notice mt-4">
+                    Оформление заказа пока не реализовано. Корзина и выбор товаров уже работают.
+                </div>
+            </aside>
+        </div>
+
+        <div id="errorState" class="notice hidden mt-5"></div>
+    </main>
+
+    <script>
+        const API_ORIGIN = 'https://osuz.uz';
+        const CART_API = `${API_ORIGIN}/api/site/cart`;
+        const AUTH_API = `${API_ORIGIN}/api/site-auth`;
+
+        const storageKeys = {
+            accessToken: 'osuzCustomerAccessToken',
+            refreshToken: 'osuzCustomerRefreshToken',
+            customer: 'osuzCustomer'
+        };
+
+        let currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+            ? localStorage.getItem('osuzLang')
+            : 'ru';
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+        let cart = { sellers: [], grandTotal: 0 };
+        let cartBusy = false;
+
+        const ui = {
+            ru: {
+                title: 'Корзина — OSUZ',
+                cart: 'Корзина',
+                eyebrow: 'Покупки',
+                description: 'Товары сгруппированы по продавцам.',
+                clear: 'Очистить корзину',
+                confirmClear: 'Удалить все товары из корзины?',
+                authTitle: 'Войдите в аккаунт',
+                authText: 'Корзина доступна только авторизованным покупателям.',
+                signIn: 'Войти',
+                emptyTitle: 'Корзина пуста',
+                emptyText: 'Добавьте товары у нужных продавцов.',
+                catalog: 'Перейти в каталог',
+                sellerTotal: 'Всего у продавца',
+                selectedTotal: 'Выбрано у продавца',
+                selectedItems: 'Выбрано товаров',
+                total: 'Итого',
+                grandTotal: 'Общая сумма',
+                checkout: 'Оформить заказ',
+                checkoutNotice: 'Оформление заказа пока не реализовано. Корзина и выбор товаров уже работают.',
+                quantity: 'Количество',
+                remove: 'Удалить',
+                selectSeller: 'Выбрать все товары продавца',
+                loadingError: 'Не удалось загрузить корзину.',
+                updateError: 'Не удалось обновить корзину.',
+                unauthorized: 'Ваша сессия завершена. Войдите снова.',
+                sum: 'сум'
+            },
+            uz: {
+                title: 'Savat — OSUZ',
+                cart: 'Savat',
+                eyebrow: 'Xaridlar',
+                description: 'Mahsulotlar sotuvchilar bo‘yicha guruhlangan.',
+                clear: 'Savatni tozalash',
+                confirmClear: 'Savatdagi barcha mahsulotlar o‘chirilsinmi?',
+                authTitle: 'Akkauntga kiring',
+                authText: 'Savat faqat tizimga kirgan xaridorlar uchun mavjud.',
+                signIn: 'Kirish',
+                emptyTitle: 'Savat bo‘sh',
+                emptyText: 'Kerakli sotuvchilardan mahsulot qo‘shing.',
+                catalog: 'Katalogga o‘tish',
+                sellerTotal: 'Sotuvchidagi jami',
+                selectedTotal: 'Tanlangan jami',
+                selectedItems: 'Tanlangan mahsulotlar',
+                total: 'Jami',
+                grandTotal: 'Umumiy summa',
+                checkout: 'Buyurtma berish',
+                checkoutNotice: 'Buyurtma berish hali amalga oshirilmagan. Savat va mahsulotlarni tanlash ishlaydi.',
+                quantity: 'Miqdor',
+                remove: 'O‘chirish',
+                selectSeller: 'Sotuvchining barcha mahsulotlarini tanlash',
+                loadingError: 'Savatni yuklab bo‘lmadi.',
+                updateError: 'Savatni yangilab bo‘lmadi.',
+                unauthorized: 'Sessiya tugadi. Qayta kiring.',
+                sum: 'so‘m'
+            },
+            en: {
+                title: 'Cart — OSUZ',
+                cart: 'Cart',
+                eyebrow: 'Shopping',
+                description: 'Products are grouped by seller.',
+                clear: 'Clear cart',
+                confirmClear: 'Remove all products from the cart?',
+                authTitle: 'Sign in',
+                authText: 'The cart is available only to signed-in customers.',
+                signIn: 'Sign in',
+                emptyTitle: 'Your cart is empty',
+                emptyText: 'Add products from the sellers you need.',
+                catalog: 'Open catalog',
+                sellerTotal: 'Seller total',
+                selectedTotal: 'Selected seller total',
+                selectedItems: 'Selected items',
+                total: 'Total',
+                grandTotal: 'Grand total',
+                checkout: 'Place order',
+                checkoutNotice: 'Order placement is not implemented yet. The cart and product selection are working.',
+                quantity: 'Quantity',
+                remove: 'Remove',
+                selectSeller: 'Select all products from this seller',
+                loadingError: 'Could not load the cart.',
+                updateError: 'Could not update the cart.',
+                unauthorized: 'Your session has ended. Sign in again.',
+                sum: 'UZS'
+            }
+        };
+
+        function t(key) {
+            return ui[currentLang]?.[key] || ui.ru[key] || key;
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function formatMoney(value) {
+            const amount = Number(value) || 0;
+            const locale = currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-US' : 'ru-RU';
+            return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(amount)} ${t('sum')}`;
+        }
+
+        function getSellerId(seller) {
+            return Number(seller.tenantId ?? seller.tenant_id);
+        }
+
+        function getProductId(item) {
+            return Number(item.productId ?? item.product_id);
+        }
+
+        function getSellerName(seller) {
+            return seller.tenantName ?? seller.tenant_name ?? '';
+        }
+
+        function getLineTotal(item) {
+            return Number(item.lineTotal ?? item.line_total ?? 0);
+        }
+
+        function getSellerTotal(seller) {
+            return Number(seller.sellerTotal ?? seller.seller_total ?? 0);
+        }
+
+        function getSelectedTotal(seller) {
+            return Number(seller.selectedTotal ?? seller.selected_total ?? 0);
+        }
+
+        function normalizeCart(data) {
+            return {
+                sellers: Array.isArray(data?.sellers) ? data.sellers : [],
+                grandTotal: Number(data?.grandTotal ?? data?.grand_total ?? 0)
+            };
+        }
+
+        function countAllItems(cartData) {
+            return cartData.sellers.reduce((total, seller) => {
+                return total + (seller.items || []).reduce((sum, item) => {
+                    return sum + Math.max(0, Number(item.quantity) || 0);
+                }, 0);
+            }, 0);
+        }
+
+        function countSelectedItems(cartData) {
+            return cartData.sellers.reduce((total, seller) => {
+                return total + (seller.items || []).reduce((sum, item) => {
+                    return sum + (item.selected ? Math.max(0, Number(item.quantity) || 0) : 0);
+                }, 0);
+            }, 0);
+        }
+
+        function updateHeaderCount() {
+            const count = countAllItems(cart);
+            const badge = document.getElementById('headerCartCount');
+            badge.textContent = count > 99 ? '99+' : String(count);
+            badge.classList.toggle('hidden', count <= 0);
+        }
+
+        function setBusy(value) {
+            cartBusy = value;
+            document.getElementById('cartContent').classList.toggle('cart-loading', value);
+            document.getElementById('clearCartButton').disabled = value;
+        }
+
+        function showError(message) {
+            const state = document.getElementById('errorState');
+            state.textContent = message;
+            state.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('errorState').classList.add('hidden');
+        }
+
+        async function parseResponse(response) {
+            const raw = await response.text();
+            let data = {};
+
+            if (raw) {
+                try {
+                    data = JSON.parse(raw);
+                } catch {
+                    data = { message: raw };
+                }
+            }
+
+            if (!response.ok) {
+                const error = new Error(
+                    Array.isArray(data.message)
+                        ? data.message.join('. ')
+                        : data.message || data.error || t('updateError')
+                );
+                error.status = response.status;
+                throw error;
+            }
+
+            return data;
+        }
+
+        async function refreshAccessToken() {
+            const refreshToken = localStorage.getItem(storageKeys.refreshToken);
+            if (!refreshToken) return '';
+
+            try {
+                const response = await fetch(`${AUTH_API}/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ refreshToken }),
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+
+                const data = await parseResponse(response);
+                if (!data.accessToken) return '';
+
+                localStorage.setItem(storageKeys.accessToken, data.accessToken);
+                return data.accessToken;
+            } catch {
+                Object.values(storageKeys).forEach(key => localStorage.removeItem(key));
+                return '';
+            }
+        }
+
+        async function cartRequest(path = '', options = {}, retry = true) {
+            let token = localStorage.getItem(storageKeys.accessToken);
+
+            if (!token) {
+                const error = new Error(t('unauthorized'));
+                error.status = 401;
+                throw error;
+            }
+
+            const response = await fetch(`${CART_API}${path}`, {
+                method: options.method || 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: options.body ? JSON.stringify(options.body) : undefined,
+                cache: 'no-store',
+                credentials: 'omit'
+            });
+
+            if (response.status === 401 && retry) {
+                token = await refreshAccessToken();
+
+                if (!token) {
+                    const error = new Error(t('unauthorized'));
+                    error.status = 401;
+                    throw error;
+                }
+
+                return cartRequest(path, options, false);
+            }
+
+            return parseResponse(response);
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang;
+            document.title = t('title');
+            document.getElementById('languageSelect').value = currentLang;
+            document.getElementById('headerCartText').textContent = t('cart');
+            document.getElementById('cartEyebrow').textContent = t('eyebrow');
+            document.getElementById('cartTitle').textContent = t('cart');
+            document.getElementById('cartDescription').textContent = t('description');
+            document.querySelector('#clearCartButton span').textContent = t('clear');
+            document.getElementById('authRequiredTitle').textContent = t('authTitle');
+            document.getElementById('authRequiredText').textContent = t('authText');
+            document.getElementById('authRequiredButton').textContent = t('signIn');
+            document.getElementById('emptyTitle').textContent = t('emptyTitle');
+            document.getElementById('emptyText').textContent = t('emptyText');
+            document.getElementById('emptyButton').childNodes[0].nodeValue = `${t('catalog')} `;
+            document.getElementById('summaryTitle').textContent = t('total');
+            document.getElementById('selectedItemsLabel').textContent = t('selectedItems');
+            document.getElementById('grandTotalLabel').textContent = t('grandTotal');
+            document.querySelector('#checkoutButton span').textContent = t('checkout');
+            document.getElementById('checkoutNotice').textContent = t('checkoutNotice');
+            renderCart();
+        }
+
+        function applyTheme() {
+            document.body.classList.toggle('dark-mode', currentTheme === 'dark');
+            lucide.createIcons();
+        }
+
+        function renderCart() {
+            updateHeaderCount();
+
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('authRequiredState').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('cartContent').classList.add('hidden');
+
+            const sellers = cart.sellers;
+
+            if (!sellers.length) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                document.getElementById('clearCartButton').classList.add('hidden');
+                lucide.createIcons();
+                return;
+            }
+
+            document.getElementById('cartContent').classList.remove('hidden');
+            document.getElementById('clearCartButton').classList.remove('hidden');
+
+            document.getElementById('sellerGroups').innerHTML = sellers.map(seller => {
+                const tenantId = getSellerId(seller);
+                const items = Array.isArray(seller.items) ? seller.items : [];
+                const allSelected = items.length > 0 && items.every(item => Boolean(item.selected));
+
+                return `
+                    <section class="seller-group" data-seller-group="${tenantId}">
+                        <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <label class="flex items-center gap-3 cursor-pointer min-w-0">
+                                <input
+                                    type="checkbox"
+                                    class="cart-checkbox"
+                                    data-action="select-seller"
+                                    data-tenant-id="${tenantId}"
+                                    ${allSelected ? 'checked' : ''}
+                                    aria-label="${escapeHTML(t('selectSeller'))}"
+                                >
+                                <span class="min-w-0">
+                                    <span class="block text-sm font-black text-gray-900 truncate">${escapeHTML(getSellerName(seller))}</span>
+                                    <span class="block text-xs text-gray-400 mt-1">${items.length} · ${escapeHTML(t('sellerTotal'))}: ${escapeHTML(formatMoney(getSellerTotal(seller)))}</span>
+                                </span>
+                            </label>
+                            <div class="text-sm text-gray-500">
+                                ${escapeHTML(t('selectedTotal'))}:
+                                <strong class="text-gray-900">${escapeHTML(formatMoney(getSelectedTotal(seller)))}</strong>
+                            </div>
+                        </div>
+
+                        <div>
+                            ${items.map(item => {
+                                const productId = getProductId(item);
+                                const quantity = Math.max(1, Number(item.quantity) || 1);
+
+                                return `
+                                    <article class="cart-row">
+                                        <input
+                                            type="checkbox"
+                                            class="cart-checkbox"
+                                            data-action="select-item"
+                                            data-tenant-id="${tenantId}"
+                                            data-product-id="${productId}"
+                                            ${item.selected ? 'checked' : ''}
+                                        >
+
+                                        <div class="min-w-0">
+                                            <a href="product.html?id=${productId}" class="font-bold text-gray-900 hover:text-primary-700 line-clamp-2">${escapeHTML(item.name || '')}</a>
+                                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-400">
+                                                <span>${escapeHTML(formatMoney(item.price))}</span>
+                                                <span>${escapeHTML(formatMoney(getLineTotal(item)))}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="cart-row-actions flex items-center justify-end gap-3">
+                                            <div class="quantity-control" aria-label="${escapeHTML(t('quantity'))}">
+                                                <button type="button" data-action="decrease" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="-">
+                                                    <i data-lucide="minus" class="w-4 h-4"></i>
+                                                </button>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value="${quantity}"
+                                                    data-action="quantity-input"
+                                                    data-tenant-id="${tenantId}"
+                                                    data-product-id="${productId}"
+                                                    aria-label="${escapeHTML(t('quantity'))}"
+                                                >
+                                                <button type="button" data-action="increase" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="+">
+                                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                                </button>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                class="danger-button w-10 h-10 rounded-xl flex items-center justify-center"
+                                                data-action="remove"
+                                                data-tenant-id="${tenantId}"
+                                                data-product-id="${productId}"
+                                                aria-label="${escapeHTML(t('remove'))}"
+                                            >
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </article>
+                                `;
+                            }).join('')}
+                        </div>
+                    </section>
+                `;
+            }).join('');
+
+            document.getElementById('selectedItemsCount').textContent = String(countSelectedItems(cart));
+            document.getElementById('grandTotalValue').textContent = formatMoney(cart.grandTotal);
+
+            bindCartActions();
+            lucide.createIcons();
+        }
+
+        async function applyCartMutation(path, options) {
+            if (cartBusy) return;
+
+            hideError();
+            setBusy(true);
+
+            try {
+                cart = normalizeCart(await cartRequest(path, options));
+                renderCart();
+            } catch (error) {
+                if (error.status === 401) {
+                    showAuthRequired();
+                } else {
+                    showError(error.message || t('updateError'));
+                }
+            } finally {
+                setBusy(false);
+            }
+        }
+
+        function bindCartActions() {
+            document.querySelectorAll('[data-action="select-item"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    applyCartMutation(
+                        `/${Number(input.dataset.tenantId)}/${Number(input.dataset.productId)}`,
+                        {
+                            method: 'PATCH',
+                            body: { selected: input.checked }
+                        }
+                    );
+                });
+            });
+
+            document.querySelectorAll('[data-action="select-seller"]').forEach(input => {
+                input.addEventListener('change', async () => {
+                    if (cartBusy) return;
+
+                    const tenantId = Number(input.dataset.tenantId);
+                    const seller = cart.sellers.find(item => getSellerId(item) === tenantId);
+                    if (!seller) return;
+
+                    hideError();
+                    setBusy(true);
+
+                    try {
+                        await Promise.all(
+                            (seller.items || []).map(item => cartRequest(
+                                `/${tenantId}/${getProductId(item)}`,
+                                {
+                                    method: 'PATCH',
+                                    body: { selected: input.checked }
+                                }
+                            ))
+                        );
+
+                        cart = normalizeCart(await cartRequest());
+                        renderCart();
+                    } catch (error) {
+                        if (error.status === 401) showAuthRequired();
+                        else showError(error.message || t('updateError'));
+                    } finally {
+                        setBusy(false);
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-action="decrease"], [data-action="increase"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tenantId = Number(button.dataset.tenantId);
+                    const productId = Number(button.dataset.productId);
+                    const seller = cart.sellers.find(item => getSellerId(item) === tenantId);
+                    const cartItem = seller?.items?.find(item => getProductId(item) === productId);
+                    if (!cartItem) return;
+
+                    const nextQuantity = Math.max(
+                        0,
+                        Number(cartItem.quantity || 1) + (button.dataset.action === 'increase' ? 1 : -1)
+                    );
+
+                    applyCartMutation(
+                        `/${tenantId}/${productId}`,
+                        {
+                            method: 'PATCH',
+                            body: { quantity: nextQuantity }
+                        }
+                    );
+                });
+            });
+
+            document.querySelectorAll('[data-action="quantity-input"]').forEach(input => {
+                input.addEventListener('change', () => {
+                    const quantity = Math.max(0, Math.floor(Number(input.value) || 0));
+
+                    applyCartMutation(
+                        `/${Number(input.dataset.tenantId)}/${Number(input.dataset.productId)}`,
+                        {
+                            method: 'PATCH',
+                            body: { quantity }
+                        }
+                    );
+                });
+            });
+
+            document.querySelectorAll('[data-action="remove"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    applyCartMutation(
+                        `/${Number(button.dataset.tenantId)}/${Number(button.dataset.productId)}`,
+                        { method: 'DELETE' }
+                    );
+                });
+            });
+        }
+
+        function showAuthRequired() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('cartContent').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('clearCartButton').classList.add('hidden');
+            document.getElementById('authRequiredState').classList.remove('hidden');
+
+            const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+            document.getElementById('authRequiredButton').href =
+                `auth.html?return=${encodeURIComponent(returnUrl)}`;
+
+            lucide.createIcons();
+        }
+
+        async function loadCart() {
+            hideError();
+
+            if (!localStorage.getItem(storageKeys.accessToken)) {
+                document.getElementById('loadingState').classList.add('hidden');
+                showAuthRequired();
+                return;
+            }
+
+            try {
+                cart = normalizeCart(await cartRequest());
+                renderCart();
+            } catch (error) {
+                document.getElementById('loadingState').classList.add('hidden');
+
+                if (error.status === 401) {
+                    showAuthRequired();
+                } else {
+                    showError(error.message || t('loadingError'));
+                    document.getElementById('emptyState').classList.remove('hidden');
+                }
+            }
+        }
+
+        document.getElementById('clearCartButton').addEventListener('click', () => {
+            if (!confirm(t('confirmClear'))) return;
+            applyCartMutation('', { method: 'DELETE' });
+        });
+
+        document.getElementById('languageSelect').addEventListener('change', event => {
+            currentLang = event.target.value;
+            localStorage.setItem('osuzLang', currentLang);
+            applyLanguage();
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        });
+
+        function updateCustomerHeader() {
+            let customer = null;
+
+            try {
+                customer = JSON.parse(localStorage.getItem(storageKeys.customer) || 'null');
+            } catch {
+                customer = null;
+            }
+
+            const fallback = currentLang === 'uz'
+                ? 'Kirish'
+                : currentLang === 'en'
+                    ? 'Sign in'
+                    : 'Войти';
+
+            const value = customer
+                ? [customer.name, customer.surname].filter(Boolean).join(' ').trim()
+                    || customer.phone
+                    || fallback
+                : fallback;
+
+            document.querySelectorAll('[data-customer-account-text]').forEach(element => {
+                element.textContent = value;
+            });
+        }
+
+        applyLanguage();
+        applyTheme();
+        updateCustomerHeader();
+        loadCart();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
