@@ -213,6 +213,180 @@
             .cart-row-actions { grid-column: 2; justify-content: space-between; width: 100%; }
             .summary-card { position: static; }
         }
+    
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+    
+        .osuz-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 8, 23, .58);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .2s ease, visibility .2s ease;
+        }
+
+        .osuz-modal-backdrop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .osuz-modal {
+            width: min(440px, 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: 0 28px 90px rgba(15,23,42,.28);
+            padding: 22px;
+            transform: translateY(10px) scale(.98);
+            transition: transform .2s ease;
+        }
+
+        .osuz-modal-backdrop.visible .osuz-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .osuz-modal-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fef2f2;
+            color: #dc2626;
+            flex: 0 0 auto;
+        }
+
+        .osuz-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .osuz-modal-button {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+
+        .osuz-modal-button.cancel {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+        }
+
+        .osuz-modal-button.cancel:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .osuz-modal-button.danger {
+            border: 1px solid #dc2626;
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .osuz-modal-button.danger:hover {
+            background: #b91c1c;
+            border-color: #b91c1c;
+        }
+
+        body.dark-mode .osuz-modal {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .osuz-modal-button.cancel {
+            background: #111c2a;
+            border-color: #344256;
+            color: #dbe5f1;
+        }
+
+        body.dark-mode .osuz-modal-button.cancel:hover {
+            background: #172536;
+        }
+
+        body.dark-mode .osuz-modal-icon {
+            background: rgba(127, 29, 29, .28);
+            color: #fca5a5;
+        }
+
+        .osuz-toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 210;
+            width: min(390px, calc(100vw - 32px));
+            border: 1px solid #b7e7ee;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 22px 60px rgba(15,23,42,.22);
+            padding: 15px 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: .22s ease;
+        }
+
+        .osuz-toast.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .osuz-toast.error {
+            border-color: #fecaca;
+        }
+
+        .osuz-toast.success {
+            border-color: #bbf7d0;
+        }
+
+        body.dark-mode .osuz-toast {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .osuz-toast.error {
+            border-color: rgba(248,113,113,.35);
+        }
+
+        body.dark-mode .osuz-toast.success {
+            border-color: rgba(74,222,128,.35);
+        }
+
+        @media (max-width: 600px) {
+            .osuz-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .osuz-modal-button {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -237,6 +411,10 @@
                     <a href="auth.html" data-customer-account-link class="header-action hidden sm:inline-flex max-w-[160px]">
                         <i data-lucide="user" class="w-4 h-4"></i>
                         <span data-customer-account-text class="truncate">Войти</span>
+                    </a>
+                    <a href="orders.html" class="header-action hidden md:inline-flex">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                        <span id="headerOrdersText">Заказы</span>
                     </a>
                     <a href="cart.html" class="header-action">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
@@ -332,7 +510,9 @@
     <script>
         const API_ORIGIN = 'https://osuz.uz';
         const CART_API = `${API_ORIGIN}/api/site/cart`;
+        const ORDER_API = `${API_ORIGIN}/api/site/orders`;
         const AUTH_API = `${API_ORIGIN}/api/site-auth`;
+        const GUEST_CART_KEY = 'osuzGuestCart';
 
         const storageKeys = {
             accessToken: 'osuzCustomerAccessToken',
@@ -351,10 +531,22 @@
             ru: {
                 title: 'Корзина — OSUZ',
                 cart: 'Корзина',
+                orders: 'Заказы',
                 eyebrow: 'Покупки',
                 description: 'Товары сгруппированы по продавцам.',
+                guestDescription: 'Корзина сохранена на этом устройстве. Войти нужно только при оформлении заказа.',
+                guestCheckoutLogin: 'Для оформления заказа войдите или зарегистрируйтесь. Корзина сохранится.',
                 clear: 'Очистить корзину',
                 confirmClear: 'Удалить все товары из корзины?',
+                confirmClearTitle: 'Очистить корзину?',
+                confirmClearText: 'Все товары будут удалены из корзины. Это действие нельзя отменить.',
+                confirmClearAction: 'Удалить всё',
+                cancel: 'Отмена',
+                cartCleared: 'Корзина очищена.',
+                removeItemTitle: 'Удалить товар?',
+                removeItemText: '«{name}» будет удалён из корзины продавца {seller}.',
+                removeItemAction: 'Удалить товар',
+                itemRemoved: 'Товар удалён из корзины.',
                 authTitle: 'Войдите в аккаунт',
                 authText: 'Корзина доступна только авторизованным покупателям.',
                 signIn: 'Войти',
@@ -367,7 +559,11 @@
                 total: 'Итого',
                 grandTotal: 'Общая сумма',
                 checkout: 'Оформить заказ',
-                checkoutNotice: 'Оформление заказа пока не реализовано. Корзина и выбор товаров уже работают.',
+                checkoutNotice: 'Будет создан отдельный заказ для каждого продавца, у которого отмечены товары.',
+                checkoutCreating: 'Создаём заказ...',
+                checkoutEmpty: 'Выберите хотя бы один товар для оформления.',
+                checkoutError: 'Не удалось создать заказ. Попробуйте ещё раз.',
+                checkoutCreated: 'Заказ создан. Открываем мои заказы...',
                 quantity: 'Количество',
                 remove: 'Удалить',
                 selectSeller: 'Выбрать все товары продавца',
@@ -379,10 +575,22 @@
             uz: {
                 title: 'Savat — OSUZ',
                 cart: 'Savat',
+                orders: 'Buyurtmalar',
                 eyebrow: 'Xaridlar',
                 description: 'Mahsulotlar sotuvchilar bo‘yicha guruhlangan.',
+                guestDescription: 'Savat ushbu qurilmada saqlanadi. Faqat buyurtma berishda akkauntga kirish kerak.',
+                guestCheckoutLogin: 'Buyurtma berish uchun kiring yoki ro‘yxatdan o‘ting. Savat saqlanib qoladi.',
                 clear: 'Savatni tozalash',
                 confirmClear: 'Savatdagi barcha mahsulotlar o‘chirilsinmi?',
+                confirmClearTitle: 'Savat tozalansinmi?',
+                confirmClearText: 'Savatdagi barcha mahsulotlar o‘chiriladi. Bu amalni bekor qilib bo‘lmaydi.',
+                confirmClearAction: 'Hammasini o‘chirish',
+                cancel: 'Bekor qilish',
+                cartCleared: 'Savat tozalandi.',
+                removeItemTitle: 'Mahsulot o‘chirilsinmi?',
+                removeItemText: '«{name}» mahsuloti {seller} sotuvchisining savatidan o‘chiriladi.',
+                removeItemAction: 'Mahsulotni o‘chirish',
+                itemRemoved: 'Mahsulot savatdan o‘chirildi.',
                 authTitle: 'Akkauntga kiring',
                 authText: 'Savat faqat tizimga kirgan xaridorlar uchun mavjud.',
                 signIn: 'Kirish',
@@ -395,7 +603,11 @@
                 total: 'Jami',
                 grandTotal: 'Umumiy summa',
                 checkout: 'Buyurtma berish',
-                checkoutNotice: 'Buyurtma berish hali amalga oshirilmagan. Savat va mahsulotlarni tanlash ishlaydi.',
+                checkoutNotice: 'Tanlangan mahsulotlar bo‘yicha har bir sotuvchi uchun alohida buyurtma yaratiladi.',
+                checkoutCreating: 'Buyurtma yaratilmoqda...',
+                checkoutEmpty: 'Buyurtma uchun kamida bitta mahsulotni tanlang.',
+                checkoutError: 'Buyurtmani yaratib bo‘lmadi. Qayta urinib ko‘ring.',
+                checkoutCreated: 'Buyurtma yaratildi. Buyurtmalar sahifasi ochilmoqda...',
                 quantity: 'Miqdor',
                 remove: 'O‘chirish',
                 selectSeller: 'Sotuvchining barcha mahsulotlarini tanlash',
@@ -407,10 +619,22 @@
             en: {
                 title: 'Cart — OSUZ',
                 cart: 'Cart',
+                orders: 'Orders',
                 eyebrow: 'Shopping',
                 description: 'Products are grouped by seller.',
+                guestDescription: 'Your cart is saved on this device. Sign-in is required only at checkout.',
+                guestCheckoutLogin: 'Sign in or register to place the order. Your cart will be preserved.',
                 clear: 'Clear cart',
                 confirmClear: 'Remove all products from the cart?',
+                confirmClearTitle: 'Clear the cart?',
+                confirmClearText: 'All products will be removed from the cart. This action cannot be undone.',
+                confirmClearAction: 'Remove all',
+                cancel: 'Cancel',
+                cartCleared: 'Cart cleared.',
+                removeItemTitle: 'Remove this product?',
+                removeItemText: '“{name}” will be removed from the cart for seller {seller}.',
+                removeItemAction: 'Remove product',
+                itemRemoved: 'Product removed from the cart.',
                 authTitle: 'Sign in',
                 authText: 'The cart is available only to signed-in customers.',
                 signIn: 'Sign in',
@@ -423,7 +647,11 @@
                 total: 'Total',
                 grandTotal: 'Grand total',
                 checkout: 'Place order',
-                checkoutNotice: 'Order placement is not implemented yet. The cart and product selection are working.',
+                checkoutNotice: 'A separate order will be created for each seller with selected products.',
+                checkoutCreating: 'Creating order...',
+                checkoutEmpty: 'Select at least one product to place an order.',
+                checkoutError: 'Could not create the order. Try again.',
+                checkoutCreated: 'Order created. Opening your orders...',
                 quantity: 'Quantity',
                 remove: 'Remove',
                 selectSeller: 'Select all products from this seller',
@@ -484,6 +712,148 @@
             };
         }
 
+
+        function isGuestCartMode() {
+            return !localStorage.getItem(storageKeys.accessToken);
+        }
+
+        function readGuestCart() {
+            try {
+                const parsed = JSON.parse(
+                    localStorage.getItem(GUEST_CART_KEY) ||
+                    '{"sellers":[],"grandTotal":0}'
+                );
+
+                return normalizeCart(parsed);
+            } catch {
+                return { sellers: [], grandTotal: 0 };
+            }
+        }
+
+        function recalculateGuestCart(cartData) {
+            const sellers = (cartData?.sellers || [])
+                .map(seller => {
+                    const items = (seller.items || [])
+                        .map(item => {
+                            const price = Number(item.price) || 0;
+                            const quantity = Math.max(1, Number(item.quantity) || 1);
+
+                            return {
+                                ...item,
+                                productId: getProductId(item),
+                                price,
+                                quantity,
+                                lineTotal: price * quantity,
+                                selected: item.selected !== false
+                            };
+                        })
+                        .filter(item => item.quantity > 0);
+
+                    const sellerTotal = items.reduce(
+                        (sum, item) => sum + item.lineTotal,
+                        0
+                    );
+
+                    const selectedTotal = items.reduce(
+                        (sum, item) =>
+                            sum + (item.selected ? item.lineTotal : 0),
+                        0
+                    );
+
+                    return {
+                        tenantId: getSellerId(seller),
+                        tenantName: getSellerName(seller),
+                        items,
+                        sellerTotal,
+                        selectedTotal
+                    };
+                })
+                .filter(seller => seller.items.length > 0);
+
+            return {
+                sellers,
+                grandTotal: sellers.reduce(
+                    (sum, seller) => sum + seller.selectedTotal,
+                    0
+                )
+            };
+        }
+
+        function saveGuestCart(cartData) {
+            const normalized = recalculateGuestCart(cartData);
+
+            if (normalized.sellers.length) {
+                localStorage.setItem(
+                    GUEST_CART_KEY,
+                    JSON.stringify(normalized)
+                );
+            } else {
+                localStorage.removeItem(GUEST_CART_KEY);
+            }
+
+            cart = normalized;
+            return normalized;
+        }
+
+        function applyGuestCartMutation(path, options = {}) {
+            const method = String(options.method || 'GET').toUpperCase();
+
+            if (method === 'DELETE' && (!path || path === '/')) {
+                localStorage.removeItem(GUEST_CART_KEY);
+                cart = { sellers: [], grandTotal: 0 };
+                return cart;
+            }
+
+            const match = String(path).match(/^\/(\d+)\/(\d+)$/);
+            if (!match) {
+                return saveGuestCart(cart);
+            }
+
+            const tenantId = Number(match[1]);
+            const productId = Number(match[2]);
+            const seller = cart.sellers.find(
+                entry => getSellerId(entry) === tenantId
+            );
+            const item = seller?.items?.find(
+                entry => getProductId(entry) === productId
+            );
+
+            if (!seller || !item) {
+                return saveGuestCart(cart);
+            }
+
+            if (method === 'DELETE') {
+                seller.items = seller.items.filter(
+                    entry => getProductId(entry) !== productId
+                );
+                return saveGuestCart(cart);
+            }
+
+            if (method === 'PATCH') {
+                const body = options.body || {};
+
+                if (Object.prototype.hasOwnProperty.call(body, 'quantity')) {
+                    const quantity = Math.floor(Number(body.quantity) || 0);
+
+                    if (quantity <= 0) {
+                        seller.items = seller.items.filter(
+                            entry => getProductId(entry) !== productId
+                        );
+                    } else {
+                        item.quantity = quantity;
+                    }
+                }
+
+                if (Object.prototype.hasOwnProperty.call(body, 'selected')) {
+                    item.selected = Boolean(body.selected);
+                }
+
+                return saveGuestCart(cart);
+            }
+
+            return saveGuestCart(cart);
+        }
+
         function countAllItems(cartData) {
             return cartData.sellers.reduce((total, seller) => {
                 return total + (seller.items || []).reduce((sum, item) => {
@@ -517,10 +887,124 @@
             const state = document.getElementById('errorState');
             state.textContent = message;
             state.classList.remove('hidden');
+            showToast(message, 'error');
         }
 
         function hideError() {
             document.getElementById('errorState').classList.add('hidden');
+        }
+
+
+        let osuzToastTimer = null;
+
+        function showToast(message, type = 'success') {
+            let toast = document.getElementById('osuzToast');
+
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'osuzToast';
+                toast.className = 'osuz-toast';
+                document.body.appendChild(toast);
+            }
+
+            toast.className = `osuz-toast ${type}`;
+            toast.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}">
+                        <i data-lucide="${type === 'error' ? 'triangle-alert' : 'circle-check'}" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-bold text-gray-900">${escapeHTML(message)}</p>
+                    </div>
+                    <button type="button" data-toast-close class="p-1 text-gray-400 hover:text-gray-700" aria-label="Close">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+
+            requestAnimationFrame(() => toast.classList.add('visible'));
+            lucide.createIcons();
+
+            toast.querySelector('[data-toast-close]')?.addEventListener('click', () => {
+                toast.classList.remove('visible');
+            });
+
+            clearTimeout(osuzToastTimer);
+            osuzToastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3200);
+        }
+
+        function showConfirmModal({
+            title,
+            text: message,
+            confirmText,
+            cancelText,
+            onConfirm
+        }) {
+            const oldModal = document.getElementById('osuzConfirmModal');
+            oldModal?.remove();
+
+            const backdrop = document.createElement('div');
+            backdrop.id = 'osuzConfirmModal';
+            backdrop.className = 'osuz-modal-backdrop';
+
+            backdrop.innerHTML = `
+                <div class="osuz-modal" role="dialog" aria-modal="true" aria-labelledby="osuzConfirmTitle">
+                    <div class="flex items-start gap-4">
+                        <div class="osuz-modal-icon">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <h3 id="osuzConfirmTitle" class="text-xl font-black text-gray-900">${escapeHTML(title)}</h3>
+                            <p class="mt-2 text-sm leading-6 text-gray-500">${escapeHTML(message)}</p>
+                        </div>
+                    </div>
+
+                    <div class="osuz-modal-actions">
+                        <button type="button" class="osuz-modal-button cancel" data-modal-cancel>
+                            ${escapeHTML(cancelText)}
+                        </button>
+                        <button type="button" class="osuz-modal-button danger" data-modal-confirm>
+                            ${escapeHTML(confirmText)}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(backdrop);
+            lucide.createIcons();
+
+            const close = () => {
+                backdrop.classList.remove('visible');
+                window.setTimeout(() => backdrop.remove(), 180);
+            };
+
+            backdrop.querySelector('[data-modal-cancel]')?.addEventListener('click', close);
+
+            backdrop.querySelector('[data-modal-confirm]')?.addEventListener('click', async () => {
+                close();
+                await onConfirm?.();
+            });
+
+            backdrop.addEventListener('click', event => {
+                if (event.target === backdrop) close();
+            });
+
+            const escapeHandler = event => {
+                if (event.key === 'Escape') {
+                    close();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+
+            document.addEventListener('keydown', escapeHandler);
+
+            requestAnimationFrame(() => {
+                backdrop.classList.add('visible');
+                backdrop.querySelector('[data-modal-cancel]')?.focus();
+            });
         }
 
         async function parseResponse(response) {
@@ -616,9 +1100,13 @@
             document.title = t('title');
             document.getElementById('languageSelect').value = currentLang;
             document.getElementById('headerCartText').textContent = t('cart');
+            document.getElementById('headerOrdersText').textContent = t('orders');
             document.getElementById('cartEyebrow').textContent = t('eyebrow');
             document.getElementById('cartTitle').textContent = t('cart');
-            document.getElementById('cartDescription').textContent = t('description');
+            document.getElementById('cartDescription').textContent =
+                isGuestCartMode()
+                    ? t('guestDescription')
+                    : t('description');
             document.querySelector('#clearCartButton span').textContent = t('clear');
             document.getElementById('authRequiredTitle').textContent = t('authTitle');
             document.getElementById('authRequiredText').textContent = t('authText');
@@ -749,11 +1237,142 @@
                 `;
             }).join('');
 
-            document.getElementById('selectedItemsCount').textContent = String(countSelectedItems(cart));
+            const selectedCount = countSelectedItems(cart);
+
+            document.getElementById('selectedItemsCount').textContent = String(selectedCount);
             document.getElementById('grandTotalValue').textContent = formatMoney(cart.grandTotal);
+
+            const checkoutButton = document.getElementById('checkoutButton');
+            checkoutButton.disabled = cartBusy || selectedCount <= 0;
 
             bindCartActions();
             lucide.createIcons();
+        }
+
+
+        async function orderRequest(path = '', options = {}, retry = true) {
+            let token = localStorage.getItem(storageKeys.accessToken);
+
+            if (!token) {
+                const error = new Error(t('unauthorized'));
+                error.status = 401;
+                throw error;
+            }
+
+            const response = await fetch(`${ORDER_API}${path}`, {
+                method: options.method || 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+                    'Authorization': `Bearer ${token}`
+                },
+                body: options.body !== undefined
+                    ? JSON.stringify(options.body)
+                    : undefined,
+                cache: 'no-store',
+                credentials: 'omit'
+            });
+
+            if (response.status === 401 && retry) {
+                token = await refreshAccessToken();
+
+                if (!token) {
+                    const error = new Error(t('unauthorized'));
+                    error.status = 401;
+                    throw error;
+                }
+
+                return orderRequest(path, options, false);
+            }
+
+            return parseResponse(response);
+        }
+
+        async function createOrdersFromCart() {
+            const selectedCount = countSelectedItems(cart);
+
+            if (selectedCount <= 0) {
+                showToast(t('checkoutEmpty'), 'error');
+                return;
+            }
+
+            if (isGuestCartMode()) {
+                sessionStorage.setItem('osuzCheckoutAfterAuth', '1');
+
+                const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+
+                showToast(t('guestCheckoutLogin'), 'success');
+
+                window.setTimeout(() => {
+                    window.location.assign(
+                        `auth.html?return=${encodeURIComponent(returnUrl)}`
+                    );
+                }, 500);
+
+                return;
+            }
+
+            const button = document.getElementById('checkoutButton');
+            const label = button.querySelector('span');
+            const oldLabel = label.textContent;
+
+            button.disabled = true;
+            label.textContent = t('checkoutCreating');
+
+            try {
+                const result = await orderRequest('', {
+                    method: 'POST'
+                });
+
+                const orders = Array.isArray(result?.orders)
+                    ? result.orders
+                    : [];
+
+                if (!orders.length) {
+                    showToast(t('checkoutError'), 'error');
+                    return;
+                }
+
+                const ids = orders
+                    .map(order => Number(order.orderId))
+                    .filter(Number.isFinite);
+
+                sessionStorage.setItem(
+                    'osuzNewOrderIds',
+                    JSON.stringify(ids)
+                );
+
+                showToast(t('checkoutCreated'), 'success');
+
+                const firstId = ids[0];
+                const target = firstId
+                    ? `orders.html?order=${encodeURIComponent(firstId)}`
+                    : 'orders.html';
+
+                window.setTimeout(() => {
+                    window.location.assign(target);
+                }, 450);
+            } catch (error) {
+                if (error.status === 401) {
+                    const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+                    window.location.assign(
+                        `auth.html?return=${encodeURIComponent(returnUrl)}`
+                    );
+                    return;
+                }
+
+                if (error.status === 400) {
+                    showToast(error.message || t('checkoutEmpty'), 'error');
+                    return;
+                }
+
+                showToast(error.message || t('checkoutError'), 'error');
+            } finally {
+                label.textContent = oldLabel;
+                if (document.body.contains(button)) {
+                    button.disabled = countSelectedItems(cart) <= 0;
+                }
+            }
         }
 
         async function applyCartMutation(path, options) {
@@ -763,7 +1382,12 @@
             setBusy(true);
 
             try {
-                cart = normalizeCart(await cartRequest(path, options));
+                if (isGuestCartMode()) {
+                    cart = applyGuestCartMutation(path, options);
+                } else {
+                    cart = normalizeCart(await cartRequest(path, options));
+                }
+
                 renderCart();
             } catch (error) {
                 if (error.status === 401) {
@@ -774,6 +1398,48 @@
             } finally {
                 setBusy(false);
             }
+        }
+
+
+        function findCartItem(tenantId, productId) {
+            const seller = cart.sellers.find(
+                item => getSellerId(item) === Number(tenantId)
+            );
+
+            const item = seller?.items?.find(
+                cartItem => getProductId(cartItem) === Number(productId)
+            );
+
+            return { seller, item };
+        }
+
+        function requestRemoveCartItem(tenantId, productId) {
+            const { seller, item } = findCartItem(tenantId, productId);
+
+            if (!seller || !item) {
+                showError(t('updateError'));
+                return;
+            }
+
+            const productName = item.name || '';
+            const sellerName = getSellerName(seller) || '—';
+
+            showConfirmModal({
+                title: t('removeItemTitle'),
+                text: t('removeItemText')
+                    .replace('{name}', productName)
+                    .replace('{seller}', sellerName),
+                confirmText: t('removeItemAction'),
+                cancelText: t('cancel'),
+                onConfirm: async () => {
+                    await applyCartMutation(
+                        `/${Number(tenantId)}/${Number(productId)}`,
+                        { method: 'DELETE' }
+                    );
+
+                    showToast(t('itemRemoved'), 'success');
+                }
+            });
         }
 
         function bindCartActions() {
@@ -801,17 +1467,26 @@
                     setBusy(true);
 
                     try {
-                        await Promise.all(
-                            (seller.items || []).map(item => cartRequest(
-                                `/${tenantId}/${getProductId(item)}`,
-                                {
-                                    method: 'PATCH',
-                                    body: { selected: input.checked }
-                                }
-                            ))
-                        );
+                        if (isGuestCartMode()) {
+                            seller.items.forEach(item => {
+                                item.selected = input.checked;
+                            });
 
-                        cart = normalizeCart(await cartRequest());
+                            cart = saveGuestCart(cart);
+                        } else {
+                            await Promise.all(
+                                (seller.items || []).map(item => cartRequest(
+                                    `/${tenantId}/${getProductId(item)}`,
+                                    {
+                                        method: 'PATCH',
+                                        body: { selected: input.checked }
+                                    }
+                                ))
+                            );
+
+                            cart = normalizeCart(await cartRequest());
+                        }
+
                         renderCart();
                     } catch (error) {
                         if (error.status === 401) showAuthRequired();
@@ -832,8 +1507,14 @@
 
                     const nextQuantity = Math.max(
                         0,
-                        Number(cartItem.quantity || 1) + (button.dataset.action === 'increase' ? 1 : -1)
+                        Number(cartItem.quantity || 1) +
+                            (button.dataset.action === 'increase' ? 1 : -1)
                     );
+
+                    if (nextQuantity === 0) {
+                        requestRemoveCartItem(tenantId, productId);
+                        return;
+                    }
 
                     applyCartMutation(
                         `/${tenantId}/${productId}`,
@@ -847,10 +1528,22 @@
 
             document.querySelectorAll('[data-action="quantity-input"]').forEach(input => {
                 input.addEventListener('change', () => {
-                    const quantity = Math.max(0, Math.floor(Number(input.value) || 0));
+                    const tenantId = Number(input.dataset.tenantId);
+                    const productId = Number(input.dataset.productId);
+                    const quantity = Math.max(
+                        0,
+                        Math.floor(Number(input.value) || 0)
+                    );
+
+                    if (quantity === 0) {
+                        const { item } = findCartItem(tenantId, productId);
+                        input.value = Math.max(1, Number(item?.quantity) || 1);
+                        requestRemoveCartItem(tenantId, productId);
+                        return;
+                    }
 
                     applyCartMutation(
-                        `/${Number(input.dataset.tenantId)}/${Number(input.dataset.productId)}`,
+                        `/${tenantId}/${productId}`,
                         {
                             method: 'PATCH',
                             body: { quantity }
@@ -861,9 +1554,9 @@
 
             document.querySelectorAll('[data-action="remove"]').forEach(button => {
                 button.addEventListener('click', () => {
-                    applyCartMutation(
-                        `/${Number(button.dataset.tenantId)}/${Number(button.dataset.productId)}`,
-                        { method: 'DELETE' }
+                    requestRemoveCartItem(
+                        Number(button.dataset.tenantId),
+                        Number(button.dataset.productId)
                     );
                 });
             });
@@ -886,15 +1579,24 @@
         async function loadCart() {
             hideError();
 
-            if (!localStorage.getItem(storageKeys.accessToken)) {
-                document.getElementById('loadingState').classList.add('hidden');
-                showAuthRequired();
+            if (isGuestCartMode()) {
+                cart = recalculateGuestCart(readGuestCart());
+                document.getElementById('authRequiredState').classList.add('hidden');
+                renderCart();
                 return;
             }
 
             try {
                 cart = normalizeCart(await cartRequest());
                 renderCart();
+
+                if (sessionStorage.getItem('osuzCheckoutAfterAuth') === '1') {
+                    sessionStorage.removeItem('osuzCheckoutAfterAuth');
+
+                    if (countSelectedItems(cart) > 0) {
+                        window.setTimeout(createOrdersFromCart, 250);
+                    }
+                }
             } catch (error) {
                 document.getElementById('loadingState').classList.add('hidden');
 
@@ -907,9 +1609,19 @@
             }
         }
 
+        document.getElementById('checkoutButton').addEventListener('click', createOrdersFromCart);
+
         document.getElementById('clearCartButton').addEventListener('click', () => {
-            if (!confirm(t('confirmClear'))) return;
-            applyCartMutation('', { method: 'DELETE' });
+            showConfirmModal({
+                title: t('confirmClearTitle'),
+                text: t('confirmClearText'),
+                confirmText: t('confirmClearAction'),
+                cancelText: t('cancel'),
+                onConfirm: async () => {
+                    await applyCartMutation('', { method: 'DELETE' });
+                    showToast(t('cartCleared'), 'success');
+                }
+            });
         });
 
         document.getElementById('languageSelect').addEventListener('change', event => {
@@ -922,6 +1634,16 @@
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('osuzTheme', currentTheme);
             applyTheme();
+        });
+
+        window.addEventListener('storage', event => {
+            if (
+                event.key === GUEST_CART_KEY &&
+                isGuestCartMode()
+            ) {
+                cart = recalculateGuestCart(readGuestCart());
+                renderCart();
+            }
         });
 
         function updateCustomerHeader() {

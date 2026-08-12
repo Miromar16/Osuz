@@ -281,6 +281,18 @@
             background: transparent !important;
         }
 
+    
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -297,7 +309,7 @@
 
     <main class="mx-auto flex min-h-[calc(100vh-73px)] max-w-[1200px] items-center justify-center px-4 py-10">
         <section id="authCard" class="auth-shell w-full max-w-[520px] overflow-hidden rounded-[28px]">
-            <div class="border-b border-gray-200 px-5 pt-5">
+            <div id="authTabs" class="border-b border-gray-200 px-5 pt-5">
                 <div class="grid grid-cols-2">
                     <button id="loginTab" type="button" class="auth-tab active px-4 pb-4 pt-2 text-sm">
                         Вход
@@ -344,9 +356,15 @@
                         <i data-lucide="arrow-right" class="h-5 w-5"></i>
                     </button>
 
-                    <button id="goRegisterButton" type="button" class="w-full text-center text-sm font-semibold text-primary-700 hover:text-primary-800">
-                        Нет аккаунта? Зарегистрироваться
-                    </button>
+                    <div class="flex flex-col gap-3 text-center">
+                        <button id="forgotPasswordButton" type="button" class="text-sm font-semibold text-gray-500 hover:text-primary-700">
+                            Забыли пароль?
+                        </button>
+
+                        <button id="goRegisterButton" type="button" class="text-sm font-semibold text-primary-700 hover:text-primary-800">
+                            Нет аккаунта? Зарегистрироваться
+                        </button>
+                    </div>
                 </form>
 
                 <div id="registerFlow" class="hidden">
@@ -468,10 +486,114 @@
                         </button>
                     </form>
                 </div>
+
+                <div id="passwordResetFlow" class="hidden">
+                    <div class="mb-6 flex items-center">
+                        <span id="resetStepDot1" class="step-dot active">1</span>
+                        <span id="resetStepLine1" class="step-line"></span>
+                        <span id="resetStepDot2" class="step-dot">2</span>
+                        <span id="resetStepLine2" class="step-line"></span>
+                        <span id="resetStepDot3" class="step-dot">3</span>
+                    </div>
+
+                    <form id="resetPhoneForm" class="space-y-5" novalidate>
+                        <div>
+                            <span id="resetPhoneEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 1 из 3</span>
+                            <h1 id="resetPhoneTitle" class="mt-2 text-3xl font-black text-gray-900">Восстановление пароля</h1>
+                            <p id="resetPhoneDescription" class="mt-2 text-sm leading-6 text-gray-500">
+                                Введите номер зарегистрированного аккаунта. Мы отправим SMS-код.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label id="resetPhoneLabel" for="resetPhone" class="mb-2 block text-sm font-bold text-gray-700">Номер телефона</label>
+                            <div class="relative">
+                                <i data-lucide="phone" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="resetPhone" type="tel" inputmode="tel" autocomplete="tel" class="auth-input" placeholder="+998 90 123 45 67">
+                            </div>
+                        </div>
+
+                        <button id="resetRequestButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="resetRequestButtonText">Получить код</span>
+                            <i data-lucide="message-square-text" class="h-5 w-5"></i>
+                        </button>
+
+                        <button id="resetBackToLogin1" type="button" class="secondary-button flex w-full items-center justify-center gap-2 px-4">
+                            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                            <span>Вернуться ко входу</span>
+                        </button>
+                    </form>
+
+                    <form id="resetVerifyForm" class="hidden space-y-5" novalidate>
+                        <div>
+                            <span id="resetVerifyEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 2 из 3</span>
+                            <h1 id="resetVerifyTitle" class="mt-2 text-3xl font-black text-gray-900">Введите код из SMS</h1>
+                            <p id="resetVerifyDescription" class="mt-2 text-sm leading-6 text-gray-500"></p>
+                        </div>
+
+                        <div>
+                            <label id="resetCodeLabel" for="resetCode" class="mb-2 block text-sm font-bold text-gray-700">Код подтверждения</label>
+                            <input id="resetCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="auth-input no-icon text-center text-2xl font-black tracking-[.42em]" placeholder="000000">
+                        </div>
+
+                        <button id="resetVerifyButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="resetVerifyButtonText">Подтвердить код</span>
+                            <i data-lucide="shield-check" class="h-5 w-5"></i>
+                        </button>
+
+                        <div class="flex flex-col gap-3 sm:flex-row">
+                            <button id="resetChangePhoneButton" type="button" class="secondary-button flex-1 px-4">Изменить номер</button>
+                            <button id="resetResendButton" type="button" class="secondary-button flex-1 px-4" disabled>Отправить снова</button>
+                        </div>
+                    </form>
+
+                    <form id="resetCompleteForm" class="hidden space-y-5" novalidate>
+                        <div>
+                            <span id="resetCompleteEyebrow" class="text-xs font-black uppercase tracking-[.16em] text-primary-600">Шаг 3 из 3</span>
+                            <h1 id="resetCompleteTitle" class="mt-2 text-3xl font-black text-gray-900">Создайте новый пароль</h1>
+                            <p id="resetCompleteDescription" class="mt-2 text-sm leading-6 text-gray-500">
+                                После смены пароля на всех устройствах потребуется войти заново.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label id="resetNewPasswordLabel" for="resetNewPassword" class="mb-2 block text-sm font-bold text-gray-700">Новый пароль</label>
+                            <div class="relative">
+                                <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="resetNewPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Минимум 6 символов">
+                                <button type="button" data-password-toggle="resetNewPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                    <i data-lucide="eye" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label id="resetConfirmPasswordLabel" for="resetConfirmPassword" class="mb-2 block text-sm font-bold text-gray-700">Повторите пароль</label>
+                            <div class="relative">
+                                <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                <input id="resetConfirmPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Повторите пароль">
+                                <button type="button" data-password-toggle="resetConfirmPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                    <i data-lucide="eye" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="resetPasswordButton" type="submit" class="primary-button flex w-full items-center justify-center gap-2 px-5">
+                            <span id="resetPasswordButtonText">Сохранить новый пароль</span>
+                            <i data-lucide="key-round" class="h-5 w-5"></i>
+                        </button>
+
+                        <button id="resetBackToLogin3" type="button" class="secondary-button flex w-full items-center justify-center gap-2 px-4">
+                            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                            <span>Вернуться ко входу</span>
+                        </button>
+                    </form>
+                </div>
+
             </div>
         </section>
 
-        <section id="accountPanel" class="hidden w-full max-w-[620px]">
+        <section id="accountPanel" class="hidden w-full max-w-[680px]">
             <div class="account-card overflow-hidden rounded-[28px]">
                 <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-7 text-white">
                     <div class="flex items-center justify-between gap-4">
@@ -502,7 +624,76 @@
                         </div>
                     </dl>
 
+
+                    <div id="accountNotice" class="notice hidden mt-6"></div>
+
+                    <div class="mt-6 rounded-2xl border border-gray-200 p-4 sm:p-5">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <h2 id="changePasswordTitle" class="text-lg font-black text-gray-900">Смена пароля</h2>
+                                <p id="changePasswordDescription" class="mt-1 text-sm text-gray-500">
+                                    Для смены пароля укажите текущий пароль.
+                                </p>
+                            </div>
+
+                            <button id="toggleChangePasswordButton" type="button" class="secondary-button px-4">
+                                <i data-lucide="key-round" class="h-4 w-4"></i>
+                                <span>Сменить пароль</span>
+                            </button>
+                        </div>
+
+                        <form id="changePasswordForm" class="hidden mt-5 space-y-4" novalidate>
+                            <div>
+                                <label id="currentPasswordLabel" for="currentPassword" class="mb-2 block text-sm font-bold text-gray-700">Текущий пароль</label>
+                                <div class="relative">
+                                    <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                    <input id="currentPassword" type="password" autocomplete="current-password" class="auth-input pr-12" placeholder="Введите текущий пароль">
+                                    <button type="button" data-password-toggle="currentPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                        <i data-lucide="eye" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label id="newAccountPasswordLabel" for="newAccountPassword" class="mb-2 block text-sm font-bold text-gray-700">Новый пароль</label>
+                                <div class="relative">
+                                    <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                    <input id="newAccountPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Минимум 6 символов">
+                                    <button type="button" data-password-toggle="newAccountPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                        <i data-lucide="eye" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label id="confirmAccountPasswordLabel" for="confirmAccountPassword" class="mb-2 block text-sm font-bold text-gray-700">Повторите новый пароль</label>
+                                <div class="relative">
+                                    <i data-lucide="lock-keyhole" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"></i>
+                                    <input id="confirmAccountPassword" type="password" autocomplete="new-password" class="auth-input pr-12" placeholder="Повторите новый пароль">
+                                    <button type="button" data-password-toggle="confirmAccountPassword" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-400 hover:bg-gray-100" aria-label="Показать пароль">
+                                        <i data-lucide="eye" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-3 sm:flex-row">
+                                <button id="saveChangePasswordButton" type="submit" class="primary-button flex flex-1 items-center justify-center gap-2 px-5">
+                                    <span>Сохранить пароль</span>
+                                    <i data-lucide="check" class="h-5 w-5"></i>
+                                </button>
+
+                                <button id="cancelChangePasswordButton" type="button" class="secondary-button flex-1 px-4">
+                                    Отмена
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <a href="orders.html" id="myOrdersButton" class="secondary-button flex flex-1 items-center justify-center gap-2 px-5">
+                            <i data-lucide="package-check" class="h-5 w-5"></i>
+                            <span>Мои заказы</span>
+                        </a>
                         <a href="index.html" id="continueShoppingButton" class="primary-button flex flex-1 items-center justify-center gap-2 px-5">
                             <span>Продолжить покупки</span>
                             <i data-lucide="arrow-right" class="h-5 w-5"></i>
@@ -519,6 +710,8 @@
 
     <script>
         const AUTH_API = 'https://osuz.uz/api/site-auth';
+        const CART_API = 'https://osuz.uz/api/site/cart';
+        const GUEST_CART_KEY = 'osuzGuestCart';
         const LOGIN_ATTEMPT_LIMIT = 5;
 
         function getSafeAuthReturnUrl() {
@@ -551,7 +744,13 @@
         let registrationPhone = sessionStorage.getItem('osuzRegistrationPhone') || '';
         let registrationTicket = sessionStorage.getItem('osuzRegistrationTicket') || '';
         let registrationStep = registrationTicket ? 3 : registrationPhone ? 2 : 1;
+
+        let resetPhone = sessionStorage.getItem('osuzPasswordResetPhone') || '';
+        let resetTicket = sessionStorage.getItem('osuzPasswordResetTicket') || '';
+        let resetStep = resetTicket ? 3 : resetPhone ? 2 : 1;
+
         let resendTimer = null;
+        let resetResendTimer = null;
         let loginGuardTimer = null;
 
         const messages = {
@@ -613,7 +812,37 @@
                 continueShopping: 'Продолжить покупки',
                 logout: 'Выйти',
                 logoutError: 'Не удалось завершить сессию на сервере, но локальные данные удалены.',
-                loading: 'Загрузка...'
+                loading: 'Загрузка...',
+                forgotPassword: 'Забыли пароль?',
+                resetStep1: 'Шаг 1 из 3',
+                resetStep2: 'Шаг 2 из 3',
+                resetStep3: 'Шаг 3 из 3',
+                resetTitle: 'Восстановление пароля',
+                resetPhoneDescription: 'Введите номер зарегистрированного аккаунта. Мы отправим SMS-код.',
+                resetVerifyTitle: 'Введите код из SMS',
+                resetVerifyDescription: 'Код для восстановления отправлен на {phone}. Он действителен 5 минут.',
+                resetCompleteTitle: 'Создайте новый пароль',
+                resetCompleteDescription: 'После смены пароля на всех устройствах потребуется войти заново.',
+                resetSavePassword: 'Сохранить новый пароль',
+                backToLogin: 'Вернуться ко входу',
+                resetAccountMissing: 'Аккаунт с этим номером не найден. Вы можете зарегистрироваться.',
+                resetTooMany: 'Слишком много запросов кода восстановления. Попробуйте позже.',
+                resetSmsUnavailable: 'SMS для восстановления пароля временно недоступно. Попробуйте позже.',
+                resetCodeInvalid: 'Код неверный, просрочен или уже использован.',
+                resetTicketExpired: 'Время восстановления истекло. Запросите новый код.',
+                resetSuccess: 'Пароль успешно изменён. Теперь войдите с новым паролем.',
+                newPassword: 'Новый пароль',
+                changePasswordTitle: 'Смена пароля',
+                changePasswordDescription: 'Для смены пароля укажите текущий пароль.',
+                changePasswordAction: 'Сменить пароль',
+                currentPassword: 'Текущий пароль',
+                confirmNewPassword: 'Повторите новый пароль',
+                savePassword: 'Сохранить пароль',
+                cancel: 'Отмена',
+                changePasswordSuccess: 'Пароль успешно изменён.',
+                currentPasswordInvalid: 'Текущий пароль неверен или новый пароль слишком короткий.',
+                sessionExpired: 'Сессия завершена. Войдите снова.',
+                myOrders: 'Мои заказы'
             },
             uz: {
                 title: 'Kirish va ro‘yxatdan o‘tish — OSUZ',
@@ -673,7 +902,37 @@
                 continueShopping: 'Xaridni davom ettirish',
                 logout: 'Chiqish',
                 logoutError: 'Serverdagi sessiyani yakunlab bo‘lmadi, ammo lokal ma’lumotlar o‘chirildi.',
-                loading: 'Yuklanmoqda...'
+                loading: 'Yuklanmoqda...',
+                forgotPassword: 'Parolni unutdingizmi?',
+                resetStep1: '3 bosqichdan 1-bosqich',
+                resetStep2: '3 bosqichdan 2-bosqich',
+                resetStep3: '3 bosqichdan 3-bosqich',
+                resetTitle: 'Parolni tiklash',
+                resetPhoneDescription: 'Ro‘yxatdan o‘tgan akkaunt raqamini kiriting. SMS-kod yuboramiz.',
+                resetVerifyTitle: 'SMS kodini kiriting',
+                resetVerifyDescription: 'Tiklash kodi {phone} raqamiga yuborildi. U 5 daqiqa amal qiladi.',
+                resetCompleteTitle: 'Yangi parol yarating',
+                resetCompleteDescription: 'Parol o‘zgargandan keyin barcha qurilmalarda qayta kirish kerak bo‘ladi.',
+                resetSavePassword: 'Yangi parolni saqlash',
+                backToLogin: 'Kirishga qaytish',
+                resetAccountMissing: 'Bu raqam bilan akkaunt topilmadi. Ro‘yxatdan o‘tishingiz mumkin.',
+                resetTooMany: 'Tiklash kodi juda ko‘p marta so‘raldi. Keyinroq urinib ko‘ring.',
+                resetSmsUnavailable: 'Parolni tiklash SMS xizmati vaqtincha ishlamayapti. Keyinroq urinib ko‘ring.',
+                resetCodeInvalid: 'Kod noto‘g‘ri, eskirgan yoki allaqachon ishlatilgan.',
+                resetTicketExpired: 'Tiklash vaqti tugadi. Yangi kod so‘rang.',
+                resetSuccess: 'Parol muvaffaqiyatli o‘zgartirildi. Endi yangi parol bilan kiring.',
+                newPassword: 'Yangi parol',
+                changePasswordTitle: 'Parolni o‘zgartirish',
+                changePasswordDescription: 'Parolni o‘zgartirish uchun joriy parolni kiriting.',
+                changePasswordAction: 'Parolni o‘zgartirish',
+                currentPassword: 'Joriy parol',
+                confirmNewPassword: 'Yangi parolni takrorlang',
+                savePassword: 'Parolni saqlash',
+                cancel: 'Bekor qilish',
+                changePasswordSuccess: 'Parol muvaffaqiyatli o‘zgartirildi.',
+                currentPasswordInvalid: 'Joriy parol noto‘g‘ri yoki yangi parol juda qisqa.',
+                sessionExpired: 'Sessiya tugadi. Qayta kiring.',
+                myOrders: 'Buyurtmalarim'
             },
             en: {
                 title: 'Sign in and registration — OSUZ',
@@ -733,7 +992,37 @@
                 continueShopping: 'Continue shopping',
                 logout: 'Sign out',
                 logoutError: 'The server session could not be closed, but local data was removed.',
-                loading: 'Loading...'
+                loading: 'Loading...',
+                forgotPassword: 'Forgot password?',
+                resetStep1: 'Step 1 of 3',
+                resetStep2: 'Step 2 of 3',
+                resetStep3: 'Step 3 of 3',
+                resetTitle: 'Reset password',
+                resetPhoneDescription: 'Enter the phone number of your registered account. We will send an SMS code.',
+                resetVerifyTitle: 'Enter the SMS code',
+                resetVerifyDescription: 'The reset code was sent to {phone}. It is valid for 5 minutes.',
+                resetCompleteTitle: 'Create a new password',
+                resetCompleteDescription: 'After resetting the password, you will need to sign in again on all devices.',
+                resetSavePassword: 'Save new password',
+                backToLogin: 'Back to sign in',
+                resetAccountMissing: 'No account was found with this phone number. You can register instead.',
+                resetTooMany: 'Too many password-reset code requests. Try again later.',
+                resetSmsUnavailable: 'Password-reset SMS is temporarily unavailable. Try again later.',
+                resetCodeInvalid: 'The code is incorrect, expired, or has already been used.',
+                resetTicketExpired: 'The reset session has expired. Request a new code.',
+                resetSuccess: 'Password changed successfully. Sign in with your new password.',
+                newPassword: 'New password',
+                changePasswordTitle: 'Change password',
+                changePasswordDescription: 'Enter your current password to change it.',
+                changePasswordAction: 'Change password',
+                currentPassword: 'Current password',
+                confirmNewPassword: 'Confirm new password',
+                savePassword: 'Save password',
+                cancel: 'Cancel',
+                changePasswordSuccess: 'Password changed successfully.',
+                currentPasswordInvalid: 'The current password is incorrect or the new password is too short.',
+                sessionExpired: 'Your session has ended. Sign in again.',
+                myOrders: 'My orders'
             }
         };
 
@@ -876,6 +1165,184 @@
                 throw error;
             } finally {
                 window.clearTimeout(timeoutId);
+            }
+        }
+
+
+        function showAccountNotice(message, type = 'success') {
+            const notice = document.getElementById('accountNotice');
+            if (!notice) return;
+
+            notice.textContent = message;
+            notice.className = `notice ${type} mt-6`;
+        }
+
+        function hideAccountNotice() {
+            const notice = document.getElementById('accountNotice');
+            if (!notice) return;
+
+            notice.textContent = '';
+            notice.className = 'notice hidden mt-6';
+        }
+
+
+
+        function readGuestCartForMigration() {
+            try {
+                const parsed = JSON.parse(
+                    localStorage.getItem(GUEST_CART_KEY) ||
+                    '{"sellers":[],"grandTotal":0}'
+                );
+
+                return parsed && Array.isArray(parsed.sellers)
+                    ? parsed
+                    : { sellers: [], grandTotal: 0 };
+            } catch {
+                return { sellers: [], grandTotal: 0 };
+            }
+        }
+
+        async function migrateGuestCartToServer() {
+            const guestCart = readGuestCartForMigration();
+            const token = localStorage.getItem(storageKeys.accessToken);
+
+            if (!token || !guestCart.sellers.length) {
+                return;
+            }
+
+            const failedSellers = [];
+
+            for (const seller of guestCart.sellers) {
+                const tenantId = Number(seller.tenantId ?? seller.tenant_id);
+                const failedItems = [];
+
+                for (const item of seller.items || []) {
+                    const productId = Number(item.productId ?? item.product_id);
+                    const quantity = Math.max(1, Number(item.quantity) || 1);
+
+                    if (
+                        !Number.isInteger(tenantId) ||
+                        tenantId <= 0 ||
+                        !Number.isInteger(productId) ||
+                        productId <= 0
+                    ) {
+                        failedItems.push(item);
+                        continue;
+                    }
+
+                    try {
+                        for (let index = 0; index < quantity; index++) {
+                            const response = await fetch(CART_API, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify({
+                                    productId,
+                                    tenantId
+                                }),
+                                cache: 'no-store',
+                                credentials: 'omit'
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(`Cart migration failed: ${response.status}`);
+                            }
+                        }
+
+                        if (item.selected === false) {
+                            const response = await fetch(
+                                `${CART_API}/${tenantId}/${productId}`,
+                                {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        selected: false
+                                    }),
+                                    cache: 'no-store',
+                                    credentials: 'omit'
+                                }
+                            );
+
+                            if (!response.ok) {
+                                throw new Error(`Cart selection migration failed: ${response.status}`);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Guest cart item migration failed:', {
+                            tenantId,
+                            productId,
+                            error
+                        });
+
+                        failedItems.push(item);
+                    }
+                }
+
+                if (failedItems.length) {
+                    failedSellers.push({
+                        ...seller,
+                        items: failedItems
+                    });
+                }
+            }
+
+            if (failedSellers.length) {
+                localStorage.setItem(
+                    GUEST_CART_KEY,
+                    JSON.stringify({
+                        sellers: failedSellers,
+                        grandTotal: 0
+                    })
+                );
+            } else {
+                localStorage.removeItem(GUEST_CART_KEY);
+            }
+        }
+
+        function redirectAfterSuccessfulAuth() {
+            if (authReturnUrl) {
+                location.replace(authReturnUrl);
+                return;
+            }
+
+            location.replace('index.html#solutions');
+        }
+
+        async function authenticatedAuthRequest(path, options = {}, retry = true) {
+            let token = localStorage.getItem(storageKeys.accessToken);
+
+            if (!token) {
+                const error = new Error(text('sessionExpired'));
+                error.status = 401;
+                throw error;
+            }
+
+            try {
+                return await authRequest(path, {
+                    ...options,
+                    token
+                });
+            } catch (error) {
+                if (error.status === 401 && retry) {
+                    token = await refreshAccessToken();
+
+                    if (!token) {
+                        const sessionError = new Error(text('sessionExpired'));
+                        sessionError.status = 401;
+                        throw sessionError;
+                    }
+
+                    return authenticatedAuthRequest(path, options, false);
+                }
+
+                throw error;
             }
         }
 
@@ -1037,7 +1504,11 @@
 
         function showTab(tab) {
             hideNotice();
+
             const isLogin = tab === 'login';
+
+            document.getElementById('authTabs').classList.remove('hidden');
+            document.getElementById('passwordResetFlow').classList.add('hidden');
 
             document.getElementById('loginTab').classList.toggle('active', isLogin);
             document.getElementById('registerTab').classList.toggle('active', !isLogin);
@@ -1046,6 +1517,86 @@
 
             if (!isLogin) renderRegistrationStep();
             if (isLogin) updateLoginGuardUI();
+        }
+
+        function showPasswordReset({ preserveNotice = false } = {}) {
+            if (!preserveNotice) hideNotice();
+
+            document.getElementById('authTabs').classList.add('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerFlow').classList.add('hidden');
+            document.getElementById('passwordResetFlow').classList.remove('hidden');
+
+            renderPasswordResetStep();
+        }
+
+        function renderPasswordResetStep() {
+            const forms = [
+                document.getElementById('resetPhoneForm'),
+                document.getElementById('resetVerifyForm'),
+                document.getElementById('resetCompleteForm')
+            ];
+
+            forms.forEach((form, index) => {
+                form.classList.toggle('hidden', resetStep !== index + 1);
+            });
+
+            for (let step = 1; step <= 3; step++) {
+                const dot = document.getElementById(`resetStepDot${step}`);
+                dot.classList.toggle('active', resetStep === step);
+                dot.classList.toggle('done', resetStep > step);
+            }
+
+            document.getElementById('resetStepLine1').classList.toggle('done', resetStep > 1);
+            document.getElementById('resetStepLine2').classList.toggle('done', resetStep > 2);
+
+            if (resetStep === 2) {
+                document.getElementById('resetVerifyDescription').textContent =
+                    text('resetVerifyDescription').replace('{phone}', resetPhone);
+
+                startResetResendTimer();
+                document.getElementById('resetCode').focus();
+            }
+
+            if (resetStep === 3) {
+                document.getElementById('resetNewPassword').focus();
+            }
+        }
+
+        function resetPasswordResetFlow() {
+            resetPhone = '';
+            resetTicket = '';
+            resetStep = 1;
+
+            sessionStorage.removeItem('osuzPasswordResetPhone');
+            sessionStorage.removeItem('osuzPasswordResetTicket');
+
+            document.getElementById('resetCode').value = '';
+            document.getElementById('resetNewPassword').value = '';
+            document.getElementById('resetConfirmPassword').value = '';
+        }
+
+        function startResetResendTimer() {
+            clearInterval(resetResendTimer);
+
+            let seconds = OTP_RESEND_SECONDS;
+            const button = document.getElementById('resetResendButton');
+
+            const render = () => {
+                if (seconds <= 0) {
+                    button.disabled = false;
+                    button.textContent = text('resend');
+                    clearInterval(resetResendTimer);
+                    return;
+                }
+
+                button.disabled = true;
+                button.textContent = text('resendIn').replace('{seconds}', seconds);
+                seconds -= 1;
+            };
+
+            render();
+            resetResendTimer = setInterval(render, 1000);
         }
 
         function renderRegistrationStep() {
@@ -1148,6 +1699,226 @@
             }
         }
 
+
+        async function requestPasswordResetCode(phone, button) {
+            setLoading(button, true, text('getCode'));
+
+            try {
+                await authRequest('/password-reset/request', {
+                    method: 'POST',
+                    body: { phone }
+                });
+
+                resetPhone = phone;
+                resetStep = 2;
+
+                sessionStorage.setItem('osuzPasswordResetPhone', phone);
+
+                showNotice(text('codeSent'), 'success');
+                renderPasswordResetStep();
+            } catch (error) {
+                if (error.status === 404) {
+                    resetPasswordResetFlow();
+                    document.getElementById('registerPhone').value = formatPhoneInput(phone);
+                    showTab('register');
+                    showNotice(text('resetAccountMissing'), 'warning');
+                    return;
+                }
+
+                if (error.status === 429) {
+                    showNotice(text('resetTooMany'), 'warning');
+                    return;
+                }
+
+                if (error.status === 502) {
+                    showNotice(text('resetSmsUnavailable'), 'warning');
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('getCode'));
+            }
+        }
+
+        document.getElementById('resetPhoneForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const input = document.getElementById('resetPhone');
+            const phone = normalizePhone(input.value);
+
+            if (!isValidPhone(phone)) {
+                markInvalid(input, text('invalidPhone'));
+                return;
+            }
+
+            await requestPasswordResetCode(
+                phone,
+                document.getElementById('resetRequestButton')
+            );
+        });
+
+        document.getElementById('resetVerifyForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const input = document.getElementById('resetCode');
+            const code = input.value.replace(/\D/g, '');
+            const button = document.getElementById('resetVerifyButton');
+
+            if (!/^\d{6}$/.test(code)) {
+                markInvalid(input, text('invalidOtp'));
+                return;
+            }
+
+            setLoading(button, true, text('verifyCode'));
+
+            try {
+                const result = await authRequest('/password-reset/verify', {
+                    method: 'POST',
+                    body: {
+                        phone: resetPhone,
+                        code
+                    }
+                });
+
+                resetTicket = result.resetTicket;
+                resetStep = 3;
+
+                sessionStorage.setItem('osuzPasswordResetTicket', resetTicket);
+
+                showNotice(text('codeVerified'), 'success');
+                renderPasswordResetStep();
+            } catch (error) {
+                if (error.status === 400) {
+                    showNotice(text('resetCodeInvalid'), 'error');
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('verifyCode'));
+            }
+        });
+
+        document.getElementById('resetCompleteForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideNotice();
+
+            const newPasswordInput = document.getElementById('resetNewPassword');
+            const confirmInput = document.getElementById('resetConfirmPassword');
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmInput.value;
+            const button = document.getElementById('resetPasswordButton');
+
+            if (!resetTicket) {
+                resetPasswordResetFlow();
+                showPasswordReset();
+                showNotice(text('resetTicketExpired'), 'warning');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                markInvalid(newPasswordInput, text('invalidPassword'));
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                markInvalid(confirmInput, text('passwordsMismatch'));
+                return;
+            }
+
+            setLoading(button, true, text('resetSavePassword'));
+
+            try {
+                await authRequest('/password-reset', {
+                    method: 'POST',
+                    body: {
+                        resetTicket,
+                        newPassword
+                    }
+                });
+
+                const phoneForLogin = resetPhone;
+
+                clearSession();
+                resetPasswordResetFlow();
+
+                document.getElementById('loginPhone').value =
+                    formatPhoneInput(phoneForLogin);
+
+                document.getElementById('loginPassword').value = '';
+
+                showTab('login');
+                showNotice(text('resetSuccess'), 'success');
+            } catch (error) {
+                if (error.status === 401) {
+                    resetPasswordResetFlow();
+                    showPasswordReset();
+                    showNotice(text('resetTicketExpired'), 'warning');
+                    return;
+                }
+
+                if (error.status === 404) {
+                    resetPasswordResetFlow();
+                    showTab('register');
+                    showNotice(text('resetAccountMissing'), 'warning');
+                    return;
+                }
+
+                showNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('resetSavePassword'));
+            }
+        });
+
+        document.getElementById('resetResendButton').addEventListener('click', async () => {
+            if (!resetPhone) return;
+
+            hideNotice();
+
+            await requestPasswordResetCode(
+                resetPhone,
+                document.getElementById('resetResendButton')
+            );
+        });
+
+        document.getElementById('resetChangePhoneButton').addEventListener('click', () => {
+            const previousPhone = resetPhone;
+
+            resetPasswordResetFlow();
+            showPasswordReset();
+
+            document.getElementById('resetPhone').value =
+                formatPhoneInput(previousPhone);
+        });
+
+        document.getElementById('forgotPasswordButton').addEventListener('click', () => {
+            const loginPhone = normalizePhone(
+                document.getElementById('loginPhone').value
+            );
+
+            resetPasswordResetFlow();
+
+            if (isValidPhone(loginPhone)) {
+                document.getElementById('resetPhone').value =
+                    formatPhoneInput(loginPhone);
+            }
+
+            showPasswordReset();
+        });
+
+        ['resetBackToLogin1', 'resetBackToLogin3'].forEach(id => {
+            document.getElementById(id).addEventListener('click', () => {
+                resetPasswordResetFlow();
+                showTab('login');
+            });
+        });
+
         document.getElementById('loginForm').addEventListener('submit', async event => {
             event.preventDefault();
             clearFieldErrors();
@@ -1185,8 +1956,9 @@
 
                 clearLoginGuard(phone);
                 saveSession(result);
+                await migrateGuestCartToServer();
                 showNotice(text('loginSuccess'), 'success');
-                setTimeout(() => location.replace('index.html#solutions'), 350);
+                setTimeout(redirectAfterSuccessfulAuth, 350);
             } catch (error) {
                 if (error.status === 401) {
                     const nextGuard = recordFailedLogin(phone);
@@ -1341,9 +2113,10 @@
                 });
 
                 saveSession(result);
+                await migrateGuestCartToServer();
                 resetRegistration();
                 showNotice(text('registrationSuccess'), 'success');
-                setTimeout(() => location.replace('index.html#solutions'), 350);
+                setTimeout(redirectAfterSuccessfulAuth, 350);
             } catch (error) {
                 if (error.status === 401) {
                     resetRegistration();
@@ -1433,13 +2206,56 @@
             document.getElementById('accountEmailLabel').textContent = text('accountEmail');
             document.getElementById('accountBirthLabel').textContent = text('accountBirth');
             document.getElementById('accountLocationLabel').textContent = text('accountLocation');
+            document.querySelector('#myOrdersButton span').textContent = text('myOrders');
             document.querySelector('#continueShoppingButton span').textContent = text('continueShopping');
             document.querySelector('#logoutButton span').textContent = text('logout');
+
+            document.getElementById('forgotPasswordButton').textContent = text('forgotPassword');
+
+            document.getElementById('resetPhoneEyebrow').textContent = text('resetStep1');
+            document.getElementById('resetVerifyEyebrow').textContent = text('resetStep2');
+            document.getElementById('resetCompleteEyebrow').textContent = text('resetStep3');
+            document.getElementById('resetPhoneTitle').textContent = text('resetTitle');
+            document.getElementById('resetPhoneDescription').textContent = text('resetPhoneDescription');
+            document.getElementById('resetPhoneLabel').textContent = text('phone');
+            document.getElementById('resetRequestButtonText').textContent = text('getCode');
+            document.getElementById('resetVerifyTitle').textContent = text('resetVerifyTitle');
+            document.getElementById('resetCodeLabel').textContent = text('otp');
+            document.getElementById('resetVerifyButtonText').textContent = text('verifyCode');
+            document.getElementById('resetChangePhoneButton').textContent = text('changePhone');
+            document.getElementById('resetResendButton').textContent = text('resend');
+            document.getElementById('resetCompleteTitle').textContent = text('resetCompleteTitle');
+            document.getElementById('resetCompleteDescription').textContent = text('resetCompleteDescription');
+            document.getElementById('resetNewPasswordLabel').textContent = text('newPassword');
+            document.getElementById('resetConfirmPasswordLabel').textContent = text('confirmPassword');
+            document.getElementById('resetNewPassword').placeholder = text('passwordHint');
+            document.getElementById('resetPasswordButtonText').textContent = text('resetSavePassword');
+
+            document.querySelector('#resetBackToLogin1 span').textContent = text('backToLogin');
+            document.querySelector('#resetBackToLogin3 span').textContent = text('backToLogin');
+
+            document.getElementById('changePasswordTitle').textContent = text('changePasswordTitle');
+            document.getElementById('changePasswordDescription').textContent = text('changePasswordDescription');
+            document.querySelector('#toggleChangePasswordButton span').textContent = text('changePasswordAction');
+            document.getElementById('currentPasswordLabel').textContent = text('currentPassword');
+            document.getElementById('newAccountPasswordLabel').textContent = text('newPassword');
+            document.getElementById('confirmAccountPasswordLabel').textContent = text('confirmNewPassword');
+            document.getElementById('currentPassword').placeholder = text('currentPassword');
+            document.getElementById('newAccountPassword').placeholder = text('passwordHint');
+            document.getElementById('confirmAccountPassword').placeholder = text('confirmNewPassword');
+            document.querySelector('#saveChangePasswordButton span').textContent = text('savePassword');
+            document.getElementById('cancelChangePasswordButton').textContent = text('cancel');
+
             document.getElementById('languageSelect').value = currentLang;
 
             if (registrationStep === 2) {
                 document.getElementById('verifyDescription').textContent =
                     text('verifyDescription').replace('{phone}', registrationPhone);
+            }
+
+            if (resetStep === 2) {
+                document.getElementById('resetVerifyDescription').textContent =
+                    text('resetVerifyDescription').replace('{phone}', resetPhone);
             }
 
             updateLoginGuardUI();
@@ -1455,12 +2271,108 @@
             localStorage.setItem('osuzLang', currentLang);
             applyLanguage();
             renderRegistrationStep();
+
+            if (!document.getElementById('passwordResetFlow').classList.contains('hidden')) {
+                renderPasswordResetStep();
+            }
         });
 
         document.getElementById('themeToggle').addEventListener('click', () => {
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('osuzTheme', currentTheme);
             applyTheme();
+        });
+
+
+        function setChangePasswordFormVisible(visible) {
+            const form = document.getElementById('changePasswordForm');
+            form.classList.toggle('hidden', !visible);
+
+            if (visible) {
+                hideAccountNotice();
+                document.getElementById('currentPassword').focus();
+            }
+        }
+
+        document.getElementById('toggleChangePasswordButton').addEventListener('click', () => {
+            const form = document.getElementById('changePasswordForm');
+            setChangePasswordFormVisible(form.classList.contains('hidden'));
+        });
+
+        document.getElementById('cancelChangePasswordButton').addEventListener('click', () => {
+            document.getElementById('changePasswordForm').reset();
+            clearFieldErrors();
+            setChangePasswordFormVisible(false);
+        });
+
+        document.getElementById('changePasswordForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            clearFieldErrors();
+            hideAccountNotice();
+
+            const currentInput = document.getElementById('currentPassword');
+            const newInput = document.getElementById('newAccountPassword');
+            const confirmInput = document.getElementById('confirmAccountPassword');
+            const button = document.getElementById('saveChangePasswordButton');
+
+            const currentPassword = currentInput.value;
+            const newPassword = newInput.value;
+            const confirmPassword = confirmInput.value;
+
+            if (currentPassword.length < 6) {
+                currentInput.classList.add('invalid');
+                currentInput.focus();
+                showAccountNotice(text('invalidPassword'), 'error');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                newInput.classList.add('invalid');
+                newInput.focus();
+                showAccountNotice(text('invalidPassword'), 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                confirmInput.classList.add('invalid');
+                confirmInput.focus();
+                showAccountNotice(text('passwordsMismatch'), 'error');
+                return;
+            }
+
+            setLoading(button, true, text('savePassword'));
+
+            try {
+                await authenticatedAuthRequest('/change-password', {
+                    method: 'PATCH',
+                    body: {
+                        currentPassword,
+                        newPassword
+                    }
+                });
+
+                document.getElementById('changePasswordForm').reset();
+                setChangePasswordFormVisible(false);
+                showAccountNotice(text('changePasswordSuccess'), 'success');
+            } catch (error) {
+                if (error.status === 400) {
+                    showAccountNotice(text('currentPasswordInvalid'), 'error');
+                    return;
+                }
+
+                if (error.status === 401) {
+                    clearSession();
+                    document.getElementById('accountPanel').classList.add('hidden');
+                    document.getElementById('authCard').classList.remove('hidden');
+                    showTab('login');
+                    showNotice(text('sessionExpired'), 'warning');
+                    return;
+                }
+
+                showAccountNotice(error.message || text('genericError'), 'error');
+            } finally {
+                setLoading(button, false, text('savePassword'));
+            }
         });
 
         function showAccount(customer) {
@@ -1472,6 +2384,10 @@
             }
 
             hideNotice();
+            hideAccountNotice();
+            document.getElementById('changePasswordForm').reset();
+            setChangePasswordFormVisible(false);
+
             document.getElementById('authCard').classList.add('hidden');
             document.getElementById('accountPanel').classList.remove('hidden');
 
@@ -1515,14 +2431,24 @@
 
         applyPhoneMask(document.getElementById('loginPhone'));
         applyPhoneMask(document.getElementById('registerPhone'));
+        applyPhoneMask(document.getElementById('resetPhone'));
 
         document.getElementById('otpCode').addEventListener('input', event => {
             event.target.value = event.target.value.replace(/\D/g, '').slice(0, 6);
         });
 
+        document.getElementById('resetCode').addEventListener('input', event => {
+            event.target.value = event.target.value.replace(/\D/g, '').slice(0, 6);
+        });
+
         applyLanguage();
         applyTheme();
-        showTab(registrationPhone || registrationTicket ? 'register' : 'login');
+
+        if (resetPhone || resetTicket) {
+            showPasswordReset();
+        } else {
+            showTab(registrationPhone || registrationTicket ? 'register' : 'login');
+        }
 
         loadCurrentCustomer().then(customer => {
             if (customer) showAccount(customer);

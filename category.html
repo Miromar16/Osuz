@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Категория — OSUZ</title>
+    <title>OSUZ — Промышленные решения</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -13,12 +15,21 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#e0f7fa', 100: '#b2ebf2', 200: '#80deea', 300: '#4dd0e1',
-                            400: '#26c6da', 500: '#00bcd4', 600: '#00acc1', 700: '#0097a7',
-                            800: '#00838f', 900: '#006064',
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064',
                         },
                     },
-                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
                 }
             }
         }
@@ -30,22 +41,47 @@
         .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #00bcd4; transition: width 0.3s; }
         .nav-link:hover { color: #0097a7; }
         .nav-link:hover::after { width: 100%; }
-        .nav-link.active { color: #00bcd4 !important; }
-        .nav-link.active::after { width: 100%; }
+
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+
+        .category-card { transition: all 0.3s ease; }
+        .category-card:hover { transform: translateY(-4px); background: #e0f7fa; border-color: #00bcd4; }
+        .category-card:hover .cat-icon { background: #00bcd4; }
+        .category-card:hover .cat-icon svg { color: #fff; }
+
+        .news-card { transition: all 0.3s ease; overflow: hidden; }
+        .news-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .news-card:hover .news-img { transform: scale(1.05); }
+        .news-img { transition: transform 0.5s ease; }
+
         .product-card { transition: all 0.3s ease; }
         .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,230,160,0.12); }
-        .filter-btn { transition: all 0.2s; }
-        .filter-btn.active { background: #00bcd4; color: #fff; border-color: #00bcd4; }
-        .filter-btn:hover:not(.active) { border-color: #00bcd4; color: #0097a7; }
-        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .fade-in { opacity: 0; transform: translateY(16px); transition: all 0.4s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        .subcat-link { transition: all 0.2s; }
-        .subcat-link:hover { background: #e0f7fa; border-color: #00bcd4; color: #00838f; }
-        .attr-checkbox:checked + label { background: #00bcd4; color: #fff; border-color: #00bcd4; }
-        .sort-btn { transition: all 0.2s; }
-        .sort-btn.active { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+
+        .cta-link { transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .cta-link:hover { gap: 12px; }
+
+        .gradient-text { background: linear-gradient(135deg, #00bcd4, #0097a7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        .section-reveal { opacity: 0; transform: translateY(40px); }
+
+        .carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .carousel-dot { transition: all 0.3s; }
+        .carousel-dot.active { background: #00bcd4 !important; width: 24px; }
+        .carousel-btn { transition: all 0.2s; }
+        .carousel-btn:hover { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+
+        .infinity-shape { animation: rotate 20s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .brand-item { transition: all 0.3s; }
+        .brand-item:hover { border-color: #00bcd4; background: #e0f7fa; }
+        .brand-item:hover span { color: #0097a7; }
+
+        .tag-pill { transition: all 0.2s; }
+        .tag-pill:hover { background: #00bcd4; color: #fff; border-color: #00bcd4; }
+
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     
         body {
             transition: background-color 0.25s ease, color 0.25s ease;
@@ -67,8 +103,7 @@
         }
 
         body.dark-mode .bg-gray-50,
-        body.dark-mode .bg-gray-100,
-        body.dark-mode .bg-gray-200 {
+        body.dark-mode .bg-gray-100 {
             background-color: #111b28 !important;
         }
 
@@ -85,35 +120,54 @@
 
         body.dark-mode .text-gray-600,
         body.dark-mode .text-gray-500,
-        body.dark-mode .text-gray-400,
-        body.dark-mode .text-gray-300 {
+        body.dark-mode .text-gray-400 {
             color: #aeb9c7 !important;
         }
 
-        body.dark-mode input,
-        body.dark-mode select {
-            background: #0f1722 !important;
+        body.dark-mode input {
             color: #f3f4f6 !important;
-            border-color: #263241 !important;
         }
 
         body.dark-mode input::placeholder {
             color: #7f8a99 !important;
         }
 
+        body.dark-mode #languageMenu,
+        body.dark-mode #mobileLanguageMenu,
+        body.dark-mode #mobileMenu,
+        body.dark-mode #heroSearchResults,
+        body.dark-mode #heroPhotoPreview,
         body.dark-mode .product-card,
-        body.dark-mode .subcat-link {
+        body.dark-mode .brand-item {
             background: #0f1722 !important;
             border-color: #263241 !important;
         }
 
-        body.dark-mode .skeleton {
-            background: linear-gradient(90deg, #182231 25%, #223044 50%, #182231 75%);
-            background-size: 200% 100%;
+        body.dark-mode .product-card .bg-white {
+            background: #0f1722 !important;
+        }
+
+        body.dark-mode .language-option {
+            color: #d8e0ea !important;
+        }
+
+        body.dark-mode .language-option:hover {
+            background: #162333 !important;
         }
 
         body.dark-mode footer {
             background: #05080d !important;
+        }
+
+        body.dark-mode #mobileOverlay {
+            background: rgba(0, 0, 0, 0.72) !important;
+        }
+
+        body.dark-mode .shadow-sm,
+        body.dark-mode .shadow-lg,
+        body.dark-mode .shadow-xl,
+        body.dark-mode .shadow-2xl {
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35) !important;
         }
 
         .theme-icon-sun {
@@ -133,6 +187,11 @@
             gap: 7px !important;
         }
 
+        .header-brand img {
+            display: block;
+            flex: 0 0 auto;
+        }
+
         .header-top-row {
             border-bottom: 1px solid #e5e7eb;
         }
@@ -140,7 +199,6 @@
         .header-nav-row {
             align-items: flex-end !important;
             height: 56px !important;
-            padding-bottom: 0 !important;
         }
 
         .header-nav-row .nav-link {
@@ -150,15 +208,75 @@
             padding-bottom: 15px;
         }
 
-        .header-nav-row .nav-link::after {
+        .nav-link.active {
+            color: #00bcd4 !important;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
             bottom: -1px;
             height: 3px;
             border-radius: 999px 999px 0 0;
         }
 
+        .feature-card {
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.045);
+            transform: none !important;
+        }
+
+        .feature-card:hover {
+            border-color: #00bcd4 !important;
+            box-shadow: 0 12px 32px rgba(0, 188, 212, 0.11);
+            transform: translateY(-3px) !important;
+        }
+
+        .feature-card .feature-icon {
+            box-shadow: none !important;
+        }
+
+        .search-result-item {
+            padding: 16px 18px;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result-item:not(:last-child) {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .search-result-item:hover {
+            background: #f8fafc;
+        }
+
+        .search-result-item .result-image {
+            width: 58px;
+            height: 58px;
+        }
+
+        .search-result-item .result-arrow {
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .search-result-item:hover .result-arrow {
+            color: #00bcd4 !important;
+            transform: translateX(4px);
+        }
+
+        #heroSearchBtn {
+            align-self: stretch;
+            min-height: 64px;
+            border-radius: 0 16px 16px 0;
+            margin: 0;
+        }
+
+        #heroSearchInput {
+            min-height: 64px;
+        }
+
         .product-card {
             border-color: #e5e7eb !important;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.055);
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
         }
 
         .product-card:hover {
@@ -166,165 +284,74 @@
             box-shadow: 0 12px 32px rgba(0, 188, 212, 0.12);
         }
 
-        .pagination-control {
-            min-width: 42px;
-            height: 42px;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            transition: 0.2s ease;
-            background: #fff;
-        }
-
-        .pagination-control:hover:not(:disabled) {
-            border-color: #00bcd4;
-            color: #0097a7;
-            background: #e0f7fa;
-        }
-
-        .pagination-control:disabled {
-            opacity: 0.38;
-            cursor: not-allowed;
-        }
-
-        .pagination-selector {
-            position: relative;
-        }
-
-        .pagination-selector-button {
-            min-width: 132px;
-            justify-content: space-between;
-            padding: 0 14px;
-        }
-
-        .pagination-selector-button.open {
-            border-color: #00bcd4;
-            color: #0097a7;
-            background: #e0f7fa;
-        }
-
-        .pagination-selector-menu {
-            position: absolute;
-            left: 50%;
-            bottom: calc(100% + 10px);
-            z-index: 60;
-            width: 190px;
-            max-height: 270px;
-            overflow-y: auto;
-            padding: 8px;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            background: #fff;
-            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
-            transform: translateX(-50%);
-        }
-
-        .pagination-selector-menu.hidden {
-            display: none;
-        }
-
-        .pagination-page-option {
-            width: 100%;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 9px 11px;
-            border-radius: 10px;
-            color: #475569;
-            font-size: 14px;
-            font-weight: 500;
-            transition: 0.18s ease;
-        }
-
-        .pagination-page-option:hover {
-            background: #f0fdff;
-            color: #0097a7;
-        }
-
-        .pagination-page-option.active {
-            background: #00bcd4;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .pagination-current-mark {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            background: currentColor;
-        }
-
         body.dark-mode .header-top-row {
             border-color: #263241 !important;
         }
 
+        body.dark-mode .feature-card,
         body.dark-mode .product-card {
             border-color: #263241 !important;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
+        body.dark-mode .feature-card:hover,
         body.dark-mode .product-card:hover {
             border-color: #00bcd4 !important;
+            box-shadow: 0 14px 34px rgba(0, 188, 212, 0.12);
         }
 
-        body.dark-mode .pagination-control {
-            background: #0f1722;
+        body.dark-mode .search-result-item:not(:last-child) {
             border-color: #263241;
-            color: #d8e0ea;
         }
 
-        body.dark-mode .pagination-control:hover:not(:disabled),
-        body.dark-mode .pagination-selector-button.open {
-            background: #12303a;
-            border-color: #00bcd4;
-            color: #4dd0e1;
-        }
-
-        body.dark-mode .pagination-selector-menu {
-            background: #0f1722;
-            border-color: #263241;
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
-        }
-
-        body.dark-mode .pagination-page-option {
-            color: #cbd5e1;
-        }
-
-        body.dark-mode .pagination-page-option:hover {
+        body.dark-mode .search-result-item:hover {
             background: #162333;
-            color: #4dd0e1;
-        }
-
-        body.dark-mode .pagination-page-option.active {
-            background: #00bcd4;
-            color: #fff;
         }
 
     
-        #breadcrumbCategory {
-            display: inline-block;
-            position: relative;
-            padding-bottom: 7px;
+        .feature-card,
+        .feature-card:hover {
+            background: #ffffff !important;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04) !important;
+            transform: none !important;
+            cursor: default;
         }
 
-        #breadcrumbCategory::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 3px;
-            border-radius: 999px;
-            background: #00bcd4;
+        .feature-card .feature-icon,
+        .feature-card:hover .feature-icon {
+            background: #e0f7fa !important;
+            box-shadow: none !important;
+        }
+
+        .feature-card .feature-icon svg,
+        .feature-card:hover .feature-icon svg {
+            color: #00acc1 !important;
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .feature-card:hover {
+            background: #0f1722 !important;
+            border-color: #263241 !important;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
+            transform: none !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon,
+        body.dark-mode .feature-card:hover .feature-icon {
+            background: #12303a !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon svg,
+        body.dark-mode .feature-card:hover .feature-icon svg {
+            color: #4dd0e1 !important;
         }
 
     
+        section[id] {
+            scroll-margin-top: 128px;
+        }
+
         .header-top-row {
             height: 72px !important;
             border-bottom-color: #d7dee7 !important;
@@ -337,24 +364,141 @@
 
         .header-nav-row .nav-link {
             height: 100%;
+            display: inline-flex;
             align-items: center;
-            padding-bottom: 1px;
+            padding: 0 0 1px;
         }
 
         .header-nav-row .nav-link::after {
             bottom: 0 !important;
         }
 
+        .header-support-link {
+            min-width: 142px;
+            justify-content: center;
+        }
+
+        .header-language-control {
+            min-width: 74px;
+            justify-content: center;
+        }
+
+        .hero-copy {
+            min-height: 292px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-copy > span:first-child {
+            min-height: 20px;
+        }
+
+        .hero-copy h1 {
+            min-height: 132px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-copy > p {
+            min-height: 58px;
+        }
+
+        .hero-copy > div:last-child {
+            min-height: 56px;
+            align-items: center;
+        }
+
+        .hero-slide-image {
+            width: 100%;
+            height: 300px;
+            max-width: 620px;
+            object-fit: cover;
+        }
+
+        .hero-controls-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hero-controls-inner {
+            width: 100%;
+            max-width: 1480px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 clamp(10px, 1.5vw, 24px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-side-btn {
+            position: static;
+            width: 44px;
+            height: 64px;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 14px;
+            background: rgba(15,23,42,.62);
+            color: rgba(255,255,255,.82);
+            backdrop-filter: blur(10px);
+            transform: none;
+            transition: .2s ease;
+            pointer-events: auto;
+        }
+
+        .hero-side-btn:hover {
+            border-color: #00bcd4;
+            background: #00bcd4;
+            color: #07111d;
+        }
+
+        .popular-tag {
+            border: 1px solid #e2e8f0;
+        }
+
+        body.dark-mode .popular-label {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .popular-tag {
+            background: #162333 !important;
+            border-color: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dark-mode .popular-tag:hover {
+            background: #123b46 !important;
+            border-color: #00bcd4 !important;
+            color: #67e8f9 !important;
+        }
+
         [data-tooltip] {
             position: relative;
         }
 
+        [data-tooltip]::before,
+        [data-tooltip]::after {
+            position: absolute;
+            z-index: 120;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .16s ease, transform .16s ease;
+        }
+
         [data-tooltip]::after {
             content: attr(data-tooltip);
-            position: absolute;
             left: 50%;
             top: calc(100% + 10px);
-            z-index: 120;
             width: max-content;
             max-width: 220px;
             padding: 7px 10px;
@@ -363,28 +507,88 @@
             color: #fff;
             font-size: 12px;
             font-weight: 600;
+            line-height: 1.25;
             white-space: nowrap;
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
+            box-shadow: 0 10px 30px rgba(15,23,42,.2);
             transform: translate(-50%, -4px);
-            transition: .16s ease;
         }
 
+        [data-tooltip]::before {
+            content: "";
+            left: 50%;
+            top: calc(100% + 4px);
+            border: 5px solid transparent;
+            border-bottom-color: #0f172a;
+            transform: translate(-50%, -4px);
+        }
+
+        [data-tooltip]:hover::before,
         [data-tooltip]:hover::after,
+        [data-tooltip]:focus-visible::before,
         [data-tooltip]:focus-visible::after {
             opacity: 1;
             visibility: visible;
             transform: translate(-50%, 0);
         }
 
+        .category-tile,
+        .product-card,
+        .brand-item {
+            border: 1px solid #cbd5e1 !important;
+        }
+
         .product-card {
-            border-color: #cbd5e1 !important;
             box-shadow: 0 5px 18px rgba(15,23,42,.07) !important;
         }
 
-        .product-card:hover {
+        .category-tile:hover,
+        .product-card:hover,
+        .brand-item:hover {
             border-color: #00bcd4 !important;
+        }
+
+        .feature-card,
+        .feature-card:hover {
+            border: 1px solid #82dce6 !important;
+            box-shadow: 0 4px 16px rgba(0,188,212,.07) !important;
+            transform: none !important;
+            cursor: default;
+        }
+
+        .feature-card .feature-icon,
+        .feature-card:hover .feature-icon {
+            background: #e0f7fa !important;
+            box-shadow: none !important;
+        }
+
+        .feature-card .feature-icon svg,
+        .feature-card:hover .feature-icon svg {
+            color: #00acc1 !important;
+        }
+
+        #partners {
+            background:
+                linear-gradient(to bottom, #f8fafc 0%, #ffffff 18%, #ffffff 82%, #f8fafc 100%);
+        }
+
+        .brand-fade-left,
+        .brand-fade-right {
+            position: absolute;
+            top: -10px;
+            bottom: -10px;
+            z-index: 10;
+            width: 180px;
+            pointer-events: none;
+        }
+
+        .brand-fade-left {
+            left: 0;
+            background: linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,.92) 24%, rgba(255,255,255,.45) 62%, transparent 100%);
+        }
+
+        .brand-fade-right {
+            right: 0;
+            background: linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,.92) 24%, rgba(255,255,255,.45) 62%, transparent 100%);
         }
 
         .footer-contact-card {
@@ -422,44 +626,171 @@
 
         .footer-contact-icon svg {
             color: #94a3b8;
+            transition: color .2s ease;
         }
 
         .footer-contact-link:hover .footer-contact-icon svg {
-            color: #fff !important;
+            color: #ffffff !important;
         }
 
         body.dark-mode .header-top-row {
             border-bottom-color: #334155 !important;
         }
 
-        body.dark-mode .product-card {
+        body.dark-mode .category-tile,
+        body.dark-mode .product-card,
+        body.dark-mode .brand-item {
             border-color: #3b4a5e !important;
         }
 
-        body.dark-mode .product-card:hover {
+        body.dark-mode .category-tile:hover,
+        body.dark-mode .product-card:hover,
+        body.dark-mode .brand-item:hover {
             border-color: #22d3ee !important;
         }
 
+        body.dark-mode .feature-card,
+        body.dark-mode .feature-card:hover {
+            background: #0f1722 !important;
+            border-color: #2c7884 !important;
+            box-shadow: 0 4px 18px rgba(0,0,0,.24) !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon,
+        body.dark-mode .feature-card:hover .feature-icon {
+            background: #12303a !important;
+        }
+
+        body.dark-mode .feature-card .feature-icon svg,
+        body.dark-mode .feature-card:hover .feature-icon svg {
+            color: #4dd0e1 !important;
+        }
+
+        body.dark-mode #partners {
+            background:
+                linear-gradient(to bottom, #0b111b 0%, #0f1722 18%, #0f1722 82%, #0b111b 100%) !important;
+        }
+
+        body.dark-mode .brand-fade-left {
+            background: linear-gradient(90deg, #0f1722 0%, rgba(15,23,34,.92) 24%, rgba(15,23,34,.48) 62%, transparent 100%);
+        }
+
+        body.dark-mode .brand-fade-right {
+            background: linear-gradient(270deg, #0f1722 0%, rgba(15,23,34,.92) 24%, rgba(15,23,34,.48) 62%, transparent 100%);
+        }
+
+        @media (max-width: 1023px) {
+            .hero-copy {
+                min-height: auto;
+            }
+
+            .hero-copy h1,
+            .hero-copy > p,
+            .hero-copy > div:last-child {
+                min-height: auto;
+            }
+
+            .hero-controls-inner {
+                padding: 0 8px;
+            }
+
+            .hero-side-btn {
+                width: 38px;
+                height: 52px;
+            }
+        }
+
     
-        html { color-scheme: light; } body.dark-mode { color-scheme: dark; }
+        html { color-scheme: light; }
+        body.dark-mode { color-scheme: dark; }
+
         .site-header { overflow: visible; background: transparent !important; border: 0 !important; }
-        .site-header-top { background:#00bcd4; border-bottom:1px solid rgba(255,255,255,.38); }
-        .site-header-nav { background:#0b1725; border-bottom:1px solid #263548; }
-        .site-logo-icon { filter:brightness(0) invert(1); }
-        .site-logo-text, .header-action, .header-action svg { color:#fff !important; }
-        .header-actions { gap:.5rem; } @media(min-width:1024px){.header-actions{gap:.75rem;}}
-        .header-action{min-height:42px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 10px;border-radius:10px;font-size:13px;font-weight:600;transition:.2s;}
-        .header-action:hover{background:rgba(255,255,255,.16);}
-        .category-header-search{height:44px;max-width:620px;flex:1;display:flex;align-items:center;border:1px solid rgba(15,23,42,.38);border-radius:11px;background:#fff;overflow:hidden;}
-        .category-header-search input{height:100%;color:#111827!important;}
-        .category-header-search input::placeholder{color:#94a3b8!important;}
-        .header-nav-row{height:52px!important;align-items:stretch!important;}
-        .header-nav-row .nav-link{height:100%;display:inline-flex;align-items:center!important;padding:0 0 1px!important;color:#cbd5e1!important;}
-        .header-nav-row .nav-link:hover,.header-nav-row .nav-link.active{color:#fff!important;}
-        .header-nav-row .nav-link::after{bottom:0!important;}
-        .footer-contact-link{display:inline-flex;align-items:center;gap:10px;color:#94a3b8;font-size:14px;transition:.2s;}.footer-contact-link:hover{color:#67e8f9}.footer-contact-link svg{color:currentColor!important}
-        body.dark-mode .site-header-top{background:#00bcd4!important;border-color:rgba(255,255,255,.38)!important}body.dark-mode .site-header-nav{background:#071321!important;border-color:#263548!important}
-        body.dark-mode .category-header-search{background:#fff!important;border-color:#cbd5e1!important}body.dark-mode .category-header-search input{color:#111827!important}
+        .site-header-top { background: #00bcd4; border-bottom: 1px solid rgba(255,255,255,.38); }
+        .site-header-nav { background: #0b1725; border-bottom: 1px solid #263548; }
+        .site-logo-icon { filter: brightness(0) invert(1); }
+        .site-logo-text, .header-action, .header-action svg { color: #fff !important; }
+        .header-actions { gap: .5rem; }
+        @media (min-width: 1024px) { .header-actions { gap: .75rem; } }
+        .header-action {
+            min-height: 42px; display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px; padding: 0 10px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            transition: background-color .2s ease;
+        }
+        .header-action:hover { background: rgba(255,255,255,.16); }
+        .header-search-wrap { position: relative; flex: 1 1 auto; max-width: 720px; }
+        .header-search-bar {
+            height: 46px; display: flex; align-items: center; overflow: hidden;
+            border: 1px solid rgba(15,23,42,.38); border-radius: 11px; background: rgba(255,255,255,.96);
+            box-shadow: 0 5px 18px rgba(15,23,42,.08);
+        }
+        .header-search-bar input { height: 100%; color: #111827 !important; }
+        .header-search-bar input::placeholder { color: #94a3b8 !important; }
+        .header-search-dropdown {
+            position: absolute; left: 0; right: 0; top: calc(100% + 9px); z-index: 90;
+            background: #fff; border: 1px solid #d9e2ec; border-radius: 15px;
+            box-shadow: 0 20px 55px rgba(15,23,42,.19); overflow: hidden;
+        }
+        .header-nav-row { height: 52px !important; align-items: stretch !important; }
+        .header-nav-row .nav-link {
+            height: 100%; display: inline-flex; align-items: center !important; padding: 0 0 1px !important;
+            color: #cbd5e1 !important;
+        }
+        .header-nav-row .nav-link:hover, .header-nav-row .nav-link.active { color: #fff !important; }
+        .header-nav-row .nav-link::after { bottom: 0 !important; }
+        .gradient-text,
+        html[native-dark-active] .gradient-text,
+        html[data-darkreader-mode] .gradient-text {
+            background: none !important; background-image: none !important;
+            color: #00bcd4 !important; -webkit-text-fill-color: #00bcd4 !important;
+            -webkit-background-clip: border-box !important; background-clip: border-box !important;
+        }
+        .hero-controls-inner { padding: 0 !important; }
+        .hero-side-btn {
+            width: 44px !important; height: clamp(118px, 22vh, 164px) !important;
+            border: 1px solid rgba(255,255,255,.36) !important; border-radius: 4px !important;
+            background: transparent !important; color: #fff !important; backdrop-filter: none !important;
+        }
+        .hero-side-btn:hover { background: #2f3f54 !important; border-color: #2f3f54 !important; color: #fff !important; }
+        .hero-prev-btn { margin-left: 0; }
+        .hero-next-btn { margin-right: 0; }
+        .footer-contact-link { display: inline-flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 14px; transition: color .2s; }
+        .footer-contact-link:hover { color: #67e8f9; }
+        .footer-contact-link svg { color: currentColor !important; }
+        body.dark-mode .site-header-top { background: #00bcd4 !important; border-color: rgba(255,255,255,.38) !important; }
+        body.dark-mode .site-header-nav { background: #071321 !important; border-color: #263548 !important; }
+        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #fff !important; border-color: #cbd5e1 !important; }
+        body.dark-mode .header-search-bar input { color: #111827 !important; }
+        @media (max-width: 1023px) {
+            .site-header-top .max-w-\[1400px\] { min-height: 66px; }
+            .hero-side-btn { width: 36px !important; height: 108px !important; }
+        }
+
+    
+        .header-search-bar #heroSearchInput {
+            height: 100% !important;
+            min-height: 0 !important;
+        }
+
+        .header-search-bar #heroSearchBtn {
+            height: 44px !important;
+            min-height: 44px !important;
+            align-self: center !important;
+            margin: 0 1px 0 0 !important;
+            border-radius: 0 10px 10px 0 !important;
+            transform: translateY(-1px);
+        }
+
+    
+        .osuz-cart-link {
+            position: relative !important;
+            z-index: 140 !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        .osuz-cart-link * {
+            pointer-events: none !important;
+        }
 
     </style>
 </head>
@@ -467,113 +798,400 @@
     <nav class="site-header fixed top-0 left-0 right-0 z-50">
         <div class="site-header-top">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6">
-                <a href="index.html" class="header-brand flex items-center gap-2 flex-shrink-0"><img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto"><span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span></a>
-                <div class="category-header-search hidden md:flex mx-2 lg:mx-5"><i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4"></i><input type="text" id="searchInput" placeholder="Поиск по названию, артикулу, бренду..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm"><button type="button" id="categoryHeaderSearchButton" class="h-full px-5 bg-gray-900 text-white font-semibold">Найти</button></div>
+                <a href="#solutions" class="header-brand flex items-center gap-2 flex-shrink-0">
+                    <img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto">
+                    <span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span>
+                </a>
+
+                <div class="header-search-wrap hidden md:block mx-2 lg:mx-5">
+                    <div class="header-search-bar">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4 flex-shrink-0"></i>
+                        <input type="text" id="heroSearchInput" placeholder="Поиск товаров, брендов, артикулов..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm lg:text-base">
+                        <label id="heroPhotoBtn" data-tooltip-key="photoSearch" data-tooltip="Поиск по фото" class="p-2.5 hover:bg-gray-100 transition-colors cursor-pointer flex-shrink-0" title="Поиск по фото">
+                            <i data-lucide="camera" class="w-5 h-5 text-primary-600"></i>
+                        </label>
+                        <input type="file" id="heroPhotoInput" accept="image/*" class="hidden">
+                        <button id="heroSearchBtn" class="h-full px-4 lg:px-6 bg-gray-900 hover:bg-gray-800 text-white font-semibold transition-colors flex items-center gap-2 flex-shrink-0">
+                            <span>Найти</span><i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div id="heroSearchResults" class="header-search-dropdown hidden">
+                        <div class="max-h-80 overflow-y-auto p-2" id="heroResultsList"></div>
+                    </div>
+                    <div id="heroPhotoPreview" class="header-search-dropdown hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="relative flex-shrink-0">
+                                <img id="heroPreviewImg" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                                <button id="heroRemovePhoto" data-tooltip-key="photoRemove" data-tooltip="Удалить фото" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600">
+                                    <i data-lucide="x" class="w-3 h-3"></i>
+                                </button>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1"><div id="heroAnalysisDot" class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div><span id="heroAnalysisText" class="text-sm font-medium text-gray-700">Анализ фото...</span></div>
+                                <p class="text-xs text-gray-500">Поиск похожих товаров в каталоге</p>
+                            </div>
+                            <button id="heroAnalyzeBtn" class="px-4 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-xl transition-colors flex-shrink-0">Найти товар</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="header-actions ml-auto flex items-center flex-shrink-0">
-                    <div class="relative hidden sm:block"><button id="categoryLanguageToggle" class="header-action"><span id="categoryLanguageLabel">RU</span><i data-lucide="chevron-down" class="w-3 h-3"></i></button><div id="categoryLanguageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl"><button data-language="ru" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇷🇺 Русский</button><button data-language="uz" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇿 O‘zbekcha</button><button data-language="en" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇸 English</button></div></div>
-                    <button id="themeToggle" type="button" class="header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i><i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i></button>
-                    <a href="auth.html" data-customer-account-link class="header-action hidden lg:inline-flex max-w-[150px]"><i data-lucide="user" class="w-4 h-4"></i><span data-customer-account-text class="truncate">Войти</span></a>
-                    <a href="cart.html" class="header-action hidden lg:inline-flex"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span><span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span></a>
+                    <div class="relative hidden sm:block">
+                        <button id="languageToggle" data-tooltip-key="language" data-tooltip="Выбрать язык" class="header-action">
+                            <span id="languageLabel">RU</span>
+                            <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                        </button>
+                        <div id="languageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                            <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇷🇺 Русский</button>
+                            <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇺🇿 O‘zbekcha</button>
+                            <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">🇺🇸 English</button>
+                        </div>
+                    </div>
+                    <button id="themeToggle" type="button" data-tooltip-key="theme" data-tooltip="Сменить тему" class="header-action !px-3" aria-label="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i>
+                    </button>
+                    <a href="auth.html" data-customer-account-link data-tooltip="Войти" class="header-action hidden lg:inline-flex max-w-[150px]">
+                        <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
+                    </a>
+                    <a href="orders.html" class="header-action hidden lg:inline-flex" aria-label="Заказы">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                        <span>Заказы</span>
+                    </a>
+                    <a id="headerCartLink" href="cart.html" data-open-cart data-tooltip-key="cart" data-tooltip="Корзина" class="header-action osuz-cart-link hidden lg:inline-flex" aria-label="Корзина">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span>Корзина</span>
+                        <span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
+                    </a>
+                    <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="header-action lg:hidden !px-3">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="site-header-nav"><div class="max-w-[1400px] mx-auto px-6 lg:px-8"><div class="header-nav-row hidden lg:flex gap-8"><a href="index.html" class="nav-link text-sm font-medium">Каталог</a><a href="index.html#catalog" class="nav-link active text-sm font-semibold">Категории</a><a href="index.html#solutions" class="nav-link text-sm font-medium">Решения</a><a href="index.html#partners" class="nav-link text-sm font-medium">Бренды</a><a href="index.html#about" class="nav-link text-sm font-medium">О нас</a></div></div></div>
+        <div class="site-header-nav">
+            <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+                <div class="header-nav-row hidden lg:flex gap-8">
+                    <a href="#catalog" data-section-link="catalog" class="nav-link active text-sm font-medium">Каталог</a>
+                    <a href="#partners" data-section-link="partners" class="nav-link text-sm font-medium">Партнёры</a>
+                    <a href="#products" data-section-link="products" class="nav-link text-sm font-medium">Товары</a>
+                    <a href="#about" data-section-link="about" class="nav-link text-sm font-medium">О нас</a>
+                </div>
+            </div>
+        </div>
     </nav>
 
-    
-    <section class="pt-36 pb-8 bg-white">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div class="flex items-center gap-2 text-sm text-gray-400 mb-6 flex-wrap">
-                <a href="index.html" class="hover:text-primary-600 transition-colors">Главная</a>
-                <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">Каталог</a>
-                <i data-lucide="chevron-right" class="w-3 h-3" id="crumbSep2"></i>
-                <span id="crumbParent" class="hidden hover:text-primary-600 transition-colors cursor-pointer"></span>
-                <i data-lucide="chevron-right" class="w-3 h-3 hidden" id="crumbSep3"></i>
-                <span id="breadcrumbCategory" class="text-gray-900 font-medium"></span>
+    <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-50 lg:hidden opacity-0 pointer-events-none transition-opacity"></div>
+    <div id="mobileMenu" class="fixed top-0 right-0 w-80 h-full bg-white z-50 lg:hidden overflow-y-auto transform translate-x-full transition-transform duration-300 shadow-2xl">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+                <span class="text-xl font-bold text-gray-900">Меню</span>
+                <button id="mobileCloseBtn" data-tooltip-key="menuClose" data-tooltip="Закрыть меню" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
+                </button>
             </div>
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                <div>
-                    <h1 id="categoryTitle" class="text-3xl lg:text-4xl font-bold text-gray-900"></h1>
+            <div class="relative mb-4">
+                <button id="mobileLanguageToggle" class="w-full flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+                    <span id="mobileLanguageLabel">RU</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div id="mobileLanguageMenu" class="hidden mt-2 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
+                    <button type="button" data-language="ru" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">Русский</button>
+                    <button type="button" data-language="uz" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">O‘zbekcha</button>
+                    <button type="button" data-language="en" class="language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700">English</button>
                 </div>
-                <div id="productCount" class="text-sm text-gray-400"></div>
+            </div>
+            <button id="mobileThemeToggle" type="button" class="w-full mb-3 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
+                <i data-lucide="moon" class="theme-icon-moon w-4 h-4"></i>
+                <i data-lucide="sun" class="theme-icon-sun w-4 h-4"></i>
+                <span id="mobileThemeLabel">Тёмная тема</span>
+            </button>
+            <a href="auth.html" data-customer-account-link class="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-50 px-3 py-3 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-100">
+                <i data-lucide="user" class="w-4 h-4"></i>
+                <span data-customer-account-text>Войти</span>
+            </a>
+            <nav class="space-y-1">
+                <a href="#catalog" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Каталог</a>
+                <a href="#solutions" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Решения</a>
+                <a href="#industries" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Отрасли</a>
+                <a href="#partners" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Партнёры</a>
+                <a href="#brands" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Бренды</a>
+                <a href="#products" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Товары</a>
+            </nav>
+            <div class="mt-8 pt-6 border-t border-gray-100 space-y-3">
+                <a href="tel:+998918401405" class="flex items-center gap-3 text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                    <i data-lucide="phone" class="w-4 h-4 text-primary-500"></i>
+                    +998-91-840-14-05
+                </a>
+                <a href="mailto:info@osuz.uz" class="flex items-center gap-3 text-sm text-gray-500 hover:text-primary-600 transition-colors">
+                    <i data-lucide="mail" class="w-4 h-4 text-primary-500"></i>
+                    info@osuz.uz
+                </a>
+            </div>
+        </div>
+    </div>
+    <section id="solutions" class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden pt-[124px]">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/4 opacity-15">
+                <svg class="infinity-shape w-[500px] h-[500px]" viewBox="0 0 200 100" fill="none">
+                    <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00bcd4"/><stop offset="100%" style="stop-color:#00acc1"/></linearGradient></defs>
+                    <path d="M100,50 C100,25 130,10 155,10 C180,10 200,30 200,50 C200,70 180,90 155,90 C130,90 100,75 100,50 Z" stroke="url(#g1)" stroke-width="3" fill="none"/>
+                    <path d="M100,50 C100,25 70,10 45,10 C20,10 0,30 0,50 C0,70 20,90 45,90 C70,90 100,75 100,50 Z" stroke="url(#g1)" stroke-width="3" fill="none"/>
+                    <ellipse cx="100" cy="50" rx="18" ry="18" fill="url(#g1)" opacity="0.6"/>
+                </svg>
+            </div>
+                    <div class="absolute top-20 left-20 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div id="heroCarousel" class="relative z-10">
+            <div class="carousel-track" id="heroTrack">
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="hero-copy">
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">OSUZ Platform</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Индустриальные решения<br><span class="gradient-text">для вашего бизнеса</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#catalog" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Перейти в каталог <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                    <a href="#contacts" class="inline-flex items-center gap-3 px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-lg transition-all">Связаться</a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=700&q=80" alt="Industrial automation" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="hero-copy">
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Автоматизация</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Умные решения<br><span class="gradient-text">для производства</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Современные системы автоматизации для оптимизации производственных процессов.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#industries" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Узнать больше <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=700&q=80" alt="Factory automation" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="min-w-full">
+                    <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-10 lg:py-14">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="hero-copy">
+                                <span class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4 block">Доставка</span>
+                                <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Быстрая доставка<br><span class="gradient-text">по всему региону</span></h1>
+                                <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Экспресс-доставка оборудования и запчастей в кратчайшие сроки.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#products" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Оформить заказ <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex justify-center">
+                                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&q=80" alt="Logistics" class="hero-slide-image rounded-2xl shadow-2xl" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23111827%22 width=%22400%22 height=%22300%22/><text fill=%22%2300e6a0%22 font-size=%2248%22 x=%22200%22 y=%22160%22 text-anchor=%22middle%22>OSUZ</text></svg>'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-controls-layer">
+                <div class="hero-controls-inner">
+                    <button id="heroPrev" data-tooltip-key="slidePrev" data-tooltip="Предыдущий слайд" class="hero-side-btn hero-prev-btn" aria-label="Предыдущий слайд">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button id="heroNext" data-tooltip-key="slideNext" data-tooltip="Следующий слайд" class="hero-side-btn hero-next-btn" aria-label="Следующий слайд">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
+                <button class="hero-dot carousel-dot active w-6 h-2 rounded-full bg-white/40" data-index="0" aria-label="Слайд 1"></button>
+                <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="1" aria-label="Слайд 2"></button>
+                <button class="hero-dot carousel-dot w-2 h-2 rounded-full bg-white/40" data-index="2" aria-label="Слайд 3"></button>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="catalog" class="section-anchor py-16 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Каталог</span>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">Категории товаров</h2>
+                <p class="text-gray-500 mt-2">Опубликованные товары по категориям</p>
+            </div>
+
+            <div id="categoriesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+                <div class="rounded-2xl h-52 skeleton"></div>
+            </div>
+        </div>
+    </section>
+   
+    <section id="products" class="section-anchor py-16 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Хиты продаж</span>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900">Популярные товары</h2>
+                </div>
+                <a href="#products" id="showAllProductsBtn" class="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm cta-link">Все товары <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <div id="popularProductsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+                <div class="rounded-xl h-72 skeleton"></div>
+            </div>
+        </div>
+    </section>
+
+   <section id="partners" class="section-anchor py-16 border-y border-gray-100 overflow-hidden">
+        <div id="brands" class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-8">
+            <div class="text-center">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Партнёры</span>
+                <h2 class="text-2xl font-bold text-gray-900">Ведущие бренды</h2>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="brand-fade-left"></div>
+            <div class="brand-fade-right"></div>
+            <div class="flex gap-5" style="animation: marquee 25s linear infinite;">
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
+            </div>
+        </div>
+    </section>
+
+  
+    <section id="industries" class="py-20 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Преимущества</span>
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900">Почему выбирают OSUZ</h2>
+                <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="clock" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Быстрая доставка</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Доставка от 24 часов по Узбекистану. Работаем с ведущими транспортными компаниями для максимальной скорости.</p>
+                </div>
+
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Гарантия подлинности</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.</p>
+                </div>
+
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="search" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Умный поиск</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.</p>
+                </div>
+
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="headphones" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Поддержка 24/7</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.</p>
+                </div>
+
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="banknote" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Лучшие цены</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.</p>
+                </div>
+
+                <div class="feature-card p-7 rounded-2xl transition-all group">
+                    <div class="feature-icon w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mb-5 transition-colors">
+                        <i data-lucide="package-check" class="w-6 h-6 text-primary-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Широкий ассортимент</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+  
+    <section id="about" class="section-anchor py-20 bg-gray-50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="section-reveal">
+                    <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">О нас</span>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">OSUZ — платформа промышленного оборудования</h2>
+                    <p class="text-gray-500 text-base leading-relaxed mb-5">
+                        OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.
+                    </p>
+                    <p class="text-gray-500 text-base leading-relaxed mb-8">
+                        Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.
+                    </p>
+                    </div>
+                </div>
+                <div class="section-reveal">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900 min-h-[360px]">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=900&q=80" alt="OSUZ industrial platform" class="absolute inset-0 w-full h-full object-cover opacity-80">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/30 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-7">
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-sm px-4 py-2 rounded-full mb-4">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-primary-400"></i>
+                                Надёжный B2B-партнёр
+                            </div>
+                            <h3 class="text-white text-2xl font-bold mb-2">Оборудование для бизнеса</h3>
+                            <p class="text-white/70 text-sm leading-relaxed">Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
    
-    <section class="bg-white pb-4" id="subcatsSection" style="display:none">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div id="subcatsList" class="flex flex-wrap gap-2"></div>
-        </div>
-    </section>
-
-  
-    <section class="bg-white border-b border-gray-100 sticky top-16 z-40">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col md:flex-row md:items-center gap-4">
-
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400">Сортировка:</span>
-                        <button class="sort-btn active text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="">По умолчанию</button>
-                        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="name">По названию</button>
-                        <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="brand">По бренду</button>
-                    </div>
-                </div>
-               
-                <div id="attrFilters" class="flex flex-wrap gap-3"></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-10 bg-gray-50 min-h-[60vh]">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-            <div id="loadingSkeleton" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
-                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
-                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
-                <div class="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm"><div class="h-40 skeleton"></div><div class="p-4"><div class="h-3 skeleton w-16 mb-2"></div><div class="h-4 skeleton w-3/4 mb-2"></div><div class="h-3 skeleton w-full"></div></div></div>
-            </div>
-            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 hidden"></div>
-            <div id="emptyState" class="hidden text-center py-20">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="search-x" class="w-8 h-8 text-gray-300"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">Товары не найдены</h3>
-                <p class="text-gray-500 text-sm">Попробуйте изменить фильтры или поисковый запрос</p>
-            </div>
-            <div id="pagination" class="hidden mt-10 flex flex-wrap items-center justify-center gap-3">
-                <button id="prevPage" data-tooltip="Предыдущая страница" class="pagination-control px-4 gap-1">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                    <span>Назад</span>
-                </button>
-
-                <div class="pagination-selector">
-                    <button
-                        id="paginationSelectorButton"
-                        type="button"
-                        data-tooltip="Выбрать страницу"
-                        class="pagination-control pagination-selector-button"
-                        aria-haspopup="listbox"
-                        aria-expanded="false"
-                    >
-                        <span id="paginationSelectorLabel">Страница 1 из 1</span>
-                        <i data-lucide="chevron-up" class="w-4 h-4"></i>
-                    </button>
-
-                    <div
-                        id="paginationSelectorMenu"
-                        class="pagination-selector-menu hidden"
-                        role="listbox"
-                        aria-label="Выбор страницы"
-                    ></div>
-                </div>
-
-                <button id="nextPage" data-tooltip="Следующая страница" class="pagination-control px-4 gap-1">
-                    <span>Далее</span>
-                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                </button>
+    <section id="cta" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 section-reveal">Начните работу <span class="gradient-text">с OSUZ</span></h2>
+            <p class="text-lg text-gray-500 mb-8 max-w-2xl mx-auto section-reveal">Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center section-reveal">
+                <a href="#products" class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Смотреть товары <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
+                <a href="#contacts" class="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-gray-200 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-medium rounded-lg transition-all">Связаться с нами</a>
             </div>
         </div>
     </section>
@@ -616,112 +1234,429 @@
             </div>
         </div>
     </footer>
-  
+
     <script>
         lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+        function openMobileMenu() {
+            mobileMenu.style.transform = 'translateX(0)';
+            mobileOverlay.style.opacity = '1';
+            mobileOverlay.style.pointerEvents = 'auto';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenu() {
+            mobileMenu.style.transform = 'translateX(100%)';
+            mobileOverlay.style.opacity = '0';
+            mobileOverlay.style.pointerEvents = 'none';
+            document.body.style.overflow = '';
+        }
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+
+       
+        const heroSearchInput = document.getElementById('heroSearchInput');
+        const heroSearchBtn = document.getElementById('heroSearchBtn');
+        const heroPhotoBtn = document.getElementById('heroPhotoBtn');
+        const heroPhotoInput = document.getElementById('heroPhotoInput');
+        const heroSearchResults = document.getElementById('heroSearchResults');
+        const heroResultsList = document.getElementById('heroResultsList');
+        const heroPhotoPreview = document.getElementById('heroPhotoPreview');
+        const heroPreviewImg = document.getElementById('heroPreviewImg');
+        const heroRemovePhoto = document.getElementById('heroRemovePhoto');
+        const heroAnalyzeBtn = document.getElementById('heroAnalyzeBtn');
+        const heroAnalysisDot = document.getElementById('heroAnalysisDot');
+        const heroAnalysisText = document.getElementById('heroAnalysisText');
+
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const mobileThemeLabel = document.getElementById('mobileThemeLabel');
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+
+        function applyTheme() {
+            const isDark = currentTheme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+
+            if (themeToggle) {
+                themeToggle.setAttribute(
+                    'aria-label',
+                    isDark ? 'Включить светлую тему' : 'Включить тёмную тему'
+                );
+                themeToggle.title = isDark ? 'Светлая тема' : 'Тёмная тема';
+            }
+
+            if (mobileThemeLabel) {
+                mobileThemeLabel.textContent = isDark
+                    ? (currentLang === 'uz' ? 'Yorug‘ mavzu' : currentLang === 'en' ? 'Light theme' : 'Светлая тема')
+                    : (currentLang === 'uz' ? 'Qorong‘i mavzu' : currentLang === 'en' ? 'Dark theme' : 'Тёмная тема');
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        }
+
+        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+        if (mobileThemeToggle) mobileThemeToggle.addEventListener('click', toggleTheme);
 
         const API_ORIGIN = 'https://osuz.uz';
-        const API = `${API_ORIGIN}/api/catalog`;
-        const currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
-            ? localStorage.getItem('osuzLang')
-            : 'ru';
+        const CATALOG_API_BASE = `${API_ORIGIN}/api/catalog`;
+        let currentLang = localStorage.getItem('osuzLang') || 'ru';
+        let productDatabase = [];
+        let searchTimer = null;
 
-        let allCategories = [];
-        let currentCategory = null;
-        let parentCategory = null;
-        let childCategories = [];
-        let categoryAttributes = [];
-        let currentPage = 1;
-        let totalPages = 1;
-        let searchQuery = '';
-        let sortMode = '';
-        let searchTimeout = null;
-
-        const params = new URLSearchParams(window.location.search);
-        const categoryId = params.get('id');
-        const categoryName = params.get('name');
-
-        const ui = {
-            ru: {
-                home: 'Главная',
-                catalog: 'Каталог',
-                category: 'Категория',
-                found: 'Найдено',
-                products: 'товаров',
-                searchPlaceholder: 'Поиск по названию, артикулу, бренду...',
-                sorting: 'Сортировка:',
-                defaultSort: 'По умолчанию',
-                nameSort: 'По названию',
-                brandSort: 'По бренду',
-                all: 'Все',
-                from: 'от',
-                to: 'до',
-                details: 'Подробнее →',
-                emptyTitle: 'Товары не найдены',
-                emptyText: 'Попробуйте изменить фильтры или поисковый запрос',
-                loadingError: 'Ошибка загрузки',
-                page: 'Страница',
-                of: 'из',
-                back: 'Назад',
-                next: 'Далее',
-                priceRequest: 'Запросить цену',
-                priceFrom: 'от {price} сум'
-            },
+        const translations = {
             uz: {
-                home: 'Bosh sahifa',
-                catalog: 'Katalog',
-                category: 'Kategoriya',
-                found: 'Topildi',
-                products: 'mahsulot',
-                searchPlaceholder: 'Nomi, artikuli yoki brendi bo‘yicha qidirish...',
-                sorting: 'Saralash:',
-                defaultSort: 'Standart',
-                nameSort: 'Nomi bo‘yicha',
-                brandSort: 'Brend bo‘yicha',
-                all: 'Barchasi',
-                from: 'dan',
-                to: 'gacha',
-                details: 'Batafsil →',
-                emptyTitle: 'Mahsulotlar topilmadi',
-                emptyText: 'Filtrlarni yoki qidiruv so‘rovini o‘zgartiring',
-                loadingError: 'Yuklashda xatolik',
-                page: 'Sahifa',
-                of: 'dan',
-                back: 'Orqaga',
-                next: 'Keyingi',
-                priceRequest: 'Narx so‘rash',
-                priceFrom: '{price} so‘mdan'
+                'UZ | RU': 'RU | UZ',
+                'Поддержка': 'Qo‘llab-quvvatlash',
+                'Войти': 'Kirish',
+                'Корзина': 'Savat',
+                'Каталог': 'Katalog',
+                'Партнёры': 'Hamkorlar',
+                'Товары': 'Mahsulotlar',
+                'О нас': 'Biz haqimizda',
+                'Меню': 'Menyu',
+                'Решения': 'Yechimlar',
+                'Отрасли': 'Sohalar',
+                'Бренды': 'Brendlar',
+                'OSUZ Platform': 'OSUZ platformasi',
+                'Индустриальные решения': 'Sanoat yechimlari',
+                'для вашего бизнеса': 'biznesingiz uchun',
+                'Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.': 'Yetakchi jahon brendlaridan 2 500 000 dan ortiq sanoat uskunalari pozitsiyalari.',
+                'Перейти в каталог': 'Katalogga o‘tish',
+                'Связаться': 'Bog‘lanish',
+                'Автоматизация': 'Avtomatlashtirish',
+                'Умные решения': 'Aqlli yechimlar',
+                'для производства': 'ishlab chiqarish uchun',
+                'Современные системы автоматизации для оптимизации производственных процессов.': 'Ishlab chiqarish jarayonlarini optimallashtirish uchun zamonaviy avtomatlashtirish tizimlari.',
+                'Узнать больше': 'Batafsil',
+                'Доставка': 'Yetkazib berish',
+                'Быстрая доставка': 'Tez yetkazib berish',
+                'по всему региону': 'butun hudud bo‘ylab',
+                'Экспресс-доставка оборудования и запчастей в кратчайшие сроки.': 'Uskunalar va ehtiyot qismlarni qisqa muddatlarda yetkazib berish.',
+                'Оформить заказ': 'Buyurtma berish',
+                'Найти': 'Topish',
+                'Анализ фото...': 'Rasm tahlil qilinmoqda...',
+                'Поиск похожих товаров в каталоге': 'Katalogdan o‘xshash mahsulotlarni qidirish',
+                'Найти товар': 'Mahsulotni topish',
+                'Популярные:': 'Mashhur:',
+                'Категории товаров': 'Mahsulot kategoriyalari',
+                'Опубликованные товары по категориям': 'Kategoriyalar bo‘yicha chop etilgan mahsulotlar',
+                'Просмотреть каталог →': 'Katalogni ko‘rish →',
+                'Хиты продаж': 'Ko‘p sotiladiganlar',
+                'Популярные товары': 'Mashhur mahsulotlar',
+                'Все товары': 'Barcha mahsulotlar',
+                'Ведущие бренды': 'Yetakchi brendlar',
+                'Преимущества': 'Afzalliklar',
+                'Почему выбирают OSUZ': 'Nega OSUZ tanlanadi',
+                'Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.': 'Biz biznesingiz uchun ishonchli hamkormiz. Mana bizni boshqalardan ajratib turadigan jihatlar.',
+                'Гарантия подлинности': 'Asllik kafolati',
+                'Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.': 'Faqat sertifikatlangan yetkazib beruvchilardan original mahsulotlar. Har bir mahsulot sifat sertifikatiga ega.',
+                'Умный поиск': 'Aqlli qidiruv',
+                'Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.': 'Mahsulotlarni artikul, nom, brend yoki analoglar orqali toping. Bazada 2 500 000+ pozitsiya mavjud.',
+                'Поддержка 24/7': '24/7 qo‘llab-quvvatlash',
+                'Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.': 'Malakali muhandislar uskunani tanlashda yordam beradi va savollaringizga javob beradi.',
+                'Лучшие цены': 'Eng yaxshi narxlar',
+                'Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.': 'Ishlab chiqaruvchilardan vositachilarsiz to‘g‘ridan-to‘g‘ri yetkazib berish. Doimiy mijozlar uchun moslashuvchan chegirmalar.',
+                'Широкий ассортимент': 'Keng assortiment',
+                'Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.': 'Elektrotexnika, pnevmatika, gidravlika, datchiklar va privodlar — ishlab chiqarishingiz uchun hammasi bir joyda.',
+                'OSUZ — платформа промышленного оборудования': 'OSUZ — sanoat uskunalari platformasi',
+                'OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.': 'OSUZ korxonalarga yetakchi brendlardan sanoat uskunalari, butlovchi qismlar va ehtiyot qismlarni tez topishga yordam beradi. Biz katalog, qulay qidiruv, kategoriyalar va mutaxassislar yordamini bir joyda birlashtiramiz.',
+                'Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.': 'Maqsadimiz — O‘zbekistondagi ishlab chiqarishlar, servis kompaniyalari va muhandislik jamoalari uchun xarid jarayonini soddalashtirish: kerakli pozitsiyani topishdan maslahat va yetkazib berishgacha.',
+                'позиций в каталоге': 'katalogdagi pozitsiyalar',
+                'брендов-партнёров': 'hamkor brendlar',
+                'поддержка клиентов': 'mijozlarni qo‘llab-quvvatlash',
+                'Надёжный B2B-партнёр': 'Ishonchli B2B hamkor',
+                'Оборудование для бизнеса': 'Biznes uchun uskunalar',
+                'Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.': 'Ishlab chiqarish uchun avtomatlashtirish, elektrika, pnevmatika, gidravlika, datchiklar, privodlar va komponentlar.',
+                'Начните работу': 'Ishni boshlang',
+                'с OSUZ': 'OSUZ bilan',
+                'Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.': 'Ro‘yxatdan o‘ting va to‘liq katalog hamda shaxsiy narxlarga kirish imkoniyatiga ega bo‘ling.',
+                'Смотреть товары': 'Mahsulotlarni ko‘rish',
+                'Связаться с нами': 'Biz bilan bog‘lanish',
+                'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'O‘zbekistondagi sanoat uskunalari va ehtiyot qismlar bo‘yicha yirik platforma.',
+                'Компания': 'Kompaniya',
+                'Оплата': 'To‘lov',
+                'Вакансии': 'Vakansiyalar',
+                'Контакты': 'Kontaktlar',
+                'Ташкент, Узбекистан': 'Toshkent, O‘zbekiston',
+                'Все права защищены.': 'Barcha huquqlar himoyalangan.',
+                'Политика': 'Siyosat',
+                'Условия': 'Shartlar',
+                'Товары не найдены': 'Mahsulotlar topilmadi',
+                'Не удалось загрузить товары': 'Mahsulotlarni yuklab bo‘lmadi',
+                'Поиск...': 'Qidirilmoqda...',
+                'Попробуйте другой запрос или загрузите фото': 'Boshqa so‘rov kiriting yoki rasm yuklang',
+                'Ошибка поиска товаров': 'Mahsulotlarni qidirishda xatolik',
+                'Категория': 'Kategoriya',
+                'Без названия': 'Nomsiz',
+                'Без бренда': 'Brendsiz',
+                'Товар из каталога': 'Katalogdagi mahsulot',
+                'Запросить цену': 'Narx so‘rash',
+                'Артикул': 'Artikul',
+                'Найдено': 'Topildi',
+                'Покупателям': 'Xaridorlarga',
+                'Новости компании': 'Kompaniya yangiliklari',
+                'Условия доставки и оплаты': 'Yetkazib berish va to‘lov shartlari',
+                'Правила возврата и обмена товара': 'Mahsulotni qaytarish va almashtirish qoidalari',
+                'Часто задаваемые вопросы (FAQ)': 'Ko‘p so‘raladigan savollar (FAQ)',
+                'Для предпринимателей': 'Tadbirkorlar uchun',
+                'Продавать у нас': 'Bizda sotish',
+                'Личный кабинет продавца': 'Sotuvchining shaxsiy kabineti',
+                'Тарифы и комиссии': 'Tariflar va komissiyalar',
+                'Новости компании': 'Kompaniya yangiliklari',
+                'Пользовательское соглашение': 'Foydalanuvchi kelishuvi',
+                'Политика конфиденциальности': 'Maxfiylik siyosati'
             },
             en: {
-                home: 'Home',
-                catalog: 'Catalog',
-                category: 'Category',
-                found: 'Found',
-                products: 'products',
-                searchPlaceholder: 'Search by name, order code or brand...',
-                sorting: 'Sort:',
-                defaultSort: 'Default',
-                nameSort: 'By name',
-                brandSort: 'By brand',
-                all: 'All',
-                from: 'min',
-                to: 'max',
-                details: 'Details →',
-                emptyTitle: 'No products found',
-                emptyText: 'Try changing the filters or search query',
-                loadingError: 'Loading error',
-                page: 'Page',
-                of: 'of',
-                back: 'Back',
-                next: 'Next',
-                priceRequest: 'Request price',
-                priceFrom: 'from {price} UZS'
+                'UZ | RU': 'RU | UZ | EN',
+                'Поддержка': 'Support',
+                'Войти': 'Sign in',
+                'Корзина': 'Cart',
+                'Каталог': 'Catalog',
+                'Партнёры': 'Partners',
+                'Товары': 'Products',
+                'О нас': 'About us',
+                'Меню': 'Menu',
+                'Решения': 'Solutions',
+                'Отрасли': 'Industries',
+                'Бренды': 'Brands',
+                'OSUZ Platform': 'OSUZ Platform',
+                'Индустриальные решения': 'Industrial solutions',
+                'для вашего бизнеса': 'for your business',
+                'Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.': 'More than 2,500,000 industrial equipment items from leading global brands.',
+                'Перейти в каталог': 'Go to catalog',
+                'Связаться': 'Contact us',
+                'Автоматизация': 'Automation',
+                'Умные решения': 'Smart solutions',
+                'для производства': 'for manufacturing',
+                'Современные системы автоматизации для оптимизации производственных процессов.': 'Modern automation systems for optimizing production processes.',
+                'Узнать больше': 'Learn more',
+                'Доставка': 'Delivery',
+                'Быстрая доставка': 'Fast delivery',
+                'по всему региону': 'throughout the region',
+                'Экспресс-доставка оборудования и запчастей в кратчайшие сроки.': 'Express delivery of equipment and spare parts in the shortest possible time.',
+                'Оформить заказ': 'Place an order',
+                'Найти': 'Search',
+                'Анализ фото...': 'Analyzing photo...',
+                'Поиск похожих товаров в каталоге': 'Searching for similar products in the catalog',
+                'Найти товар': 'Find product',
+                'Популярные:': 'Popular:',
+                'Категории товаров': 'Product categories',
+                'Опубликованные товары по категориям': 'Published products by category',
+                'Просмотреть каталог →': 'View catalog →',
+                'Хиты продаж': 'Best sellers',
+                'Популярные товары': 'Popular products',
+                'Все товары': 'All products',
+                'Ведущие бренды': 'Leading brands',
+                'Преимущества': 'Advantages',
+                'Почему выбирают OSUZ': 'Why choose OSUZ',
+                'Мы — надёжный партнёр для вашего бизнеса. Вот что делает нас лучше других.': 'We are a reliable partner for your business. Here is what makes us stand out.',
+                'Гарантия подлинности': 'Authenticity guarantee',
+                'Только оригинальные товары от сертифицированных поставщиков. Каждый товар имеет сертификат качества.': 'Only original products from certified suppliers. Every product has a quality certificate.',
+                'Умный поиск': 'Smart search',
+                'Находите товары по артикулу, названию, бренду или аналогам. База из 2 500 000+ позиций.': 'Find products by part number, name, brand, or alternatives. A database of 2,500,000+ items.',
+                'Поддержка 24/7': '24/7 support',
+                'Квалифицированные инженеры помогут подобрать оборудование и ответят на любые вопросы.': 'Qualified engineers will help you select equipment and answer any questions.',
+                'Лучшие цены': 'Best prices',
+                'Прямые поставки от производителей без посредников. Гибкая система скидок для постоянных клиентов.': 'Direct supplies from manufacturers without intermediaries. A flexible discount system for regular customers.',
+                'Широкий ассортимент': 'Wide range',
+                'Электротехника, пневматика, гидравлика, датчики, приводы — всё в одном месте для вашего производства.': 'Electrical equipment, pneumatics, hydraulics, sensors, drives — everything your production needs in one place.',
+                'OSUZ — платформа промышленного оборудования': 'OSUZ — industrial equipment platform',
+                'OSUZ помогает предприятиям быстро находить промышленное оборудование, комплектующие и запчасти от ведущих брендов. Мы объединяем каталог товаров, удобный поиск, категории и поддержку специалистов в одном месте.': 'OSUZ helps companies quickly find industrial equipment, components, and spare parts from leading brands. We bring together a product catalog, convenient search, categories, and expert support in one place.',
+                'Наша цель — упростить закупки для производств, сервисных компаний и инженерных команд в Узбекистане: от поиска нужной позиции до консультации и поставки.': 'Our goal is to simplify procurement for manufacturers, service companies, and engineering teams in Uzbekistan: from finding the right item to consultation and delivery.',
+                'позиций в каталоге': 'catalog items',
+                'брендов-партнёров': 'partner brands',
+                'поддержка клиентов': 'customer support',
+                'Надёжный B2B-партнёр': 'Reliable B2B partner',
+                'Оборудование для бизнеса': 'Equipment for business',
+                'Автоматизация, электрика, пневматика, гидравлика, датчики, приводы и компоненты для производства.': 'Automation, electrical equipment, pneumatics, hydraulics, sensors, drives, and manufacturing components.',
+                'Начните работу': 'Get started',
+                'с OSUZ': 'with OSUZ',
+                'Зарегистрируйтесь и получите доступ к полному каталогу и персональным ценам.': 'Sign up and get access to the full catalog and personalized prices.',
+                'Смотреть товары': 'View products',
+                'Связаться с нами': 'Contact us',
+                'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'Uzbekistan’s largest platform for industrial equipment and spare parts.',
+                'Компания': 'Company',
+                'Оплата': 'Payment',
+                'Вакансии': 'Careers',
+                'Контакты': 'Contacts',
+                'Ташкент, Узбекистан': 'Tashkent, Uzbekistan',
+                'Все права защищены.': 'All rights reserved.',
+                'Политика': 'Privacy policy',
+                'Условия': 'Terms',
+                'Товары не найдены': 'Products not found',
+                'Не удалось загрузить товары': 'Failed to load products',
+                'Поиск...': 'Searching...',
+                'Попробуйте другой запрос или загрузите фото': 'Try another query or upload a photo',
+                'Ошибка поиска товаров': 'Product search error',
+                'Категория': 'Category',
+                'Без названия': 'Untitled',
+                'Без бренда': 'No brand',
+                'Товар из каталога': 'Catalog product',
+                'Запросить цену': 'Request price',
+                'Артикул': 'Part number',
+                'Найдено': 'Found',
+                'Покупателям': 'For buyers',
+                'Новости компании': 'Company news',
+                'Условия доставки и оплаты': 'Delivery and payment terms',
+                'Правила возврата и обмена товара': 'Return and exchange policy',
+                'Часто задаваемые вопросы (FAQ)': 'Frequently asked questions (FAQ)',
+                'Для предпринимателей': 'For entrepreneurs',
+                'Продавать у нас': 'Sell with us',
+                'Личный кабинет продавца': 'Seller account',
+                'Тарифы и комиссии': 'Plans and commissions',
+                'Пользовательское соглашение': 'User agreement',
+                'Политика конфиденциальности': 'Privacy policy'
             }
-        }[currentLang];
+        };
 
-        if (!categoryId && !categoryName) {
-            window.location.href = 'index.html#catalog';
+        function t(text) {
+            if (currentLang === 'ru') return text;
+            return translations[currentLang]?.[text] || text;
         }
+
+
+        const tooltipTexts = {
+            ru: {
+                language: 'Выбрать язык',
+                theme: 'Сменить тему',
+                cart: 'Корзина',
+                login: 'Войти',
+                menuOpen: 'Открыть меню',
+                menuClose: 'Закрыть меню',
+                slidePrev: 'Предыдущий слайд',
+                slideNext: 'Следующий слайд',
+                photoSearch: 'Поиск по фото',
+                photoRemove: 'Удалить фото'
+            },
+            uz: {
+                language: 'Tilni tanlash',
+                theme: 'Mavzuni almashtirish',
+                cart: 'Savat',
+                login: 'Kirish',
+                menuOpen: 'Menyuni ochish',
+                menuClose: 'Menyuni yopish',
+                slidePrev: 'Oldingi slayd',
+                slideNext: 'Keyingi slayd',
+                photoSearch: 'Rasm orqali qidirish',
+                photoRemove: 'Rasmni o‘chirish'
+            },
+            en: {
+                language: 'Choose language',
+                theme: 'Change theme',
+                cart: 'Cart',
+                login: 'Sign in',
+                menuOpen: 'Open menu',
+                menuClose: 'Close menu',
+                slidePrev: 'Previous slide',
+                slideNext: 'Next slide',
+                photoSearch: 'Search by photo',
+                photoRemove: 'Remove photo'
+            }
+        };
+
+        function updateTooltips() {
+            document.querySelectorAll('[data-tooltip-key]').forEach(element => {
+                const key = element.dataset.tooltipKey;
+                const value = tooltipTexts[currentLang]?.[key] || tooltipTexts.ru[key];
+                if (value) element.dataset.tooltip = value;
+            });
+        }
+
+        function localizeStaticText() {
+            document.documentElement.lang = currentLang;
+            const label = document.getElementById('languageLabel');
+            const mobileLabel = document.getElementById('mobileLanguageLabel');
+            const currentLanguageLabel = currentLang.toUpperCase();
+            if (label) label.textContent = currentLanguageLabel;
+            if (mobileLabel) mobileLabel.textContent = currentLanguageLabel;
+
+            document.querySelectorAll('.language-option').forEach(option => {
+                const isActive = option.dataset.language === currentLang;
+                option.classList.toggle('bg-primary-50', isActive);
+                option.classList.toggle('text-primary-700', isActive);
+                option.classList.toggle('font-semibold', isActive);
+            });
+            document.title = currentLang === 'ru'
+                ? 'OSUZ — Промышленные решения'
+                : currentLang === 'uz'
+                    ? 'OSUZ — Sanoat yechimlari'
+                    : 'OSUZ — Industrial Solutions';
+
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+                acceptNode(node) {
+                    const value = node.nodeValue.trim();
+                    if (!value) return NodeFilter.FILTER_REJECT;
+                    if (node.parentElement && ['SCRIPT', 'STYLE'].includes(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            });
+
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+
+            nodes.forEach(node => {
+                if (!node.__ruText) node.__ruText = node.nodeValue;
+                const original = node.__ruText;
+                const trimmed = original.trim();
+                const translated = currentLang === 'ru' ? trimmed : t(trimmed);
+                const leading = original.match(/^\s*/)[0];
+                const trailing = original.match(/\s*$/)[0];
+                node.nodeValue = leading + translated + trailing;
+            });
+
+            heroSearchInput.placeholder = currentLang === 'ru'
+                ? 'Поиск товаров, брендов, артикулов...'
+                : currentLang === 'uz'
+                    ? 'Mahsulotlar, brendlar, artikullarni qidirish...'
+                    : 'Search products, brands, and part numbers...';
+            heroPhotoBtn.title = currentLang === 'ru'
+                ? 'Поиск по фото'
+                : currentLang === 'uz'
+                    ? 'Rasm orqali qidirish'
+                    : 'Search by photo';
+            updateTooltips();
+            applyTheme();
+        }
+
+        function setLanguage(language) {
+            if (!['ru', 'uz', 'en'].includes(language)) return;
+            currentLang = language;
+            localStorage.setItem('osuzLang', currentLang);
+            localizeStaticText();
+            window.updateCustomerHeader?.();
+
+            if (productDatabase.length) {
+                productDatabase = productDatabase.map(p => p.raw ? normalizeProduct(p.raw) : p);
+                renderPopularProducts(productDatabase);
+            }
+
+            loadCategories();
+
+            const languageMenu = document.getElementById('languageMenu');
+            const mobileLanguageMenu = document.getElementById('mobileLanguageMenu');
+            if (languageMenu) languageMenu.classList.add('hidden');
+            if (mobileLanguageMenu) mobileLanguageMenu.classList.add('hidden');
+        }
+
+        function buildFileUrl(url) {
+            if (!url) return '';
+            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+            return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
+        }
+
 
         function escapeHTML(value) {
             return String(value ?? '')
@@ -732,514 +1667,466 @@
                 .replaceAll("'", '&#039;');
         }
 
-        function buildFileUrl(url) {
-            if (!url) return '';
-            if (/^https?:\/\//i.test(url)) return url;
-            return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
-        }
-
-        function localizedObjectValue(values, fallback = '') {
-            if (!values || typeof values !== 'object') return fallback;
-            return currentLang === 'uz'
-                ? (values.uz || values.ru || values.en || fallback)
-                : currentLang === 'en'
-                    ? (values.en || values.ru || values.uz || fallback)
-                    : (values.ru || values.en || values.uz || fallback);
-        }
-
-        function localizedProductName(product) {
-            return currentLang === 'uz'
-                ? (product.name_uz || product.name_ru || product.name_en || ui.category)
-                : currentLang === 'en'
-                    ? (product.name_en || product.name_ru || product.name_uz || ui.category)
-                    : (product.name_ru || product.name_en || product.name_uz || ui.category);
-        }
-
-        function localizedAttributeName(attribute) {
-            return currentLang === 'uz'
-                ? (attribute.name_uz || attribute.name_ru || attribute.name_en || '')
-                : currentLang === 'en'
-                    ? (attribute.name_en || attribute.name_ru || attribute.name_uz || '')
-                    : (attribute.name_ru || attribute.name_en || attribute.name_uz || '');
-        }
-
-        function localizedOptionValue(option) {
-            return currentLang === 'uz'
-                ? (option.value_uz || option.value_ru || option.value_en || '')
-                : currentLang === 'en'
-                    ? (option.value_en || option.value_ru || option.value_uz || '')
-                    : (option.value_ru || option.value_en || option.value_uz || '');
-        }
-
         function formatPrice(value) {
             const number = Number(value);
-            if (!Number.isFinite(number) || number <= 0) return ui.priceRequest;
+            if (!Number.isFinite(number) || number <= 0) {
+                return currentLang === 'uz'
+                    ? 'Narx so‘rash'
+                    : currentLang === 'en'
+                        ? 'Request price'
+                        : 'Запросить цену';
+            }
 
             const formatted = new Intl.NumberFormat(
                 currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-US' : 'ru-RU',
                 { maximumFractionDigits: 0 }
             ).format(number);
 
-            return ui.priceFrom.replace('{price}', formatted);
+            return currentLang === 'uz'
+                ? `${formatted} so‘mdan`
+                : currentLang === 'en'
+                    ? `from ${formatted} UZS`
+                    : `от ${formatted} сум`;
         }
 
-        async function apiFetch(path, query = {}, timeoutMs = 15000) {
-            const params = new URLSearchParams();
+        function normalizeProduct(p) {
+            const name = (
+                currentLang === 'uz'
+                    ? (p.name_uz || p.name_ru || p.name_en)
+                    : currentLang === 'en'
+                        ? (p.name_en || p.name_ru || p.name_uz)
+                        : (p.name_ru || p.name_uz || p.name_en)
+            ) || t('Без названия');
 
-            Object.entries(query).forEach(([key, value]) => {
-                if (value === undefined || value === null || value === '') return;
-                params.set(key, String(value));
-            });
+            const category = p.category_name || '';
+            const code = p.order_code ? `${t('Артикул')}: ${p.order_code}` : '';
 
-            const queryString = params.toString();
-            const url = API + path + (queryString ? `?${queryString}` : '');
-            const controller = new AbortController();
-            const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+            return {
+                id: Number(p.id),
+                raw: p,
+                brand: p.brand || t('Без бренда'),
+                name,
+                desc: [code, category].filter(Boolean).join(' · '),
+                category,
+                orderCode: p.order_code || '',
+                img: buildFileUrl(p.photo_url),
+                datasheet: buildFileUrl(p.datasheet_url),
+                priceFrom: p.price_from,
+                priceLabel: formatPrice(p.price_from),
+            };
+        }
 
-            try {
-                const response = await fetch(url, {
-                    signal: controller.signal,
-                    cache: 'no-store',
-                    headers: {
-                        'Accept': 'application/json'
+        function productCardTemplate(p) {
+            const safeName = escapeHTML(p.name);
+            const safeBrand = escapeHTML(p.brand);
+            const safeDescription = escapeHTML(p.desc || p.category || t('Товар из каталога'));
+            const safePrice = escapeHTML(p.priceLabel);
+            const safeImage = escapeHTML(p.img);
+
+            return `
+                <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                    <a href="product.html?id=${encodeURIComponent(p.id)}" data-product-preview-id="${p.id}" class="block h-full">
+                        <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
+                            ${safeImage
+                                ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
+                                : `<div class="text-gray-400 font-bold text-sm">${safeBrand}</div>`
+                            }
+                        </div>
+                        <div class="p-4">
+                            <div class="text-xs text-primary-600 font-semibold mb-1">${safeBrand}</div>
+                            <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">${safeName}</h3>
+                            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${safeDescription}</p>
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-sm font-bold text-gray-900">${safePrice}</span>
+                                <span class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary-600"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </article>`;
+        }
+
+        function renderPopularProducts(products, showAll = false) {
+            const grid = document.getElementById('popularProductsGrid');
+            if (!grid) return;
+
+            if (!products.length) {
+                grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Товары не найдены')}</div>`;
+                return;
+            }
+
+            const visibleProducts = showAll ? products : products.slice(0, 4);
+            grid.innerHTML = visibleProducts.map(productCardTemplate).join('');
+
+            grid.querySelectorAll('[data-product-preview-id]').forEach(link => {
+                link.addEventListener('click', () => {
+                    const id = Number(link.dataset.productPreviewId);
+                    const preview = visibleProducts.find(item => Number(item.id) === id)?.raw;
+
+                    if (preview) {
+                        sessionStorage.setItem(
+                            `osuzProductPreview:${id}`,
+                            JSON.stringify(preview)
+                        );
                     }
                 });
+            });
+
+            lucide.createIcons();
+        }
+
+        async function loadProducts({ q = '', page = 1, limit = 48 } = {}) {
+            const params = new URLSearchParams({
+                page: String(Math.max(1, Number(page) || 1)),
+                limit: String(Math.min(100, Math.max(1, Number(limit) || 48)))
+            });
+
+            const rawQuery = String(q || '').trim();
+            if (rawQuery) params.set('q', rawQuery);
+
+            const controller = new AbortController();
+            const timeoutId = window.setTimeout(() => controller.abort(), 15000);
+
+            try {
+                const response = await fetch(
+                    `${CATALOG_API_BASE}/products?${params.toString()}`,
+                    {
+                        signal: controller.signal,
+                        cache: 'no-store',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
 
                 if (!response.ok) {
-                    throw new Error(`API ${response.status}: ${url}`);
+                    throw new Error(`Products API error: ${response.status}`);
                 }
 
-                return await response.json();
+                const data = await response.json();
+                const items = Array.isArray(data.items) ? data.items : [];
+                return items.map(normalizeProduct);
             } finally {
                 window.clearTimeout(timeoutId);
             }
         }
 
-        function applyStaticLanguage() {
-            document.documentElement.lang = currentLang;
-
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.placeholder = ui.searchPlaceholder;
-
-            const sortingLabel = document.querySelector('.sort-btn')?.parentElement?.querySelector('span');
-            if (sortingLabel) sortingLabel.textContent = ui.sorting;
-
-            const sortButtons = document.querySelectorAll('.sort-btn');
-            if (sortButtons[0]) sortButtons[0].textContent = ui.defaultSort;
-            if (sortButtons[1]) sortButtons[1].textContent = ui.nameSort;
-            if (sortButtons[2]) sortButtons[2].textContent = ui.brandSort;
-
-            const emptyTitle = document.querySelector('#emptyState h3');
-            const emptyText = document.querySelector('#emptyState p');
-            if (emptyTitle) emptyTitle.textContent = ui.emptyTitle;
-            if (emptyText) emptyText.textContent = ui.emptyText;
-
-            const prevLabel = document.querySelector('#prevPage span');
-            const nextLabel = document.querySelector('#nextPage span');
-            if (prevLabel) prevLabel.textContent = ui.back;
-            if (nextLabel) nextLabel.textContent = ui.next;
+        async function initProducts() {
+            try {
+                productDatabase = await loadProducts({ limit: 48 });
+                renderPopularProducts(productDatabase);
+            } catch (e) {
+                console.error('Failed to load products:', e);
+                const grid = document.getElementById('popularProductsGrid');
+                if (grid) grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Не удалось загрузить товары')}</div>`;
+            }
         }
 
-        async function init() {
-            applyStaticLanguage();
+        async function searchProducts(query) {
+            const rawQuery = String(query || '').trim();
+            if (!rawQuery) return [];
 
-            try {
-                allCategories = await apiFetch('/categories');
-            } catch (error) {
-                console.error('Failed to load categories:', error);
-                allCategories = [];
-            }
+            return loadProducts({
+                q: rawQuery,
+                limit: 12
+            });
+        }
 
-            if (categoryId) {
-                currentCategory = allCategories.find(category => category.id === Number(categoryId));
-            }
-
-            if (!currentCategory && categoryName) {
-                currentCategory = allCategories.find(category =>
-                    Object.values(category.names || {}).some(name => name === categoryName)
-                );
-            }
-
-            if (!currentCategory) {
-                const fallbackName = categoryName || ui.category;
-                document.getElementById('categoryTitle').textContent = fallbackName;
-                document.getElementById('breadcrumbCategory').textContent = fallbackName;
-                await loadProducts();
+        async function heroSearch(query) {
+            if (!query || query.length < 2) {
+                heroSearchResults.classList.add('hidden');
                 return;
             }
 
-            const currentName = localizedObjectValue(currentCategory.names, ui.category);
-            document.title = `${currentName} — OSUZ`;
-            document.getElementById('categoryTitle').textContent = currentName;
-            document.getElementById('breadcrumbCategory').textContent = currentName;
-
-            const breadcrumbLinks = document.querySelectorAll('section a[href="index.html"], section a[href="index.html#catalog"]');
-            if (breadcrumbLinks[0]) breadcrumbLinks[0].textContent = ui.home;
-            if (breadcrumbLinks[1]) breadcrumbLinks[1].textContent = ui.catalog;
-
-            if (currentCategory.parent_id) {
-                parentCategory = allCategories.find(category => category.id === currentCategory.parent_id);
-                if (parentCategory) {
-                    const crumbParent = document.getElementById('crumbParent');
-                    crumbParent.textContent = localizedObjectValue(parentCategory.names, ui.category);
-                    crumbParent.classList.remove('hidden');
-                    crumbParent.onclick = () => {
-                        window.location.href = `category.html?id=${parentCategory.id}`;
-                    };
-                    document.getElementById('crumbSep3').classList.remove('hidden');
-                }
-            }
-
-            childCategories = allCategories
-                .filter(category => category.parent_id === currentCategory.id)
-                .sort((a, b) =>
-                    localizedObjectValue(a.names).localeCompare(localizedObjectValue(b.names))
-                );
-
-            if (childCategories.length) {
-                const section = document.getElementById('subcatsSection');
-                const list = document.getElementById('subcatsList');
-                section.style.display = '';
-                list.innerHTML = childCategories.map(category => `
-                    <a
-                        href="category.html?id=${category.id}"
-                        class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white"
-                    >
-                        ${escapeHTML(localizedObjectValue(category.names, ui.category))}
-                    </a>
-                `).join('');
-            }
-
-            await Promise.all([loadAttributes(), loadProducts()]);
-        }
-
-        async function loadAttributes() {
-            if (!currentCategory) return;
+            heroSearchResults.classList.remove('hidden');
+            heroPhotoPreview.classList.add('hidden');
+            heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Поиск...')}</p></div>`;
 
             try {
-                categoryAttributes = await apiFetch(`/categories/${currentCategory.id}/attributes`);
-            } catch (error) {
-                console.warn('Attributes are unavailable:', error);
-                categoryAttributes = [];
-            }
+                const results = await searchProducts(query);
+                if (results.length === 0) {
+                    heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
+                } else {
+                    heroResultsList.innerHTML = results.map(p => `
+                        <a href="product.html?id=${encodeURIComponent(p.id)}" data-search-product-id="${p.id}" class="search-result-item flex items-center gap-4 rounded-xl group">
+                            <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
+                                <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
+                                <div class="text-xs text-gray-500 truncate">${escapeHTML(p.desc)}</div>
+                                <div class="text-xs font-bold text-gray-900 mt-1">${escapeHTML(p.priceLabel)}</div>
+                            </div>
+                            <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
+                        </a>
+                    `).join('');
 
-            renderAttrFilters();
-        }
+                    heroResultsList
+                        .querySelectorAll('[data-search-product-id]')
+                        .forEach(link => {
+                            link.addEventListener('click', () => {
+                                const id = Number(link.dataset.searchProductId);
+                                const preview = results.find(
+                                    item => Number(item.id) === id
+                                )?.raw;
 
-        function buildOptionTree(options, parentId = null, depth = 0) {
-            return options
-                .filter(option => (option.parent_id ?? null) === parentId)
-                .sort((a, b) =>
-                    Number(a.sort_order || 0) - Number(b.sort_order || 0) ||
-                    localizedOptionValue(a).localeCompare(localizedOptionValue(b))
-                )
-                .flatMap(option => {
-                    const label = localizedOptionValue(option);
-                    if (!label) return [];
-
-                    return [
-                        { option, label, depth },
-                        ...buildOptionTree(options, option.id, depth + 1)
-                    ];
-                });
-        }
-
-        function renderAttrFilters() {
-            const container = document.getElementById('attrFilters');
-            container.innerHTML = '';
-
-            categoryAttributes.forEach(attribute => {
-                const attributeName = localizedAttributeName(attribute);
-                if (!attributeName) return;
-
-                if (attribute.type === 'select' && Array.isArray(attribute.options) && attribute.options.length) {
-                    const wrap = document.createElement('div');
-                    wrap.className = 'flex items-center gap-1.5';
-
-                    const label = document.createElement('span');
-                    label.className = 'text-xs text-gray-400';
-                    label.textContent = `${attributeName}:`;
-                    wrap.appendChild(label);
-
-                    const select = document.createElement('select');
-                    select.className = 'text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:border-primary-500';
-                    select.dataset.attrId = attribute.id;
-
-                    const allOption = document.createElement('option');
-                    allOption.value = '';
-                    allOption.textContent = ui.all;
-                    select.appendChild(allOption);
-
-                    buildOptionTree(attribute.options).forEach(item => {
-                        const optionElement = document.createElement('option');
-                        optionElement.value = String(item.option.id);
-                        optionElement.textContent = `${'— '.repeat(item.depth)}${item.label}`;
-                        select.appendChild(optionElement);
-                    });
-
-                    wrap.appendChild(select);
-                    container.appendChild(wrap);
-                    return;
-                }
-
-                if (attribute.type === 'number_range' || attribute.type === 'number') {
-                    const wrap = document.createElement('div');
-                    wrap.className = 'flex items-center gap-1.5';
-
-                    const label = document.createElement('span');
-                    label.className = 'text-xs text-gray-400';
-                    label.textContent = `${attributeName}${attribute.default_unit ? ` (${attribute.default_unit})` : ''}:`;
-                    wrap.appendChild(label);
-
-                    const min = document.createElement('input');
-                    min.type = 'number';
-                    min.placeholder = ui.from;
-                    min.className = 'w-20 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
-
-                    wrap.appendChild(min);
-
-                    if (attribute.type === 'number_range') {
-                        const max = document.createElement('input');
-                        max.type = 'number';
-                        max.placeholder = ui.to;
-                        max.className = 'w-20 text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-primary-500';
-                        wrap.appendChild(max);
-                    }
-
-                    container.appendChild(wrap);
-                }
-            });
-        }
-
-        async function loadProducts() {
-            const grid = document.getElementById('productsGrid');
-            const skeleton = document.getElementById('loadingSkeleton');
-            const empty = document.getElementById('emptyState');
-            const pagination = document.getElementById('pagination');
-
-            skeleton.classList.remove('hidden');
-            grid.classList.add('hidden');
-            empty.classList.add('hidden');
-            pagination.classList.add('hidden');
-            grid.innerHTML = '';
-
-            const query = {
-                page: currentPage,
-                limit: 48
-            };
-
-            if (currentCategory) query.category_id = currentCategory.id;
-
-            const rawQuery = String(searchQuery || '').trim();
-            if (rawQuery) query.q = rawQuery;
-
-            try {
-                const data = await apiFetch('/products', query);
-                const items = Array.isArray(data.items) ? data.items : [];
-                totalPages = Math.max(1, Math.ceil(Number(data.total || 0) / Number(data.limit || 48)));
-
-                skeleton.classList.add('hidden');
-
-                if (!items.length) {
-                    empty.classList.remove('hidden');
-                    document.getElementById('productCount').textContent = `${ui.found}: 0`;
-                    return;
-                }
-
-                document.getElementById('productCount').textContent =
-                    `${ui.found}: ${Number(data.total || items.length)} ${ui.products}`;
-
-                let sorted = [...items];
-
-                if (sortMode === 'name') {
-                    sorted.sort((a, b) =>
-                        localizedProductName(a).localeCompare(localizedProductName(b))
-                    );
-                } else if (sortMode === 'brand') {
-                    sorted.sort((a, b) =>
-                        String(a.brand || '').localeCompare(String(b.brand || ''))
-                    );
-                }
-
-                grid.innerHTML = sorted.map(product => {
-                    const name = localizedProductName(product);
-                    const photo = buildFileUrl(product.photo_url);
-                    const brand = product.brand || '';
-                    const brandLetter = (brand || '?').charAt(0).toUpperCase();
-                    const price = formatPrice(product.price_from);
-
-                    return `
-                        <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in">
-                            <a href="product.html?id=${encodeURIComponent(product.id)}" data-product-preview-id="${product.id}" class="block h-full">
-                                <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
-                                    ${photo
-                                        ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
-                                        : `<div class="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center"><span class="text-lg font-bold text-gray-400">${escapeHTML(brandLetter)}</span></div>`
-                                    }
-                                </div>
-                                <div class="p-4">
-                                    <span class="text-xs text-primary-600 font-semibold">${escapeHTML(brand)}</span>
-                                    <h3 class="font-semibold text-gray-900 text-sm mt-1 mb-1 line-clamp-2">${escapeHTML(name)}</h3>
-                                    <p class="text-xs text-gray-500 mb-3">${escapeHTML(product.order_code || '')}</p>
-                                    <div class="flex items-end justify-between gap-3">
-                                        <div>
-                                            <div class="text-sm font-bold text-gray-900">${escapeHTML(price)}</div>
-                                            <div class="text-[11px] text-gray-400 mt-1">${escapeHTML(product.category_name || '')}</div>
-                                        </div>
-                                        <span class="text-xs text-primary-600 font-medium whitespace-nowrap">${ui.details}</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </article>
-                    `;
-                }).join('');
-
-                grid.querySelectorAll('[data-product-preview-id]').forEach(link => {
-                    link.addEventListener('click', () => {
-                        const id = Number(link.dataset.productPreviewId);
-                        const preview = sorted.find(item => Number(item.id) === id);
-
-                        if (preview) {
-                            sessionStorage.setItem(
-                                `osuzProductPreview:${id}`,
-                                JSON.stringify(preview)
-                            );
-                        }
-                    });
-                });
-
-                grid.classList.remove('hidden');
-                grid.querySelectorAll('.fade-in').forEach(card => {
-                    requestAnimationFrame(() => card.classList.add('visible'));
-                });
-
-                if (totalPages > 1) {
-                    pagination.classList.remove('hidden');
-                    renderPagination();
+                                if (preview) {
+                                    sessionStorage.setItem(
+                                        `osuzProductPreview:${id}`,
+                                        JSON.stringify(preview)
+                                    );
+                                }
+                            });
+                        });
                 }
 
                 lucide.createIcons();
-            } catch (error) {
-                console.error('Failed to load products:', error);
-                skeleton.classList.add('hidden');
-                empty.classList.remove('hidden');
-                document.getElementById('productCount').textContent = ui.loadingError;
+            } catch (e) {
+                console.error('Search failed:', e);
+                heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Ошибка поиска товаров')}</p></div>`;
             }
         }
 
-        const paginationSelectorButton = document.getElementById('paginationSelectorButton');
-        const paginationSelectorLabel = document.getElementById('paginationSelectorLabel');
-        const paginationSelectorMenu = document.getElementById('paginationSelectorMenu');
+        heroSearchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => heroSearch(e.target.value), 350);
+        });
+        heroSearchBtn.addEventListener('click', () => heroSearch(heroSearchInput.value));
 
-        function closePaginationSelector() {
-            paginationSelectorMenu?.classList.add('hidden');
-            paginationSelectorButton?.classList.remove('open');
-            paginationSelectorButton?.setAttribute('aria-expanded', 'false');
+        heroPhotoBtn.addEventListener('click', () => heroPhotoInput.click());
+
+        heroPhotoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                heroPreviewImg.src = ev.target.result;
+                heroPhotoPreview.classList.remove('hidden');
+                heroSearchResults.classList.add('hidden');
+                heroAnalysisDot.className = 'w-2 h-2 bg-primary-500 rounded-full animate-pulse';
+                heroAnalysisText.textContent = t('Анализ фото...');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        heroRemovePhoto.addEventListener('click', () => {
+            heroPhotoPreview.classList.add('hidden');
+            heroPhotoInput.value = '';
+            heroPreviewImg.src = '';
+        });
+
+        heroAnalyzeBtn.addEventListener('click', () => {
+            heroAnalyzeBtn.innerHTML = '<span class="animate-spin">⟳</span>';
+            heroAnalyzeBtn.disabled = true;
+
+            setTimeout(() => {
+                const results = productDatabase.slice(0, 6);
+                heroAnalysisDot.className = 'w-2 h-2 bg-green-500 rounded-full';
+                heroAnalysisText.textContent = `${t('Найдено')} ${results.length} ${t('Товары').toLowerCase()}`;
+                heroSearchResults.classList.remove('hidden');
+                heroResultsList.innerHTML = results.length ? results.map(p => `
+                    <a href="product.html?id=${encodeURIComponent(p.id)}" class="search-result-item flex items-center gap-4 rounded-xl group">
+                        <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
+                            <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
+                            <div class="text-xs text-gray-500 truncate">${escapeHTML(p.desc)}</div>
+                                <div class="text-xs font-bold text-gray-900 mt-1">${escapeHTML(p.priceLabel)}</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
+                    </a>
+                `).join('') :  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p></div>`;
+                lucide.createIcons();
+                heroAnalyzeBtn.innerHTML = t('Найти товар');
+                heroAnalyzeBtn.disabled = false;
+            }, 1500);
+        });
+
+        document.addEventListener('click', (e) => {
+            const searchContainer = e.target.closest('#heroSearchInput, #heroSearchBtn, #heroPhotoBtn, #heroSearchResults, #heroPhotoPreview, #heroAnalyzeBtn, #heroRemovePhoto');
+            if (!searchContainer) {
+                heroSearchResults.classList.add('hidden');
+            }
+        });
+
+        
+        const heroTrack = document.getElementById('heroTrack');
+        const heroDots = document.querySelectorAll('.hero-dot');
+        let heroIndex = 0;
+
+        function updateHero() {
+            heroTrack.style.transform = `translateX(-${heroIndex * 100}%)`;
+            heroDots.forEach((d, i) => { d.classList.toggle('active', i === heroIndex); d.style.width = i === heroIndex ? '24px' : '8px'; });
         }
 
-        function openPaginationSelector() {
-            if (!paginationSelectorButton || !paginationSelectorMenu) return;
+        document.getElementById('heroNext').addEventListener('click', () => { heroIndex = (heroIndex + 1) % 3; updateHero(); });
+        document.getElementById('heroPrev').addEventListener('click', () => { heroIndex = (heroIndex - 1 + 3) % 3; updateHero(); });
+        heroDots.forEach(d => d.addEventListener('click', () => { heroIndex = parseInt(d.dataset.index); updateHero(); }));
+        setInterval(() => { heroIndex = (heroIndex + 1) % 3; updateHero(); }, 12000);
 
-            paginationSelectorMenu.classList.remove('hidden');
-            paginationSelectorButton.classList.add('open');
-            paginationSelectorButton.setAttribute('aria-expanded', 'true');
+       
+        gsap.utils.toArray('.section-reveal').forEach(item => {
+            gsap.to(item, { scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none none' }, opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
+        });
 
-            paginationSelectorMenu
-                .querySelector('.pagination-page-option.active')
-                ?.scrollIntoView({ block: 'nearest' });
+        
+        const catImages = {
+            'электротехника': 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900&q=80',
+            'механика': 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900&q=80',
+            'промышленная автоматизация': 'https://images.unsplash.com/photo-1565043666747-69f6646db940?w=900&q=80',
+            'пневматика': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80',
+            'гидравлика': 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=900&q=80',
+            'кип и измерения': 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=900&q=80',
+            'приводы и двигатели': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=900&q=80',
+            'инструменты и сервис': 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=900&q=80',
+            'расходные материалы': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&q=80',
+           'безопасность': 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80',
+          'электронные компоненты': 'https://electronicaplus.ru/images/554654544849.jpeg',
+            'default': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80'
+        };
+        const catColors = ['#00bcd4','#0097a7','#00acc1','#26c6da','#4dd0e1','#80deea','#b2ebf2','#e0f7fa'];
+
+        function getCategoryImage(name) {
+            const key = (name || '').trim().toLowerCase();
+            return catImages[key] || catImages.default;
         }
 
-        function goToPage(page) {
-            const selectedPage = Number(page);
-            if (!selectedPage || selectedPage < 1 || selectedPage > totalPages) return;
-
-            closePaginationSelector();
-            if (selectedPage === currentPage) return;
-
-            currentPage = selectedPage;
-            loadProducts();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        async function loadCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            try {
+                const res = await fetch(`${CATALOG_API_BASE}/categories`);
+                const categories = await res.json();
+                const topLevel = categories.filter(c => !c.parent_id);
+                if (topLevel.length === 0) { grid.innerHTML = ''; return; }
+                grid.innerHTML = topLevel.map((c, i) => {
+                    const name = (
+                        currentLang === 'uz'
+                            ? (c.names?.uz || c.names?.ru || c.names?.en)
+                            : currentLang === 'en'
+                                ? (c.names?.en || c.names?.ru || c.names?.uz)
+                                : (c.names?.ru || c.names?.uz || c.names?.en)
+                    ) || t('Категория');
+                    const ruName = c.names?.ru || c.names?.en || name;
+                    const color = catColors[i % catColors.length];
+                    const imageUrl = getCategoryImage(ruName);
+                    return `<a href="category.html?id=${c.id}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                        <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
+                        <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
+                        <div class="absolute top-4 right-4 w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-md" style="background: ${color}35;">
+                            <i data-lucide="package" class="w-5 h-5" style="color: ${color};"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <h3 class="text-white font-bold text-base drop-shadow">${name}</h3>
+                            <p class="text-white/75 text-xs mt-1">${t('Просмотреть каталог →')}</p>
+                        </div>
+                    </a>`;
+                }).join('');
+                lucide.createIcons();
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+                grid.innerHTML = '';
+            }
         }
 
-        function renderPagination() {
-            if (!paginationSelectorLabel || !paginationSelectorMenu) return;
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                if (!targetId || targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (!target) return;
+                e.preventDefault();
+                closeMobileMenu();
+                const navOffset = 126;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
+                window.scrollTo({ top, behavior: 'smooth' });
+            });
+        });
 
-            paginationSelectorLabel.textContent =
-                `${ui.page} ${currentPage} ${ui.of} ${totalPages}`;
+        const showAllProductsBtn = document.getElementById('showAllProductsBtn');
+        if (showAllProductsBtn) {
+            showAllProductsBtn.addEventListener('click', () => {
+                renderPopularProducts(productDatabase, true);
+            });
+        }
 
-            paginationSelectorMenu.innerHTML = Array.from(
-                { length: totalPages },
-                (_, index) => index + 1
-            ).map(page => `
-                <button
-                    type="button"
-                    class="pagination-page-option ${page === currentPage ? 'active' : ''}"
-                    data-page="${page}"
-                    role="option"
-                    aria-selected="${page === currentPage}"
-                >
-                    <span>${ui.page} ${page}</span>
-                    ${page === currentPage
-                        ? '<span class="pagination-current-mark" aria-hidden="true"></span>'
-                        : ''
-                    }
-                </button>
-            `).join('');
+        const languageToggle = document.getElementById('languageToggle');
+        const mobileLanguageToggle = document.getElementById('mobileLanguageToggle');
+        const languageMenu = document.getElementById('languageMenu');
+        const mobileLanguageMenu = document.getElementById('mobileLanguageMenu');
 
-            paginationSelectorMenu.querySelectorAll('[data-page]').forEach(button => {
-                button.addEventListener('click', () => goToPage(button.dataset.page));
+        if (languageToggle && languageMenu) {
+            languageToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                languageMenu.classList.toggle('hidden');
+                if (mobileLanguageMenu) mobileLanguageMenu.classList.add('hidden');
+            });
+        }
+
+        if (mobileLanguageToggle && mobileLanguageMenu) {
+            mobileLanguageToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                mobileLanguageMenu.classList.toggle('hidden');
+                if (languageMenu) languageMenu.classList.add('hidden');
+            });
+        }
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', () => setLanguage(option.dataset.language));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (languageMenu && !event.target.closest('#languageToggle') && !event.target.closest('#languageMenu')) {
+                languageMenu.classList.add('hidden');
+            }
+
+            if (
+                mobileLanguageMenu &&
+                !event.target.closest('#mobileLanguageToggle') &&
+                !event.target.closest('#mobileLanguageMenu')
+            ) {
+                mobileLanguageMenu.classList.add('hidden');
+            }
+        });
+
+        localizeStaticText();
+        applyTheme();
+
+        const desktopSectionLinks = [...document.querySelectorAll('[data-section-link]')];
+        const observedSections = desktopSectionLinks
+            .map(link => document.getElementById(link.dataset.sectionLink))
+            .filter(Boolean);
+
+        function setActiveNavigation(sectionId) {
+            desktopSectionLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.sectionLink === sectionId);
+            });
+        }
+
+        if (observedSections.length) {
+            const navigationObserver = new IntersectionObserver(entries => {
+                const visible = entries
+                    .filter(entry => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visible) setActiveNavigation(visible.target.id);
+            }, {
+                rootMargin: '-125px 0px -55% 0px',
+                threshold: [0.08, 0.2, 0.4]
             });
 
-            document.getElementById('prevPage').disabled = currentPage <= 1;
-            document.getElementById('nextPage').disabled = currentPage >= totalPages;
-            lucide.createIcons();
+            observedSections.forEach(section => navigationObserver.observe(section));
         }
 
-        paginationSelectorButton?.addEventListener('click', event => {
-            event.stopPropagation();
-            paginationSelectorMenu.classList.contains('hidden')
-                ? openPaginationSelector()
-                : closePaginationSelector();
-        });
-
-        document.addEventListener('click', event => {
-            if (!event.target.closest('.pagination-selector')) closePaginationSelector();
-        });
-
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') closePaginationSelector();
-        });
-
-        document.getElementById('searchInput').addEventListener('input', event => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchQuery = event.target.value.trim();
-                currentPage = 1;
-                loadProducts();
-            }, 400);
-        });
-
-        document.querySelectorAll('.sort-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.sort-btn').forEach(item => item.classList.remove('active'));
-                button.classList.add('active');
-                sortMode = button.dataset.sort;
-                currentPage = 1;
-                loadProducts();
-            });
-        });
-
-        document.getElementById('prevPage').addEventListener('click', () => {
-            if (currentPage > 1) goToPage(currentPage - 1);
-        });
-
-        document.getElementById('nextPage').addEventListener('click', () => {
-            if (currentPage < totalPages) goToPage(currentPage + 1);
-        });
-
-        init();
+        Promise.all([
+            initProducts(),
+            loadCategories()
+        ]).catch(error => console.error('Initial loading failed:', error));
     </script>
-
 
     <script>
         (() => {
@@ -1293,25 +2180,11 @@
 
     <script>
         (() => {
-            const toggle = document.getElementById('categoryLanguageToggle');
-            const menu = document.getElementById('categoryLanguageMenu');
-            const lang = ['ru','uz','en'].includes(localStorage.getItem('osuzLang')) ? localStorage.getItem('osuzLang') : 'ru';
-            const flags = {ru:'🇷🇺',uz:'🇺🇿',en:'🇺🇸'};
-            document.getElementById('categoryLanguageLabel').textContent = lang.toUpperCase();
-            toggle?.addEventListener('click', e => { e.stopPropagation(); menu?.classList.toggle('hidden'); });
-            document.querySelectorAll('.category-language-option').forEach(btn => btn.addEventListener('click', () => { localStorage.setItem('osuzLang', btn.dataset.language); location.reload(); }));
-            document.addEventListener('click', e => { if (!e.target.closest('#categoryLanguageToggle') && !e.target.closest('#categoryLanguageMenu')) menu?.classList.add('hidden'); });
-            document.getElementById('categoryHeaderSearchButton')?.addEventListener('click', () => document.getElementById('searchInput')?.dispatchEvent(new Event('input', {bubbles:true})));
-        })();
-    </script>
-
-
-    <script>
-        (() => {
             const CART_API = 'https://osuz.uz/api/site/cart';
             const AUTH_API = 'https://osuz.uz/api/site-auth';
             const ACCESS_KEY = 'osuzCustomerAccessToken';
             const REFRESH_KEY = 'osuzCustomerRefreshToken';
+            const GUEST_CART_KEY = 'osuzGuestCart';
 
             function setCartCount(count) {
                 const safeCount = Math.max(0, Number(count) || 0);
@@ -1328,6 +2201,21 @@
                         return sum + Math.max(0, Number(item.quantity) || 0);
                     }, 0);
                 }, 0);
+            }
+
+            function readGuestCart() {
+                try {
+                    const value = JSON.parse(
+                        localStorage.getItem(GUEST_CART_KEY) ||
+                        '{"sellers":[],"grandTotal":0}'
+                    );
+
+                    return value && Array.isArray(value.sellers)
+                        ? value
+                        : { sellers: [], grandTotal: 0 };
+                } catch {
+                    return { sellers: [], grandTotal: 0 };
+                }
             }
 
             async function refreshAccessToken() {
@@ -1390,7 +2278,7 @@
 
                 const token = localStorage.getItem(ACCESS_KEY);
                 if (!token) {
-                    setCartCount(0);
+                    setCartCount(countCartItems(readGuestCart()));
                     return;
                 }
 
@@ -1404,10 +2292,41 @@
 
             window.updateOsuzCartBadge();
             window.addEventListener('storage', event => {
-                if ([ACCESS_KEY, REFRESH_KEY].includes(event.key)) {
+                if ([ACCESS_KEY, REFRESH_KEY, GUEST_CART_KEY].includes(event.key)) {
                     window.updateOsuzCartBadge();
                 }
             });
+        })();
+    </script>
+
+
+    <script>
+        (() => {
+            function openCart(event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                const cartUrl = new URL('cart.html', window.location.href);
+                window.location.assign(cartUrl.href);
+            }
+
+            function bindCartLinks() {
+                document.querySelectorAll('a[href="cart.html"], [data-open-cart]').forEach(link => {
+                    link.classList.add('osuz-cart-link');
+
+                    if (link.dataset.cartClickBound === '1') return;
+
+                    link.dataset.cartClickBound = '1';
+                    link.addEventListener('click', openCart, true);
+                });
+            }
+
+            bindCartLinks();
+
+            document.addEventListener('DOMContentLoaded', bindCartLinks);
+            window.addEventListener('pageshow', bindCartLinks);
         })();
     </script>
 

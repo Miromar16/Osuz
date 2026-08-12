@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои заказы — OSUZ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .site-header-top { background: #00bcd4; }
+        .site-header-nav {
+            background: #0b1421;
+            border-top: 1px solid rgba(255,255,255,.18);
+        }
+        .header-action {
+            min-height: 44px;
+            padding: 0 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+        .header-action:hover { background: rgba(255,255,255,.15); }
+        .nav-link { color: #cbd5e1; }
+        .nav-link:hover { color: #67e8f9; }
+        .surface {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 8px 28px rgba(15,23,42,.055);
+        }
+        .order-row {
+            width: 100%;
+            text-align: left;
+            border: 1px solid #dbe4ee;
+            border-radius: 18px;
+            padding: 16px;
+            background: #fff;
+            transition: .18s ease;
+        }
+        .order-row:hover {
+            border-color: #71dce7;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(15,23,42,.07);
+        }
+        .order-row.active {
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 3px rgba(0,188,212,.10);
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+        .status-pending { background: #fff7ed; color: #c2410c; }
+        .status-responded { background: #ecfeff; color: #0e7490; }
+        .status-completed { background: #f0fdf4; color: #15803d; }
+        .status-cancelled { background: #f1f5f9; color: #64748b; }
+        .status-payment_failed { background: #fef2f2; color: #b91c1c; }
+
+        .item-status {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 0 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+        }
+        .item-pending { background: #f1f5f9; color: #64748b; }
+        .item-available { background: #f0fdf4; color: #15803d; }
+        .item-partial { background: #fff7ed; color: #c2410c; }
+        .item-unavailable { background: #fef2f2; color: #b91c1c; }
+
+        .primary-button {
+            min-height: 46px;
+            border-radius: 13px;
+            background: #00bcd4;
+            color: #07111d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 0 17px;
+            font-weight: 900;
+            transition: .18s ease;
+        }
+        .primary-button:hover:not(:disabled) {
+            background: #00acc1;
+            transform: translateY(-1px);
+        }
+        .primary-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .secondary-button {
+            min-height: 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 15px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+        .secondary-button:hover:not(:disabled) {
+            border-color: #00bcd4;
+            color: #00838f;
+        }
+        .danger-button {
+            min-height: 44px;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            background: #fff;
+            color: #dc2626;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 15px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+        .danger-button:hover:not(:disabled) {
+            background: #fef2f2;
+            border-color: #f87171;
+        }
+        .choice-button {
+            min-height: 54px;
+            border: 1px solid #cbd5e1;
+            border-radius: 15px;
+            background: #fff;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 16px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 850;
+            transition: .18s ease;
+        }
+        .choice-button:hover {
+            border-color: #00bcd4;
+            background: #ecfeff;
+            color: #0e7490;
+        }
+        .field {
+            width: 100%;
+            min-height: 46px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            color: #0f172a;
+            padding: 0 13px;
+            outline: none;
+            transition: .18s ease;
+        }
+        .field:focus {
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 3px rgba(0,188,212,.10);
+        }
+        .notice {
+            border: 1px solid #bae6fd;
+            border-radius: 14px;
+            background: #f0f9ff;
+            color: #075985;
+            padding: 13px 14px;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+        .notice.warning {
+            border-color: #fde68a;
+            background: #fffbeb;
+            color: #92400e;
+        }
+        .notice.error {
+            border-color: #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+        .notice.success {
+            border-color: #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+        }
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            background: #cbd5e1;
+            flex: 0 0 auto;
+        }
+        .timeline-dot.active { background: #00bcd4; }
+        .timeline-line {
+            width: 2px;
+            min-height: 22px;
+            background: #e2e8f0;
+            margin-left: 5px;
+        }
+        .payment-choice.active {
+            border-color: #00bcd4;
+            background: #ecfeff;
+            color: #0e7490;
+        }
+        .osuz-toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 300;
+            width: min(390px, calc(100vw - 32px));
+            border: 1px solid #b7e7ee;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 22px 60px rgba(15,23,42,.22);
+            padding: 15px 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: .22s ease;
+        }
+        .osuz-toast.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .osuz-toast.error { border-color: #fecaca; }
+        .osuz-toast.success { border-color: #bbf7d0; }
+        .theme-icon-sun { display: none; }
+
+        body.dark-mode {
+            background: #070b12;
+            color: #f8fafc;
+        }
+        body.dark-mode .site-header-nav { background: #070d16; }
+        body.dark-mode .surface,
+        body.dark-mode .order-row,
+        body.dark-mode .secondary-button,
+        body.dark-mode .choice-button,
+        body.dark-mode .field,
+        body.dark-mode .osuz-toast {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+        body.dark-mode .order-row:hover,
+        body.dark-mode .order-row.active,
+        body.dark-mode .choice-button:hover,
+        body.dark-mode .payment-choice.active {
+            border-color: #00bcd4;
+            background: #102b37;
+        }
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 {
+            color: #f8fafc !important;
+        }
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 {
+            color: #aeb9c7 !important;
+        }
+        body.dark-mode .border-gray-100,
+        body.dark-mode .border-gray-200 {
+            border-color: #344256 !important;
+        }
+        body.dark-mode .notice {
+            background: #102937;
+            border-color: #245c72;
+            color: #bae6fd;
+        }
+        body.dark-mode .notice.warning {
+            background: rgba(120,53,15,.22);
+            border-color: rgba(251,191,36,.35);
+            color: #fde68a;
+        }
+        body.dark-mode .notice.error {
+            background: rgba(127,29,29,.22);
+            border-color: rgba(248,113,113,.35);
+            color: #fecaca;
+        }
+        body.dark-mode .notice.success {
+            background: rgba(20,83,45,.23);
+            border-color: rgba(74,222,128,.35);
+            color: #bbf7d0;
+        }
+        body.dark-mode .danger-button {
+            background: #0f1722;
+            border-color: rgba(248,113,113,.35);
+            color: #fca5a5;
+        }
+        body.dark-mode .theme-icon-moon { display: none; }
+        body.dark-mode .theme-icon-sun { display: block; }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        @media (max-width: 1023px) {
+            .orders-layout { grid-template-columns: 1fr !important; }
+            .order-detail-panel { min-height: 0 !important; }
+        }
+    
+        .confirm-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 290;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2,8,23,.58);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: .2s ease;
+        }
+        .confirm-backdrop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .confirm-card {
+            width: min(430px, 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: 0 28px 90px rgba(15,23,42,.30);
+            padding: 22px;
+            transform: translateY(10px) scale(.98);
+            transition: .2s ease;
+        }
+        .confirm-backdrop.visible .confirm-card {
+            transform: translateY(0) scale(1);
+        }
+        body.dark-mode .confirm-card {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <div class="site-header-top">
+            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                    <span class="text-xl font-black tracking-wide text-white">OSUZ</span>
+                </a>
+
+                <div class="ml-auto flex items-center gap-1 lg:gap-3">
+                    <select id="languageSelect" class="header-action bg-transparent outline-none cursor-pointer">
+                        <option value="ru">RU</option>
+                        <option value="uz">UZ</option>
+                        <option value="en">EN</option>
+                    </select>
+
+                    <button id="themeToggle" class="header-action !px-3" aria-label="Сменить тему">
+                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i>
+                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i>
+                    </button>
+
+                    <a href="auth.html" data-customer-account-link class="header-action hidden sm:inline-flex max-w-[170px]">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span data-customer-account-text class="truncate">Войти</span>
+                    </a>
+
+                    <a href="orders.html" class="header-action bg-white/10">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                        <span id="headerOrdersText" class="hidden sm:inline">Заказы</span>
+                    </a>
+
+                    <a href="cart.html" class="header-action">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="headerCartText" class="hidden sm:inline">Корзина</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="site-header-nav">
+            <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
+                <a href="index.html#catalog" class="nav-link text-sm font-semibold">Каталог</a>
+                <a href="index.html#partners" class="nav-link text-sm font-semibold">Партнёры</a>
+                <a href="index.html#products" class="nav-link text-sm font-semibold">Товары</a>
+                <a href="index.html#about" class="nav-link text-sm font-semibold">О нас</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-14">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+            <div>
+                <span id="ordersEyebrow" class="text-xs font-black uppercase tracking-[.18em] text-primary-600">Покупки</span>
+                <h1 id="ordersTitle" class="text-3xl lg:text-4xl font-black text-gray-900 mt-2">Мои заказы</h1>
+                <p id="ordersDescription" class="text-sm text-gray-500 mt-2">
+                    Следите за ответом продавца, выбирайте получение и оплачивайте заказ.
+                </p>
+            </div>
+
+            <button id="refreshOrdersButton" type="button" class="secondary-button">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <span>Обновить</span>
+            </button>
+        </div>
+
+        <div id="authRequiredState" class="surface hidden rounded-3xl p-9 lg:p-12 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
+                <i data-lucide="log-in" class="w-8 h-8 text-primary-700"></i>
+            </div>
+            <h2 id="authRequiredTitle" class="text-2xl font-black text-gray-900">Войдите в аккаунт</h2>
+            <p id="authRequiredText" class="text-gray-500 mt-2 mb-6">
+                Для оформления и просмотра заказов нужен аккаунт покупателя.
+            </p>
+            <a id="authRequiredButton" href="auth.html" class="primary-button">Войти</a>
+        </div>
+
+        <div id="loadingState" class="grid lg:grid-cols-[360px_minmax(0,1fr)] gap-6">
+            <div class="surface rounded-3xl h-[520px] animate-pulse"></div>
+            <div class="surface rounded-3xl h-[520px] animate-pulse"></div>
+        </div>
+
+        <div id="emptyState" class="surface hidden rounded-3xl p-9 lg:p-14 text-center">
+            <div class="w-20 h-20 rounded-3xl bg-primary-50 flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="package-open" class="w-10 h-10 text-primary-700"></i>
+            </div>
+            <h2 id="emptyTitle" class="text-2xl font-black text-gray-900">Заказов пока нет</h2>
+            <p id="emptyText" class="text-gray-500 mt-2 mb-6">
+                Отметьте товары в корзине и оформите заказ.
+            </p>
+            <a id="emptyButton" href="cart.html" class="primary-button">
+                Перейти в корзину
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <div id="ordersContent" class="orders-layout hidden grid grid-cols-[360px_minmax(0,1fr)] gap-6 items-start">
+            <aside class="surface rounded-3xl p-4">
+                <div class="flex items-center justify-between gap-3 px-2 pt-1 pb-4">
+                    <h2 id="ordersListTitle" class="text-lg font-black text-gray-900">Все заказы</h2>
+                    <span id="ordersCount" class="text-xs font-bold text-gray-400">0</span>
+                </div>
+                <div id="ordersList" class="space-y-3 max-h-[680px] overflow-auto pr-1"></div>
+            </aside>
+
+            <section id="orderDetailPanel" class="order-detail-panel surface rounded-3xl min-h-[520px] overflow-hidden">
+                <div id="detailPlaceholder" class="p-8 lg:p-12 text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
+                        <i data-lucide="mouse-pointer-click" class="w-8 h-8 text-primary-700"></i>
+                    </div>
+                    <h2 id="detailPlaceholderTitle" class="text-xl font-black text-gray-900">Выберите заказ</h2>
+                    <p id="detailPlaceholderText" class="text-sm text-gray-500 mt-2">
+                        Здесь появятся товары, статус, доставка и действия.
+                    </p>
+                </div>
+                <div id="orderDetail" class="hidden"></div>
+            </section>
+        </div>
+
+        <div id="pageError" class="notice error hidden mt-6"></div>
+    </main>
+
+    <script>
+        const API_ORIGIN = 'https://osuz.uz';
+        const ORDERS_API = `${API_ORIGIN}/api/site/orders`;
+        const AUTH_API = `${API_ORIGIN}/api/site-auth`;
+
+        const storageKeys = {
+            accessToken: 'osuzCustomerAccessToken',
+            refreshToken: 'osuzCustomerRefreshToken',
+            customer: 'osuzCustomer'
+        };
+
+        let currentLang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+            ? localStorage.getItem('osuzLang')
+            : 'ru';
+        let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+
+        let orders = [];
+        let selectedOrderId = Number(new URLSearchParams(location.search).get('order')) || 0;
+        let currentOrder = null;
+        let detailPollTimer = null;
+        let listPollTimer = null;
+        let requestBusy = false;
+        let toastTimer = null;
+
+        const ui = {
+            ru: {
+                pageTitle: 'Мои заказы — OSUZ',
+                headerOrders: 'Заказы',
+                headerCart: 'Корзина',
+                eyebrow: 'Покупки',
+                title: 'Мои заказы',
+                description: 'Следите за ответом продавца, выбирайте получение и оплачивайте заказ.',
+                refresh: 'Обновить',
+                authTitle: 'Войдите в аккаунт',
+                authText: 'Для оформления и просмотра заказов нужен аккаунт покупателя.',
+                signIn: 'Войти',
+                emptyTitle: 'Заказов пока нет',
+                emptyText: 'Отметьте товары в корзине и оформите заказ.',
+                cart: 'Перейти в корзину',
+                allOrders: 'Все заказы',
+                selectOrder: 'Выберите заказ',
+                selectOrderText: 'Здесь появятся товары, статус, доставка и действия.',
+                order: 'Заказ',
+                seller: 'Продавец',
+                created: 'Создан',
+                items: 'Товары',
+                requested: 'Заказано',
+                available: 'Есть',
+                itemPending: 'Ожидает ответа',
+                itemAvailable: 'В наличии',
+                itemPartial: 'Частично',
+                itemUnavailable: 'Нет в наличии',
+                status: 'Статус',
+                statusPending: 'Ждём продавца',
+                statusResponded: 'Продавец ответил',
+                statusCompleted: 'Завершён',
+                statusCancelled: 'Отменён',
+                statusPaymentFailed: 'Оплата не подтверждена',
+                waitingSeller: 'Заказ отправлен продавцу в Telegram. Страница обновляется автоматически.',
+                proceed: 'Продолжить оформление',
+                confirmHint: 'Продавец ответил по товарам. Подтвердите, что хотите продолжить оформление.',
+                cancel: 'Отменить заказ',
+                cancelConfirm: 'Отменить этот заказ?',
+                cancelTitle: 'Отменить заказ?',
+                cancelText: 'После отмены этот заказ нельзя будет продолжить оформлять.',
+                cancelAction: 'Да, отменить',
+                keepOrder: 'Оставить заказ',
+                chooseDelivery: 'Выберите способ получения',
+                pickup: 'Самовывоз',
+                pickupText: 'Забрать товар у продавца.',
+                delivery: 'Доставка',
+                deliveryText: 'Доставить товар по координатам.',
+                sellerAddress: 'Адрес продавца',
+                sellerPhone: 'Телефон продавца',
+                landmark: 'Ориентир',
+                pickupWaiting: 'Самовывоз выбран. Ждём подтверждения брони продавцом.',
+                pickupReady: 'Товар забронирован до',
+                getLocation: 'Определить мою геопозицию',
+                latitude: 'Широта',
+                longitude: 'Долгота',
+                confirmDelivery: 'Подтвердить доставку',
+                locationError: 'Не удалось определить геопозицию. Введите координаты вручную.',
+                locationRequired: 'Для доставки нужны корректные широта и долгота.',
+                choosePayment: 'Выберите способ оплаты',
+                paymentCash: 'Наличными',
+                paymentCard: 'Картой',
+                paymentPayme: 'Payme',
+                paymentClick: 'Click',
+                paymentTransfer: 'Перевод на компанию',
+                paymentQr: 'QR',
+                paymentSelected: 'Способ оплаты',
+                transferTitle: 'Реквизиты компании',
+                company: 'Название компании',
+                inn: 'ИНН',
+                transferSubmit: 'Отправить реквизиты',
+                innInvalid: 'ИНН должен содержать ровно 9 цифр.',
+                receiptTitle: 'Загрузите чек',
+                receiptText: 'Изображение до 5 МБ. После отправки продавец подтвердит или отклонит чек.',
+                receiptChoose: 'Выбрать изображение',
+                receiptSubmit: 'Отправить чек',
+                receiptInvalid: 'Выберите изображение размером не более 5 МБ.',
+                waitingPayment: 'Данные отправлены продавцу. Страница автоматически проверяет изменение статуса.',
+                deliveryWaiting: 'Ждём, когда продавец подтвердит оплату и отметит заказ отправленным.',
+                deliverySent: 'Продавец отметил заказ отправленным. Подтвердите получение товара.',
+                deliveryDeadline: 'Автозавершение до',
+                received: 'Я получил заказ',
+                total: 'Сумма',
+                paymentFailed: 'Три чека были отклонены. Свяжитесь с продавцом напрямую.',
+                completedText: 'Заказ завершён.',
+                cancelledText: 'Заказ отменён.',
+                networkError: 'Не удалось загрузить заказы.',
+                actionError: 'Не удалось выполнить действие.',
+                unauthorized: 'Сессия завершена. Войдите снова.',
+                success: 'Готово',
+                loading: 'Загрузка...',
+                noPaymentMethods: 'Продавец не указал доступные способы оплаты.',
+                sum: 'сум'
+            },
+            uz: {
+                pageTitle: 'Buyurtmalarim — OSUZ',
+                headerOrders: 'Buyurtmalar',
+                headerCart: 'Savat',
+                eyebrow: 'Xaridlar',
+                title: 'Buyurtmalarim',
+                description: 'Sotuvchi javobini kuzating, yetkazib berish va to‘lov usulini tanlang.',
+                refresh: 'Yangilash',
+                authTitle: 'Akkauntga kiring',
+                authText: 'Buyurtmalarni rasmiylashtirish va ko‘rish uchun xaridor akkaunti kerak.',
+                signIn: 'Kirish',
+                emptyTitle: 'Hozircha buyurtmalar yo‘q',
+                emptyText: 'Savatdagi mahsulotlarni belgilang va buyurtma yarating.',
+                cart: 'Savatga o‘tish',
+                allOrders: 'Barcha buyurtmalar',
+                selectOrder: 'Buyurtmani tanlang',
+                selectOrderText: 'Bu yerda mahsulotlar, holat, yetkazib berish va amallar ko‘rinadi.',
+                order: 'Buyurtma',
+                seller: 'Sotuvchi',
+                created: 'Yaratilgan',
+                items: 'Mahsulotlar',
+                requested: 'So‘ralgan',
+                available: 'Mavjud',
+                itemPending: 'Javob kutilmoqda',
+                itemAvailable: 'Mavjud',
+                itemPartial: 'Qisman',
+                itemUnavailable: 'Mavjud emas',
+                status: 'Holat',
+                statusPending: 'Sotuvchi javobi kutilmoqda',
+                statusResponded: 'Sotuvchi javob berdi',
+                statusCompleted: 'Yakunlangan',
+                statusCancelled: 'Bekor qilingan',
+                statusPaymentFailed: 'To‘lov tasdiqlanmadi',
+                waitingSeller: 'Buyurtma Telegram orqali sotuvchiga yuborildi. Sahifa avtomatik yangilanadi.',
+                proceed: 'Rasmiylashtirishni davom ettirish',
+                confirmHint: 'Sotuvchi mahsulotlar bo‘yicha javob berdi. Davom etishni tasdiqlang.',
+                cancel: 'Buyurtmani bekor qilish',
+                cancelConfirm: 'Bu buyurtma bekor qilinsinmi?',
+                cancelTitle: 'Buyurtma bekor qilinsinmi?',
+                cancelText: 'Bekor qilingandan keyin bu buyurtmani rasmiylashtirishni davom ettirib bo‘lmaydi.',
+                cancelAction: 'Ha, bekor qilish',
+                keepOrder: 'Buyurtmani qoldirish',
+                chooseDelivery: 'Olish usulini tanlang',
+                pickup: 'Olib ketish',
+                pickupText: 'Mahsulotni sotuvchidan olib ketish.',
+                delivery: 'Yetkazib berish',
+                deliveryText: 'Mahsulotni koordinatalar bo‘yicha yetkazish.',
+                sellerAddress: 'Sotuvchi manzili',
+                sellerPhone: 'Sotuvchi telefoni',
+                landmark: 'Mo‘ljal',
+                pickupWaiting: 'Olib ketish tanlandi. Sotuvchi bronni tasdiqlashi kutilmoqda.',
+                pickupReady: 'Mahsulot quyidagi vaqtgacha bron qilingan',
+                getLocation: 'Geolokatsiyamni aniqlash',
+                latitude: 'Kenglik',
+                longitude: 'Uzunlik',
+                confirmDelivery: 'Yetkazib berishni tasdiqlash',
+                locationError: 'Geolokatsiyani aniqlab bo‘lmadi. Koordinatalarni qo‘lda kiriting.',
+                locationRequired: 'Yetkazib berish uchun to‘g‘ri koordinatalar kerak.',
+                choosePayment: 'To‘lov usulini tanlang',
+                paymentCash: 'Naqd',
+                paymentCard: 'Karta',
+                paymentPayme: 'Payme',
+                paymentClick: 'Click',
+                paymentTransfer: 'Kompaniyaga o‘tkazma',
+                paymentQr: 'QR',
+                paymentSelected: 'To‘lov usuli',
+                transferTitle: 'Kompaniya rekvizitlari',
+                company: 'Kompaniya nomi',
+                inn: 'STIR',
+                transferSubmit: 'Rekvizitlarni yuborish',
+                innInvalid: 'STIR aynan 9 ta raqamdan iborat bo‘lishi kerak.',
+                receiptTitle: 'Chekni yuklang',
+                receiptText: '5 MB gacha rasm. Yuborilgandan keyin sotuvchi chekni tasdiqlaydi yoki rad etadi.',
+                receiptChoose: 'Rasm tanlash',
+                receiptSubmit: 'Chekni yuborish',
+                receiptInvalid: '5 MB dan kichik rasmni tanlang.',
+                waitingPayment: 'Ma’lumot sotuvchiga yuborildi. Sahifa holatni avtomatik tekshiradi.',
+                deliveryWaiting: 'Sotuvchi to‘lovni tasdiqlab, buyurtmani yuborishini kutmoqdamiz.',
+                deliverySent: 'Sotuvchi buyurtmani yuborilgan deb belgiladi. Qabul qilganingizni tasdiqlang.',
+                deliveryDeadline: 'Avtomatik yakunlash vaqti',
+                received: 'Buyurtmani oldim',
+                total: 'Summa',
+                paymentFailed: 'Uchta chek rad etildi. Sotuvchi bilan bevosita bog‘laning.',
+                completedText: 'Buyurtma yakunlandi.',
+                cancelledText: 'Buyurtma bekor qilindi.',
+                networkError: 'Buyurtmalarni yuklab bo‘lmadi.',
+                actionError: 'Amalni bajarib bo‘lmadi.',
+                unauthorized: 'Sessiya tugadi. Qayta kiring.',
+                success: 'Tayyor',
+                loading: 'Yuklanmoqda...',
+                noPaymentMethods: 'Sotuvchi to‘lov usullarini ko‘rsatmagan.',
+                sum: 'so‘m'
+            },
+            en: {
+                pageTitle: 'My orders — OSUZ',
+                headerOrders: 'Orders',
+                headerCart: 'Cart',
+                eyebrow: 'Shopping',
+                title: 'My orders',
+                description: 'Track the seller response, choose delivery, and complete payment.',
+                refresh: 'Refresh',
+                authTitle: 'Sign in',
+                authText: 'You need a customer account to place and view orders.',
+                signIn: 'Sign in',
+                emptyTitle: 'No orders yet',
+                emptyText: 'Select products in your cart and place an order.',
+                cart: 'Open cart',
+                allOrders: 'All orders',
+                selectOrder: 'Select an order',
+                selectOrderText: 'Products, status, delivery and actions will appear here.',
+                order: 'Order',
+                seller: 'Seller',
+                created: 'Created',
+                items: 'Products',
+                requested: 'Requested',
+                available: 'Available',
+                itemPending: 'Waiting for response',
+                itemAvailable: 'Available',
+                itemPartial: 'Partial',
+                itemUnavailable: 'Unavailable',
+                status: 'Status',
+                statusPending: 'Waiting for seller',
+                statusResponded: 'Seller responded',
+                statusCompleted: 'Completed',
+                statusCancelled: 'Cancelled',
+                statusPaymentFailed: 'Payment failed',
+                waitingSeller: 'The order was sent to the seller in Telegram. This page refreshes automatically.',
+                proceed: 'Continue checkout',
+                confirmHint: 'The seller answered for all products. Confirm that you want to continue checkout.',
+                cancel: 'Cancel order',
+                cancelConfirm: 'Cancel this order?',
+                cancelTitle: 'Cancel this order?',
+                cancelText: 'After cancellation, this order cannot be continued.',
+                cancelAction: 'Yes, cancel',
+                keepOrder: 'Keep order',
+                chooseDelivery: 'Choose how to receive the order',
+                pickup: 'Pickup',
+                pickupText: 'Pick the products up from the seller.',
+                delivery: 'Delivery',
+                deliveryText: 'Deliver the products to your coordinates.',
+                sellerAddress: 'Seller address',
+                sellerPhone: 'Seller phone',
+                landmark: 'Landmark',
+                pickupWaiting: 'Pickup selected. Waiting for the seller to confirm the reservation.',
+                pickupReady: 'Reserved until',
+                getLocation: 'Use my location',
+                latitude: 'Latitude',
+                longitude: 'Longitude',
+                confirmDelivery: 'Confirm delivery',
+                locationError: 'Could not detect your location. Enter coordinates manually.',
+                locationRequired: 'Valid latitude and longitude are required for delivery.',
+                choosePayment: 'Choose a payment method',
+                paymentCash: 'Cash',
+                paymentCard: 'Card',
+                paymentPayme: 'Payme',
+                paymentClick: 'Click',
+                paymentTransfer: 'Company transfer',
+                paymentQr: 'QR',
+                paymentSelected: 'Payment method',
+                transferTitle: 'Company details',
+                company: 'Company name',
+                inn: 'TIN',
+                transferSubmit: 'Send company details',
+                innInvalid: 'TIN must contain exactly 9 digits.',
+                receiptTitle: 'Upload receipt',
+                receiptText: 'Image up to 5 MB. The seller will approve or reject it.',
+                receiptChoose: 'Choose image',
+                receiptSubmit: 'Send receipt',
+                receiptInvalid: 'Choose an image no larger than 5 MB.',
+                waitingPayment: 'The information was sent to the seller. The page will keep checking the status.',
+                deliveryWaiting: 'Waiting for the seller to approve payment and mark the order as shipped.',
+                deliverySent: 'The seller marked the order as shipped. Confirm that you received it.',
+                deliveryDeadline: 'Automatic completion by',
+                received: 'I received the order',
+                total: 'Total',
+                paymentFailed: 'Three receipts were rejected. Contact the seller directly.',
+                completedText: 'The order is completed.',
+                cancelledText: 'The order is cancelled.',
+                networkError: 'Could not load orders.',
+                actionError: 'Could not complete the action.',
+                unauthorized: 'Your session has ended. Sign in again.',
+                success: 'Done',
+                loading: 'Loading...',
+                noPaymentMethods: 'The seller has not provided payment methods.',
+                sum: 'UZS'
+            }
+        };
+
+        function t(key) {
+            return ui[currentLang]?.[key] || ui.ru[key] || key;
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function formatMoney(value) {
+            const amount = Number(value);
+            if (!Number.isFinite(amount)) return '—';
+
+            const locale = currentLang === 'uz'
+                ? 'uz-UZ'
+                : currentLang === 'en'
+                    ? 'en-US'
+                    : 'ru-RU';
+
+            return `${new Intl.NumberFormat(locale, {
+                maximumFractionDigits: 0
+            }).format(amount)} ${t('sum')}`;
+        }
+
+        function formatDate(value) {
+            if (!value) return '—';
+
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return String(value);
+
+            const locale = currentLang === 'uz'
+                ? 'uz-UZ'
+                : currentLang === 'en'
+                    ? 'en-US'
+                    : 'ru-RU';
+
+            return new Intl.DateTimeFormat(locale, {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            }).format(date);
+        }
+
+        function statusLabel(status) {
+            const map = {
+                pending: 'statusPending',
+                responded: 'statusResponded',
+                completed: 'statusCompleted',
+                cancelled: 'statusCancelled',
+                payment_failed: 'statusPaymentFailed'
+            };
+
+            return t(map[status] || 'status');
+        }
+
+        function itemStatusLabel(status) {
+            const map = {
+                pending: 'itemPending',
+                available: 'itemAvailable',
+                partial: 'itemPartial',
+                unavailable: 'itemUnavailable'
+            };
+
+            return t(map[status] || 'itemPending');
+        }
+
+        function paymentLabel(method) {
+            const map = {
+                cash: 'paymentCash',
+                card: 'paymentCard',
+                payme: 'paymentPayme',
+                click: 'paymentClick',
+                transfer: 'paymentTransfer',
+                qr: 'paymentQr'
+            };
+
+            return t(map[method] || 'paymentSelected');
+        }
+
+        function getStoredCustomer() {
+            try {
+                return JSON.parse(localStorage.getItem(storageKeys.customer) || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        async function parseResponse(response) {
+            const raw = await response.text();
+            let data = {};
+
+            if (raw) {
+                try {
+                    data = JSON.parse(raw);
+                } catch {
+                    data = { message: raw };
+                }
+            }
+
+            if (!response.ok) {
+                const error = new Error(
+                    Array.isArray(data.message)
+                        ? data.message.join('. ')
+                        : data.message || data.error || t('actionError')
+                );
+
+                error.status = response.status;
+                throw error;
+            }
+
+            return data;
+        }
+
+        async function refreshAccessToken() {
+            const refreshToken = localStorage.getItem(storageKeys.refreshToken);
+            if (!refreshToken) return '';
+
+            try {
+                const response = await fetch(`${AUTH_API}/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ refreshToken }),
+                    cache: 'no-store',
+                    credentials: 'omit'
+                });
+
+                const data = await parseResponse(response);
+
+                if (!data.accessToken) return '';
+
+                localStorage.setItem(storageKeys.accessToken, data.accessToken);
+                return data.accessToken;
+            } catch {
+                Object.values(storageKeys).forEach(key => localStorage.removeItem(key));
+                return '';
+            }
+        }
+
+        async function ordersRequest(path = '', options = {}, retry = true) {
+            let token = localStorage.getItem(storageKeys.accessToken);
+
+            if (!token) {
+                const error = new Error(t('unauthorized'));
+                error.status = 401;
+                throw error;
+            }
+
+            const isFormData = options.body instanceof FormData;
+            const headers = {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+
+            if (options.body !== undefined && !isFormData) {
+                headers['Content-Type'] = 'application/json';
+            }
+
+            const response = await fetch(`${ORDERS_API}${path}`, {
+                method: options.method || 'GET',
+                headers,
+                body: options.body === undefined
+                    ? undefined
+                    : isFormData
+                        ? options.body
+                        : JSON.stringify(options.body),
+                cache: 'no-store',
+                credentials: 'omit'
+            });
+
+            if (response.status === 401 && retry) {
+                token = await refreshAccessToken();
+
+                if (!token) {
+                    const error = new Error(t('unauthorized'));
+                    error.status = 401;
+                    throw error;
+                }
+
+                return ordersRequest(path, options, false);
+            }
+
+            return parseResponse(response);
+        }
+
+        function showToast(message, type = 'success') {
+            let toast = document.getElementById('osuzToast');
+
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'osuzToast';
+                toast.className = 'osuz-toast';
+                document.body.appendChild(toast);
+            }
+
+            toast.className = `osuz-toast ${type}`;
+
+            toast.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${type === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}">
+                        <i data-lucide="${type === 'error' ? 'triangle-alert' : 'circle-check'}" class="w-5 h-5"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-bold text-gray-900">${escapeHTML(message)}</p>
+                    </div>
+                    <button type="button" data-toast-close class="p-1 text-gray-400 hover:text-gray-700">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+
+            requestAnimationFrame(() => toast.classList.add('visible'));
+            lucide.createIcons();
+
+            toast.querySelector('[data-toast-close]')?.addEventListener('click', () => {
+                toast.classList.remove('visible');
+            });
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3400);
+        }
+
+
+        function showConfirmDialog({
+            title,
+            message,
+            confirmText,
+            cancelText,
+            onConfirm
+        }) {
+            document.getElementById('ordersConfirmDialog')?.remove();
+
+            const backdrop = document.createElement('div');
+            backdrop.id = 'ordersConfirmDialog';
+            backdrop.className = 'confirm-backdrop';
+
+            backdrop.innerHTML = `
+                <div class="confirm-card" role="dialog" aria-modal="true">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="triangle-alert" class="w-6 h-6"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-xl font-black text-gray-900">${escapeHTML(title)}</h3>
+                            <p class="mt-2 text-sm leading-6 text-gray-500">${escapeHTML(message)}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                        <button type="button" class="secondary-button" data-dialog-cancel>
+                            ${escapeHTML(cancelText)}
+                        </button>
+                        <button type="button" class="danger-button" data-dialog-confirm>
+                            ${escapeHTML(confirmText)}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(backdrop);
+            lucide.createIcons();
+
+            const close = () => {
+                backdrop.classList.remove('visible');
+                setTimeout(() => backdrop.remove(), 180);
+            };
+
+            backdrop.querySelector('[data-dialog-cancel]')?.addEventListener('click', close);
+
+            backdrop.querySelector('[data-dialog-confirm]')?.addEventListener('click', async () => {
+                close();
+                await onConfirm?.();
+            });
+
+            backdrop.addEventListener('click', event => {
+                if (event.target === backdrop) close();
+            });
+
+            requestAnimationFrame(() => backdrop.classList.add('visible'));
+        }
+
+        function showPageError(message) {
+            const error = document.getElementById('pageError');
+            error.textContent = message;
+            error.classList.remove('hidden');
+        }
+
+        function hidePageError() {
+            document.getElementById('pageError').classList.add('hidden');
+        }
+
+        function showAuthRequired() {
+            clearInterval(detailPollTimer);
+            clearInterval(listPollTimer);
+
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('ordersContent').classList.add('hidden');
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('authRequiredState').classList.remove('hidden');
+
+            const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+            document.getElementById('authRequiredButton').href =
+                `auth.html?return=${encodeURIComponent(returnUrl)}`;
+
+            lucide.createIcons();
+        }
+
+        function renderOrdersList() {
+            const list = document.getElementById('ordersList');
+            document.getElementById('ordersCount').textContent = String(orders.length);
+
+            list.innerHTML = orders.map(order => `
+                <button
+                    type="button"
+                    class="order-row ${Number(order.orderId) === Number(selectedOrderId) ? 'active' : ''}"
+                    data-order-id="${Number(order.orderId)}"
+                >
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="text-xs font-black uppercase tracking-[.12em] text-primary-600">
+                                ${escapeHTML(t('order'))} #${Number(order.tenantOrderNumber || order.orderId)}
+                            </div>
+                            <div class="mt-1 font-black text-gray-900 truncate">
+                                ${escapeHTML(order.tenantName || '')}
+                            </div>
+                        </div>
+                        <span class="status-badge status-${escapeHTML(order.status || 'pending')}">
+                            ${escapeHTML(statusLabel(order.status))}
+                        </span>
+                    </div>
+                    <div class="mt-3 text-xs text-gray-400">
+                        ${escapeHTML(formatDate(order.createdAt))}
+                    </div>
+                </button>
+            `).join('');
+
+            list.querySelectorAll('[data-order-id]').forEach(button => {
+                button.addEventListener('click', () => {
+                    selectOrder(Number(button.dataset.orderId));
+                });
+            });
+        }
+
+        function renderSellerInfo(order) {
+            const seller = order?.seller || {};
+
+            return `
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div class="rounded-2xl bg-gray-50 p-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-gray-400">${escapeHTML(t('sellerAddress'))}</div>
+                        <div class="mt-2 text-sm font-bold text-gray-900">${escapeHTML(seller.address || '—')}</div>
+                        ${seller.landmark ? `<div class="mt-1 text-xs text-gray-500">${escapeHTML(t('landmark'))}: ${escapeHTML(seller.landmark)}</div>` : ''}
+                    </div>
+                    <div class="rounded-2xl bg-gray-50 p-4">
+                        <div class="text-xs font-bold uppercase tracking-wider text-gray-400">${escapeHTML(t('sellerPhone'))}</div>
+                        <div class="mt-2 text-sm font-bold text-gray-900">${seller.phone ? `<a href="tel:${escapeHTML(seller.phone)}" class="hover:text-primary-700">${escapeHTML(seller.phone)}</a>` : '—'}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTimeline(order) {
+            const steps = [
+                {
+                    active: true,
+                    title: t('statusPending'),
+                    text: order.status === 'pending' ? t('waitingSeller') : ''
+                },
+                {
+                    active: ['responded', 'completed'].includes(order.status) || Boolean(order.deliveryType),
+                    title: t('statusResponded'),
+                    text: order.status === 'responded' && !order.deliveryType ? t('confirmHint') : ''
+                },
+                {
+                    active: Boolean(order.deliveryType),
+                    title: order.deliveryType === 'pickup' ? t('pickup') : t('delivery'),
+                    text: order.deliveryType === 'pickup'
+                        ? (order.pickupDeadline ? `${t('pickupReady')}: ${formatDate(order.pickupDeadline)}` : t('pickupWaiting'))
+                        : ''
+                },
+                {
+                    active: order.status === 'completed',
+                    title: t('statusCompleted'),
+                    text: order.status === 'completed' ? t('completedText') : ''
+                }
+            ];
+
+            return `
+                <div class="space-y-0">
+                    ${steps.map((step, index) => `
+                        <div class="flex gap-3">
+                            <div class="flex flex-col items-center">
+                                <span class="timeline-dot ${step.active ? 'active' : ''}"></span>
+                                ${index < steps.length - 1 ? '<span class="timeline-line"></span>' : ''}
+                            </div>
+                            <div class="pb-4">
+                                <div class="text-sm font-black ${step.active ? 'text-gray-900' : 'text-gray-400'}">${escapeHTML(step.title)}</div>
+                                ${step.text ? `<div class="mt-1 text-xs leading-5 text-gray-500">${escapeHTML(step.text)}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderItems(order) {
+            const items = Array.isArray(order.items) ? order.items : [];
+
+            return `
+                <div class="space-y-3">
+                    ${items.map(item => `
+                        <div class="rounded-2xl border border-gray-200 p-4">
+                            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <a
+                                        href="product.html?id=${Number(item.productId)}"
+                                        class="font-black text-gray-900 hover:text-primary-700"
+                                    >
+                                        ${escapeHTML(item.name || '')}
+                                    </a>
+                                    <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                                        <span>${escapeHTML(t('requested'))}: <strong>${Number(item.requestedQty || 0)}</strong></span>
+                                        <span>${escapeHTML(t('available'))}: <strong>${Number(item.availableQty || 0)}</strong></span>
+                                        <span>${escapeHTML(formatMoney(item.price))}</span>
+                                    </div>
+                                </div>
+
+                                <span class="item-status item-${escapeHTML(item.status || 'pending')}">
+                                    ${escapeHTML(itemStatusLabel(item.status))}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function canProceed(order) {
+            return order.status === 'responded' &&
+                !order.deliveryType &&
+                (order.items || []).some(item =>
+                    ['available', 'partial'].includes(item.status)
+                );
+        }
+
+        function isLocallyConfirmed(orderId) {
+            return sessionStorage.getItem(`osuzOrderConfirmed:${orderId}`) === '1';
+        }
+
+        function markLocallyConfirmed(orderId) {
+            sessionStorage.setItem(`osuzOrderConfirmed:${orderId}`, '1');
+        }
+
+        function renderDeliveryChoice(order) {
+            const seller = order.seller || {};
+
+            return `
+                <div class="rounded-2xl border border-gray-200 p-5">
+                    <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('chooseDelivery'))}</h3>
+                    <div class="grid sm:grid-cols-2 gap-3 mt-4">
+                        <button type="button" class="choice-button" data-action="pickup">
+                            <span class="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="store" class="w-5 h-5"></i>
+                            </span>
+                            <span>
+                                <span class="block">${escapeHTML(t('pickup'))}</span>
+                                <span class="block mt-1 text-xs font-medium text-gray-500">${escapeHTML(t('pickupText'))}</span>
+                            </span>
+                        </button>
+
+                        ${seller.deliveryEnabled ? `
+                            <button type="button" class="choice-button" data-action="show-delivery-form">
+                                <span class="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="truck" class="w-5 h-5"></i>
+                                </span>
+                                <span>
+                                    <span class="block">${escapeHTML(t('delivery'))}</span>
+                                    <span class="block mt-1 text-xs font-medium text-gray-500">${escapeHTML(t('deliveryText'))}</span>
+                                </span>
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <div id="deliveryCoordinatesForm" class="hidden mt-4 rounded-2xl bg-gray-50 p-4">
+                        <button type="button" class="secondary-button mb-4" data-action="get-location">
+                            <i data-lucide="locate-fixed" class="w-4 h-4"></i>
+                            <span>${escapeHTML(t('getLocation'))}</span>
+                        </button>
+
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="mb-2 block text-xs font-black uppercase tracking-wider text-gray-500">${escapeHTML(t('latitude'))}</label>
+                                <input id="deliveryLat" type="number" step="any" class="field" placeholder="41.31">
+                            </div>
+                            <div>
+                                <label class="mb-2 block text-xs font-black uppercase tracking-wider text-gray-500">${escapeHTML(t('longitude'))}</label>
+                                <input id="deliveryLng" type="number" step="any" class="field" placeholder="69.28">
+                            </div>
+                        </div>
+
+                        <button type="button" class="primary-button mt-4" data-action="confirm-delivery">
+                            <i data-lucide="truck" class="w-4 h-4"></i>
+                            <span>${escapeHTML(t('confirmDelivery'))}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPaymentChoice(order) {
+            const methods = Array.isArray(order?.seller?.paymentMethods)
+                ? order.seller.paymentMethods
+                : [];
+
+            if (!methods.length) {
+                return `<div class="notice warning">${escapeHTML(t('noPaymentMethods'))}</div>`;
+            }
+
+            const iconMap = {
+                cash: 'banknote',
+                card: 'credit-card',
+                payme: 'smartphone',
+                click: 'mouse-pointer-click',
+                transfer: 'building-2',
+                qr: 'qr-code'
+            };
+
+            return `
+                <div class="rounded-2xl border border-gray-200 p-5">
+                    <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('choosePayment'))}</h3>
+                    <div class="grid sm:grid-cols-2 gap-3 mt-4">
+                        ${methods.map(method => `
+                            <button
+                                type="button"
+                                class="choice-button payment-choice"
+                                data-action="payment-method"
+                                data-method="${escapeHTML(method)}"
+                            >
+                                <span class="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center">
+                                    <i data-lucide="${iconMap[method] || 'wallet-cards'}" class="w-5 h-5"></i>
+                                </span>
+                                <span>${escapeHTML(paymentLabel(method))}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTransferForm(order) {
+            return `
+                <div class="rounded-2xl border border-gray-200 p-5">
+                    <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('transferTitle'))}</h3>
+                    <div class="grid gap-3 mt-4">
+                        <div>
+                            <label class="mb-2 block text-xs font-black uppercase tracking-wider text-gray-500">${escapeHTML(t('company'))}</label>
+                            <input id="transferCompany" type="text" class="field" maxlength="160">
+                        </div>
+                        <div>
+                            <label class="mb-2 block text-xs font-black uppercase tracking-wider text-gray-500">${escapeHTML(t('inn'))}</label>
+                            <input id="transferInn" type="text" inputmode="numeric" maxlength="9" class="field">
+                        </div>
+                    </div>
+                    <button type="button" class="primary-button mt-4" data-action="transfer-info">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>${escapeHTML(t('transferSubmit'))}</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderReceiptForm(order) {
+            return `
+                <div class="rounded-2xl border border-gray-200 p-5">
+                    <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('receiptTitle'))}</h3>
+                    <p class="mt-2 text-sm leading-6 text-gray-500">${escapeHTML(t('receiptText'))}</p>
+
+                    <label class="mt-4 secondary-button cursor-pointer">
+                        <i data-lucide="image-up" class="w-4 h-4"></i>
+                        <span id="receiptFileLabel">${escapeHTML(t('receiptChoose'))}</span>
+                        <input id="receiptFile" type="file" accept="image/*" class="hidden">
+                    </label>
+
+                    <button type="button" class="primary-button mt-4 ml-0 sm:ml-2" data-action="receipt">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        <span>${escapeHTML(t('receiptSubmit'))}</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderActionArea(order) {
+            if (order.status === 'pending') {
+                return `<div class="notice">${escapeHTML(t('waitingSeller'))}</div>`;
+            }
+
+            if (order.status === 'cancelled') {
+                return `<div class="notice warning">${escapeHTML(t('cancelledText'))}</div>`;
+            }
+
+            if (order.status === 'completed') {
+                return `<div class="notice success">${escapeHTML(t('completedText'))}</div>`;
+            }
+
+            if (order.status === 'payment_failed') {
+                return `
+                    <div class="notice error">
+                        ${escapeHTML(t('paymentFailed'))}
+                        ${order?.seller?.phone ? ` <a class="font-black underline" href="tel:${escapeHTML(order.seller.phone)}">${escapeHTML(order.seller.phone)}</a>` : ''}
+                    </div>
+                `;
+            }
+
+            if (order.status !== 'responded') {
+                return '';
+            }
+
+            if (!order.deliveryType) {
+                const confirmed = isLocallyConfirmed(order.orderId);
+
+                if (confirmed) {
+                    return `
+                        ${renderDeliveryChoice(order)}
+                        <button type="button" class="danger-button mt-4" data-action="cancel-order">
+                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            <span>${escapeHTML(t('cancel'))}</span>
+                        </button>
+                    `;
+                }
+
+                if (canProceed(order)) {
+                    return `
+                        <div class="notice mb-4">${escapeHTML(t('confirmHint'))}</div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button type="button" class="primary-button" data-action="confirm-order">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                <span>${escapeHTML(t('proceed'))}</span>
+                            </button>
+                            <button type="button" class="danger-button" data-action="cancel-order">
+                                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                <span>${escapeHTML(t('cancel'))}</span>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                return `<div class="notice warning">${escapeHTML(t('actionError'))}</div>`;
+            }
+
+            if (order.deliveryType === 'pickup') {
+                return `
+                    <div class="notice ${order.pickupDeadline ? 'success' : ''}">
+                        ${order.pickupDeadline
+                            ? `${escapeHTML(t('pickupReady'))}: <strong>${escapeHTML(formatDate(order.pickupDeadline))}</strong>`
+                            : escapeHTML(t('pickupWaiting'))
+                        }
+                    </div>
+                `;
+            }
+
+            if (order.deliveryType === 'delivery') {
+                if (!order.paymentMethod) {
+                    return renderPaymentChoice(order);
+                }
+
+                if (order.paymentMethod === 'transfer') {
+                    if (!order.totalAmount && !order.deliveryDeadline) {
+                        return `
+                            <div class="mb-4 text-sm font-bold text-gray-500">
+                                ${escapeHTML(t('paymentSelected'))}: ${escapeHTML(paymentLabel(order.paymentMethod))}
+                            </div>
+                            ${renderTransferForm(order)}
+                        `;
+                    }
+                }
+
+                if (['card', 'payme', 'click', 'qr'].includes(order.paymentMethod)) {
+                    if (!order.deliveryDeadline) {
+                        return `
+                            <div class="mb-4 text-sm font-bold text-gray-500">
+                                ${escapeHTML(t('paymentSelected'))}: ${escapeHTML(paymentLabel(order.paymentMethod))}
+                            </div>
+                            ${renderReceiptForm(order)}
+                        `;
+                    }
+                }
+
+                if (order.deliveryDeadline) {
+                    return `
+                        <div class="notice success mb-4">
+                            ${escapeHTML(t('deliverySent'))}
+                            <div class="mt-2 text-xs">
+                                ${escapeHTML(t('deliveryDeadline'))}: <strong>${escapeHTML(formatDate(order.deliveryDeadline))}</strong>
+                            </div>
+                        </div>
+                        <button type="button" class="primary-button" data-action="received">
+                            <i data-lucide="package-check" class="w-4 h-4"></i>
+                            <span>${escapeHTML(t('received'))}</span>
+                        </button>
+                    `;
+                }
+
+                return `<div class="notice">${escapeHTML(order.paymentMethod ? t('deliveryWaiting') : t('waitingPayment'))}</div>`;
+            }
+
+            return '';
+        }
+
+        function renderOrderDetail(order) {
+            currentOrder = order;
+
+            document.getElementById('detailPlaceholder').classList.add('hidden');
+            const detail = document.getElementById('orderDetail');
+            detail.classList.remove('hidden');
+
+            detail.innerHTML = `
+                <div class="p-5 sm:p-6 lg:p-7 border-b border-gray-200">
+                    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                        <div>
+                            <div class="text-xs font-black uppercase tracking-[.14em] text-primary-600">
+                                ${escapeHTML(t('order'))} #${Number(order.tenantOrderNumber || order.orderId)}
+                            </div>
+                            <h2 class="mt-2 text-2xl font-black text-gray-900">${escapeHTML(order.tenantName || '')}</h2>
+                            <div class="mt-2 text-sm text-gray-500">${escapeHTML(formatDate(order.createdAt))}</div>
+                        </div>
+
+                        <span class="status-badge status-${escapeHTML(order.status || 'pending')}">
+                            ${escapeHTML(statusLabel(order.status))}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-5 sm:p-6 lg:p-7 space-y-6">
+                    <div class="grid xl:grid-cols-[minmax(0,1fr)_280px] gap-6">
+                        <div>
+                            <h3 class="text-lg font-black text-gray-900 mb-3">${escapeHTML(t('items'))}</h3>
+                            ${renderItems(order)}
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-gray-900 mb-3">${escapeHTML(t('status'))}</h3>
+                            ${renderTimeline(order)}
+
+                            ${Number.isFinite(Number(order.totalAmount)) ? `
+                                <div class="rounded-2xl bg-primary-50 p-4 mt-3">
+                                    <div class="text-xs font-bold uppercase tracking-wider text-primary-700">${escapeHTML(t('total'))}</div>
+                                    <div class="mt-1 text-2xl font-black text-gray-900">${escapeHTML(formatMoney(order.totalAmount))}</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    ${renderSellerInfo(order)}
+
+                    <div id="orderActionArea">
+                        ${renderActionArea(order)}
+                    </div>
+                </div>
+            `;
+
+            bindDetailActions();
+            lucide.createIcons();
+        }
+
+        function prefillSavedLocation() {
+            const customer = getStoredCustomer();
+            const saved = customer?.savedLocation;
+
+            if (!saved) return;
+
+            const latInput = document.getElementById('deliveryLat');
+            const lngInput = document.getElementById('deliveryLng');
+
+            if (latInput && saved.lat !== undefined && saved.lat !== null) {
+                latInput.value = saved.lat;
+            }
+
+            if (lngInput && saved.lng !== undefined && saved.lng !== null) {
+                lngInput.value = saved.lng;
+            }
+        }
+
+        async function performAction(callback, successMessage = '') {
+            if (requestBusy) return;
+
+            requestBusy = true;
+            hidePageError();
+
+            try {
+                const result = await callback();
+
+                if (result?.orderId) {
+                    currentOrder = result;
+                }
+
+                if (successMessage) {
+                    showToast(successMessage, 'success');
+                }
+
+                await refreshSelectedOrder();
+                await loadOrders({ preserveSelection: true });
+            } catch (error) {
+                if (error.status === 401) {
+                    showAuthRequired();
+                    return;
+                }
+
+                showToast(error.message || t('actionError'), 'error');
+            } finally {
+                requestBusy = false;
+            }
+        }
+
+        function bindDetailActions() {
+            const root = document.getElementById('orderDetail');
+
+            root.querySelector('[data-action="confirm-order"]')?.addEventListener('click', () => {
+                performAction(
+                    async () => {
+                        const order = await ordersRequest(`/${selectedOrderId}/confirm`, {
+                            method: 'POST'
+                        });
+
+                        markLocallyConfirmed(selectedOrderId);
+
+                        if (order.deliveryType === 'pickup') {
+                            sessionStorage.removeItem(`osuzOrderConfirmed:${selectedOrderId}`);
+                        }
+
+                        return order;
+                    },
+                    t('success')
+                );
+            });
+
+            root.querySelector('[data-action="cancel-order"]')?.addEventListener('click', () => {
+                showConfirmDialog({
+                    title: t('cancelTitle'),
+                    message: t('cancelText'),
+                    confirmText: t('cancelAction'),
+                    cancelText: t('keepOrder'),
+                    onConfirm: () => performAction(
+                        () => ordersRequest(`/${selectedOrderId}/cancel`, {
+                            method: 'POST'
+                        }),
+                        t('success')
+                    )
+                });
+            });
+
+            root.querySelector('[data-action="pickup"]')?.addEventListener('click', () => {
+                performAction(
+                    () => ordersRequest(`/${selectedOrderId}/delivery`, {
+                        method: 'POST',
+                        body: { type: 'pickup' }
+                    }),
+                    t('success')
+                );
+            });
+
+            root.querySelector('[data-action="show-delivery-form"]')?.addEventListener('click', () => {
+                document.getElementById('deliveryCoordinatesForm')?.classList.remove('hidden');
+                prefillSavedLocation();
+                lucide.createIcons();
+            });
+
+            root.querySelector('[data-action="get-location"]')?.addEventListener('click', () => {
+                if (!navigator.geolocation) {
+                    showToast(t('locationError'), 'error');
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        document.getElementById('deliveryLat').value =
+                            position.coords.latitude.toFixed(6);
+                        document.getElementById('deliveryLng').value =
+                            position.coords.longitude.toFixed(6);
+                    },
+                    () => showToast(t('locationError'), 'error'),
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            });
+
+            root.querySelector('[data-action="confirm-delivery"]')?.addEventListener('click', () => {
+                const lat = Number(document.getElementById('deliveryLat')?.value);
+                const lng = Number(document.getElementById('deliveryLng')?.value);
+
+                if (
+                    !Number.isFinite(lat) ||
+                    !Number.isFinite(lng) ||
+                    lat < -90 ||
+                    lat > 90 ||
+                    lng < -180 ||
+                    lng > 180
+                ) {
+                    showToast(t('locationRequired'), 'error');
+                    return;
+                }
+
+                performAction(
+                    () => ordersRequest(`/${selectedOrderId}/delivery`, {
+                        method: 'POST',
+                        body: {
+                            type: 'delivery',
+                            lat,
+                            lng
+                        }
+                    }),
+                    t('success')
+                );
+            });
+
+            root.querySelectorAll('[data-action="payment-method"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const method = button.dataset.method;
+
+                    performAction(
+                        async () => {
+                            const result = await ordersRequest(
+                                `/${selectedOrderId}/payment-method`,
+                                {
+                                    method: 'POST',
+                                    body: { method }
+                                }
+                            );
+
+                            if (result?.nextStep) {
+                                sessionStorage.setItem(
+                                    `osuzOrderNextStep:${selectedOrderId}`,
+                                    result.nextStep
+                                );
+                            }
+
+                            return result;
+                        },
+                        t('success')
+                    );
+                });
+            });
+
+            root.querySelector('[data-action="transfer-info"]')?.addEventListener('click', () => {
+                const company = document.getElementById('transferCompany')?.value.trim() || '';
+                const inn = (document.getElementById('transferInn')?.value || '').replace(/\D/g, '');
+
+                if (!company || !/^\d{9}$/.test(inn)) {
+                    showToast(t('innInvalid'), 'error');
+                    return;
+                }
+
+                performAction(
+                    () => ordersRequest(`/${selectedOrderId}/transfer-info`, {
+                        method: 'POST',
+                        body: {
+                            company,
+                            inn
+                        }
+                    }),
+                    t('waitingPayment')
+                );
+            });
+
+            const receiptInput = root.querySelector('#receiptFile');
+
+            receiptInput?.addEventListener('change', () => {
+                const file = receiptInput.files?.[0];
+                const label = document.getElementById('receiptFileLabel');
+
+                if (label) {
+                    label.textContent = file
+                        ? file.name
+                        : t('receiptChoose');
+                }
+            });
+
+            root.querySelector('[data-action="receipt"]')?.addEventListener('click', () => {
+                const file = document.getElementById('receiptFile')?.files?.[0];
+
+                if (
+                    !file ||
+                    !file.type.startsWith('image/') ||
+                    file.size > 5 * 1024 * 1024
+                ) {
+                    showToast(t('receiptInvalid'), 'error');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('photo', file);
+
+                performAction(
+                    () => ordersRequest(`/${selectedOrderId}/receipt`, {
+                        method: 'POST',
+                        body: formData
+                    }),
+                    t('waitingPayment')
+                );
+            });
+
+            root.querySelector('[data-action="received"]')?.addEventListener('click', () => {
+                performAction(
+                    () => ordersRequest(`/${selectedOrderId}/received`, {
+                        method: 'POST'
+                    }),
+                    t('success')
+                );
+            });
+        }
+
+        async function refreshSelectedOrder() {
+            if (!selectedOrderId) return;
+
+            try {
+                const order = await ordersRequest(`/${selectedOrderId}`);
+                renderOrderDetail(order);
+                syncPolling(order);
+            } catch (error) {
+                if (error.status === 404) {
+                    selectedOrderId = 0;
+                    currentOrder = null;
+                    document.getElementById('orderDetail').classList.add('hidden');
+                    document.getElementById('detailPlaceholder').classList.remove('hidden');
+                    return;
+                }
+
+                if (error.status === 401) {
+                    showAuthRequired();
+                    return;
+                }
+
+                showPageError(error.message || t('networkError'));
+            }
+        }
+
+        function syncPolling(order) {
+            clearInterval(detailPollTimer);
+
+            const shouldPoll = order &&
+                !['completed', 'cancelled', 'payment_failed'].includes(order.status);
+
+            if (!shouldPoll) return;
+
+            detailPollTimer = setInterval(() => {
+                refreshSelectedOrder();
+            }, 12000);
+        }
+
+        async function selectOrder(orderId) {
+            selectedOrderId = Number(orderId);
+
+            const url = new URL(location.href);
+            url.searchParams.set('order', String(selectedOrderId));
+            history.replaceState(null, '', url);
+
+            renderOrdersList();
+            await refreshSelectedOrder();
+        }
+
+        async function loadOrders({ preserveSelection = false } = {}) {
+            hidePageError();
+
+            if (!localStorage.getItem(storageKeys.accessToken)) {
+                showAuthRequired();
+                return;
+            }
+
+            try {
+                const data = await ordersRequest();
+                orders = Array.isArray(data?.orders) ? data.orders : [];
+
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('authRequiredState').classList.add('hidden');
+
+                if (!orders.length) {
+                    document.getElementById('ordersContent').classList.add('hidden');
+                    document.getElementById('emptyState').classList.remove('hidden');
+                    return;
+                }
+
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('ordersContent').classList.remove('hidden');
+
+                if (
+                    !preserveSelection ||
+                    !selectedOrderId ||
+                    !orders.some(order => Number(order.orderId) === Number(selectedOrderId))
+                ) {
+                    selectedOrderId = Number(selectedOrderId) &&
+                        orders.some(order => Number(order.orderId) === Number(selectedOrderId))
+                            ? Number(selectedOrderId)
+                            : Number(orders[0].orderId);
+                }
+
+                renderOrdersList();
+                await refreshSelectedOrder();
+            } catch (error) {
+                document.getElementById('loadingState').classList.add('hidden');
+
+                if (error.status === 401) {
+                    showAuthRequired();
+                    return;
+                }
+
+                showPageError(error.message || t('networkError'));
+            }
+        }
+
+        function updateCustomerHeader() {
+            const customer = getStoredCustomer();
+            const fallback = currentLang === 'uz'
+                ? 'Kirish'
+                : currentLang === 'en'
+                    ? 'Sign in'
+                    : 'Войти';
+
+            const value = customer
+                ? [customer.name, customer.surname].filter(Boolean).join(' ').trim()
+                    || customer.phone
+                    || fallback
+                : fallback;
+
+            document.querySelectorAll('[data-customer-account-text]').forEach(element => {
+                element.textContent = value;
+            });
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang;
+            document.title = t('pageTitle');
+
+            document.getElementById('languageSelect').value = currentLang;
+            document.getElementById('headerOrdersText').textContent = t('headerOrders');
+            document.getElementById('headerCartText').textContent = t('headerCart');
+            document.getElementById('ordersEyebrow').textContent = t('eyebrow');
+            document.getElementById('ordersTitle').textContent = t('title');
+            document.getElementById('ordersDescription').textContent = t('description');
+            document.querySelector('#refreshOrdersButton span').textContent = t('refresh');
+            document.getElementById('authRequiredTitle').textContent = t('authTitle');
+            document.getElementById('authRequiredText').textContent = t('authText');
+            document.getElementById('authRequiredButton').textContent = t('signIn');
+            document.getElementById('emptyTitle').textContent = t('emptyTitle');
+            document.getElementById('emptyText').textContent = t('emptyText');
+            document.getElementById('emptyButton').childNodes[0].nodeValue = `${t('cart')} `;
+            document.getElementById('ordersListTitle').textContent = t('allOrders');
+            document.getElementById('detailPlaceholderTitle').textContent = t('selectOrder');
+            document.getElementById('detailPlaceholderText').textContent = t('selectOrderText');
+
+            updateCustomerHeader();
+            renderOrdersList();
+
+            if (currentOrder) {
+                renderOrderDetail(currentOrder);
+            }
+
+            lucide.createIcons();
+        }
+
+        function applyTheme() {
+            const isDark = currentTheme === 'dark';
+            document.body.classList.toggle('dark-mode', isDark);
+            document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+            lucide.createIcons();
+        }
+
+        document.getElementById('languageSelect').addEventListener('change', event => {
+            currentLang = event.target.value;
+            localStorage.setItem('osuzLang', currentLang);
+            applyLanguage();
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('osuzTheme', currentTheme);
+            applyTheme();
+        });
+
+        document.getElementById('refreshOrdersButton').addEventListener('click', async event => {
+            const button = event.currentTarget;
+            button.disabled = true;
+
+            try {
+                await loadOrders({ preserveSelection: true });
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+        window.addEventListener('storage', event => {
+            if (event.key === 'osuzTheme') {
+                currentTheme = event.newValue || 'light';
+                applyTheme();
+            }
+
+            if (event.key === 'osuzLang') {
+                currentLang = ['ru', 'uz', 'en'].includes(event.newValue)
+                    ? event.newValue
+                    : 'ru';
+                applyLanguage();
+            }
+        });
+
+        applyLanguage();
+        applyTheme();
+        loadOrders();
+
+        listPollTimer = setInterval(() => {
+            if (!document.hidden && localStorage.getItem(storageKeys.accessToken)) {
+                loadOrders({ preserveSelection: true });
+            }
+        }, 30000);
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && selectedOrderId) {
+                refreshSelectedOrder();
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

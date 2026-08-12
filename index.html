@@ -780,6 +780,18 @@
             transform: translateY(-1px);
         }
 
+    
+        .osuz-cart-link {
+            position: relative !important;
+            z-index: 140 !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        .osuz-cart-link * {
+            pointer-events: none !important;
+        }
+
     </style>
 </head>
 <body>
@@ -843,7 +855,11 @@
                         <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
                         <span data-customer-account-text class="truncate">Войти</span>
                     </a>
-                    <a href="cart.html" data-tooltip-key="cart" data-tooltip="Корзина" class="header-action hidden lg:inline-flex" aria-label="Корзина">
+                    <a href="orders.html" class="header-action hidden lg:inline-flex" aria-label="Заказы">
+                        <i data-lucide="package-check" class="w-5 h-5"></i>
+                        <span>Заказы</span>
+                    </a>
+                    <a id="headerCartLink" href="cart.html" data-open-cart data-tooltip-key="cart" data-tooltip="Корзина" class="header-action osuz-cart-link hidden lg:inline-flex" aria-label="Корзина">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         <span>Корзина</span>
                         <span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
@@ -1997,7 +2013,7 @@
                     const ruName = c.names?.ru || c.names?.en || name;
                     const color = catColors[i % catColors.length];
                     const imageUrl = getCategoryImage(ruName);
-                    return `<a href="category.html?id=${c.id}" target="_blank" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                    return `<a href="category.html?id=${c.id}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
                         <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
                         <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
@@ -2168,6 +2184,7 @@
             const AUTH_API = 'https://osuz.uz/api/site-auth';
             const ACCESS_KEY = 'osuzCustomerAccessToken';
             const REFRESH_KEY = 'osuzCustomerRefreshToken';
+            const GUEST_CART_KEY = 'osuzGuestCart';
 
             function setCartCount(count) {
                 const safeCount = Math.max(0, Number(count) || 0);
@@ -2184,6 +2201,21 @@
                         return sum + Math.max(0, Number(item.quantity) || 0);
                     }, 0);
                 }, 0);
+            }
+
+            function readGuestCart() {
+                try {
+                    const value = JSON.parse(
+                        localStorage.getItem(GUEST_CART_KEY) ||
+                        '{"sellers":[],"grandTotal":0}'
+                    );
+
+                    return value && Array.isArray(value.sellers)
+                        ? value
+                        : { sellers: [], grandTotal: 0 };
+                } catch {
+                    return { sellers: [], grandTotal: 0 };
+                }
             }
 
             async function refreshAccessToken() {
@@ -2246,7 +2278,7 @@
 
                 const token = localStorage.getItem(ACCESS_KEY);
                 if (!token) {
-                    setCartCount(0);
+                    setCartCount(countCartItems(readGuestCart()));
                     return;
                 }
 
@@ -2260,10 +2292,41 @@
 
             window.updateOsuzCartBadge();
             window.addEventListener('storage', event => {
-                if ([ACCESS_KEY, REFRESH_KEY].includes(event.key)) {
+                if ([ACCESS_KEY, REFRESH_KEY, GUEST_CART_KEY].includes(event.key)) {
                     window.updateOsuzCartBadge();
                 }
             });
+        })();
+    </script>
+
+
+    <script>
+        (() => {
+            function openCart(event) {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                const cartUrl = new URL('cart.html', window.location.href);
+                window.location.assign(cartUrl.href);
+            }
+
+            function bindCartLinks() {
+                document.querySelectorAll('a[href="cart.html"], [data-open-cart]').forEach(link => {
+                    link.classList.add('osuz-cart-link');
+
+                    if (link.dataset.cartClickBound === '1') return;
+
+                    link.dataset.cartClickBound = '1';
+                    link.addEventListener('click', openCart, true);
+                });
+            }
+
+            bindCartLinks();
+
+            document.addEventListener('DOMContentLoaded', bindCartLinks);
+            window.addEventListener('pageshow', bindCartLinks);
         })();
     </script>
 
