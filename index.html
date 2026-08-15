@@ -758,8 +758,8 @@
         .footer-contact-link svg { color: currentColor !important; }
         body.dark-mode .site-header-top { background: #00bcd4 !important; border-color: rgba(255,255,255,.38) !important; }
         body.dark-mode .site-header-nav { background: #071321 !important; border-color: #263548 !important; }
-        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #fff !important; border-color: #cbd5e1 !important; }
-        body.dark-mode .header-search-bar input { color: #111827 !important; }
+        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #0d1724 !important; border-color: #334155 !important; }
+        body.dark-mode .header-search-bar input { color: #f8fafc !important; background:#0d1724 !important; }
         @media (max-width: 1023px) {
             .site-header-top .max-w-\[1400px\] { min-height: 66px; }
             .hero-side-btn { width: 36px !important; height: 108px !important; }
@@ -790,6 +790,241 @@
 
         .osuz-cart-link * {
             pointer-events: none !important;
+        }
+
+    
+        /* 08.08 fixes: dark search must stay dark in Firefox/Chrome */
+        body.dark-mode .header-search-bar,
+        body.dark-mode .header-search-dropdown {
+            background: #0d1724 !important;
+            border-color: #334155 !important;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .header-search-bar #heroSearchInput {
+            background: #0d1724 !important;
+            background-color: #0d1724 !important;
+            color: #f8fafc !important;
+            caret-color: #67e8f9 !important;
+            -moz-appearance: none;
+            appearance: none;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .header-search-bar #heroSearchInput::placeholder {
+            color: #94a3b8 !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-mode .header-search-bar #heroPhotoBtn {
+            background: transparent !important;
+        }
+
+        body.dark-mode .header-search-bar #heroPhotoBtn:hover {
+            background: #162333 !important;
+        }
+
+        /* Prevent Firefox/default-link white flash on search results */
+        .search-result-item,
+        .search-result-item:link,
+        .search-result-item:visited {
+            background-color: transparent;
+            color: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color .12s ease, border-color .12s ease !important;
+        }
+
+        .search-result-item:focus {
+            outline: none;
+        }
+
+        body.dark-mode .search-result-item,
+        body.dark-mode .search-result-item:link,
+        body.dark-mode .search-result-item:visited {
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+
+        body.dark-mode .search-result-item:hover,
+        body.dark-mode .search-result-item:focus-visible,
+        body.dark-mode .search-result-item:active {
+            background-color: #162333 !important;
+            color: inherit !important;
+        }
+
+        body.dark-mode #heroResultsList {
+            background: #0d1724 !important;
+        }
+
+    
+        /* 14.08 mobile navigation */
+        .osuz-mobile-bottom-nav { display: none; }
+        .osuz-mobile-cart-badge {
+            position: absolute;
+            top: 4px;
+            right: calc(50% - 25px);
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            padding: 0;
+            border-radius: 6px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            color: #fff;
+            border: 2px solid #fff;
+            font-size: 9px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        /* header cart indicator: compact corner badge */
+        .osuz-cart-link,
+        a[href="cart.html"] {
+            position: relative;
+        }
+        .osuz-cart-link [data-cart-count],
+        a[href="cart.html"] [data-cart-count],
+        #headerCartCount {
+            position: absolute !important;
+            top: 2px !important;
+            right: 1px !important;
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px !important;
+            padding: 0 !important;
+            border-radius: 6px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1 !important;
+            font-size: 9px !important;
+            border: 2px solid rgba(255,255,255,.95) !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (max-width: 767px) {
+            body { padding-bottom: 72px !important; }
+
+            .osuz-mobile-bottom-nav {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 260;
+                height: 68px;
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0,1fr));
+                background: rgba(8, 15, 25, .97);
+                border-top: 1px solid rgba(148,163,184,.25);
+                box-shadow: 0 -10px 30px rgba(2,8,23,.22);
+                backdrop-filter: blur(14px);
+                padding: 5px max(6px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
+            }
+
+            .osuz-mobile-nav-item {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                min-width: 0;
+                border-radius: 12px;
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 10px;
+                font-weight: 700;
+                line-height: 1.05;
+                transition: .18s ease;
+            }
+
+            .osuz-mobile-nav-item svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .osuz-mobile-nav-item.active {
+                color: #67e8f9;
+                background: rgba(0,188,212,.13);
+            }
+
+            body.dark-mode .osuz-mobile-cart-badge {
+                border-color: #08101b !important;
+            }
+        }
+
+    
+        /* 14.08: mobile header without burger, with visible search and profile */
+        @media (max-width: 767px) {
+            #mobileMenuBtn,
+            #mobileMenu,
+            #mobileOverlay {
+                display: none !important;
+            }
+
+            .site-header-top > .max-w-\[1400px\] {
+                flex-wrap: wrap;
+                min-height: auto !important;
+                padding-top: 8px;
+                padding-bottom: 9px;
+                row-gap: 8px !important;
+            }
+
+            .header-search-wrap {
+                display: block !important;
+                order: 3;
+                width: 100%;
+                max-width: none !important;
+                flex-basis: 100%;
+                margin: 0 !important;
+            }
+
+            .header-search-bar {
+                height: 44px !important;
+            }
+
+            .header-search-bar #heroSearchBtn {
+                height: 42px !important;
+                min-height: 42px !important;
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+            }
+
+            .site-header-top [data-customer-account-link] {
+                display: inline-flex !important;
+                min-width: 42px;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+            .site-header-top [data-customer-account-text] {
+                display: none !important;
+            }
+
+            .site-header-nav {
+                display: none !important;
+            }
+
+            #solutions {
+                padding-top: 132px !important;
+            }
+
+            .hero-copy {
+                min-height: 390px !important;
+                justify-content: flex-start !important;
+            }
+
+            .hero-copy > div:last-child {
+                margin-top: auto !important;
+                min-height: 56px !important;
+                align-items: flex-end !important;
+            }
+
+            .hero-copy h1 {
+                min-height: 128px !important;
+            }
         }
 
     </style>
@@ -955,7 +1190,7 @@
                                 <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.</p>
                                 <div class="flex flex-wrap gap-4">
                                     <a href="#catalog" class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25">Перейти в каталог <i data-lucide="arrow-right" class="w-5 h-5"></i></a>
-                                    <a href="#contacts" class="inline-flex items-center gap-3 px-8 py-4 border border-white/20 hover:border-white/40 text-white font-medium rounded-lg transition-all">Связаться</a>
+                                    
                                 </div>
                             </div>
                             <div class="hidden lg:flex justify-center">
@@ -1062,29 +1297,29 @@
         <div id="brands" class="max-w-[1400px] mx-auto px-6 lg:px-8 mb-8">
             <div class="text-center">
                 <span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Партнёры</span>
-                <h2 class="text-2xl font-bold text-gray-900">Ведущие бренды</h2>
+                <h2 class="text-2xl font-bold text-gray-900">Бренды</h2>
             </div>
         </div>
         <div class="relative">
             <div class="brand-fade-left"></div>
             <div class="brand-fade-right"></div>
             <div class="flex gap-5" style="animation: marquee 25s linear infinite;">
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SIEMENS</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">ABB</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">OMRON</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SCHNEIDER</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">MITSUBISHI</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FANUC</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">FESTO</span></div>
-                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">SICK</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
+                <div class="brand-item px-8 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[140px] cursor-pointer bg-white"><span class="text-base font-bold text-gray-400">Бренд</span></div>
             </div>
         </div>
     </section>
@@ -1315,6 +1550,77 @@
         let currentLang = localStorage.getItem('osuzLang') || 'ru';
         let productDatabase = [];
         let searchTimer = null;
+        let synonymGroups = [];
+        let synonymsPromise = null;
+
+        function buildSitePageUrl(fileName, params = {}) {
+            const url = new URL(fileName, document.baseURI);
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null && value !== '') {
+                    url.searchParams.set(key, String(value));
+                }
+            });
+            return url.href;
+        }
+
+        async function loadSynonymGroups() {
+            if (synonymGroups.length) return synonymGroups;
+            if (synonymsPromise) return synonymsPromise;
+
+            synonymsPromise = fetch(`${CATALOG_API_BASE}/synonyms`, {
+                cache: 'no-store',
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(response => response.ok ? response.json() : [])
+                .then(data => {
+                    synonymGroups = Array.isArray(data) ? data : [];
+                    return synonymGroups;
+                })
+                .catch(error => {
+                    console.warn('Synonyms load failed:', error);
+                    return [];
+                })
+                .finally(() => {
+                    synonymsPromise = null;
+                });
+
+            return synonymsPromise;
+        }
+
+        async function synonymSuggestions(query) {
+            const q = String(query || '').trim().toLowerCase();
+            if (q.length < 2) return [];
+
+            const groups = await loadSynonymGroups();
+            const found = [];
+
+            groups.forEach(group => {
+                const canonical = String(group?.canonical || '').trim();
+                if (!canonical) return;
+
+                const terms = Array.isArray(group?.terms)
+                    ? group.terms.map(term => String(term?.term || '').trim()).filter(Boolean)
+                    : [];
+
+                const candidates = [canonical, ...terms];
+                const matched = candidates.some(term => {
+                    const value = term.toLowerCase();
+                    return value === q || value.startsWith(q) || q.startsWith(value);
+                });
+
+                if (matched && canonical.toLowerCase() !== q) {
+                    found.push(canonical);
+                }
+            });
+
+            return [...new Set(found)].slice(0, 4);
+        }
+
+        function synonymPromptText(canonical) {
+            if (currentLang === 'uz') return `Sinonim bo‘yicha qidirish: ${canonical}`;
+            if (currentLang === 'en') return `Search by synonym: ${canonical}`;
+            return `Искать по синониму: ${canonical}`;
+        }
 
         const translations = {
             uz: {
@@ -1330,6 +1636,7 @@
                 'Решения': 'Yechimlar',
                 'Отрасли': 'Sohalar',
                 'Бренды': 'Brendlar',
+                'Бренд': 'Brend',
                 'OSUZ Platform': 'OSUZ platformasi',
                 'Индустриальные решения': 'Sanoat yechimlari',
                 'для вашего бизнеса': 'biznesingiz uchun',
@@ -1432,6 +1739,7 @@
                 'Решения': 'Solutions',
                 'Отрасли': 'Industries',
                 'Бренды': 'Brands',
+                'Бренд': 'Brand',
                 'OSUZ Platform': 'OSUZ Platform',
                 'Индустриальные решения': 'Industrial solutions',
                 'для вашего бизнеса': 'for your business',
@@ -1622,6 +1930,15 @@
                 : currentLang === 'uz'
                     ? 'Mahsulotlar, brendlar, artikullarni qidirish...'
                     : 'Search products, brands, and part numbers...';
+
+            const heroSearchButtonLabel = heroSearchBtn?.querySelector('span');
+            if (heroSearchButtonLabel) {
+                heroSearchButtonLabel.textContent = currentLang === 'ru'
+                    ? 'Найти'
+                    : currentLang === 'uz'
+                        ? 'Qidirish'
+                        : 'Search';
+            }
             heroPhotoBtn.title = currentLang === 'ru'
                 ? 'Поиск по фото'
                 : currentLang === 'uz'
@@ -1725,7 +2042,7 @@
 
             return `
                 <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                    <a href="product.html?id=${encodeURIComponent(p.id)}" data-product-preview-id="${p.id}" class="block h-full">
+                    <a href="${buildSitePageUrl('product.html', { id: p.id })}" data-product-preview-id="${p.id}" class="block h-full">
                         <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
                             ${safeImage
                                 ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
@@ -1834,58 +2151,94 @@
         }
 
         async function heroSearch(query) {
-            if (!query || query.length < 2) {
+            const rawQuery = String(query || '').trim();
+
+            if (rawQuery.length < 2) {
                 heroSearchResults.classList.add('hidden');
                 return;
             }
 
             heroSearchResults.classList.remove('hidden');
             heroPhotoPreview.classList.add('hidden');
-            heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Поиск...')}</p></div>`;
+            heroResultsList.innerHTML = `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Поиск...')}</p></div>`;
 
             try {
-                const results = await searchProducts(query);
-                if (results.length === 0) {
-                    heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
-                } else {
-                    heroResultsList.innerHTML = results.map(p => `
-                        <a href="product.html?id=${encodeURIComponent(p.id)}" data-search-product-id="${p.id}" class="search-result-item flex items-center gap-4 rounded-xl group">
+                const [results, suggestions] = await Promise.all([
+                    searchProducts(rawQuery),
+                    synonymSuggestions(rawQuery)
+                ]);
+
+                const synonymHtml = suggestions.length
+                    ? `
+                        <div class="px-2 pt-2 pb-1">
+                            ${suggestions.map(canonical => `
+                                <button
+                                    type="button"
+                                    data-synonym-query="${escapeHTML(canonical)}"
+                                    class="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-left hover:bg-primary-50 transition-colors"
+                                >
+                                    <span class="w-9 h-9 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                    </span>
+                                    <span class="min-w-0">
+                                        <span class="block text-xs font-bold text-primary-600">${escapeHTML(synonymPromptText(canonical))}</span>
+                                        <span class="block text-xs text-gray-400 mt-1">${escapeHTML(rawQuery)} → ${escapeHTML(canonical)}</span>
+                                    </span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    `
+                    : '';
+
+                const productHtml = results.length
+                    ? results.map(p => `
+                        <a href="${buildSitePageUrl('product.html', { id: p.id })}" data-search-product-id="${p.id}" class="search-result-item flex items-center gap-4 rounded-xl group">
                             <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
+                                ${p.img ? `<img src="${escapeHTML(p.img)}" class="w-full h-full object-contain" alt="${escapeHTML(p.name)}">` : `<span class="text-xs font-bold text-gray-400">${escapeHTML((p.brand || '?').charAt(0))}</span>`}
                             </div>
                             <div class="flex-1 min-w-0">
-                                <div class="text-xs text-primary-600 font-semibold">${p.brand}</div>
-                                <div class="font-medium text-gray-900 text-sm truncate">${p.name}</div>
+                                <div class="text-xs text-primary-600 font-semibold">${escapeHTML(p.brand)}</div>
+                                <div class="font-medium text-gray-900 text-sm truncate">${escapeHTML(p.name)}</div>
                                 <div class="text-xs text-gray-500 truncate">${escapeHTML(p.desc)}</div>
                                 <div class="text-xs font-bold text-gray-900 mt-1">${escapeHTML(p.priceLabel)}</div>
                             </div>
                             <i data-lucide="chevron-right" class="result-arrow w-4 h-4 text-gray-300"></i>
                         </a>
-                    `).join('');
+                    `).join('')
+                    : `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Товары не найдены')}</p><p class="text-gray-400 text-xs mt-1">${t('Попробуйте другой запрос или загрузите фото')}</p></div>`;
 
-                    heroResultsList
-                        .querySelectorAll('[data-search-product-id]')
-                        .forEach(link => {
-                            link.addEventListener('click', () => {
-                                const id = Number(link.dataset.searchProductId);
-                                const preview = results.find(
-                                    item => Number(item.id) === id
-                                )?.raw;
+                heroResultsList.innerHTML = synonymHtml + productHtml;
 
-                                if (preview) {
-                                    sessionStorage.setItem(
-                                        `osuzProductPreview:${id}`,
-                                        JSON.stringify(preview)
-                                    );
-                                }
-                            });
+                heroResultsList.querySelectorAll('[data-synonym-query]').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const canonical = button.dataset.synonymQuery || '';
+                        heroSearchInput.value = canonical;
+                        heroSearch(canonical);
+                    });
+                });
+
+                heroResultsList
+                    .querySelectorAll('[data-search-product-id]')
+                    .forEach(link => {
+                        link.addEventListener('click', () => {
+                            const id = Number(link.dataset.searchProductId);
+                            const preview = results.find(
+                                item => Number(item.id) === id
+                            )?.raw;
+
+                            if (preview) {
+                                sessionStorage.setItem(
+                                    `osuzProductPreview:${id}`,
+                                    JSON.stringify(preview)
+                                );
+                            }
                         });
-                }
+                    });
 
                 lucide.createIcons();
             } catch (e) {
                 console.error('Search failed:', e);
-                heroResultsList.innerHTML =  `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Ошибка поиска товаров')}</p></div>`;
+                heroResultsList.innerHTML = `<div class="px-4 py-6 text-center"><p class="text-gray-500 text-sm">${t('Ошибка поиска товаров')}</p></div>`;
             }
         }
 
@@ -2013,7 +2366,7 @@
                     const ruName = c.names?.ru || c.names?.en || name;
                     const color = catColors[i % catColors.length];
                     const imageUrl = getCategoryImage(ruName);
-                    return `<a href="category.html?id=${c.id}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                    return `<a href="${buildSitePageUrl('category.html', { id: c.id })}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
                         <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
                         <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
@@ -2327,6 +2680,128 @@
 
             document.addEventListener('DOMContentLoaded', bindCartLinks);
             window.addEventListener('pageshow', bindCartLinks);
+        })();
+    </script>
+
+    <nav class="osuz-mobile-bottom-nav" aria-label="Мобильная навигация">
+        <a href="index.html#solutions" class="osuz-mobile-nav-item" data-mobile-nav="home">
+            <i data-lucide="house"></i>
+            <span data-mobile-nav-label="home">Главная</span>
+        </a>
+        <a href="index.html#catalog" class="osuz-mobile-nav-item" data-mobile-nav="catalog">
+            <i data-lucide="layout-grid"></i>
+            <span data-mobile-nav-label="catalog">Каталог</span>
+        </a>
+        <a href="cart.html" class="osuz-mobile-nav-item" data-mobile-nav="cart">
+            <i data-lucide="shopping-cart"></i>
+            <span data-mobile-nav-label="cart">Корзина</span>
+            <span class="osuz-mobile-cart-badge" data-mobile-cart-count>0</span>
+        </a>
+        <a href="auth.html" class="osuz-mobile-nav-item" data-mobile-nav="profile">
+            <i data-lucide="circle-user-round"></i>
+            <span data-mobile-nav-label="profile">Профиль</span>
+        </a>
+    </nav>
+
+
+    <script>
+        (() => {
+            const labels = {
+                ru: { home: 'Главная', catalog: 'Каталог', cart: 'Корзина', profile: 'Профиль' },
+                uz: { home: 'Bosh sahifa', catalog: 'Katalog', cart: 'Savat', profile: 'Profil' },
+                en: { home: 'Home', catalog: 'Catalog', cart: 'Cart', profile: 'Profile' }
+            };
+
+            function currentMobileLang() {
+                const value = localStorage.getItem('osuzLang');
+                return ['ru','uz','en'].includes(value) ? value : 'ru';
+            }
+
+            function syncMobileNavLabels() {
+                const lang = currentMobileLang();
+                document.querySelectorAll('[data-mobile-nav-label]').forEach(node => {
+                    const key = node.dataset.mobileNavLabel;
+                    node.textContent = labels[lang]?.[key] || labels.ru[key];
+                });
+            }
+
+            function mobileNavActiveKey() {
+                const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+                if (page.includes('cart')) return 'cart';
+                if (page.includes('auth') || page.includes('orders')) return 'profile';
+                if (page.includes('category') || page.includes('product')) return 'catalog';
+                if (page.includes('index') || page === '') {
+                    return location.hash === '#catalog' ? 'catalog' : 'home';
+                }
+                return 'home';
+            }
+
+            function syncMobileNavActive() {
+                const active = mobileNavActiveKey();
+                document.querySelectorAll('[data-mobile-nav]').forEach(link => {
+                    link.classList.toggle('active', link.dataset.mobileNav === active);
+                });
+            }
+
+            function localGuestCartCount() {
+                try {
+                    const cart = JSON.parse(localStorage.getItem('osuzGuestCart') || '{"sellers":[]}');
+                    return (cart.sellers || []).reduce((sum, seller) => {
+                        return sum + (seller.items || []).reduce((itemSum, item) => {
+                            return itemSum + Math.max(0, Number(item.quantity) || 0);
+                        }, 0);
+                    }, 0);
+                } catch {
+                    return 0;
+                }
+            }
+
+            function syncMobileCartBadge() {
+                let count = 0;
+                const source = document.querySelector('[data-cart-count]:not([data-mobile-cart-count]), #headerCartCount');
+
+                if (source && !source.classList.contains('hidden')) {
+                    count = Number(source.textContent) || 0;
+                } else if (!localStorage.getItem('osuzCustomerAccessToken')) {
+                    count = localGuestCartCount();
+                }
+
+                document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
+                    badge.textContent = String(count);
+                    badge.style.display = count > 0 ? 'flex' : 'none';
+                });
+            }
+
+            syncMobileNavLabels();
+            syncMobileNavActive();
+            syncMobileCartBadge();
+
+            window.addEventListener('hashchange', syncMobileNavActive);
+            window.addEventListener('storage', event => {
+                if (event.key === 'osuzLang') syncMobileNavLabels();
+                if (['osuzGuestCart','osuzCustomerAccessToken'].includes(event.key)) syncMobileCartBadge();
+            });
+
+            document.addEventListener('click', event => {
+                if (event.target.closest('[data-language]')) {
+                    setTimeout(syncMobileNavLabels, 0);
+                }
+            }, true);
+
+            document.addEventListener('change', event => {
+                if (event.target.matches('#languageSelect, #languageButton, [data-language-select]')) {
+                    setTimeout(syncMobileNavLabels, 0);
+                }
+            }, true);
+
+            const observer = new MutationObserver(() => syncMobileCartBadge());
+            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+
+            setTimeout(() => {
+                syncMobileNavLabels();
+                syncMobileCartBadge();
+                window.lucide?.createIcons?.();
+            }, 50);
         })();
     </script>
 
