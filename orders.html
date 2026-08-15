@@ -396,104 +396,6 @@
             color: #f8fafc;
         }
 
-    
-        /* 14.08 mobile navigation */
-        .osuz-mobile-bottom-nav { display: none; }
-        .osuz-mobile-cart-badge {
-            position: absolute;
-            top: 4px;
-            right: calc(50% - 25px);
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            padding: 0;
-            border-radius: 6px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: #0f172a;
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 9px;
-            line-height: 1;
-            font-weight: 900;
-        }
-
-        /* header cart indicator: compact corner badge */
-        .osuz-cart-link,
-        a[href="cart.html"] {
-            position: relative;
-        }
-        .osuz-cart-link [data-cart-count],
-        a[href="cart.html"] [data-cart-count],
-        #headerCartCount {
-            position: absolute !important;
-            top: 2px !important;
-            right: 1px !important;
-            width: 18px !important;
-            height: 18px !important;
-            min-width: 18px !important;
-            padding: 0 !important;
-            border-radius: 6px !important;
-            align-items: center !important;
-            justify-content: center !important;
-            line-height: 1 !important;
-            font-size: 9px !important;
-            border: 2px solid rgba(255,255,255,.95) !important;
-            box-sizing: border-box !important;
-        }
-
-        @media (max-width: 767px) {
-            body { padding-bottom: 72px !important; }
-
-            .osuz-mobile-bottom-nav {
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 260;
-                height: 68px;
-                display: grid;
-                grid-template-columns: repeat(4, minmax(0,1fr));
-                background: rgba(8, 15, 25, .97);
-                border-top: 1px solid rgba(148,163,184,.25);
-                box-shadow: 0 -10px 30px rgba(2,8,23,.22);
-                backdrop-filter: blur(14px);
-                padding: 5px max(6px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
-            }
-
-            .osuz-mobile-nav-item {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                min-width: 0;
-                border-radius: 12px;
-                color: #94a3b8;
-                text-decoration: none;
-                font-size: 10px;
-                font-weight: 700;
-                line-height: 1.05;
-                transition: .18s ease;
-            }
-
-            .osuz-mobile-nav-item svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .osuz-mobile-nav-item.active {
-                color: #67e8f9;
-                background: rgba(0,188,212,.13);
-            }
-
-            body.dark-mode .osuz-mobile-cart-badge {
-                border-color: #08101b !important;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -689,7 +591,6 @@
                 pickupText: 'Забрать товар у продавца.',
                 delivery: 'Доставка',
                 deliveryText: 'Доставить товар по координатам.',
-                deliverySeparatePrice: 'Стоимость доставки оплачивается отдельно и не входит в цену товара.',
                 sellerAddress: 'Адрес продавца',
                 sellerPhone: 'Телефон продавца',
                 landmark: 'Ориентир',
@@ -783,7 +684,6 @@
                 pickupText: 'Mahsulotni sotuvchidan olib ketish.',
                 delivery: 'Yetkazib berish',
                 deliveryText: 'Mahsulotni koordinatalar bo‘yicha yetkazish.',
-                deliverySeparatePrice: 'Yetkazib berish narxi alohida to‘lanadi va mahsulot narxiga kirmaydi.',
                 sellerAddress: 'Sotuvchi manzili',
                 sellerPhone: 'Sotuvchi telefoni',
                 landmark: 'Mo‘ljal',
@@ -877,7 +777,6 @@
                 pickupText: 'Pick the products up from the seller.',
                 delivery: 'Delivery',
                 deliveryText: 'Deliver the products to your coordinates.',
-                deliverySeparatePrice: 'Delivery is paid separately and is not included in the product price.',
                 sellerAddress: 'Seller address',
                 sellerPhone: 'Seller phone',
                 landmark: 'Landmark',
@@ -1392,14 +1291,6 @@
             return `
                 <div class="rounded-2xl border border-gray-200 p-5">
                     <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('chooseDelivery'))}</h3>
-                    ${seller.deliveryEnabled ? `
-                        <div class="notice warning mt-4">
-                            <div class="flex items-start gap-2">
-                                <i data-lucide="circle-dollar-sign" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
-                                <span>${escapeHTML(t('deliverySeparatePrice'))}</span>
-                            </div>
-                        </div>
-                    ` : ''}
                     <div class="grid sm:grid-cols-2 gap-3 mt-4">
                         <button type="button" class="choice-button" data-action="pickup">
                             <span class="w-10 h-10 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center flex-shrink-0">
@@ -1706,22 +1597,7 @@
 
         function prefillSavedLocation() {
             const customer = getStoredCustomer();
-            let localDefault = null;
-
-            try {
-                localDefault = JSON.parse(
-                    localStorage.getItem('osuzDefaultLocation') || 'null'
-                );
-            } catch {
-                localDefault = null;
-            }
-
-            const saved =
-                localDefault &&
-                Number.isFinite(Number(localDefault.lat)) &&
-                Number.isFinite(Number(localDefault.lng))
-                    ? localDefault
-                    : customer?.savedLocation;
+            const saved = customer?.savedLocation;
 
             if (!saved) return;
 
@@ -2178,128 +2054,5 @@
 
         lucide.createIcons();
     </script>
-
-    <nav class="osuz-mobile-bottom-nav" aria-label="Мобильная навигация">
-        <a href="index.html#solutions" class="osuz-mobile-nav-item" data-mobile-nav="home">
-            <i data-lucide="house"></i>
-            <span data-mobile-nav-label="home">Главная</span>
-        </a>
-        <a href="index.html#catalog" class="osuz-mobile-nav-item" data-mobile-nav="catalog">
-            <i data-lucide="layout-grid"></i>
-            <span data-mobile-nav-label="catalog">Каталог</span>
-        </a>
-        <a href="cart.html" class="osuz-mobile-nav-item" data-mobile-nav="cart">
-            <i data-lucide="shopping-cart"></i>
-            <span data-mobile-nav-label="cart">Корзина</span>
-            <span class="osuz-mobile-cart-badge" data-mobile-cart-count>0</span>
-        </a>
-        <a href="auth.html" class="osuz-mobile-nav-item" data-mobile-nav="profile">
-            <i data-lucide="circle-user-round"></i>
-            <span data-mobile-nav-label="profile">Профиль</span>
-        </a>
-    </nav>
-
-
-    <script>
-        (() => {
-            const labels = {
-                ru: { home: 'Главная', catalog: 'Каталог', cart: 'Корзина', profile: 'Профиль' },
-                uz: { home: 'Bosh sahifa', catalog: 'Katalog', cart: 'Savat', profile: 'Profil' },
-                en: { home: 'Home', catalog: 'Catalog', cart: 'Cart', profile: 'Profile' }
-            };
-
-            function currentMobileLang() {
-                const value = localStorage.getItem('osuzLang');
-                return ['ru','uz','en'].includes(value) ? value : 'ru';
-            }
-
-            function syncMobileNavLabels() {
-                const lang = currentMobileLang();
-                document.querySelectorAll('[data-mobile-nav-label]').forEach(node => {
-                    const key = node.dataset.mobileNavLabel;
-                    node.textContent = labels[lang]?.[key] || labels.ru[key];
-                });
-            }
-
-            function mobileNavActiveKey() {
-                const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-                if (page.includes('cart')) return 'cart';
-                if (page.includes('auth') || page.includes('orders')) return 'profile';
-                if (page.includes('category') || page.includes('product')) return 'catalog';
-                if (page.includes('index') || page === '') {
-                    return location.hash === '#catalog' ? 'catalog' : 'home';
-                }
-                return 'home';
-            }
-
-            function syncMobileNavActive() {
-                const active = mobileNavActiveKey();
-                document.querySelectorAll('[data-mobile-nav]').forEach(link => {
-                    link.classList.toggle('active', link.dataset.mobileNav === active);
-                });
-            }
-
-            function localGuestCartCount() {
-                try {
-                    const cart = JSON.parse(localStorage.getItem('osuzGuestCart') || '{"sellers":[]}');
-                    return (cart.sellers || []).reduce((sum, seller) => {
-                        return sum + (seller.items || []).reduce((itemSum, item) => {
-                            return itemSum + Math.max(0, Number(item.quantity) || 0);
-                        }, 0);
-                    }, 0);
-                } catch {
-                    return 0;
-                }
-            }
-
-            function syncMobileCartBadge() {
-                let count = 0;
-                const source = document.querySelector('[data-cart-count]:not([data-mobile-cart-count]), #headerCartCount');
-
-                if (source && !source.classList.contains('hidden')) {
-                    count = Number(source.textContent) || 0;
-                } else if (!localStorage.getItem('osuzCustomerAccessToken')) {
-                    count = localGuestCartCount();
-                }
-
-                document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
-                });
-            }
-
-            syncMobileNavLabels();
-            syncMobileNavActive();
-            syncMobileCartBadge();
-
-            window.addEventListener('hashchange', syncMobileNavActive);
-            window.addEventListener('storage', event => {
-                if (event.key === 'osuzLang') syncMobileNavLabels();
-                if (['osuzGuestCart','osuzCustomerAccessToken'].includes(event.key)) syncMobileCartBadge();
-            });
-
-            document.addEventListener('click', event => {
-                if (event.target.closest('[data-language]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
-            }, true);
-
-            document.addEventListener('change', event => {
-                if (event.target.matches('#languageSelect, #languageButton, [data-language-select]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
-            }, true);
-
-            const observer = new MutationObserver(() => syncMobileCartBadge());
-            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
-
-            setTimeout(() => {
-                syncMobileNavLabels();
-                syncMobileCartBadge();
-                window.lucide?.createIcons?.();
-            }, 50);
-        })();
-    </script>
-
 </body>
 </html>

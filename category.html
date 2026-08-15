@@ -530,104 +530,6 @@
             background: #00bcd4;
         }
 
-    
-        /* 14.08 mobile navigation */
-        .osuz-mobile-bottom-nav { display: none; }
-        .osuz-mobile-cart-badge {
-            position: absolute;
-            top: 4px;
-            right: calc(50% - 25px);
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            padding: 0;
-            border-radius: 6px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: #0f172a;
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 9px;
-            line-height: 1;
-            font-weight: 900;
-        }
-
-        /* header cart indicator: compact corner badge */
-        .osuz-cart-link,
-        a[href="cart.html"] {
-            position: relative;
-        }
-        .osuz-cart-link [data-cart-count],
-        a[href="cart.html"] [data-cart-count],
-        #headerCartCount {
-            position: absolute !important;
-            top: 2px !important;
-            right: 1px !important;
-            width: 18px !important;
-            height: 18px !important;
-            min-width: 18px !important;
-            padding: 0 !important;
-            border-radius: 6px !important;
-            align-items: center !important;
-            justify-content: center !important;
-            line-height: 1 !important;
-            font-size: 9px !important;
-            border: 2px solid rgba(255,255,255,.95) !important;
-            box-sizing: border-box !important;
-        }
-
-        @media (max-width: 767px) {
-            body { padding-bottom: 72px !important; }
-
-            .osuz-mobile-bottom-nav {
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 260;
-                height: 68px;
-                display: grid;
-                grid-template-columns: repeat(4, minmax(0,1fr));
-                background: rgba(8, 15, 25, .97);
-                border-top: 1px solid rgba(148,163,184,.25);
-                box-shadow: 0 -10px 30px rgba(2,8,23,.22);
-                backdrop-filter: blur(14px);
-                padding: 5px max(6px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
-            }
-
-            .osuz-mobile-nav-item {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                min-width: 0;
-                border-radius: 12px;
-                color: #94a3b8;
-                text-decoration: none;
-                font-size: 10px;
-                font-weight: 700;
-                line-height: 1.05;
-                transition: .18s ease;
-            }
-
-            .osuz-mobile-nav-item svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .osuz-mobile-nav-item.active {
-                color: #67e8f9;
-                background: rgba(0,188,212,.13);
-            }
-
-            body.dark-mode .osuz-mobile-cart-badge {
-                border-color: #08101b !important;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -635,7 +537,7 @@
         <div class="site-header-top">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6">
                 <a href="index.html" class="header-brand flex items-center gap-2 flex-shrink-0"><img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto"><span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span></a>
-                <div class="category-header-search hidden md:flex mx-2 lg:mx-5"><i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4"></i><input type="text" id="searchInput" list="categorySynonymSuggestions" placeholder="Поиск по названию, артикулу, бренду..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm"><datalist id="categorySynonymSuggestions"></datalist><button type="button" id="categoryHeaderSearchButton" class="h-full px-5 bg-gray-900 text-white font-semibold">Найти</button></div>
+                <div class="category-header-search hidden md:flex mx-2 lg:mx-5"><i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4"></i><input type="text" id="searchInput" placeholder="Поиск по названию, артикулу, бренду..." class="flex-1 min-w-0 px-3 outline-none bg-transparent text-sm"><button type="button" id="categoryHeaderSearchButton" class="h-full px-5 bg-gray-900 text-white font-semibold">Найти</button></div>
                 <div class="header-actions ml-auto flex items-center flex-shrink-0">
                     <div class="relative hidden sm:block"><button id="categoryLanguageToggle" class="header-action"><span id="categoryLanguageLabel">RU</span><i data-lucide="chevron-down" class="w-3 h-3"></i></button><div id="categoryLanguageMenu" class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl"><button data-language="ru" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇷🇺 Русский</button><button data-language="uz" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇿 O‘zbekcha</button><button data-language="en" class="category-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50">🇺🇸 English</button></div></div>
                     <button id="themeToggle" type="button" class="header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i><i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i></button>
@@ -799,16 +701,6 @@
         let searchQuery = '';
         let sortMode = '';
         let searchTimeout = null;
-
-        function buildSitePageUrl(fileName, params = {}) {
-            const url = new URL(fileName, document.baseURI);
-            Object.entries(params).forEach(([key, value]) => {
-                if (value !== undefined && value !== null && value !== '') {
-                    url.searchParams.set(key, String(value));
-                }
-            });
-            return url.href;
-        }
 
         const params = new URLSearchParams(window.location.search);
         const categoryId = params.get('id');
@@ -1168,9 +1060,9 @@
             if (!container) return;
 
             const parts = [
-                `<a href="index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>`,
+                `<a href="/index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>`,
                 `<i data-lucide="chevron-right" class="w-3 h-3"></i>`,
-                `<a href="index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>`
+                `<a href="/index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>`
             ];
 
             const trail = buildCategoryTrail(category);
@@ -1189,7 +1081,7 @@
                     );
                 } else {
                     parts.push(
-                        `<a href="category.html?id=${encodeURIComponent(item.id)}" class="hover:text-primary-600 transition-colors">${escapeHTML(name)}</a>`
+                        `<a href="/category.html?id=${encodeURIComponent(item.id)}" class="hover:text-primary-600 transition-colors">${escapeHTML(name)}</a>`
                     );
                 }
             });
@@ -1252,9 +1144,9 @@
 
                 const breadcrumbContainer = document.getElementById('categoryBreadcrumbs');
                 breadcrumbContainer.innerHTML = `
-                    <a href="index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>
+                    <a href="/index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>
                     <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                    <a href="index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>
+                    <a href="/index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>
                     <i data-lucide="chevron-right" class="w-3 h-3"></i>
                     <span id="breadcrumbCategory" class="breadcrumb-current text-gray-900">${escapeHTML(fallbackName)}</span>
                 `;
@@ -1287,7 +1179,7 @@
                 section.style.display = '';
                 list.innerHTML = childCategories.map(category => `
                     <a
-                        href="category.html?id=${category.id}"
+                        href="/category.html?id=${category.id}"
                         class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white"
                     >
                         ${escapeHTML(localizedObjectValue(category.names, ui.category))}
@@ -1396,66 +1288,6 @@
             });
         }
 
-
-        let categorySynonymGroups = null;
-
-        async function loadCategorySynonyms() {
-            if (Array.isArray(categorySynonymGroups)) return categorySynonymGroups;
-
-            try {
-                const response = await fetch(`${API}/synonyms`, {
-                    cache: 'no-store',
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                categorySynonymGroups = response.ok
-                    ? await response.json()
-                    : [];
-            } catch (error) {
-                console.warn('Category synonyms failed:', error);
-                categorySynonymGroups = [];
-            }
-
-            return Array.isArray(categorySynonymGroups)
-                ? categorySynonymGroups
-                : [];
-        }
-
-        async function refreshCategorySynonymSuggestions(query) {
-            const datalist = document.getElementById('categorySynonymSuggestions');
-            if (!datalist) return;
-
-            const q = String(query || '').trim().toLowerCase();
-            if (q.length < 2) {
-                datalist.innerHTML = '';
-                return;
-            }
-
-            const groups = await loadCategorySynonyms();
-            const matches = [];
-
-            groups.forEach(group => {
-                const canonical = String(group?.canonical || '').trim();
-                if (!canonical) return;
-
-                const terms = Array.isArray(group?.terms)
-                    ? group.terms.map(item => String(item?.term || '').trim()).filter(Boolean)
-                    : [];
-
-                if ([canonical, ...terms].some(term => {
-                    const value = term.toLowerCase();
-                    return value === q || value.startsWith(q) || q.startsWith(value);
-                })) {
-                    matches.push(canonical);
-                }
-            });
-
-            datalist.innerHTML = [...new Set(matches)]
-                .slice(0, 8)
-                .map(value => `<option value="${escapeHTML(value)}"></option>`)
-                .join('');
-        }
-
         async function loadProducts() {
             const grid = document.getElementById('productsGrid');
             const skeleton = document.getElementById('loadingSkeleton');
@@ -1515,7 +1347,7 @@
 
                     return `
                         <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in">
-                            <a href="${buildSitePageUrl('product.html', { id: product.id })}" data-product-preview-id="${product.id}" class="block h-full">
+                            <a href="/product.html?id=${encodeURIComponent(product.id)}" data-product-preview-id="${product.id}" class="block h-full">
                                 <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
                                     ${photo
                                         ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
@@ -1656,12 +1488,9 @@
         });
 
         document.getElementById('searchInput').addEventListener('input', event => {
-            const value = event.target.value;
-            refreshCategorySynonymSuggestions(value);
-
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                searchQuery = value.trim();
+                searchQuery = event.target.value.trim();
                 currentPage = 1;
                 loadProducts();
             }, 400);
@@ -1915,137 +1744,16 @@
         })();
     </script>
 
-    <nav class="osuz-mobile-bottom-nav" aria-label="Мобильная навигация">
-        <a href="index.html#solutions" class="osuz-mobile-nav-item" data-mobile-nav="home">
-            <i data-lucide="house"></i>
-            <span data-mobile-nav-label="home">Главная</span>
-        </a>
-        <a href="index.html#catalog" class="osuz-mobile-nav-item" data-mobile-nav="catalog">
-            <i data-lucide="layout-grid"></i>
-            <span data-mobile-nav-label="catalog">Каталог</span>
-        </a>
-        <a href="cart.html" class="osuz-mobile-nav-item" data-mobile-nav="cart">
-            <i data-lucide="shopping-cart"></i>
-            <span data-mobile-nav-label="cart">Корзина</span>
-            <span class="osuz-mobile-cart-badge" data-mobile-cart-count>0</span>
-        </a>
-        <a href="auth.html" class="osuz-mobile-nav-item" data-mobile-nav="profile">
-            <i data-lucide="circle-user-round"></i>
-            <span data-mobile-nav-label="profile">Профиль</span>
-        </a>
-    </nav>
-
 
     <script>
         (() => {
-            const labels = {
-                ru: { home: 'Главная', catalog: 'Каталог', cart: 'Корзина', profile: 'Профиль' },
-                uz: { home: 'Bosh sahifa', catalog: 'Katalog', cart: 'Savat', profile: 'Profil' },
-                en: { home: 'Home', catalog: 'Catalog', cart: 'Cart', profile: 'Profile' }
-            };
-
-            function currentMobileLang() {
-                const value = localStorage.getItem('osuzLang');
-                return ['ru','uz','en'].includes(value) ? value : 'ru';
-            }
-
-            function syncMobileNavLabels() {
-                const lang = currentMobileLang();
-                document.querySelectorAll('[data-mobile-nav-label]').forEach(node => {
-                    const key = node.dataset.mobileNavLabel;
-                    node.textContent = labels[lang]?.[key] || labels.ru[key];
-                });
-            }
-
-            function mobileNavActiveKey() {
-                const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-                if (page.includes('cart')) return 'cart';
-                if (page.includes('auth') || page.includes('orders')) return 'profile';
-                if (page.includes('category') || page.includes('product')) return 'catalog';
-                if (page.includes('index') || page === '') {
-                    return location.hash === '#catalog' ? 'catalog' : 'home';
-                }
-                return 'home';
-            }
-
-            function syncMobileNavActive() {
-                const active = mobileNavActiveKey();
-                document.querySelectorAll('[data-mobile-nav]').forEach(link => {
-                    link.classList.toggle('active', link.dataset.mobileNav === active);
-                });
-            }
-
-            function localGuestCartCount() {
-                try {
-                    const cart = JSON.parse(localStorage.getItem('osuzGuestCart') || '{"sellers":[]}');
-                    return (cart.sellers || []).reduce((sum, seller) => {
-                        return sum + (seller.items || []).reduce((itemSum, item) => {
-                            return itemSum + Math.max(0, Number(item.quantity) || 0);
-                        }, 0);
-                    }, 0);
-                } catch {
-                    return 0;
-                }
-            }
-
-            function syncMobileCartBadge() {
-                let count = 0;
-                const source = document.querySelector('[data-cart-count]:not([data-mobile-cart-count]), #headerCartCount');
-
-                if (source && !source.classList.contains('hidden')) {
-                    count = Number(source.textContent) || 0;
-                } else if (!localStorage.getItem('osuzCustomerAccessToken')) {
-                    count = localGuestCartCount();
-                }
-
-                document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
-                });
-            }
-
-            syncMobileNavLabels();
-            syncMobileNavActive();
-            syncMobileCartBadge();
-
-            window.addEventListener('hashchange', syncMobileNavActive);
-            window.addEventListener('storage', event => {
-                if (event.key === 'osuzLang') syncMobileNavLabels();
-                if (['osuzGuestCart','osuzCustomerAccessToken'].includes(event.key)) syncMobileCartBadge();
-            });
-
             document.addEventListener('click', event => {
-                if (event.target.closest('[data-language]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
+                const link = event.target.closest('a[href*="category.html"]');
+                if (!link) return;
+
+                link.removeAttribute('target');
             }, true);
-
-            document.addEventListener('change', event => {
-                if (event.target.matches('#languageSelect, #languageButton, [data-language-select]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
-            }, true);
-
-            const observer = new MutationObserver(() => syncMobileCartBadge());
-            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
-
-            setTimeout(() => {
-                syncMobileNavLabels();
-                syncMobileCartBadge();
-                window.lucide?.createIcons?.();
-            }, 50);
         })();
-    </script>
-
-
-    <script>
-        document.addEventListener('click', event => {
-            const card = event.target.closest('[data-product-preview-id]');
-            if (!card) return;
-            const id = Number(card.dataset.productPreviewId);
-            if (!Number.isInteger(id) || id <= 0) return;
-            card.href = buildSitePageUrl('product.html', { id });
-        }, true);
     </script>
 
 </body>

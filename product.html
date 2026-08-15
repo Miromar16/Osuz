@@ -393,175 +393,6 @@
             background: #00bcd4;
         }
 
-    
-        /* 14.08 mobile navigation */
-        .osuz-mobile-bottom-nav { display: none; }
-        .osuz-mobile-cart-badge {
-            position: absolute;
-            top: 4px;
-            right: calc(50% - 25px);
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            padding: 0;
-            border-radius: 6px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: #0f172a;
-            color: #fff;
-            border: 2px solid #fff;
-            font-size: 9px;
-            line-height: 1;
-            font-weight: 900;
-        }
-
-        /* header cart indicator: compact corner badge */
-        .osuz-cart-link,
-        a[href="cart.html"] {
-            position: relative;
-        }
-        .osuz-cart-link [data-cart-count],
-        a[href="cart.html"] [data-cart-count],
-        #headerCartCount {
-            position: absolute !important;
-            top: 2px !important;
-            right: 1px !important;
-            width: 18px !important;
-            height: 18px !important;
-            min-width: 18px !important;
-            padding: 0 !important;
-            border-radius: 6px !important;
-            align-items: center !important;
-            justify-content: center !important;
-            line-height: 1 !important;
-            font-size: 9px !important;
-            border: 2px solid rgba(255,255,255,.95) !important;
-            box-sizing: border-box !important;
-        }
-
-        @media (max-width: 767px) {
-            body { padding-bottom: 72px !important; }
-
-            .osuz-mobile-bottom-nav {
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 260;
-                height: 68px;
-                display: grid;
-                grid-template-columns: repeat(4, minmax(0,1fr));
-                background: rgba(8, 15, 25, .97);
-                border-top: 1px solid rgba(148,163,184,.25);
-                box-shadow: 0 -10px 30px rgba(2,8,23,.22);
-                backdrop-filter: blur(14px);
-                padding: 5px max(6px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
-            }
-
-            .osuz-mobile-nav-item {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 3px;
-                min-width: 0;
-                border-radius: 12px;
-                color: #94a3b8;
-                text-decoration: none;
-                font-size: 10px;
-                font-weight: 700;
-                line-height: 1.05;
-                transition: .18s ease;
-            }
-
-            .osuz-mobile-nav-item svg {
-                width: 20px;
-                height: 20px;
-            }
-
-            .osuz-mobile-nav-item.active {
-                color: #67e8f9;
-                background: rgba(0,188,212,.13);
-            }
-
-            body.dark-mode .osuz-mobile-cart-badge {
-                border-color: #08101b !important;
-            }
-        }
-
-    
-        /* 14.08 product layout */
-        .product-main-grid {
-            align-items: stretch !important;
-        }
-
-        .product-gallery-panel,
-        .product-info-panel {
-            height: 100%;
-            min-height: 560px;
-        }
-
-        .product-gallery-panel {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-gallery-panel > .relative {
-            flex: 1 1 auto;
-            min-height: 430px;
-        }
-
-        .product-info-panel {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-description-box {
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
-        }
-
-        body.dark-mode .product-description-box {
-            background: #111b28;
-            border-color: #334155;
-        }
-
-        .product-action-button {
-            min-height: 46px;
-        }
-
-        .related-lazy-placeholder {
-            min-height: 84px;
-            border: 1px dashed #cbd5e1;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            font-size: 13px;
-        }
-
-        body.dark-mode .related-lazy-placeholder {
-            border-color: #334155;
-            color: #64748b;
-        }
-
-        @media (max-width: 1023px) {
-            .product-gallery-panel,
-            .product-info-panel {
-                min-height: 0;
-            }
-
-            .product-gallery-panel > .relative {
-                min-height: 340px;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -598,8 +429,8 @@
             <div id="productPreviewNotice" class="product-preview-notice hidden mb-6"></div>
             <div id="breadcrumbs" class="flex flex-wrap items-center gap-2 text-sm text-gray-400 mb-7"></div>
 
-            <section class="product-main-grid grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-stretch">
-                <div class="product-gallery-panel surface rounded-3xl p-4 lg:p-6">
+            <section class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-start">
+                <div class="surface rounded-3xl p-4 lg:p-6">
                     <div class="relative rounded-2xl bg-gray-50 overflow-hidden">
                         <img id="mainProductImage" class="main-image" alt="">
                         <button id="galleryPrev" class="gallery-control hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" aria-label="Предыдущее изображение">
@@ -613,7 +444,7 @@
                     <div id="galleryThumbs" class="mt-4 flex flex-wrap gap-3"></div>
                 </div>
 
-                <div class="product-info-panel surface rounded-3xl p-6 lg:p-8">
+                <div class="surface rounded-3xl p-6 lg:p-8">
                     <div id="productBrand" class="text-sm font-black uppercase tracking-widest text-primary-600 mb-3"></div>
                     <h1 id="productTitle" class="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-4"></h1>
                     <div class="flex flex-wrap gap-2 mb-6">
@@ -627,28 +458,17 @@
                         <div id="productPrice" class="text-3xl font-black text-gray-900"></div>
                     </div>
 
-                    <div id="productDescriptionBox" class="product-description-box hidden">
-                        <div id="productDescriptionLabel" class="text-xs font-black uppercase tracking-wider text-gray-400 mb-2">Описание</div>
-                        <p id="productSpecification" class="text-gray-600 leading-7"></p>
-                    </div>
+                    <p id="productSpecification" class="text-gray-500 leading-7 mb-7"></p>
 
-                    <div class="flex flex-wrap gap-3 mt-auto">
+                    <div class="flex flex-wrap gap-3">
                         <a id="datasheetLink" href="#" target="_blank" rel="noopener" class="hidden inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700">
                             <i data-lucide="file-text" class="w-5 h-5"></i>
                             <span id="datasheetLabel">Открыть даташит</span>
                         </a>
-                        <a href="#sellers" class="product-action-button inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 font-bold text-gray-900">
+                        <a href="#sellers" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 font-bold text-gray-900">
                             <i data-lucide="store" class="w-5 h-5"></i>
                             <span id="sellersButtonLabel">Посмотреть продавцов</span>
                         </a>
-                        <button id="complementsButton" type="button" class="product-action-button inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700">
-                            <i data-lucide="boxes" class="w-5 h-5"></i>
-                            <span id="complementsButtonLabel">Комплектующие</span>
-                        </button>
-                        <button id="shareButton" type="button" class="product-action-button inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700">
-                            <i data-lucide="share-2" class="w-5 h-5"></i>
-                            <span id="shareButtonLabel">Поделиться</span>
-                        </button>
                     </div>
 
                     <div id="orderNotice" class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
@@ -678,10 +498,6 @@
                 <div id="sellersList" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
                 <div id="sellersEmpty" class="hidden surface rounded-3xl p-8 text-center text-gray-500"></div>
             </section>
-
-            <div id="relatedLazySentinel" class="related-lazy-placeholder mt-10">
-                <span id="relatedLazyText">Аналоги и комплектующие загрузятся при прокрутке</span>
-            </div>
 
             <section id="analogsSection" class="mt-10 hidden">
                 <h2 id="analogsTitle" class="text-2xl lg:text-3xl font-black text-gray-900 mb-5">Аналоги</h2>
@@ -757,9 +573,6 @@
         let galleryIndex = 0;
         let sellerListingsByTenant = new Map();
         let allCategories = [];
-        let relatedProductsLoaded = false;
-        let relatedProductsLoading = false;
-        let relatedObserver = null;
 
         const ui = {
             ru: {
@@ -767,7 +580,7 @@
                 catalog: 'Каталог',
                 products: 'Товары',
                 product: 'Товар',
-                orderCode: 'Код заказа',
+                orderCode: 'Артикул',
                 series: 'Серия',
                 barcode: 'Штрихкод',
                 minPrice: 'Минимальная цена',
@@ -775,13 +588,6 @@
                 fromPrice: 'от {price} сум',
                 datasheet: 'Открыть даташит',
                 sellersButton: 'Посмотреть продавцов',
-                description: 'Описание',
-                complementsButton: 'Комплектующие',
-                share: 'Поделиться',
-                shareCopied: 'Ссылка на товар скопирована.',
-                shareError: 'Не удалось поделиться ссылкой.',
-                relatedLazy: 'Аналоги и комплектующие загрузятся при прокрутке',
-                noComplements: 'Для этого товара комплектующие не найдены.',
                 notice: 'Оформление заказа на сайте пока недоступно. Ниже можно сравнить продавцов, цены и остатки.',
                 attributes: 'Характеристики',
                 offers: 'Предложения',
@@ -836,7 +642,7 @@
                 catalog: 'Katalog',
                 products: 'Mahsulotlar',
                 product: 'Mahsulot',
-                orderCode: 'Buyurtma kodi',
+                orderCode: 'Artikul',
                 series: 'Seriya',
                 barcode: 'Shtrix-kod',
                 minPrice: 'Minimal narx',
@@ -844,13 +650,6 @@
                 fromPrice: '{price} so‘mdan',
                 datasheet: 'Datashitni ochish',
                 sellersButton: 'Sotuvchilarni ko‘rish',
-                description: 'Tavsif',
-                complementsButton: 'Butlovchi qismlar',
-                share: 'Ulashish',
-                shareCopied: 'Mahsulot havolasi nusxalandi.',
-                shareError: 'Havolani ulashib bo‘lmadi.',
-                relatedLazy: 'Analoglar va butlovchi qismlar pastga aylantirilganda yuklanadi',
-                noComplements: 'Bu mahsulot uchun butlovchi qismlar topilmadi.',
                 notice: 'Saytda buyurtma berish hozircha mavjud emas. Quyida sotuvchilar, narxlar va qoldiqlarni solishtirish mumkin.',
                 attributes: 'Xususiyatlar',
                 offers: 'Takliflar',
@@ -913,13 +712,6 @@
                 fromPrice: 'from {price} UZS',
                 datasheet: 'Open datasheet',
                 sellersButton: 'View sellers',
-                description: 'Description',
-                complementsButton: 'Components',
-                share: 'Share',
-                shareCopied: 'Product link copied.',
-                shareError: 'Could not share the link.',
-                relatedLazy: 'Analogs and components will load as you scroll',
-                noComplements: 'No components were found for this product.',
                 notice: 'Website ordering is not available yet. You can compare sellers, prices and stock below.',
                 attributes: 'Specifications',
                 offers: 'Offers',
@@ -1175,91 +967,6 @@
             }
         }
 
-
-        function localizedProductDescription(item) {
-            if (!item) return '';
-
-            const languageFields = currentLang === 'uz'
-                ? ['description_uz', 'description_ru', 'description_en']
-                : currentLang === 'en'
-                    ? ['description_en', 'description_ru', 'description_uz']
-                    : ['description_ru', 'description_uz', 'description_en'];
-
-            for (const field of languageFields) {
-                const value = String(item[field] || '').trim();
-                if (value) return value;
-            }
-
-            return String(
-                item.description ||
-                item.specification ||
-                ''
-            ).trim();
-        }
-
-        async function loadRelatedProducts() {
-            if (relatedProductsLoaded || relatedProductsLoading) return;
-            relatedProductsLoading = true;
-
-            const sentinel = document.getElementById('relatedLazySentinel');
-            if (sentinel) {
-                sentinel.innerHTML = `<span class="inline-flex items-center gap-2"><span class="animate-spin">⟳</span>${escapeHTML(ui.relatedLazy)}</span>`;
-            }
-
-            try {
-                const requests = await Promise.allSettled([
-                    apiFetch(`/products/${productId}/analogs`, 10000),
-                    apiFetch(`/products/${productId}/complements`, 10000)
-                ]);
-
-                const analogs =
-                    requests[0].status === 'fulfilled' && Array.isArray(requests[0].value)
-                        ? requests[0].value
-                        : [];
-
-                const complements =
-                    requests[1].status === 'fulfilled' && Array.isArray(requests[1].value)
-                        ? requests[1].value
-                        : [];
-
-                renderRelated('analogs', analogs);
-                renderRelated('complements', complements);
-                relatedProductsLoaded = true;
-
-                if (sentinel) sentinel.classList.add('hidden');
-            } catch (error) {
-                console.warn('Related products loading failed:', error);
-                if (sentinel) sentinel.textContent = ui.relatedLazy;
-            } finally {
-                relatedProductsLoading = false;
-            }
-        }
-
-        function initRelatedLazyLoading() {
-            relatedObserver?.disconnect?.();
-
-            const sentinel = document.getElementById('relatedLazySentinel');
-            if (!sentinel || relatedProductsLoaded) return;
-
-            if (!('IntersectionObserver' in window)) {
-                loadRelatedProducts();
-                return;
-            }
-
-            relatedObserver = new IntersectionObserver(entries => {
-                if (entries.some(entry => entry.isIntersecting)) {
-                    relatedObserver.disconnect();
-                    loadRelatedProducts();
-                }
-            }, {
-                root: null,
-                rootMargin: '500px 0px',
-                threshold: 0.01
-            });
-
-            relatedObserver.observe(sentinel);
-        }
-
         function applyStaticLanguage() {
             document.documentElement.lang = currentLang;
 
@@ -1267,10 +974,6 @@
             setTextById('priceCaption', ui.minPrice);
             setTextById('datasheetLabel', ui.datasheet);
             setTextById('sellersButtonLabel', ui.sellersButton);
-            setTextById('productDescriptionLabel', ui.description);
-            setTextById('complementsButtonLabel', ui.complementsButton);
-            setTextById('shareButtonLabel', ui.share);
-            setTextById('relatedLazyText', ui.relatedLazy);
             setTextById('orderNotice', ui.notice);
             setTextById('attributesTitle', ui.attributes);
             setTextById('sellersEyebrow', ui.offers);
@@ -1389,6 +1092,8 @@
                     attributeRequest,
                     apiFetch(`/products/${productId}/attribute-values`, 10000),
                     apiFetch(`/products/${productId}/listings`, 12000),
+                    apiFetch(`/products/${productId}/analogs`, 10000),
+                    apiFetch(`/products/${productId}/complements`, 10000),
                     apiFetch('/categories', 10000)
                 ]);
 
@@ -1407,15 +1112,26 @@
                         ? requests[2].value
                         : [];
 
-                allCategories =
+                const analogs =
                     requests[3].status === 'fulfilled' && Array.isArray(requests[3].value)
                         ? requests[3].value
+                        : [];
+
+                const complements =
+                    requests[4].status === 'fulfilled' && Array.isArray(requests[4].value)
+                        ? requests[4].value
+                        : [];
+
+                allCategories =
+                    requests[5].status === 'fulfilled' && Array.isArray(requests[5].value)
+                        ? requests[5].value
                         : [];
 
                 renderProductBreadcrumbs();
                 renderAttributes();
                 renderSellers(listings);
-                initRelatedLazyLoading();
+                renderRelated('analogs', analogs);
+                renderRelated('complements', complements);
                 finishProductLoading();
             } catch (error) {
                 console.error('Product loading failed:', error);
@@ -1445,16 +1161,8 @@
             document.getElementById('productBrand').textContent = product.brand || '';
             document.getElementById('productTitle').textContent = name;
             document.getElementById('productPrice').textContent = formatPrice(product.price_from);
-
-            const description = localizedProductDescription(product);
-            const descriptionBox = document.getElementById('productDescriptionBox');
-            document.getElementById('productSpecification').textContent = description;
-
-            if (description) {
-                descriptionBox.classList.remove('hidden');
-            } else {
-                descriptionBox.classList.add('hidden');
-            }
+            document.getElementById('productSpecification').textContent =
+                product.specification || '';
 
             renderChip('orderCodeChip', ui.orderCode, product.order_code);
             renderChip('seriesChip', ui.series, product.series);
@@ -2018,53 +1726,6 @@
             }
         }
 
-
-        document.getElementById('complementsButton')?.addEventListener('click', async () => {
-            await loadRelatedProducts();
-
-            const section = document.getElementById('complementsSection');
-            if (section && !section.classList.contains('hidden')) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                showCartToast(ui.noComplements, true);
-            }
-        });
-
-        document.getElementById('shareButton')?.addEventListener('click', async () => {
-            const data = {
-                title: localizedProductName(product),
-                text: localizedProductName(product),
-                url: location.href
-            };
-
-            try {
-                if (navigator.share) {
-                    await navigator.share(data);
-                    return;
-                }
-
-                if (navigator.clipboard?.writeText) {
-                    await navigator.clipboard.writeText(location.href);
-                    showCartToast(ui.shareCopied);
-                    return;
-                }
-
-                const helper = document.createElement('textarea');
-                helper.value = location.href;
-                helper.style.position = 'fixed';
-                helper.style.opacity = '0';
-                document.body.appendChild(helper);
-                helper.select();
-                document.execCommand('copy');
-                helper.remove();
-                showCartToast(ui.shareCopied);
-            } catch (error) {
-                if (error?.name !== 'AbortError') {
-                    showCartToast(ui.shareError, true);
-                }
-            }
-        });
-
         function bindSellerCartButtons() {
             document.querySelectorAll('[data-add-listing-to-cart]').forEach(button => {
                 button.addEventListener('click', () => addListingToCart(button));
@@ -2431,129 +2092,6 @@
 
             document.addEventListener('DOMContentLoaded', bindCartLinks);
             window.addEventListener('pageshow', bindCartLinks);
-        })();
-    </script>
-
-
-    <nav class="osuz-mobile-bottom-nav" aria-label="Мобильная навигация">
-        <a href="index.html#solutions" class="osuz-mobile-nav-item" data-mobile-nav="home">
-            <i data-lucide="house"></i>
-            <span data-mobile-nav-label="home">Главная</span>
-        </a>
-        <a href="index.html#catalog" class="osuz-mobile-nav-item" data-mobile-nav="catalog">
-            <i data-lucide="layout-grid"></i>
-            <span data-mobile-nav-label="catalog">Каталог</span>
-        </a>
-        <a href="cart.html" class="osuz-mobile-nav-item" data-mobile-nav="cart">
-            <i data-lucide="shopping-cart"></i>
-            <span data-mobile-nav-label="cart">Корзина</span>
-            <span class="osuz-mobile-cart-badge" data-mobile-cart-count>0</span>
-        </a>
-        <a href="auth.html" class="osuz-mobile-nav-item" data-mobile-nav="profile">
-            <i data-lucide="circle-user-round"></i>
-            <span data-mobile-nav-label="profile">Профиль</span>
-        </a>
-    </nav>
-
-
-    <script>
-        (() => {
-            const labels = {
-                ru: { home: 'Главная', catalog: 'Каталог', cart: 'Корзина', profile: 'Профиль' },
-                uz: { home: 'Bosh sahifa', catalog: 'Katalog', cart: 'Savat', profile: 'Profil' },
-                en: { home: 'Home', catalog: 'Catalog', cart: 'Cart', profile: 'Profile' }
-            };
-
-            function currentMobileLang() {
-                const value = localStorage.getItem('osuzLang');
-                return ['ru','uz','en'].includes(value) ? value : 'ru';
-            }
-
-            function syncMobileNavLabels() {
-                const lang = currentMobileLang();
-                document.querySelectorAll('[data-mobile-nav-label]').forEach(node => {
-                    const key = node.dataset.mobileNavLabel;
-                    node.textContent = labels[lang]?.[key] || labels.ru[key];
-                });
-            }
-
-            function mobileNavActiveKey() {
-                const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-                if (page.includes('cart')) return 'cart';
-                if (page.includes('auth') || page.includes('orders')) return 'profile';
-                if (page.includes('category') || page.includes('product')) return 'catalog';
-                if (page.includes('index') || page === '') {
-                    return location.hash === '#catalog' ? 'catalog' : 'home';
-                }
-                return 'home';
-            }
-
-            function syncMobileNavActive() {
-                const active = mobileNavActiveKey();
-                document.querySelectorAll('[data-mobile-nav]').forEach(link => {
-                    link.classList.toggle('active', link.dataset.mobileNav === active);
-                });
-            }
-
-            function localGuestCartCount() {
-                try {
-                    const cart = JSON.parse(localStorage.getItem('osuzGuestCart') || '{"sellers":[]}');
-                    return (cart.sellers || []).reduce((sum, seller) => {
-                        return sum + (seller.items || []).reduce((itemSum, item) => {
-                            return itemSum + Math.max(0, Number(item.quantity) || 0);
-                        }, 0);
-                    }, 0);
-                } catch {
-                    return 0;
-                }
-            }
-
-            function syncMobileCartBadge() {
-                let count = 0;
-                const source = document.querySelector('[data-cart-count]:not([data-mobile-cart-count]), #headerCartCount');
-
-                if (source && !source.classList.contains('hidden')) {
-                    count = Number(source.textContent) || 0;
-                } else if (!localStorage.getItem('osuzCustomerAccessToken')) {
-                    count = localGuestCartCount();
-                }
-
-                document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
-                });
-            }
-
-            syncMobileNavLabels();
-            syncMobileNavActive();
-            syncMobileCartBadge();
-
-            window.addEventListener('hashchange', syncMobileNavActive);
-            window.addEventListener('storage', event => {
-                if (event.key === 'osuzLang') syncMobileNavLabels();
-                if (['osuzGuestCart','osuzCustomerAccessToken'].includes(event.key)) syncMobileCartBadge();
-            });
-
-            document.addEventListener('click', event => {
-                if (event.target.closest('[data-language]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
-            }, true);
-
-            document.addEventListener('change', event => {
-                if (event.target.matches('#languageSelect, #languageButton, [data-language-select]')) {
-                    setTimeout(syncMobileNavLabels, 0);
-                }
-            }, true);
-
-            const observer = new MutationObserver(() => syncMobileCartBadge());
-            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
-
-            setTimeout(() => {
-                syncMobileNavLabels();
-                syncMobileCartBadge();
-                window.lucide?.createIcons?.();
-            }, 50);
         })();
     </script>
 
