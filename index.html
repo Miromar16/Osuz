@@ -758,11 +758,30 @@
         .footer-contact-link svg { color: currentColor !important; }
         body.dark-mode .site-header-top { background: #00bcd4 !important; border-color: rgba(255,255,255,.38) !important; }
         body.dark-mode .site-header-nav { background: #071321 !important; border-color: #263548 !important; }
-        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #fff !important; border-color: #cbd5e1 !important; }
-        body.dark-mode .header-search-bar input { color: #111827 !important; }
+        body.dark-mode .header-search-bar, body.dark-mode .header-search-dropdown { background: #0d1724 !important; border-color: #334155 !important; }
+        body.dark-mode .header-search-bar input { color: #f8fafc !important; background:#0d1724 !important; }
         @media (max-width: 1023px) {
             .site-header-top .max-w-\[1400px\] { min-height: 66px; }
             .hero-side-btn { width: 36px !important; height: 108px !important; }
+        }
+
+        /* Mobile: arrows removed so hero text has clean space */
+        @media (max-width: 767px) {
+            .hero-controls-layer { display: none !important; }
+            .hero-copy { padding-left: 4px; padding-right: 4px; }
+        }
+
+        /* Dark search: white Find button */
+        body.dark-mode .header-search-bar #heroSearchBtn {
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+        body.dark-mode .header-search-bar #heroSearchBtn:hover {
+            background: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        body.dark-mode .header-search-bar #heroSearchBtn svg {
+            color: #0f172a !important;
         }
 
     
@@ -790,6 +809,71 @@
 
         .osuz-cart-link * {
             pointer-events: none !important;
+        }
+
+    
+        /* 08.08 fixes: dark search must stay dark in Firefox/Chrome */
+        body.dark-mode .header-search-bar,
+        body.dark-mode .header-search-dropdown {
+            background: #0d1724 !important;
+            border-color: #334155 !important;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .header-search-bar #heroSearchInput {
+            background: #0d1724 !important;
+            background-color: #0d1724 !important;
+            color: #f8fafc !important;
+            caret-color: #67e8f9 !important;
+            -moz-appearance: none;
+            appearance: none;
+            color-scheme: dark;
+        }
+
+        body.dark-mode .header-search-bar #heroSearchInput::placeholder {
+            color: #94a3b8 !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-mode .header-search-bar #heroPhotoBtn {
+            background: transparent !important;
+        }
+
+        body.dark-mode .header-search-bar #heroPhotoBtn:hover {
+            background: #162333 !important;
+        }
+
+        /* Prevent Firefox/default-link white flash on search results */
+        .search-result-item,
+        .search-result-item:link,
+        .search-result-item:visited {
+            background-color: transparent;
+            color: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color .12s ease, border-color .12s ease !important;
+        }
+
+        .search-result-item:focus {
+            outline: none;
+        }
+
+        body.dark-mode .search-result-item,
+        body.dark-mode .search-result-item:link,
+        body.dark-mode .search-result-item:visited {
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+
+        body.dark-mode .search-result-item:hover,
+        body.dark-mode .search-result-item:focus-visible,
+        body.dark-mode .search-result-item:active {
+            background-color: #162333 !important;
+            color: inherit !important;
+        }
+
+        body.dark-mode #heroResultsList {
+            background: #0d1724 !important;
         }
 
     </style>
@@ -1622,6 +1706,15 @@
                 : currentLang === 'uz'
                     ? 'Mahsulotlar, brendlar, artikullarni qidirish...'
                     : 'Search products, brands, and part numbers...';
+
+            const heroSearchButtonLabel = heroSearchBtn?.querySelector('span');
+            if (heroSearchButtonLabel) {
+                heroSearchButtonLabel.textContent = currentLang === 'ru'
+                    ? 'Найти'
+                    : currentLang === 'uz'
+                        ? 'Qidirish'
+                        : 'Search';
+            }
             heroPhotoBtn.title = currentLang === 'ru'
                 ? 'Поиск по фото'
                 : currentLang === 'uz'
@@ -1709,7 +1802,7 @@
                 desc: [code, category].filter(Boolean).join(' · '),
                 category,
                 orderCode: p.order_code || '',
-                img: buildFileUrl(p.photo_url),
+                img: buildFileUrl(p.photo_url) || 'osuz logo.png',
                 datasheet: buildFileUrl(p.datasheet_url),
                 priceFrom: p.price_from,
                 priceLabel: formatPrice(p.price_from),
@@ -1728,7 +1821,7 @@
                     <a href="product.html?id=${encodeURIComponent(p.id)}" data-product-preview-id="${p.id}" class="block h-full">
                         <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
                             ${safeImage
-                                ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
+                                ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
                                 : `<div class="text-gray-400 font-bold text-sm">${safeBrand}</div>`
                             }
                         </div>
@@ -2329,6 +2422,5 @@
             window.addEventListener('pageshow', bindCartLinks);
         })();
     </script>
-
 </body>
 </html>

@@ -310,7 +310,7 @@
         #breadcrumbCategory {
             display: inline-block;
             position: relative;
-            padding-bottom: 7px;
+            padding-bottom: 0;
         }
 
         #breadcrumbCategory::after {
@@ -508,6 +508,18 @@
             opacity: 1 !important;
         }
 
+        /* Dark search: white Find buttons */
+        body.dark-mode #categoryHeaderSearchButton,
+        body.dark-mode #mobileCategorySearchButton {
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+        body.dark-mode #categoryHeaderSearchButton:hover,
+        body.dark-mode #mobileCategorySearchButton:hover {
+            background: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+
         #categoryBreadcrumbs a,
         #categoryBreadcrumbs span {
             white-space: nowrap;
@@ -530,6 +542,186 @@
             background: #00bcd4;
         }
 
+
+
+        /* 18.08 additions: compact breadcrumbs + collapsible filters */
+        #categoryBreadcrumbs {
+            flex-wrap: nowrap !important;
+            min-width: 0;
+            overflow: visible;
+            align-items: baseline !important;
+        }
+
+        #categoryBreadcrumbs > i[data-lucide="chevron-right"] {
+            position: relative;
+            top: 2px;
+            align-self: baseline;
+        }
+
+        #categoryBreadcrumbs > * {
+            flex: 0 0 auto;
+        }
+
+        #categoryBreadcrumbs .breadcrumb-current {
+            min-width: 0;
+            max-width: min(62vw, 620px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .breadcrumb-overflow {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .breadcrumb-overflow > summary {
+            list-style: none;
+            width: 34px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dbe4ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            user-select: none;
+            transition: .18s ease;
+        }
+
+        .breadcrumb-overflow > summary::-webkit-details-marker { display: none; }
+        .breadcrumb-overflow > summary::marker { display: none; content: ''; }
+        .breadcrumb-overflow > summary:hover,
+        .breadcrumb-overflow[open] > summary {
+            border-color: #00bcd4;
+            color: #00838f;
+            background: #ecfeff;
+        }
+
+        .breadcrumb-overflow-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: calc(100% + 9px);
+            z-index: 120;
+            width: max-content;
+            min-width: 220px;
+            max-width: min(330px, calc(100vw - 32px));
+            padding: 7px;
+            border: 1px solid #dbe4ee;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, .16);
+        }
+
+        .breadcrumb-overflow:hover .breadcrumb-overflow-menu,
+        .breadcrumb-overflow[open] .breadcrumb-overflow-menu {
+            display: block;
+        }
+
+        .breadcrumb-overflow-link {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: normal !important;
+            line-height: 1.35;
+            transition: .16s ease;
+        }
+
+        .breadcrumb-overflow-link:hover {
+            background: #ecfeff;
+            color: #00838f;
+        }
+
+        body.dark-mode .breadcrumb-overflow > summary,
+        body.dark-mode .breadcrumb-overflow-menu {
+            background: #0f1722;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .breadcrumb-overflow > summary:hover,
+        body.dark-mode .breadcrumb-overflow[open] > summary,
+        body.dark-mode .breadcrumb-overflow-link:hover {
+            background: #12303a;
+            border-color: #00bcd4;
+            color: #67e8f9;
+        }
+
+        body.dark-mode .breadcrumb-overflow-link { color: #cbd5e1; }
+
+        #filtersToggle.hidden { display: none !important; }
+        #filtersToggle:not(.hidden) { display: inline-flex; }
+
+        #filtersToggle {
+            transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+        }
+
+        #filtersToggle .filter-toggle-chevron {
+            transition: transform .18s ease;
+        }
+
+        #filtersToggle.is-open .filter-toggle-chevron {
+            transform: rotate(180deg);
+        }
+
+        #filtersPanel {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 14px;
+        }
+
+        body.dark-mode #filtersPanel { border-color: #263241; }
+
+        @media (max-width: 767px) {
+            #categoryBreadcrumbs { gap: 6px !important; }
+            #categoryBreadcrumbs .breadcrumb-current { max-width: 56vw; }
+            .breadcrumb-overflow-menu { left: -38px; }
+
+            #filtersToggle {
+                width: 42px;
+                min-width: 42px;
+                height: 40px;
+                padding: 0 !important;
+                justify-content: center;
+            }
+
+            #filtersToggle .filters-toggle-label,
+            #filtersToggle .filter-toggle-chevron {
+                display: none;
+            }
+
+            #attrFilters {
+                display: grid !important;
+                grid-template-columns: 1fr;
+                gap: 10px !important;
+            }
+
+            #attrFilters > div {
+                width: 100%;
+                display: grid !important;
+                grid-template-columns: minmax(105px, 1fr) minmax(0, 1.35fr);
+                align-items: center;
+            }
+
+            #attrFilters select,
+            #attrFilters input {
+                width: 100% !important;
+                min-width: 0;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -546,6 +738,13 @@
                         <i data-lucide="package-check" class="w-5 h-5"></i><span>Заказы</span>
                     </a>
                     <a href="cart.html" data-open-cart class="header-action osuz-cart-link hidden lg:inline-flex"><i data-lucide="shopping-cart" class="w-5 h-5"></i><span>Корзина</span><span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span></a>
+                </div>
+            </div>
+            <div class="md:hidden max-w-[1400px] mx-auto px-4 pb-3">
+                <div class="h-11 flex items-center rounded-xl bg-white border border-white/70 overflow-hidden shadow-sm">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 ml-4 flex-shrink-0"></i>
+                    <input type="search" id="mobileSearchInput" placeholder="Поиск товаров..." class="flex-1 min-w-0 h-full px-3 outline-none bg-transparent text-sm text-gray-900" autocomplete="off">
+                    <button type="button" id="mobileCategorySearchButton" class="h-full px-4 bg-gray-900 text-white text-sm font-semibold flex-shrink-0">Найти</button>
                 </div>
             </div>
         </div>
@@ -576,17 +775,31 @@
     <section class="bg-white border-b border-gray-100 sticky top-16 z-40">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
             <div class="flex flex-col gap-4">
-                <div class="flex flex-col md:flex-row md:items-center gap-4">
-
-                    <div class="flex items-center gap-2">
+                <div class="flex flex-row flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2">
                         <span class="text-xs text-gray-400">Сортировка:</span>
                         <button class="sort-btn active text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="">По умолчанию</button>
                         <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="name">По названию</button>
                         <button class="sort-btn text-xs px-3 py-1.5 rounded-lg border border-gray-200" data-sort="brand">По бренду</button>
                     </div>
+
+                    <button
+                        type="button"
+                        id="filtersToggle"
+                        class="hidden min-h-10 px-3 rounded-xl border border-gray-200 bg-white text-gray-700 text-sm font-semibold items-center gap-2 hover:border-primary-500 hover:text-primary-700"
+                        aria-expanded="false"
+                        aria-controls="filtersPanel"
+                        title="Фильтры"
+                    >
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                        <span class="filters-toggle-label">Фильтры</span>
+                        <i data-lucide="chevron-down" class="filter-toggle-chevron w-4 h-4"></i>
+                    </button>
                 </div>
-               
-                <div id="attrFilters" class="flex flex-wrap gap-3"></div>
+
+                <div id="filtersPanel" class="hidden">
+                    <div id="attrFilters" class="flex flex-wrap gap-3"></div>
+                </div>
             </div>
         </div>
     </section>
@@ -708,13 +921,14 @@
 
         const ui = {
             ru: {
-                home: 'Главная',
+                home: 'Osuz',
                 catalog: 'Каталог',
                 category: 'Категория',
                 found: 'Найдено',
                 products: 'товаров',
                 searchPlaceholder: 'Поиск по названию, артикулу, бренду...',
                 sorting: 'Сортировка:',
+                filters: 'Фильтры',
                 defaultSort: 'По умолчанию',
                 nameSort: 'По названию',
                 brandSort: 'По бренду',
@@ -753,13 +967,14 @@
                 footerRights: 'Все права защищены.'
             },
             uz: {
-                home: 'Bosh sahifa',
+                home: 'Osuz',
                 catalog: 'Katalog',
                 category: 'Kategoriya',
                 found: 'Topildi',
                 products: 'mahsulot',
                 searchPlaceholder: 'Nomi, artikuli yoki brendi bo‘yicha qidirish...',
                 sorting: 'Saralash:',
+                filters: 'Filtrlar',
                 defaultSort: 'Standart',
                 nameSort: 'Nomi bo‘yicha',
                 brandSort: 'Brend bo‘yicha',
@@ -798,13 +1013,14 @@
                 footerRights: 'Barcha huquqlar himoyalangan.'
             },
             en: {
-                home: 'Home',
+                home: 'Osuz',
                 catalog: 'Catalog',
                 category: 'Category',
                 found: 'Found',
                 products: 'products',
                 searchPlaceholder: 'Search by name, order code or brand...',
                 sorting: 'Sort:',
+                filters: 'Filters',
                 defaultSort: 'Default',
                 nameSort: 'By name',
                 brandSort: 'By brand',
@@ -987,6 +1203,10 @@
                 document.getElementById('categoryHeaderSearchButton'),
                 ui.searchButton
             );
+            setNodeText(
+                document.getElementById('mobileCategorySearchButton'),
+                ui.searchButton
+            );
 
             const ordersLink = document.querySelector('a[href="orders.html"] span');
             const cartLink = document.querySelector('a[href="cart.html"] > span:not([data-cart-count])');
@@ -1059,32 +1279,37 @@
             const container = document.getElementById('categoryBreadcrumbs');
             if (!container) return;
 
+            const trail = buildCategoryTrail(category);
+            const current = trail[trail.length - 1] || category;
+            const intermediate = trail.slice(0, -1);
+            const currentName = localizedObjectValue(current?.names, ui.category);
+            const separator = '<i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0"></i>';
+
             const parts = [
-                `<a href="/index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>`,
-                `<i data-lucide="chevron-right" class="w-3 h-3"></i>`,
-                `<a href="/index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>`
+                `<a href="index.html" class="hover:text-primary-600 transition-colors font-semibold">Osuz</a>`
             ];
 
-            const trail = buildCategoryTrail(category);
+            if (intermediate.length) {
+                const menuItems = intermediate.map(item => `
+                    <a href="category.html?id=${encodeURIComponent(item.id)}" class="breadcrumb-overflow-link">
+                        <span>${escapeHTML(localizedObjectValue(item.names, ui.category))}</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                    </a>
+                `).join('');
 
-            trail.forEach((item, index) => {
-                const name = localizedObjectValue(item.names, ui.category);
-                const isCurrent = index === trail.length - 1;
+                parts.push(separator);
+                parts.push(`
+                    <details class="breadcrumb-overflow">
+                        <summary aria-label="Показать промежуточные категории" title="Промежуточные категории">…</summary>
+                        <div class="breadcrumb-overflow-menu">${menuItems}</div>
+                    </details>
+                `);
+            }
 
-                parts.push(
-                    `<i data-lucide="chevron-right" class="w-3 h-3"></i>`
-                );
-
-                if (isCurrent) {
-                    parts.push(
-                        `<span id="breadcrumbCategory" class="breadcrumb-current text-gray-900">${escapeHTML(name)}</span>`
-                    );
-                } else {
-                    parts.push(
-                        `<a href="/category.html?id=${encodeURIComponent(item.id)}" class="hover:text-primary-600 transition-colors">${escapeHTML(name)}</a>`
-                    );
-                }
-            });
+            parts.push(separator);
+            parts.push(
+                `<span id="breadcrumbCategory" class="breadcrumb-current text-gray-900" title="${escapeHTML(currentName)}">${escapeHTML(currentName)}</span>`
+            );
 
             container.innerHTML = parts.join('');
             lucide.createIcons();
@@ -1094,7 +1319,9 @@
             document.documentElement.lang = currentLang;
 
             const searchInput = document.getElementById('searchInput');
+            const mobileSearchInput = document.getElementById('mobileSearchInput');
             if (searchInput) searchInput.placeholder = ui.searchPlaceholder;
+            if (mobileSearchInput) mobileSearchInput.placeholder = ui.searchPlaceholder;
 
             const sortingLabel = document.querySelector('.sort-btn')?.parentElement?.querySelector('span');
             if (sortingLabel) sortingLabel.textContent = ui.sorting;
@@ -1103,6 +1330,11 @@
             if (sortButtons[0]) sortButtons[0].textContent = ui.defaultSort;
             if (sortButtons[1]) sortButtons[1].textContent = ui.nameSort;
             if (sortButtons[2]) sortButtons[2].textContent = ui.brandSort;
+
+            const filtersToggle = document.getElementById('filtersToggle');
+            const filtersToggleLabel = filtersToggle?.querySelector('.filters-toggle-label');
+            if (filtersToggleLabel) filtersToggleLabel.textContent = ui.filters || 'Фильтры';
+            if (filtersToggle) filtersToggle.title = ui.filters || 'Фильтры';
 
             const emptyTitle = document.querySelector('#emptyState h3');
             const emptyText = document.querySelector('#emptyState p');
@@ -1144,11 +1376,9 @@
 
                 const breadcrumbContainer = document.getElementById('categoryBreadcrumbs');
                 breadcrumbContainer.innerHTML = `
-                    <a href="/index.html" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.home)}</a>
-                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                    <a href="/index.html#catalog" class="hover:text-primary-600 transition-colors">${escapeHTML(ui.catalog)}</a>
-                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                    <span id="breadcrumbCategory" class="breadcrumb-current text-gray-900">${escapeHTML(fallbackName)}</span>
+                    <a href="index.html" class="hover:text-primary-600 transition-colors font-semibold">Osuz</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0"></i>
+                    <span id="breadcrumbCategory" class="breadcrumb-current text-gray-900" title="${escapeHTML(fallbackName)}">${escapeHTML(fallbackName)}</span>
                 `;
                 lucide.createIcons();
 
@@ -1179,7 +1409,7 @@
                 section.style.display = '';
                 list.innerHTML = childCategories.map(category => `
                     <a
-                        href="/category.html?id=${category.id}"
+                        href="category.html?id=${category.id}"
                         class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white"
                     >
                         ${escapeHTML(localizedObjectValue(category.names, ui.category))}
@@ -1223,6 +1453,8 @@
 
         function renderAttrFilters() {
             const container = document.getElementById('attrFilters');
+            const filtersToggle = document.getElementById('filtersToggle');
+            const filtersPanel = document.getElementById('filtersPanel');
             container.innerHTML = '';
 
             categoryAttributes.forEach(attribute => {
@@ -1286,6 +1518,17 @@
                     container.appendChild(wrap);
                 }
             });
+
+            const hasFilters = container.children.length > 0;
+            filtersToggle?.classList.toggle('hidden', !hasFilters);
+
+            if (!hasFilters) {
+                filtersPanel?.classList.add('hidden');
+                filtersToggle?.classList.remove('is-open');
+                filtersToggle?.setAttribute('aria-expanded', 'false');
+            }
+
+            lucide.createIcons();
         }
 
         async function loadProducts() {
@@ -1340,17 +1583,17 @@
 
                 grid.innerHTML = sorted.map(product => {
                     const name = localizedProductName(product);
-                    const photo = buildFileUrl(product.photo_url);
+                    const photo = buildFileUrl(product.photo_url) || 'osuz logo.png';
                     const brand = product.brand || '';
                     const brandLetter = (brand || '?').charAt(0).toUpperCase();
                     const price = formatPrice(product.price_from);
 
                     return `
                         <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in">
-                            <a href="/product.html?id=${encodeURIComponent(product.id)}" data-product-preview-id="${product.id}" class="block h-full">
+                            <a href="product.html?id=${encodeURIComponent(product.id)}" data-product-preview-id="${product.id}" class="block h-full">
                                 <div class="h-40 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
                                     ${photo
-                                        ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.remove();">`
+                                        ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
                                         : `<div class="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center"><span class="text-lg font-bold text-gray-400">${escapeHTML(brandLetter)}</span></div>`
                                     }
                                 </div>
@@ -1403,6 +1646,18 @@
                 document.getElementById('productCount').textContent = ui.loadingError;
             }
         }
+
+        const filtersToggleButton = document.getElementById('filtersToggle');
+        const filtersPanelElement = document.getElementById('filtersPanel');
+
+        filtersToggleButton?.addEventListener('click', () => {
+            if (!filtersPanelElement) return;
+
+            const willOpen = filtersPanelElement.classList.contains('hidden');
+            filtersPanelElement.classList.toggle('hidden', !willOpen);
+            filtersToggleButton.classList.toggle('is-open', willOpen);
+            filtersToggleButton.setAttribute('aria-expanded', String(willOpen));
+        });
 
         const paginationSelectorButton = document.getElementById('paginationSelectorButton');
         const paginationSelectorLabel = document.getElementById('paginationSelectorLabel');
@@ -1487,13 +1742,25 @@
             if (event.key === 'Escape') closePaginationSelector();
         });
 
-        document.getElementById('searchInput').addEventListener('input', event => {
+        const desktopSearchInput = document.getElementById('searchInput');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+
+        desktopSearchInput.addEventListener('input', event => {
+            if (mobileSearchInput && mobileSearchInput.value !== event.target.value) {
+                mobileSearchInput.value = event.target.value;
+            }
+
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 searchQuery = event.target.value.trim();
                 currentPage = 1;
                 loadProducts();
             }, 400);
+        });
+
+        mobileSearchInput?.addEventListener('input', event => {
+            desktopSearchInput.value = event.target.value;
+            desktopSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
         });
 
         document.querySelectorAll('.sort-btn').forEach(button => {
@@ -1587,7 +1854,23 @@
             toggle?.addEventListener('click', e => { e.stopPropagation(); menu?.classList.toggle('hidden'); });
             document.querySelectorAll('.category-language-option').forEach(btn => btn.addEventListener('click', () => { localStorage.setItem('osuzLang', btn.dataset.language); location.reload(); }));
             document.addEventListener('click', e => { if (!e.target.closest('#categoryLanguageToggle') && !e.target.closest('#categoryLanguageMenu')) menu?.classList.add('hidden'); });
-            document.getElementById('categoryHeaderSearchButton')?.addEventListener('click', () => document.getElementById('searchInput')?.dispatchEvent(new Event('input', {bubbles:true})));
+            const desktopSearch = document.getElementById('searchInput');
+            const mobileSearch = document.getElementById('mobileSearchInput');
+            const submitMobileSearch = () => {
+                if (!desktopSearch || !mobileSearch) return;
+                desktopSearch.value = mobileSearch.value;
+                desktopSearch.dispatchEvent(new Event('input', { bubbles: true }));
+            };
+
+            document.getElementById('categoryHeaderSearchButton')?.addEventListener('click', () =>
+                desktopSearch?.dispatchEvent(new Event('input', { bubbles: true }))
+            );
+            document.getElementById('mobileCategorySearchButton')?.addEventListener('click', submitMobileSearch);
+            mobileSearch?.addEventListener('keydown', event => {
+                if (event.key !== 'Enter') return;
+                event.preventDefault();
+                submitMobileSearch();
+            });
         })();
     </script>
 
@@ -1743,18 +2026,5 @@
             window.addEventListener('pageshow', bindCartLinks);
         })();
     </script>
-
-
-    <script>
-        (() => {
-            document.addEventListener('click', event => {
-                const link = event.target.closest('a[href*="category.html"]');
-                if (!link) return;
-
-                link.removeAttribute('target');
-            }, true);
-        })();
-    </script>
-
 </body>
 </html>

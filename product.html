@@ -393,6 +393,121 @@
             background: #00bcd4;
         }
 
+
+
+        /* 18.08 additions: compact breadcrumb path */
+        #breadcrumbs {
+            flex-wrap: nowrap !important;
+            min-width: 0;
+            overflow: visible;
+        }
+
+        #breadcrumbs > * { flex: 0 0 auto; }
+
+        #breadcrumbs .breadcrumb-current {
+            min-width: 0;
+            max-width: min(62vw, 620px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .breadcrumb-overflow {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .breadcrumb-overflow > summary {
+            list-style: none;
+            width: 34px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dbe4ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1;
+            cursor: pointer;
+            user-select: none;
+            transition: .18s ease;
+        }
+
+        .breadcrumb-overflow > summary::-webkit-details-marker { display: none; }
+        .breadcrumb-overflow > summary::marker { display: none; content: ''; }
+        .breadcrumb-overflow > summary:hover,
+        .breadcrumb-overflow[open] > summary {
+            border-color: #00bcd4;
+            color: #00838f;
+            background: #ecfeff;
+        }
+
+        .breadcrumb-overflow-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: calc(100% + 9px);
+            z-index: 120;
+            width: max-content;
+            min-width: 220px;
+            max-width: min(330px, calc(100vw - 32px));
+            padding: 7px;
+            border: 1px solid #dbe4ee;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, .16);
+        }
+
+        .breadcrumb-overflow:hover .breadcrumb-overflow-menu,
+        .breadcrumb-overflow[open] .breadcrumb-overflow-menu { display: block; }
+
+        .breadcrumb-overflow-link {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: normal !important;
+            line-height: 1.35;
+            transition: .16s ease;
+        }
+
+        .breadcrumb-overflow-link:hover {
+            background: #ecfeff;
+            color: #00838f;
+        }
+
+        body.dark-mode .breadcrumb-overflow > summary,
+        body.dark-mode .breadcrumb-overflow-menu {
+            background: #0f1722;
+            border-color: #334155;
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .breadcrumb-overflow > summary:hover,
+        body.dark-mode .breadcrumb-overflow[open] > summary,
+        body.dark-mode .breadcrumb-overflow-link:hover {
+            background: #12303a;
+            border-color: #00bcd4;
+            color: #67e8f9;
+        }
+
+        body.dark-mode .breadcrumb-overflow-link { color: #cbd5e1; }
+
+        @media (max-width: 767px) {
+            #breadcrumbs { gap: 6px !important; }
+            #breadcrumbs .breadcrumb-current { max-width: 56vw; }
+            .breadcrumb-overflow-menu { left: -38px; }
+        }
+
     </style>
 </head>
 <body>
@@ -432,14 +547,14 @@
             <section class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-start">
                 <div class="surface rounded-3xl p-4 lg:p-6">
                     <div class="relative rounded-2xl bg-gray-50 overflow-hidden">
-                        <img id="mainProductImage" class="main-image" alt="">
+                        <img id="mainProductImage" class="main-image" alt="" onerror="this.onerror=null;this.src='osuz logo.png';">
                         <button id="galleryPrev" class="gallery-control hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" aria-label="Предыдущее изображение">
                             <i data-lucide="chevron-left" class="w-5 h-5"></i>
                         </button>
                         <button id="galleryNext" class="gallery-control hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" aria-label="Следующее изображение">
                             <i data-lucide="chevron-right" class="w-5 h-5"></i>
                         </button>
-                        <div id="imageFallback" class="hidden absolute inset-0 items-center justify-center text-6xl font-black text-gray-300">OSUZ</div>
+                        <div id="imageFallback" class="hidden absolute inset-0 items-center justify-center"><img src="osuz logo.png" alt="OSUZ" class="max-w-[180px] max-h-[120px] object-contain opacity-80"></div>
                     </div>
                     <div id="galleryThumbs" class="mt-4 flex flex-wrap gap-3"></div>
                 </div>
@@ -615,9 +730,11 @@
                 cartError: 'Не удалось добавить товар в корзину.',
                 outOfStock: 'Нет в наличии',
                 previewLoaded: 'Основная информация показана сразу. Предложения продавцов ещё загружаются.',
-                previewOnly: 'Основная информация загружена, но сервер не ответил на запрос предложений продавцов.',
+                previewOnly: 'Не удалось обновить основные данные товара. Показана сохранённая версия.',
+                sellersLoadError: 'Не удалось загрузить предложения продавцов. Обновите страницу и попробуйте ещё раз.',
+                sellersLoading: 'Загружаем предложения продавцов...',
                 errorButton: 'Вернуться в каталог',
-                home: 'Главная',
+                home: 'Osuz',
                 navCatalog: 'Каталог',
                 navPartners: 'Партнёры',
                 navProducts: 'Товары',
@@ -677,9 +794,11 @@
                 cartError: 'Mahsulotni savatga qo‘shib bo‘lmadi.',
                 outOfStock: 'Omborda yo‘q',
                 previewLoaded: 'Asosiy ma’lumot darhol ko‘rsatildi. Sotuvchilar takliflari hali yuklanmoqda.',
-                previewOnly: 'Asosiy ma’lumot yuklandi, ammo server sotuvchilar takliflariga javob bermadi.',
+                previewOnly: 'Mahsulotning asosiy ma’lumotlarini yangilab bo‘lmadi. Saqlangan versiya ko‘rsatildi.',
+                sellersLoadError: 'Sotuvchilar takliflarini yuklab bo‘lmadi. Sahifani yangilab, qayta urinib ko‘ring.',
+                sellersLoading: 'Sotuvchilar takliflari yuklanmoqda...',
                 errorButton: 'Katalogga qaytish',
-                home: 'Bosh sahifa',
+                home: 'Osuz',
                 navCatalog: 'Katalog',
                 navPartners: 'Hamkorlar',
                 navProducts: 'Mahsulotlar',
@@ -739,9 +858,11 @@
                 cartError: 'Could not add the product to the cart.',
                 outOfStock: 'Out of stock',
                 previewLoaded: 'The main product information is shown immediately. Seller offers are still loading.',
-                previewOnly: 'The main product information is available, but the server did not return seller offers.',
+                previewOnly: 'The latest product data could not be refreshed. The saved version is shown.',
+                sellersLoadError: 'Seller offers could not be loaded. Refresh the page and try again.',
+                sellersLoading: 'Loading seller offers...',
                 errorButton: 'Return to catalog',
-                home: 'Home',
+                home: 'Osuz',
                 navCatalog: 'Catalog',
                 navPartners: 'Partners',
                 navProducts: 'Products',
@@ -872,37 +993,42 @@
             if (!container || !product) return;
 
             const name = localizedProductName(product);
+            const trail = buildProductCategoryTrail(product.category_id);
+            const separator = '<i data-lucide="chevron-right" class="w-3 h-3 flex-shrink-0"></i>';
+
+            const intermediate = trail.length
+                ? trail.map(category => ({
+                    id: category.id,
+                    name: localizedCategoryName(category, ui.products)
+                }))
+                : (product.category_id
+                    ? [{ id: product.category_id, name: product.category_name || ui.products }]
+                    : []);
+
             const parts = [
-                `<a href="index.html" class="hover:text-primary-600">${escapeHTML(ui.home)}</a>`,
-                `<i data-lucide="chevron-right" class="w-3 h-3"></i>`,
-                `<a href="index.html#catalog" class="hover:text-primary-600">${escapeHTML(ui.catalog)}</a>`
+                `<a href="index.html" class="hover:text-primary-600 font-semibold">Osuz</a>`
             ];
 
-            const trail = buildProductCategoryTrail(product.category_id);
+            if (intermediate.length) {
+                const menuItems = intermediate.map(item => `
+                    <a href="category.html?id=${encodeURIComponent(item.id)}" class="breadcrumb-overflow-link">
+                        <span>${escapeHTML(item.name)}</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 flex-shrink-0"></i>
+                    </a>
+                `).join('');
 
-            if (trail.length) {
-                trail.forEach(category => {
-                    parts.push(
-                        `<i data-lucide="chevron-right" class="w-3 h-3"></i>`
-                    );
-                    parts.push(
-                        `<a href="category.html?id=${encodeURIComponent(category.id)}" class="hover:text-primary-600">${escapeHTML(localizedCategoryName(category, ui.products))}</a>`
-                    );
-                });
-            } else if (product.category_id) {
-                parts.push(
-                    `<i data-lucide="chevron-right" class="w-3 h-3"></i>`
-                );
-                parts.push(
-                    `<a href="category.html?id=${encodeURIComponent(product.category_id)}" class="hover:text-primary-600">${escapeHTML(product.category_name || ui.products)}</a>`
-                );
+                parts.push(separator);
+                parts.push(`
+                    <details class="breadcrumb-overflow">
+                        <summary aria-label="Показать путь к товару" title="Промежуточные категории">…</summary>
+                        <div class="breadcrumb-overflow-menu">${menuItems}</div>
+                    </details>
+                `);
             }
 
+            parts.push(separator);
             parts.push(
-                `<i data-lucide="chevron-right" class="w-3 h-3"></i>`
-            );
-            parts.push(
-                `<span class="breadcrumb-current text-gray-900 font-semibold">${escapeHTML(name)}</span>`
+                `<span class="breadcrumb-current text-gray-900 font-semibold" title="${escapeHTML(name)}">${escapeHTML(name)}</span>`
             );
 
             container.innerHTML = parts.join('');
@@ -1035,13 +1161,11 @@
             document.getElementById('loadingState').classList.add('hidden');
             document.getElementById('errorState').classList.add('hidden');
             document.getElementById('productContent').classList.remove('hidden');
-            document.getElementById('sellers').classList.add('hidden');
-            document.getElementById('sellersButtonLabel')?.closest('a')?.classList.add('hidden');
+            document.getElementById('sellers').classList.remove('hidden');
+            document.getElementById('sellersButtonLabel')?.closest('a')?.classList.remove('hidden');
+            document.getElementById('productPreviewNotice').classList.add('hidden');
 
-            const notice = document.getElementById('productPreviewNotice');
-            notice.textContent = ui.previewLoaded;
-            notice.classList.remove('hidden');
-
+            renderSellersLoading();
             lucide.createIcons();
             return true;
         }
@@ -1066,7 +1190,9 @@
             const previewVisible = showProductPreview(cachedPreview);
 
             try {
-                product = await apiFetch(`/products/${productId}`, 15000);
+                const freshProduct = await apiFetch(`/products/${productId}`, 15000);
+
+                product = freshProduct;
 
                 sessionStorage.setItem(
                     `osuzProductPreview:${productId}`,
@@ -1083,68 +1209,118 @@
                 );
 
                 renderProduct();
+            } catch (error) {
+                console.error('Product refresh failed:', error);
 
-                const attributeRequest = product.category_id
-                    ? apiFetch(`/categories/${product.category_id}/attributes`, 10000)
-                    : Promise.resolve([]);
+                if (!previewVisible || !product) {
+                    showError();
+                    return;
+                }
+            }
 
-                const requests = await Promise.allSettled([
-                    attributeRequest,
-                    apiFetch(`/products/${productId}/attribute-values`, 10000),
-                    apiFetch(`/products/${productId}/listings`, 12000),
-                    apiFetch(`/products/${productId}/analogs`, 10000),
-                    apiFetch(`/products/${productId}/complements`, 10000),
-                    apiFetch('/categories', 10000)
-                ]);
+            // Основная карточка уже готова.
+            // Не ждём sellers / attributes / analogs / categories,
+            // чтобы не держать глобальную синюю плашку.
+            finishProductLoading();
+            renderSellersLoading();
 
+            const categoriesPromise = apiFetch('/categories', 10000)
+                .then(categories => {
+                    allCategories = Array.isArray(categories)
+                        ? categories
+                        : [];
+
+                    renderProductBreadcrumbs();
+                })
+                .catch(error => {
+                    console.error('Categories loading failed:', error);
+                    allCategories = [];
+                    renderProductBreadcrumbs();
+                });
+
+            const attributesPromise = Promise.allSettled([
+                product.category_id
+                    ? apiFetch(
+                        `/categories/${product.category_id}/attributes`,
+                        10000
+                    )
+                    : Promise.resolve([]),
+                apiFetch(
+                    `/products/${productId}/attribute-values`,
+                    10000
+                )
+            ]).then(results => {
                 productAttributes =
-                    requests[0].status === 'fulfilled' && Array.isArray(requests[0].value)
-                        ? requests[0].value
+                    results[0].status === 'fulfilled' &&
+                    Array.isArray(results[0].value)
+                        ? results[0].value
                         : [];
 
                 attributeValues =
-                    requests[1].status === 'fulfilled' && requests[1].value
-                        ? requests[1].value
+                    results[1].status === 'fulfilled' &&
+                    results[1].value
+                        ? results[1].value
                         : {};
 
-                const listings =
-                    requests[2].status === 'fulfilled' && Array.isArray(requests[2].value)
-                        ? requests[2].value
-                        : [];
-
-                const analogs =
-                    requests[3].status === 'fulfilled' && Array.isArray(requests[3].value)
-                        ? requests[3].value
-                        : [];
-
-                const complements =
-                    requests[4].status === 'fulfilled' && Array.isArray(requests[4].value)
-                        ? requests[4].value
-                        : [];
-
-                allCategories =
-                    requests[5].status === 'fulfilled' && Array.isArray(requests[5].value)
-                        ? requests[5].value
-                        : [];
-
-                renderProductBreadcrumbs();
                 renderAttributes();
-                renderSellers(listings);
-                renderRelated('analogs', analogs);
-                renderRelated('complements', complements);
-                finishProductLoading();
-            } catch (error) {
-                console.error('Product loading failed:', error);
+            });
 
-                if (previewVisible) {
-                    const notice = document.getElementById('productPreviewNotice');
-                    notice.textContent = ui.previewOnly;
-                    notice.classList.remove('hidden');
-                    return;
-                }
+            const sellersPromise = apiFetch(
+                `/products/${productId}/listings`,
+                12000
+            )
+                .then(listings => {
+                    renderSellers(
+                        Array.isArray(listings)
+                            ? listings
+                            : []
+                    );
+                })
+                .catch(error => {
+                    renderSellersLoadError(error);
+                });
 
-                showError();
-            }
+            const analogsPromise = apiFetch(
+                `/products/${productId}/analogs`,
+                10000
+            )
+                .then(analogs => {
+                    renderRelated(
+                        'analogs',
+                        Array.isArray(analogs)
+                            ? analogs
+                            : []
+                    );
+                })
+                .catch(error => {
+                    console.error('Analogs loading failed:', error);
+                    renderRelated('analogs', []);
+                });
+
+            const complementsPromise = apiFetch(
+                `/products/${productId}/complements`,
+                10000
+            )
+                .then(complements => {
+                    renderRelated(
+                        'complements',
+                        Array.isArray(complements)
+                            ? complements
+                            : []
+                    );
+                })
+                .catch(error => {
+                    console.error('Complements loading failed:', error);
+                    renderRelated('complements', []);
+                });
+
+            await Promise.allSettled([
+                categoriesPromise,
+                attributesPromise,
+                sellersPromise,
+                analogsPromise,
+                complementsPromise
+            ]);
         }
 
         function showError() {
@@ -1194,7 +1370,7 @@
                 galleryImages = [buildFileUrl(product.photo_url)];
             }
 
-            if (!galleryImages.length) galleryImages = [''];
+            if (!galleryImages.length) galleryImages = ['osuz logo.png'];
 
             galleryIndex = 0;
             renderGallery();
@@ -1223,8 +1399,8 @@
                         aria-current="${index === galleryIndex ? 'true' : 'false'}"
                     >
                         ${url
-                            ? `<img src="${escapeHTML(url)}" alt="" loading="lazy">`
-                            : '<span class="text-xs font-bold text-gray-400">OSUZ</span>'
+                            ? `<img src="${escapeHTML(url)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
+                            : `<img src="osuz logo.png" alt="OSUZ" loading="lazy">`
                         }
                     </button>
                 `).join('')
@@ -1767,8 +1943,62 @@
             return value || '—';
         }
 
+        function renderSellersLoading() {
+            sellerListingsByTenant = new Map();
+
+            const list = document.getElementById('sellersList');
+            const empty = document.getElementById('sellersEmpty');
+            const count = document.getElementById('sellersCount');
+
+            empty.classList.add('hidden');
+            count.textContent = ui.sellersLoading;
+
+            list.innerHTML = `
+                <div class="seller-card rounded-2xl p-5">
+                    <div class="h-4 w-32 skeleton rounded-lg"></div>
+                    <div class="mt-3 h-3 w-24 skeleton rounded-lg"></div>
+                    <div class="mt-6 h-8 w-36 skeleton rounded-lg"></div>
+                    <div class="mt-5 h-11 w-full skeleton rounded-xl"></div>
+                </div>
+                <div class="seller-card rounded-2xl p-5 hidden md:block">
+                    <div class="h-4 w-32 skeleton rounded-lg"></div>
+                    <div class="mt-3 h-3 w-24 skeleton rounded-lg"></div>
+                    <div class="mt-6 h-8 w-36 skeleton rounded-lg"></div>
+                    <div class="mt-5 h-11 w-full skeleton rounded-xl"></div>
+                </div>
+            `;
+
+            document.getElementById('sellers').classList.remove('hidden');
+            document.getElementById('sellersButtonLabel')
+                ?.closest('a')
+                ?.classList.remove('hidden');
+        }
+
+        function renderSellersLoadError(error) {
+            console.error('Seller listings loading failed:', error);
+
+            sellerListingsByTenant = new Map();
+
+            const list = document.getElementById('sellersList');
+            const empty = document.getElementById('sellersEmpty');
+            const count = document.getElementById('sellersCount');
+
+            list.innerHTML = '';
+            count.textContent = '';
+            empty.textContent = ui.sellersLoadError;
+            empty.classList.remove('hidden');
+
+            document.getElementById('sellers').classList.remove('hidden');
+            document.getElementById('sellersButtonLabel')
+                ?.closest('a')
+                ?.classList.remove('hidden');
+        }
+
         function renderSellers(listings) {
             const list = Array.isArray(listings) ? listings : [];
+
+            document.getElementById('sellersEmpty').classList.add('hidden');
+            document.getElementById('sellersList').innerHTML = '';
 
             sellerListingsByTenant = new Map(
                 list.map(listing => [
@@ -1843,14 +2073,14 @@
 
         function relatedCard(item) {
             const name = localizedProductName(item);
-            const image = buildFileUrl(item.photo_url);
+            const image = buildFileUrl(item.photo_url) || 'osuz logo.png';
 
             return `
                 <a href="product.html?id=${encodeURIComponent(item.id)}" class="related-card rounded-2xl overflow-hidden block">
                     <div class="h-40 bg-gray-50 flex items-center justify-center p-4">
                         ${image
-                            ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain">`
-                            : '<span class="text-xl font-black text-gray-300">OSUZ</span>'
+                            ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null;this.src='osuz logo.png';">`
+                            : `<img src="osuz logo.png" alt="OSUZ" class="max-h-full max-w-full object-contain">`
                         }
                     </div>
                     <div class="p-4">
