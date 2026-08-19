@@ -702,23 +702,68 @@
                 display: none;
             }
 
+            /* Mobile filters: compact floating panel, never stretches the page */
+            #filtersPanel {
+                position: absolute;
+                left: 14px;
+                right: 14px;
+                top: calc(100% + 6px);
+                z-index: 80;
+                max-height: 45vh;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: touch;
+                padding: 12px !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 16px;
+                background: rgba(255,255,255,.98);
+                box-shadow: 0 18px 45px rgba(15,23,42,.18);
+                backdrop-filter: blur(12px);
+            }
+
+            body.dark-mode #filtersPanel {
+                background: rgba(15,23,34,.98) !important;
+                border-color: #334155 !important;
+                box-shadow: 0 18px 45px rgba(0,0,0,.42);
+            }
+
             #attrFilters {
                 display: grid !important;
                 grid-template-columns: 1fr;
-                gap: 10px !important;
+                gap: 7px !important;
             }
 
             #attrFilters > div {
                 width: 100%;
+                min-height: 36px;
                 display: grid !important;
-                grid-template-columns: minmax(105px, 1fr) minmax(0, 1.35fr);
+                grid-template-columns: minmax(105px, .9fr) minmax(0, 1.25fr);
                 align-items: center;
+                gap: 8px !important;
+            }
+
+            #attrFilters > div > span {
+                font-size: 11px !important;
+                line-height: 1.25;
             }
 
             #attrFilters select,
             #attrFilters input {
                 width: 100% !important;
                 min-width: 0;
+                height: 36px;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                font-size: 12px !important;
+            }
+
+            /* number range: keep two inputs compact on one row */
+            #attrFilters > div:has(input[type="number"]) {
+                grid-template-columns: minmax(105px, .9fr) minmax(0, 1.25fr);
+            }
+
+            #attrFilters > div:has(input[type="number"]) > input {
+                min-width: 0 !important;
             }
         }
 
@@ -778,7 +823,7 @@
     </section>
 
   
-    <section class="bg-white border-b border-gray-100 sticky top-16 z-40">
+    <section class="bg-white border-b border-gray-100 sticky top-16 z-40 overflow-visible">
         <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row flex-wrap items-center justify-between gap-3">
