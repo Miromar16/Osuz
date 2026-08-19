@@ -492,7 +492,7 @@
         <div class="site-header-top">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
                 <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
-                    <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto">
+                    <img src="osuz logo.png" alt="OSUZ" class="h-8 w-auto" style="filter: brightness(0) invert(1);">
                     <span class="text-xl font-black tracking-wide text-white">OSUZ</span>
                 </a>
 
@@ -514,7 +514,7 @@
                         <i data-lucide="package-check" class="w-5 h-5"></i>
                         <span id="headerOrdersText">Заказы</span>
                     </a>
-                    <a href="cart.html" class="header-action">
+                    <a href="cart.html" class="header-action !px-3" aria-label="Корзина">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         <span id="headerCartText" class="hidden sm:inline">Корзина</span>
                         <span id="headerCartCount" class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
@@ -1861,8 +1861,18 @@
                 }
 
                 document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
+                    const nextText = String(count);
+                    const nextDisplay = count > 0 ? 'flex' : 'none';
+
+                    // Важно: не мутируем DOM без необходимости.
+                    // Иначе MutationObserver ниже сам провоцирует новый callback
+                    // и страница уходит в бесконечный цикл обновлений.
+                    if (badge.textContent !== nextText) {
+                        badge.textContent = nextText;
+                    }
+                    if (badge.style.display !== nextDisplay) {
+                        badge.style.display = nextDisplay;
+                    }
                 });
             }
 
@@ -1889,7 +1899,7 @@
             }, true);
 
             const observer = new MutationObserver(() => syncMobileCartBadge());
-            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+            observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
 
             setTimeout(() => {
                 syncMobileNavLabels();

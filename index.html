@@ -811,6 +811,31 @@
             pointer-events: none !important;
         }
 
+
+        .osuz-cart-count:not(.hidden) {
+            display: inline-flex !important;
+        }
+
+        @media (max-width: 1023px) {
+            #headerCartLink {
+                min-width: 42px;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+            #headerCartLink [data-cart-count] {
+                position: absolute;
+                top: 1px;
+                right: 1px;
+                min-width: 17px;
+                height: 17px;
+                padding: 0 4px;
+                font-size: 9px;
+                line-height: 17px;
+                border: 2px solid #00bcd4;
+            }
+        }
+
     
         /* 08.08 fixes: dark search must stay dark in Firefox/Chrome */
         body.dark-mode .header-search-bar,
@@ -883,7 +908,7 @@
         <div class="site-header-top">
             <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3 lg:gap-6">
                 <a href="#solutions" class="header-brand flex items-center gap-2 flex-shrink-0">
-                    <img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto">
+                    <img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto" style="filter: brightness(0) invert(1);">
                     <span class="site-logo-text text-lg font-black tracking-wider">OSUZ</span>
                 </a>
 
@@ -943,10 +968,10 @@
                         <i data-lucide="package-check" class="w-5 h-5"></i>
                         <span>Заказы</span>
                     </a>
-                    <a id="headerCartLink" href="cart.html" data-open-cart data-tooltip-key="cart" data-tooltip="Корзина" class="header-action osuz-cart-link hidden lg:inline-flex" aria-label="Корзина">
+                    <a id="headerCartLink" href="cart.html" data-open-cart data-tooltip-key="cart" data-tooltip="Корзина" class="header-action osuz-cart-link inline-flex !px-3" aria-label="Корзина">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span>Корзина</span>
-                        <span data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
+                        <span class="hidden lg:inline">Корзина</span>
+                        <span data-cart-count class="osuz-cart-count hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
                     </a>
                     <button id="mobileMenuBtn" data-tooltip-key="menuOpen" data-tooltip="Открыть меню" class="header-action lg:hidden !px-3">
                         <i data-lucide="menu" class="w-5 h-5"></i>
@@ -1002,6 +1027,13 @@
                 <a href="#partners" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Партнёры</a>
                 <a href="#brands" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Бренды</a>
                 <a href="#products" class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">Товары</a>
+                <a href="cart.html" data-open-cart class="osuz-cart-link flex items-center justify-between gap-3 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors">
+                    <span class="flex items-center gap-3">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span>Корзина</span>
+                    </span>
+                    <span data-cart-count class="osuz-cart-count hidden min-w-5 h-5 px-1 rounded-full bg-primary-500 text-white text-[10px] font-black items-center justify-center">0</span>
+                </a>
             </nav>
             <div class="mt-8 pt-6 border-t border-gray-100 space-y-3">
                 <a href="tel:+998918401405" class="flex items-center gap-3 text-sm text-gray-500 hover:text-primary-600 transition-colors">

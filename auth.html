@@ -412,15 +412,43 @@
             font-size: 9px !important;
         }
 
+
+
+        /* Mobile auth interaction fix */
+        #authCard,
+        #authCard form,
+        #authCard input,
+        #authCard button,
+        #authCard select,
+        #authCard textarea {
+            pointer-events: auto !important;
+        }
+
+        @media (max-width: 767px) {
+            #authCard {
+                position: relative;
+                z-index: 2;
+                touch-action: manipulation;
+            }
+
+            #authCard .auth-input {
+                position: relative;
+                z-index: 1;
+                -webkit-user-select: text;
+                user-select: text;
+                touch-action: manipulation;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="auth-site-header">
         <div class="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-5">
-            <a href="index.html" class="flex items-center gap-2"><img src="osuz logo.png" alt="OSUZ" class="auth-site-logo h-8 w-auto"><span class="auth-site-title text-xl font-black tracking-wide">OSUZ</span></a>
+            <a href="index.html" class="flex items-center gap-2"><img src="osuz logo.png" alt="OSUZ" class="auth-site-logo h-8 w-auto" style="filter: brightness(0) invert(1);"><span class="auth-site-title text-xl font-black tracking-wide">OSUZ</span></a>
             <div class="flex items-center gap-2 lg:gap-3">
                 <label class="auth-header-action"><select id="languageSelect" class="bg-transparent text-white outline-none cursor-pointer"><option value="ru">RU</option><option value="uz">UZ</option><option value="en">EN</option></select></label>
                 <button id="themeToggle" type="button" class="auth-header-action !px-3" aria-label="Сменить тему"><i data-lucide="moon" class="theme-icon-moon h-5 w-5"></i><i data-lucide="sun" class="theme-icon-sun h-5 w-5"></i></button>
+                <a href="cart.html" class="auth-header-action !px-3" aria-label="Корзина" title="Корзина"><i data-lucide="shopping-cart" class="h-5 w-5"></i></a>
                 <a href="index.html" class="auth-header-action hidden sm:inline-flex"><i data-lucide="arrow-left" class="h-4 w-4"></i><span id="homeLinkText">На главную</span></a>
             </div>
         </div>
@@ -748,7 +776,7 @@
                             <div>
                                 <h2 id="defaultLocationTitle" class="text-lg font-black text-gray-900">Локация по умолчанию</h2>
                                 <p id="defaultLocationDescription" class="mt-1 text-sm text-gray-500">
-                                    Выберите точку на карте. Она будет подставляться при оформлении доставки на этом устройстве.
+                                    Выберите точку на карте. Она сохранится в аккаунте и будет подставляться при оформлении доставки.
                                 </p>
                             </div>
                             <button id="useMyLocationButton" type="button" class="secondary-button px-4">
@@ -960,10 +988,10 @@
                 accountBirth: 'Дата рождения',
                 accountLocation: 'Сохранённая локация',
                 defaultLocationTitle: 'Локация по умолчанию',
-                defaultLocationDescription: 'Выберите точку на карте. Она будет подставляться при оформлении доставки на этом устройстве.',
+                defaultLocationDescription: 'Выберите точку на карте. Она сохранится в аккаунте и будет подставляться при оформлении доставки.',
                 useMyLocation: 'Моя геопозиция',
                 saveDefaultLocation: 'Сохранить локацию',
-                locationSaved: 'Локация по умолчанию сохранена.',
+                locationSaved: 'Локация сохранена в аккаунте. Она будет доступна на сайте и в Telegram-боте.',
                 locationUnavailable: 'Не удалось определить геопозицию.',
                 continueShopping: 'Продолжить покупки',
                 logout: 'Выйти',
@@ -1059,7 +1087,7 @@
                 defaultLocationDescription: 'Xaritadan nuqtani tanlang. Ushbu qurilmada yetkazib berishda avtomatik qo‘yiladi.',
                 useMyLocation: 'Mening joylashuvim',
                 saveDefaultLocation: 'Joylashuvni saqlash',
-                locationSaved: 'Standart joylashuv saqlandi.',
+                locationSaved: 'Joylashuv akkauntda saqlandi. U sayt va Telegram-botda mavjud bo‘ladi.',
                 locationUnavailable: 'Geolokatsiyani aniqlab bo‘lmadi.',
                 continueShopping: 'Xaridni davom ettirish',
                 logout: 'Chiqish',
@@ -1155,7 +1183,7 @@
                 defaultLocationDescription: 'Choose a point on the map. It will be prefilled for delivery checkout on this device.',
                 useMyLocation: 'Use my location',
                 saveDefaultLocation: 'Save location',
-                locationSaved: 'Default location saved.',
+                locationSaved: 'Location saved to your account. It will be available on the website and in the Telegram bot.',
                 locationUnavailable: 'Could not detect your location.',
                 continueShopping: 'Continue shopping',
                 logout: 'Sign out',
@@ -1543,13 +1571,13 @@
                 ? customer.savedLocation
                 : null;
             const storedLocation = readLocalDefaultLocation();
-            const initial = storedLocation || serverLocation || { lat: 41.311081, lng: 69.240562 };
+            const initial = serverLocation || storedLocation || { lat: 41.311081, lng: 69.240562 };
 
             if (!accountMap) {
                 accountMap = L.map('accountMap', {
                     zoomControl: true,
                     scrollWheelZoom: true
-                }).setView([initial.lat, initial.lng], storedLocation || serverLocation ? 14 : 11);
+                }).setView([initial.lat, initial.lng], serverLocation || storedLocation ? 14 : 11);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
@@ -1590,24 +1618,68 @@
             );
         });
 
-        document.getElementById('saveDefaultLocationButton')?.addEventListener('click', () => {
+        document.getElementById('saveDefaultLocationButton')?.addEventListener('click', async () => {
             if (!validLocation(selectedDefaultLocation)) {
                 showAccountNotice(text('locationUnavailable'), 'warning');
                 return;
             }
 
-            localStorage.setItem(
-                DEFAULT_LOCATION_KEY,
-                JSON.stringify(selectedDefaultLocation)
-            );
+            const button = document.getElementById('saveDefaultLocationButton');
+            hideAccountNotice();
+            setLoading(button, true, text('saveDefaultLocation'));
 
-            const storedCustomer = getStoredCustomer();
-            if (storedCustomer) {
-                storedCustomer.savedLocation = selectedDefaultLocation;
-                localStorage.setItem(storageKeys.customer, JSON.stringify(storedCustomer));
+            try {
+                const result = await authenticatedAuthRequest('/me/location', {
+                    method: 'PATCH',
+                    body: {
+                        lat: Number(selectedDefaultLocation.lat),
+                        lng: Number(selectedDefaultLocation.lng)
+                    }
+                });
+
+                const savedLocation = validLocation(result?.savedLocation)
+                    ? {
+                        lat: Number(result.savedLocation.lat),
+                        lng: Number(result.savedLocation.lng)
+                    }
+                    : {
+                        lat: Number(selectedDefaultLocation.lat),
+                        lng: Number(selectedDefaultLocation.lng)
+                    };
+
+                selectedDefaultLocation = savedLocation;
+
+                // localStorage остаётся только локальным кэшем. Источник истины — backend.
+                localStorage.setItem(
+                    DEFAULT_LOCATION_KEY,
+                    JSON.stringify(savedLocation)
+                );
+
+                const storedCustomer = getStoredCustomer();
+                if (storedCustomer) {
+                    storedCustomer.savedLocation = savedLocation;
+                    localStorage.setItem(storageKeys.customer, JSON.stringify(storedCustomer));
+                }
+
+                updateSelectedLocation(savedLocation);
+                showAccountNotice(text('locationSaved'), 'success');
+            } catch (error) {
+                if (error.status === 401) {
+                    clearSession();
+                    document.getElementById('accountPanel').classList.add('hidden');
+                    document.getElementById('authCard').classList.remove('hidden');
+                    showTab('login');
+                    showNotice(text('sessionExpired'), 'warning');
+                    return;
+                }
+
+                showAccountNotice(
+                    error.message || text('locationUnavailable'),
+                    error.status === 400 ? 'warning' : 'error'
+                );
+            } finally {
+                setLoading(button, false, text('saveDefaultLocation'));
             }
-
-            showAccountNotice(text('locationSaved'), 'success');
         });
 
         async function authenticatedAuthRequest(path, options = {}, retry = true) {
@@ -2696,7 +2768,7 @@
             document.getElementById('accountEmail').textContent = customer.email || '—';
             document.getElementById('accountBirthDate').textContent = customer.birthDate || '—';
 
-            const location = readLocalDefaultLocation() || customer.savedLocation;
+            const location = validLocation(customer.savedLocation) ? customer.savedLocation : readLocalDefaultLocation();
             document.getElementById('accountLocation').textContent =
                 validLocation(location)
                     ? `${Number(location.lat).toFixed(5)}, ${Number(location.lng).toFixed(5)}`
@@ -2846,8 +2918,18 @@
                 }
 
                 document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
+                    const nextText = String(count);
+                    const nextDisplay = count > 0 ? 'flex' : 'none';
+
+                    // Не трогаем DOM без необходимости: MutationObserver ниже
+                    // следит за страницей, поэтому без этой проверки возникал
+                    // бесконечный цикл мутаций и мобильная форма зависала.
+                    if (badge.textContent !== nextText) {
+                        badge.textContent = nextText;
+                    }
+                    if (badge.style.display !== nextDisplay) {
+                        badge.style.display = nextDisplay;
+                    }
                 });
             }
 

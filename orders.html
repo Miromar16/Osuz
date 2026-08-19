@@ -1116,6 +1116,55 @@
             return parseResponse(response);
         }
 
+        async function saveCustomerLocation(lat, lng, retry = true) {
+            let token = localStorage.getItem(storageKeys.accessToken);
+            if (!token) return null;
+
+            const response = await fetch(`${AUTH_API}/me/location`, {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ lat, lng }),
+                cache: 'no-store',
+                credentials: 'omit'
+            });
+
+            if (response.status === 401 && retry) {
+                token = await refreshAccessToken();
+                if (!token) return null;
+                return saveCustomerLocation(lat, lng, false);
+            }
+
+            const data = await parseResponse(response);
+            const savedLocation = data?.savedLocation;
+
+            if (
+                savedLocation &&
+                Number.isFinite(Number(savedLocation.lat)) &&
+                Number.isFinite(Number(savedLocation.lng))
+            ) {
+                const normalized = {
+                    lat: Number(savedLocation.lat),
+                    lng: Number(savedLocation.lng)
+                };
+
+                localStorage.setItem('osuzDefaultLocation', JSON.stringify(normalized));
+
+                const customer = getStoredCustomer();
+                if (customer) {
+                    customer.savedLocation = normalized;
+                    localStorage.setItem(storageKeys.customer, JSON.stringify(customer));
+                }
+
+                return normalized;
+            }
+
+            return null;
+        }
+
         function showToast(message, type = 'success') {
             let toast = document.getElementById('osuzToast');
 
@@ -1717,11 +1766,11 @@
             }
 
             const saved =
-                localDefault &&
-                Number.isFinite(Number(localDefault.lat)) &&
-                Number.isFinite(Number(localDefault.lng))
-                    ? localDefault
-                    : customer?.savedLocation;
+                customer?.savedLocation &&
+                Number.isFinite(Number(customer.savedLocation.lat)) &&
+                Number.isFinite(Number(customer.savedLocation.lng))
+                    ? customer.savedLocation
+                    : localDefault;
 
             if (!saved) return;
 
@@ -1860,14 +1909,24 @@
                 }
 
                 performAction(
-                    () => ordersRequest(`/${selectedOrderId}/delivery`, {
-                        method: 'POST',
-                        body: {
-                            type: 'delivery',
-                            lat,
-                            lng
-                        }
-                    }),
+                    async () => {
+                        const order = await ordersRequest(`/${selectedOrderId}/delivery`, {
+                            method: 'POST',
+                            body: {
+                                type: 'delivery',
+                                lat,
+                                lng
+                            }
+                        });
+
+                        // Сохранение профиля не должно блокировать оформление конкретного заказа.
+                        // Координаты заказа уже отправлены выше; профиль обновляем отдельно.
+                        saveCustomerLocation(lat, lng).catch(error => {
+                            console.warn('Could not save customer location:', error);
+                        });
+
+                        return order;
+                    },
                     t('success')
                 );
             });
@@ -2262,9 +2321,16 @@
                     count = localGuestCartCount();
                 }
 
+                const nextText = String(count);
+                const nextDisplay = count > 0 ? 'flex' : 'none';
+
                 document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
-                    badge.textContent = String(count);
-                    badge.style.display = count > 0 ? 'flex' : 'none';
+                    if (badge.textContent !== nextText) {
+                        badge.textContent = nextText;
+                    }
+                    if (badge.style.display !== nextDisplay) {
+                        badge.style.display = nextDisplay;
+                    }
                 });
             }
 
@@ -2290,8 +2356,28 @@
                 }
             }, true);
 
-            const observer = new MutationObserver(() => syncMobileCartBadge());
-            observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class'] });
+            const observer = new MutationObserver(mutations => {
+                const shouldSync = mutations.some(mutation => {
+                    if (mutation.type === 'attributes') {
+                        return mutation.target?.matches?.('[data-cart-count], #headerCartCount');
+                    }
+
+                    return Array.from(mutation.addedNodes || []).some(node =>
+                        node.nodeType === 1 && (
+                            node.matches?.('[data-cart-count], #headerCartCount') ||
+                            node.querySelector?.('[data-cart-count], #headerCartCount')
+                        )
+                    );
+                });
+
+                if (shouldSync) syncMobileCartBadge();
+            });
+            observer.observe(document.body, {
+                subtree: true,
+                childList: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
 
             setTimeout(() => {
                 syncMobileNavLabels();
