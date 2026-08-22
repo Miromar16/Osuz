@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход и регистрация — OSUZ</title>
+    <script>
+        if (location.hostname === '127.0.0.1') {
+            const localUrl = new URL(location.href);
+            localUrl.hostname = 'localhost';
+            location.replace(localUrl.toString());
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=f04be54d-34c9-43bb-ae59-fa95dbc60170&lang=ru_RU" type="text/javascript"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -408,8 +414,22 @@
             filter: brightness(.86) contrast(1.05);
         }
 
-        .leaflet-control-attribution {
-            font-size: 9px !important;
+        .account-map-message {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.55;
+            background: #f8fafc;
+        }
+
+        body.dark-mode .account-map-message {
+            background: #111b28;
+            color: #aeb9c7;
         }
 
 
@@ -928,6 +948,7 @@
         let loginGuardTimer = null;
         let accountMap = null;
         let accountLocationMarker = null;
+        let accountMapReadyPromise = null;
         let selectedDefaultLocation = null;
         const DEFAULT_LOCATION_KEY = 'osuzDefaultLocation';
 
@@ -1535,7 +1556,54 @@
             }
         }
 
-        function updateSelectedLocation(locationValue) {
+        function ensureYandexMaps() {
+            if (accountMapReadyPromise) return accountMapReadyPromise;
+
+            accountMapReadyPromise = new Promise((resolve, reject) => {
+                if (!window.ymaps) {
+                    reject(new Error('Yandex Maps API is unavailable'));
+                    return;
+                }
+
+                window.ymaps.ready(() => resolve(window.ymaps));
+            });
+
+            return accountMapReadyPromise;
+        }
+
+        function syncAccountMapMarker({ center = true } = {}) {
+            if (!accountMap || !window.ymaps || !validLocation(selectedDefaultLocation)) return;
+
+            const coords = [
+                Number(selectedDefaultLocation.lat),
+                Number(selectedDefaultLocation.lng)
+            ];
+
+            if (!accountLocationMarker) {
+                accountLocationMarker = new ymaps.Placemark(
+                    coords,
+                    {},
+                    { draggable: true, preset: 'islands#circleDotIcon' }
+                );
+
+                accountLocationMarker.events.add('dragend', () => {
+                    const point = accountLocationMarker.geometry.getCoordinates();
+                    updateSelectedLocation({ lat: point[0], lng: point[1] }, { centerMap: false });
+                });
+
+                accountMap.geoObjects.add(accountLocationMarker);
+            } else {
+                accountLocationMarker.geometry.setCoordinates(coords);
+            }
+
+            if (center) {
+                accountMap.setCenter(coords, Math.max(Number(accountMap.getZoom()) || 0, 14), {
+                    checkZoomRange: true
+                });
+            }
+        }
+
+        function updateSelectedLocation(locationValue, { centerMap = true } = {}) {
             if (!validLocation(locationValue)) return;
 
             selectedDefaultLocation = {
@@ -1547,25 +1615,12 @@
             document.getElementById('selectedLocationText').textContent = label;
             document.getElementById('accountLocation').textContent = label;
 
-            if (accountMap && window.L) {
-                const latLng = [selectedDefaultLocation.lat, selectedDefaultLocation.lng];
-
-                if (!accountLocationMarker) {
-                    accountLocationMarker = L.marker(latLng, { draggable: true }).addTo(accountMap);
-                    accountLocationMarker.on('dragend', () => {
-                        const point = accountLocationMarker.getLatLng();
-                        updateSelectedLocation({ lat: point.lat, lng: point.lng });
-                    });
-                } else {
-                    accountLocationMarker.setLatLng(latLng);
-                }
-
-                accountMap.setView(latLng, Math.max(accountMap.getZoom(), 14));
-            }
+            syncAccountMapMarker({ center: centerMap });
         }
 
-        function initAccountMap(customer) {
-            if (!window.L) return;
+        async function initAccountMap(customer) {
+            const mapNode = document.getElementById('accountMap');
+            if (!mapNode) return;
 
             const serverLocation = validLocation(customer?.savedLocation)
                 ? customer.savedLocation
@@ -1573,27 +1628,38 @@
             const storedLocation = readLocalDefaultLocation();
             const initial = serverLocation || storedLocation || { lat: 41.311081, lng: 69.240562 };
 
-            if (!accountMap) {
-                accountMap = L.map('accountMap', {
-                    zoomControl: true,
-                    scrollWheelZoom: true
-                }).setView([initial.lat, initial.lng], serverLocation || storedLocation ? 14 : 11);
+            try {
+                await ensureYandexMaps();
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap'
-                }).addTo(accountMap);
-
-                accountMap.on('click', event => {
-                    updateSelectedLocation({
-                        lat: event.latlng.lat,
-                        lng: event.latlng.lng
+                if (!accountMap) {
+                    accountMap = new ymaps.Map('accountMap', {
+                        center: [Number(initial.lat), Number(initial.lng)],
+                        zoom: serverLocation || storedLocation ? 14 : 11,
+                        controls: ['zoomControl', 'geolocationControl']
+                    }, {
+                        suppressMapOpenBlock: true
                     });
-                });
-            }
 
-            updateSelectedLocation(initial);
-            setTimeout(() => accountMap?.invalidateSize?.(), 120);
+                    accountMap.events.add('click', event => {
+                        const coords = event.get('coords');
+                        updateSelectedLocation({ lat: coords[0], lng: coords[1] }, { centerMap: false });
+                    });
+                }
+
+                updateSelectedLocation(initial);
+                setTimeout(() => accountMap?.container?.fitToViewport?.(), 120);
+            } catch (error) {
+                console.error('Yandex Maps init failed:', error);
+                mapNode.innerHTML = `
+                    <div class="account-map-message">
+                        ${location.hostname === '127.0.0.1'
+                            ? 'Ключ Yandex Maps разрешён для localhost. Откройте эту же страницу через http://localhost:' + location.port + location.pathname + location.search
+                            : 'Не удалось загрузить карту. Координаты можно выбрать через кнопку «Моя геопозиция».'}
+                    </div>
+                `;
+
+                updateSelectedLocation(initial, { centerMap: false });
+            }
         }
 
         document.getElementById('useMyLocationButton')?.addEventListener('click', () => {

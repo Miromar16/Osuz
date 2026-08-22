@@ -742,6 +742,7 @@
                 listingUnavailable: 'Предложение продавца больше недоступно.',
                 cartError: 'Не удалось добавить товар в корзину.',
                 outOfStock: 'Нет в наличии',
+                stockLimit: 'В наличии только {stock} шт.',
                 previewLoaded: 'Основная информация показана сразу. Предложения продавцов ещё загружаются.',
                 previewOnly: 'Не удалось обновить основные данные товара. Показана сохранённая версия.',
                 sellersLoadError: 'Не удалось загрузить предложения продавцов. Обновите страницу и попробуйте ещё раз.',
@@ -806,6 +807,7 @@
                 listingUnavailable: 'Sotuvchining taklifi endi mavjud emas.',
                 cartError: 'Mahsulotni savatga qo‘shib bo‘lmadi.',
                 outOfStock: 'Omborda yo‘q',
+                stockLimit: 'Omborda faqat {stock} dona bor.',
                 previewLoaded: 'Asosiy ma’lumot darhol ko‘rsatildi. Sotuvchilar takliflari hali yuklanmoqda.',
                 previewOnly: 'Mahsulotning asosiy ma’lumotlarini yangilab bo‘lmadi. Saqlangan versiya ko‘rsatildi.',
                 sellersLoadError: 'Sotuvchilar takliflarini yuklab bo‘lmadi. Sahifani yangilab, qayta urinib ko‘ring.',
@@ -870,6 +872,7 @@
                 listingUnavailable: 'This seller offer is no longer available.',
                 cartError: 'Could not add the product to the cart.',
                 outOfStock: 'Out of stock',
+                stockLimit: 'Only {stock} item(s) are in stock.',
                 previewLoaded: 'The main product information is shown immediately. Seller offers are still loading.',
                 previewOnly: 'The latest product data could not be refreshed. The saved version is shown.',
                 sellersLoadError: 'Seller offers could not be loaded. Refresh the page and try again.',
@@ -1515,6 +1518,40 @@
             switchGalleryImage(nextIndex);
         });
 
+        function localizedOptionValue(option) {
+            if (!option) return '';
+
+            return currentLang === 'uz'
+                ? (option.value_uz || option.value_ru || option.value_en || '')
+                : currentLang === 'en'
+                    ? (option.value_en || option.value_ru || option.value_uz || '')
+                    : (option.value_ru || option.value_en || option.value_uz || '');
+        }
+
+        function matchLocalizedOption(attribute, rawValue) {
+            if (!attribute || !Array.isArray(attribute.options) || !attribute.options.length) return null;
+            const normalizedRaw = String(rawValue ?? '').trim().toLowerCase();
+            if (!normalizedRaw) return null;
+
+            return attribute.options.find(option => {
+                return [option.value_ru, option.value_en, option.value_uz]
+                    .filter(Boolean)
+                    .some(candidate => String(candidate).trim().toLowerCase() === normalizedRaw);
+            }) || null;
+        }
+
+        function localizeAttributeStringValue(attribute, rawValue) {
+            const raw = String(rawValue ?? '').trim();
+            if (!raw) return '';
+
+            const matchedOption = matchLocalizedOption(attribute, raw);
+            if (matchedOption) {
+                return localizedOptionValue(matchedOption);
+            }
+
+            return raw;
+        }
+
         function formatAttributeValue(attribute, value) {
             if (value === null || value === undefined || value === '') return '';
 
@@ -1550,9 +1587,20 @@
                 if (max !== null && max !== undefined) return `${formatNumber(max)}${unit}`;
             }
 
+            if (Array.isArray(value)) {
+                return value
+                    .map(item => localizeAttributeStringValue(attribute, item))
+                    .filter(Boolean)
+                    .join(', ');
+            }
+
             const unit = attribute.type === 'number' && attribute.default_unit
                 ? ` ${attribute.default_unit}`
                 : '';
+
+            if (typeof value === 'string') {
+                return `${localizeAttributeStringValue(attribute, value)}${unit}`;
+            }
 
             return `${String(value)}${unit}`;
         }
@@ -1734,6 +1782,22 @@
         }
 
 
+        function stockLimitMessage(stock) {
+            return String(ui.stockLimit || 'Only {stock} item(s) are in stock.')
+                .replace('{stock}', String(Math.max(0, Number(stock) || 0)));
+        }
+
+        function getCartItemQuantity(cartData, tenantId, productIdValue) {
+            const sellers = Array.isArray(cartData?.sellers) ? cartData.sellers : [];
+            const seller = sellers.find(entry =>
+                Number(entry.tenantId ?? entry.tenant_id) === Number(tenantId)
+            );
+            const item = seller?.items?.find(entry =>
+                Number(entry.productId ?? entry.product_id) === Number(productIdValue)
+            );
+            return Math.max(0, Number(item?.quantity) || 0);
+        }
+
         function readGuestCart() {
             try {
                 const parsed = JSON.parse(
@@ -1811,12 +1875,18 @@
             }
 
             const price = Number(listing.price);
+            const stock = Math.max(0, Math.floor(Number(listing.total_stock) || 0));
 
-            if (!Number.isFinite(price) || price <= 0) {
+            if (!Number.isFinite(price) || price <= 0 || stock <= 0) {
                 throw new Error(ui.listingUnavailable);
             }
 
             const guestCart = readGuestCart();
+            const currentQuantity = getCartItemQuantity(guestCart, tenantId, productId);
+
+            if (currentQuantity >= stock) {
+                throw new Error(stockLimitMessage(stock));
+            }
 
             let seller = guestCart.sellers.find(
                 item => Number(item.tenantId) === Number(tenantId)
@@ -1839,6 +1909,7 @@
 
             if (item) {
                 item.quantity = Math.max(1, Number(item.quantity) || 1) + 1;
+                item.maxStock = stock;
                 item.selected = true;
             } else {
                 item = {
@@ -1846,6 +1917,7 @@
                     name: localizedProductName(product),
                     price,
                     quantity: 1,
+                    maxStock: stock,
                     lineTotal: price,
                     selected: true
                 };
@@ -1899,6 +1971,20 @@
             }
 
             try {
+                const listing = sellerListingsByTenant.get(Number(tenantId));
+                const stock = Math.max(0, Math.floor(Number(listing?.total_stock) || 0));
+
+                if (stock <= 0) {
+                    throw new Error(ui.listingUnavailable);
+                }
+
+                const currentCart = await authorizedCartRequest();
+                const currentQuantity = getCartItemQuantity(currentCart, tenantId, productId);
+
+                if (currentQuantity >= stock) {
+                    throw new Error(stockLimitMessage(stock));
+                }
+
                 const serverCart = await authorizedCartRequest('', {
                     method: 'POST',
                     body: {

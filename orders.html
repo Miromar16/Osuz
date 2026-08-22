@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мои заказы — OSUZ</title>
+    <script>
+        if (location.hostname === '127.0.0.1') {
+            const localUrl = new URL(location.href);
+            localUrl.hostname = 'localhost';
+            location.replace(localUrl.toString());
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=f04be54d-34c9-43bb-ae59-fa95dbc60170&lang=ru_RU" type="text/javascript"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -211,6 +219,41 @@
         .field:focus {
             border-color: #00bcd4;
             box-shadow: 0 0 0 3px rgba(0,188,212,.10);
+        }
+
+        .delivery-location-map {
+            width: 100%;
+            height: 320px;
+            margin-top: 14px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            background: #e2e8f0;
+        }
+
+        .delivery-map-message {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        body.dark-mode .delivery-location-map {
+            border-color: #344256;
+        }
+
+        body.dark-mode .delivery-map-message {
+            color: #aeb9c7;
+            background: #111b28;
+        }
+
+        @media (max-width: 767px) {
+            .delivery-location-map { height: 260px; }
         }
         .notice {
             border: 1px solid #bae6fd;
@@ -640,6 +683,11 @@
         let listPollTimer = null;
         let requestBusy = false;
         let toastTimer = null;
+        const receiptPreviewUrls = new Map();
+        const uploadedReceiptPreviewOrders = new Set();
+        let deliveryMap = null;
+        let deliveryPlacemark = null;
+        let deliveryMapReadyPromise = null;
 
         const ui = {
             ru: {
@@ -699,8 +747,9 @@
                 latitude: 'Широта',
                 longitude: 'Долгота',
                 confirmDelivery: 'Подтвердить доставку',
-                locationError: 'Не удалось определить геопозицию. Введите координаты вручную.',
+                locationError: 'Не удалось определить геопозицию. Выберите точку на карте или введите координаты вручную.',
                 locationRequired: 'Для доставки нужны корректные широта и долгота.',
+                mapHint: 'Нажмите на карту, чтобы выбрать точку доставки. Маркер можно перетаскивать.',
                 choosePayment: 'Выберите способ оплаты',
                 paymentCash: 'Наличными',
                 paymentCard: 'Картой',
@@ -719,6 +768,8 @@
                 receiptChoose: 'Выбрать изображение',
                 receiptSubmit: 'Отправить чек',
                 receiptInvalid: 'Выберите изображение размером не более 5 МБ.',
+                receiptPreview: 'Предпросмотр чека',
+                receiptUploaded: 'Отправленный чек',
                 waitingPayment: 'Данные отправлены продавцу. Страница автоматически проверяет изменение статуса.',
                 deliveryWaiting: 'Ждём, когда продавец подтвердит оплату и отметит заказ отправленным.',
                 deliverySent: 'Продавец отметил заказ отправленным. Подтвердите получение товара.',
@@ -793,8 +844,9 @@
                 latitude: 'Kenglik',
                 longitude: 'Uzunlik',
                 confirmDelivery: 'Yetkazib berishni tasdiqlash',
-                locationError: 'Geolokatsiyani aniqlab bo‘lmadi. Koordinatalarni qo‘lda kiriting.',
+                locationError: 'Geolokatsiyani aniqlab bo‘lmadi. Xaritada nuqtani tanlang yoki koordinatalarni qo‘lda kiriting.',
                 locationRequired: 'Yetkazib berish uchun to‘g‘ri koordinatalar kerak.',
+                mapHint: 'Yetkazib berish nuqtasini tanlash uchun xaritani bosing. Markerni sudrab ko‘chirish mumkin.',
                 choosePayment: 'To‘lov usulini tanlang',
                 paymentCash: 'Naqd',
                 paymentCard: 'Karta',
@@ -813,6 +865,8 @@
                 receiptChoose: 'Rasm tanlash',
                 receiptSubmit: 'Chekni yuborish',
                 receiptInvalid: '5 MB dan kichik rasmni tanlang.',
+                receiptPreview: 'Chekni oldindan ko‘rish',
+                receiptUploaded: 'Yuborilgan chek',
                 waitingPayment: 'Ma’lumot sotuvchiga yuborildi. Sahifa holatni avtomatik tekshiradi.',
                 deliveryWaiting: 'Sotuvchi to‘lovni tasdiqlab, buyurtmani yuborishini kutmoqdamiz.',
                 deliverySent: 'Sotuvchi buyurtmani yuborilgan deb belgiladi. Qabul qilganingizni tasdiqlang.',
@@ -887,8 +941,9 @@
                 latitude: 'Latitude',
                 longitude: 'Longitude',
                 confirmDelivery: 'Confirm delivery',
-                locationError: 'Could not detect your location. Enter coordinates manually.',
+                locationError: 'Could not detect your location. Choose a point on the map or enter coordinates manually.',
                 locationRequired: 'Valid latitude and longitude are required for delivery.',
+                mapHint: 'Click the map to choose the delivery point. You can drag the marker.',
                 choosePayment: 'Choose a payment method',
                 paymentCash: 'Cash',
                 paymentCard: 'Card',
@@ -907,6 +962,8 @@
                 receiptChoose: 'Choose image',
                 receiptSubmit: 'Send receipt',
                 receiptInvalid: 'Choose an image no larger than 5 MB.',
+                receiptPreview: 'Receipt preview',
+                receiptUploaded: 'Submitted receipt',
                 waitingPayment: 'The information was sent to the seller. The page will keep checking the status.',
                 deliveryWaiting: 'Waiting for the seller to approve payment and mark the order as shipped.',
                 deliverySent: 'The seller marked the order as shipped. Confirm that you received it.',
@@ -1387,6 +1444,43 @@
             `;
         }
 
+        function effectiveAvailableQty(item) {
+            const requested = Math.max(0, Number(item?.requestedQty) || 0);
+            const available = Math.max(0, Number(item?.availableQty) || 0);
+
+            // Backend may return status=available while availableQty is still 0.
+            // In that case the seller confirmed the requested quantity.
+            if (item?.status === 'available' && available <= 0) {
+                return requested;
+            }
+
+            return available;
+        }
+
+        function calculateOrderDisplayTotal(order) {
+            const backendTotal = Number(order?.totalAmount);
+
+            // Prefer a real positive total calculated by backend.
+            if (Number.isFinite(backendTotal) && backendTotal > 0) {
+                return backendTotal;
+            }
+
+            const items = Array.isArray(order?.items) ? order.items : [];
+
+            return items.reduce((sum, item) => {
+                const price = Math.max(0, Number(item?.price) || 0);
+                let quantity = 0;
+
+                if (item?.status === 'available') {
+                    quantity = effectiveAvailableQty(item);
+                } else if (item?.status === 'partial') {
+                    quantity = Math.max(0, Number(item?.availableQty) || 0);
+                }
+
+                return sum + (price * quantity);
+            }, 0);
+        }
+
         function renderItems(order) {
             const items = Array.isArray(order.items) ? order.items : [];
 
@@ -1404,7 +1498,7 @@
                                     </a>
                                     <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
                                         <span>${escapeHTML(t('requested'))}: <strong>${Number(item.requestedQty || 0)}</strong></span>
-                                        <span>${escapeHTML(t('available'))}: <strong>${Number(item.availableQty || 0)}</strong></span>
+                                        <span>${escapeHTML(t('available'))}: <strong>${effectiveAvailableQty(item)}</strong></span>
                                         <span>${escapeHTML(formatMoney(item.price))}</span>
                                     </div>
                                 </div>
@@ -1474,12 +1568,17 @@
                     </div>
 
                     <div id="deliveryCoordinatesForm" class="hidden mt-4 rounded-2xl bg-gray-50 p-4">
-                        <button type="button" class="secondary-button mb-4" data-action="get-location">
-                            <i data-lucide="locate-fixed" class="w-4 h-4"></i>
-                            <span>${escapeHTML(t('getLocation'))}</span>
-                        </button>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <p class="text-sm leading-6 text-gray-500">${escapeHTML(t('mapHint'))}</p>
+                            <button type="button" class="secondary-button flex-shrink-0" data-action="get-location">
+                                <i data-lucide="locate-fixed" class="w-4 h-4"></i>
+                                <span>${escapeHTML(t('getLocation'))}</span>
+                            </button>
+                        </div>
 
-                        <div class="grid sm:grid-cols-2 gap-3">
+                        <div id="deliveryMap" class="delivery-location-map"></div>
+
+                        <div class="grid sm:grid-cols-2 gap-3 mt-4">
                             <div>
                                 <label class="mb-2 block text-xs font-black uppercase tracking-wider text-gray-500">${escapeHTML(t('latitude'))}</label>
                                 <input id="deliveryLat" type="number" step="any" class="field" placeholder="41.31">
@@ -1561,11 +1660,72 @@
             `;
         }
 
+        function buildReceiptAssetUrl(value) {
+            const raw = String(value || '').trim();
+            if (!raw) return '';
+            if (/^(?:https?:|data:|blob:)/i.test(raw)) return raw;
+            return `${API_ORIGIN}${raw.startsWith('/') ? '' : '/'}${raw}`;
+        }
+
+        function getServerReceiptUrl(order) {
+            const candidates = [
+                order?.receiptUrl,
+                order?.receipt_url,
+                order?.receiptPhotoUrl,
+                order?.receipt_photo_url,
+                order?.paymentReceiptUrl,
+                order?.payment_receipt_url,
+                order?.receiptPhoto,
+                order?.receipt_photo,
+                order?.receipt?.url,
+                order?.paymentReceipt?.url
+            ];
+
+            const value = candidates.find(item => typeof item === 'string' && item.trim());
+            return buildReceiptAssetUrl(value || '');
+        }
+
+        function getUploadedReceiptPreview(order) {
+            const orderId = Number(order?.orderId);
+            const serverUrl = getServerReceiptUrl(order);
+            if (serverUrl) return serverUrl;
+            if (uploadedReceiptPreviewOrders.has(orderId)) {
+                return receiptPreviewUrls.get(orderId) || '';
+            }
+            return '';
+        }
+
+        function renderUploadedReceipt(order) {
+            const url = getUploadedReceiptPreview(order);
+            if (!url) return '';
+
+            return `
+                <div class="rounded-2xl border border-gray-200 p-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-lucide="receipt" class="w-4 h-4 text-primary-600"></i>
+                        <span class="text-sm font-black text-gray-900">${escapeHTML(t('receiptUploaded'))}</span>
+                    </div>
+                    <a href="${escapeHTML(url)}" target="_blank" rel="noopener" class="block overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+                        <img src="${escapeHTML(url)}" alt="${escapeHTML(t('receiptUploaded'))}" class="w-full max-h-72 object-contain bg-white" onerror="this.closest('div')?.classList.add('hidden');">
+                    </a>
+                </div>
+            `;
+        }
+
         function renderReceiptForm(order) {
+            const orderId = Number(order?.orderId);
+            const selectedPreview = receiptPreviewUrls.get(orderId) || '';
+            const isUploadedPreview = uploadedReceiptPreviewOrders.has(orderId);
+
             return `
                 <div class="rounded-2xl border border-gray-200 p-5">
                     <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('receiptTitle'))}</h3>
                     <p class="mt-2 text-sm leading-6 text-gray-500">${escapeHTML(t('receiptText'))}</p>
+
+                    <div id="receiptLocalPreviewWrap" class="${selectedPreview && !isUploadedPreview ? '' : 'hidden'} mt-4 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+                        <div class="px-3 py-2 text-xs font-bold text-gray-500">${escapeHTML(t('receiptPreview'))}</div>
+                        <img id="receiptLocalPreview" src="${escapeHTML(selectedPreview)}" alt="${escapeHTML(t('receiptPreview'))}" class="w-full max-h-64 object-contain bg-white">
+                    </div>
 
                     <label class="mt-4 secondary-button cursor-pointer">
                         <i data-lucide="image-up" class="w-4 h-4"></i>
@@ -1699,6 +1859,7 @@
         }
 
         function renderOrderDetail(order) {
+            destroyDeliveryMap();
             currentOrder = order;
 
             document.getElementById('detailPlaceholder').classList.add('hidden');
@@ -1732,16 +1893,18 @@
                             <h3 class="text-lg font-black text-gray-900 mb-3">${escapeHTML(t('status'))}</h3>
                             ${renderTimeline(order)}
 
-                            ${Number.isFinite(Number(order.totalAmount)) ? `
+                            ${Number.isFinite(calculateOrderDisplayTotal(order)) ? `
                                 <div class="rounded-2xl bg-primary-50 p-4 mt-3">
                                     <div class="text-xs font-bold uppercase tracking-wider text-primary-700">${escapeHTML(t('total'))}</div>
-                                    <div class="mt-1 text-2xl font-black text-gray-900">${escapeHTML(formatMoney(order.totalAmount))}</div>
+                                    <div class="mt-1 text-2xl font-black text-gray-900">${escapeHTML(formatMoney(calculateOrderDisplayTotal(order)))}</div>
                                 </div>
                             ` : ''}
                         </div>
                     </div>
 
                     ${renderSellerInfo(order)}
+
+                    ${renderUploadedReceipt(order)}
 
                     <div id="orderActionArea">
                         ${renderActionArea(order)}
@@ -1751,6 +1914,118 @@
 
             bindDetailActions();
             lucide.createIcons();
+        }
+
+        function destroyDeliveryMap() {
+            if (deliveryMap) {
+                try { deliveryMap.destroy(); } catch {}
+            }
+            deliveryMap = null;
+            deliveryPlacemark = null;
+        }
+
+        function ensureDeliveryYandexMaps() {
+            if (deliveryMapReadyPromise) return deliveryMapReadyPromise;
+
+            deliveryMapReadyPromise = new Promise((resolve, reject) => {
+                if (!window.ymaps) {
+                    reject(new Error('Yandex Maps API is unavailable'));
+                    return;
+                }
+                window.ymaps.ready(() => resolve(window.ymaps));
+            });
+
+            return deliveryMapReadyPromise;
+        }
+
+        function validDeliveryCoords(lat, lng) {
+            return Number.isFinite(Number(lat)) &&
+                Number.isFinite(Number(lng)) &&
+                Number(lat) >= -90 && Number(lat) <= 90 &&
+                Number(lng) >= -180 && Number(lng) <= 180;
+        }
+
+        function setDeliveryCoordinates(lat, lng, { centerMap = true } = {}) {
+            lat = Number(lat);
+            lng = Number(lng);
+            if (!validDeliveryCoords(lat, lng)) return;
+
+            const latInput = document.getElementById('deliveryLat');
+            const lngInput = document.getElementById('deliveryLng');
+            if (latInput) latInput.value = lat.toFixed(6);
+            if (lngInput) lngInput.value = lng.toFixed(6);
+
+            if (!deliveryMap || !window.ymaps) return;
+            const coords = [lat, lng];
+
+            if (!deliveryPlacemark) {
+                deliveryPlacemark = new ymaps.Placemark(
+                    coords,
+                    {},
+                    { draggable: true, preset: 'islands#circleDotIcon' }
+                );
+                deliveryPlacemark.events.add('dragend', () => {
+                    const point = deliveryPlacemark.geometry.getCoordinates();
+                    setDeliveryCoordinates(point[0], point[1], { centerMap: false });
+                });
+                deliveryMap.geoObjects.add(deliveryPlacemark);
+            } else {
+                deliveryPlacemark.geometry.setCoordinates(coords);
+            }
+
+            if (centerMap) {
+                deliveryMap.setCenter(coords, Math.max(Number(deliveryMap.getZoom()) || 0, 14), {
+                    checkZoomRange: true
+                });
+            }
+        }
+
+        async function initDeliveryMap() {
+            const node = document.getElementById('deliveryMap');
+            if (!node) return;
+
+            const lat = Number(document.getElementById('deliveryLat')?.value);
+            const lng = Number(document.getElementById('deliveryLng')?.value);
+            const initial = validDeliveryCoords(lat, lng)
+                ? { lat, lng }
+                : { lat: 41.311081, lng: 69.240562 };
+
+            try {
+                await ensureDeliveryYandexMaps();
+
+                if (!document.getElementById('deliveryMap')) return;
+
+                if (!deliveryMap) {
+                    deliveryMap = new ymaps.Map('deliveryMap', {
+                        center: [initial.lat, initial.lng],
+                        zoom: validDeliveryCoords(lat, lng) ? 14 : 11,
+                        controls: ['zoomControl', 'geolocationControl']
+                    }, {
+                        suppressMapOpenBlock: true
+                    });
+
+                    deliveryMap.events.add('click', event => {
+                        const coords = event.get('coords');
+                        setDeliveryCoordinates(coords[0], coords[1], { centerMap: false });
+                    });
+                }
+
+                if (validDeliveryCoords(lat, lng)) {
+                    setDeliveryCoordinates(lat, lng);
+                }
+
+                setTimeout(() => deliveryMap?.container?.fitToViewport?.(), 120);
+            } catch (error) {
+                console.error('Yandex Maps init failed:', error);
+                if (!document.getElementById('deliveryMap')) return;
+                node.innerHTML = `
+                    <div class="delivery-map-message">
+                        ${location.hostname === '127.0.0.1'
+                            ? 'Ключ Yandex Maps разрешён для localhost. Откройте страницу через http://localhost:' + location.port + location.pathname + location.search
+                            : escapeHTML(t('locationError'))}
+                    </div>
+                `;
+            }
         }
 
         function prefillSavedLocation() {
@@ -1784,6 +2059,8 @@
             if (lngInput && saved.lng !== undefined && saved.lng !== null) {
                 lngInput.value = saved.lng;
             }
+
+            setDeliveryCoordinates(saved.lat, saved.lng);
         }
 
         async function performAction(callback, successMessage = '') {
@@ -1867,6 +2144,7 @@
             root.querySelector('[data-action="show-delivery-form"]')?.addEventListener('click', () => {
                 document.getElementById('deliveryCoordinatesForm')?.classList.remove('hidden');
                 prefillSavedLocation();
+                initDeliveryMap();
                 lucide.createIcons();
             });
 
@@ -1878,10 +2156,10 @@
 
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        document.getElementById('deliveryLat').value =
-                            position.coords.latitude.toFixed(6);
-                        document.getElementById('deliveryLng').value =
-                            position.coords.longitude.toFixed(6);
+                        setDeliveryCoordinates(
+                            position.coords.latitude,
+                            position.coords.longitude
+                        );
                     },
                     () => showToast(t('locationError'), 'error'),
                     {
@@ -1890,6 +2168,16 @@
                         maximumAge: 60000
                     }
                 );
+            });
+
+            ['deliveryLat', 'deliveryLng'].forEach(id => {
+                root.querySelector(`#${id}`)?.addEventListener('change', () => {
+                    const lat = Number(document.getElementById('deliveryLat')?.value);
+                    const lng = Number(document.getElementById('deliveryLng')?.value);
+                    if (validDeliveryCoords(lat, lng)) {
+                        setDeliveryCoordinates(lat, lng);
+                    }
+                });
             });
 
             root.querySelector('[data-action="confirm-delivery"]')?.addEventListener('click', () => {
@@ -1985,12 +2273,35 @@
             receiptInput?.addEventListener('change', () => {
                 const file = receiptInput.files?.[0];
                 const label = document.getElementById('receiptFileLabel');
+                const previewWrap = document.getElementById('receiptLocalPreviewWrap');
+                const previewImage = document.getElementById('receiptLocalPreview');
+                const orderId = Number(selectedOrderId);
 
                 if (label) {
                     label.textContent = file
                         ? file.name
                         : t('receiptChoose');
                 }
+
+                const previousUrl = receiptPreviewUrls.get(orderId);
+                if (previousUrl?.startsWith('blob:')) {
+                    URL.revokeObjectURL(previousUrl);
+                }
+
+                uploadedReceiptPreviewOrders.delete(orderId);
+
+                if (!file || !file.type.startsWith('image/')) {
+                    receiptPreviewUrls.delete(orderId);
+                    previewWrap?.classList.add('hidden');
+                    if (previewImage) previewImage.removeAttribute('src');
+                    return;
+                }
+
+                const previewUrl = URL.createObjectURL(file);
+                receiptPreviewUrls.set(orderId, previewUrl);
+
+                if (previewImage) previewImage.src = previewUrl;
+                previewWrap?.classList.remove('hidden');
             });
 
             root.querySelector('[data-action="receipt"]')?.addEventListener('click', () => {
@@ -2009,10 +2320,14 @@
                 formData.append('photo', file);
 
                 performAction(
-                    () => ordersRequest(`/${selectedOrderId}/receipt`, {
-                        method: 'POST',
-                        body: formData
-                    }),
+                    async () => {
+                        const result = await ordersRequest(`/${selectedOrderId}/receipt`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        uploadedReceiptPreviewOrders.add(Number(selectedOrderId));
+                        return result;
+                    },
                     t('waitingPayment')
                 );
             });

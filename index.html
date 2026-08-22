@@ -901,7 +901,178 @@
             background: #0d1724 !important;
         }
 
-    </style>
+    
+        /* Mobile menu search */
+        .mobile-menu-search-shell {
+            border: 1px solid #dbe4ee;
+            border-radius: 14px;
+            background: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            min-height: 46px;
+        }
+        .mobile-menu-search-shell:focus-within {
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 3px rgba(0,188,212,.10);
+        }
+        .mobile-menu-search-shell input {
+            min-width: 0;
+            flex: 1;
+            height: 44px;
+            padding: 0 10px;
+            outline: none;
+            background: transparent;
+            color: #0f172a;
+            font-size: 13px;
+        }
+        .mobile-menu-search-button {
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            background: #00bcd4;
+            color: #07111d;
+        }
+        .mobile-menu-search-results {
+            margin-top: 8px;
+            max-height: 42vh;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 12px 30px rgba(15,23,42,.10);
+        }
+        .mobile-menu-search-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #eef2f7;
+            text-decoration: none;
+        }
+        .mobile-menu-search-item:last-child { border-bottom: 0; }
+        .mobile-menu-search-item:hover { background: #f0fdff; }
+        .mobile-menu-search-thumb {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border-radius: 10px;
+            background: #f8fafc;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-menu-search-thumb img { width: 100%; height: 100%; object-fit: contain; }
+        body.dark-mode .mobile-menu-search-shell,
+        body.dark-mode .mobile-menu-search-results {
+            background: #0f1722 !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode .mobile-menu-search-shell input { color: #f8fafc !important; }
+        body.dark-mode .mobile-menu-search-shell input::placeholder { color: #7f8a99 !important; }
+        body.dark-mode .mobile-menu-search-item { border-color: #263241 !important; }
+        body.dark-mode .mobile-menu-search-item:hover { background: #162333 !important; }
+        body.dark-mode .mobile-menu-search-thumb { background: #111b28 !important; }
+
+        /* Mobile top search: always visible under the turquoise header */
+        .mobile-top-search-wrap {
+            display: none;
+        }
+
+        @media (max-width: 767px) {
+            .site-header-nav {
+                display: none !important;
+            }
+
+            .mobile-top-search-wrap {
+                display: block;
+                background: #00bcd4;
+                padding: 0 16px 12px;
+                border-bottom: 1px solid rgba(255,255,255,.28);
+            }
+
+            .mobile-top-search-shell {
+                height: 44px;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                border: 1px solid rgba(255,255,255,.70);
+                border-radius: 12px;
+                background: #ffffff;
+                box-shadow: 0 1px 3px rgba(15,23,42,.08);
+            }
+
+            .mobile-top-search-shell:focus-within {
+                border-color: #0f172a;
+                box-shadow: 0 0 0 3px rgba(15,23,42,.10);
+            }
+
+            .mobile-top-search-shell input {
+                flex: 1;
+                min-width: 0;
+                height: 100%;
+                padding: 0 12px;
+                border: 0;
+                outline: 0;
+                background: transparent;
+                color: #0f172a !important;
+                font-size: 14px;
+            }
+
+            .mobile-top-search-shell input::placeholder {
+                color: #94a3b8 !important;
+            }
+
+            .mobile-top-search-btn {
+                height: 100%;
+                padding: 0 16px;
+                flex: 0 0 auto;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: #111827;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+
+            .mobile-top-search-results {
+                margin-top: 8px;
+                max-height: 42vh;
+                overflow-y: auto;
+                border: 1px solid #dbe4ee;
+                border-radius: 12px;
+                background: #ffffff;
+                box-shadow: 0 16px 35px rgba(15,23,42,.16);
+            }
+
+            body.dark-mode .mobile-top-search-shell,
+            body.dark-mode .mobile-top-search-results {
+                background: #0f1722 !important;
+                border-color: #334155 !important;
+            }
+
+            body.dark-mode .mobile-top-search-shell input {
+                color: #f8fafc !important;
+            }
+
+            body.dark-mode .mobile-top-search-btn {
+                background: #ffffff !important;
+                color: #0f172a !important;
+            }
+
+            /* Header is taller because mobile search is now visible */
+            section[id] {
+                scroll-margin-top: 140px;
+            }
+        }
+
+</style>
 </head>
 <body>
     <nav class="site-header fixed top-0 left-0 right-0 z-50">
@@ -979,6 +1150,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="mobile-top-search-wrap">
+            <form id="mobileTopSearchForm" class="mobile-top-search-shell" autocomplete="off">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-3 flex-shrink-0"></i>
+                <input id="mobileTopSearchInput" type="search" placeholder="Поиск товаров..." autocomplete="off">
+                <button id="mobileTopSearchButton" type="submit" class="mobile-top-search-btn" aria-label="Найти">
+                    <span>Найти</span>
+                </button>
+            </form>
+            <div id="mobileTopSearchResults" class="mobile-top-search-results hidden">
+                <div id="mobileTopResultsList"></div>
+            </div>
+        </div>
+
         <div class="site-header-nav">
             <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
                 <div class="header-nav-row hidden lg:flex gap-8">
@@ -999,6 +1184,18 @@
                 <button id="mobileCloseBtn" data-tooltip-key="menuClose" data-tooltip="Закрыть меню" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
                     <i data-lucide="x" class="w-5 h-5 text-gray-600"></i>
                 </button>
+            </div>
+            <div class="mb-4">
+                <form id="mobileMenuSearchForm" class="mobile-menu-search-shell" autocomplete="off">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-3 flex-shrink-0"></i>
+                    <input id="mobileMenuSearchInput" type="search" placeholder="Поиск товаров..." autocomplete="off">
+                    <button id="mobileMenuSearchButton" type="submit" class="mobile-menu-search-button" aria-label="Найти">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+                <div id="mobileMenuSearchResults" class="mobile-menu-search-results hidden">
+                    <div id="mobileMenuResultsList"></div>
+                </div>
             </div>
             <div class="relative mb-4">
                 <button id="mobileLanguageToggle" class="w-full flex items-center justify-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-primary-50 hover:text-primary-600 py-3 px-3 rounded-lg transition-colors">
@@ -1390,6 +1587,11 @@
         const heroAnalyzeBtn = document.getElementById('heroAnalyzeBtn');
         const heroAnalysisDot = document.getElementById('heroAnalysisDot');
         const heroAnalysisText = document.getElementById('heroAnalysisText');
+        const mobileMenuSearchForm = document.getElementById('mobileMenuSearchForm');
+        const mobileMenuSearchInput = document.getElementById('mobileMenuSearchInput');
+        const mobileMenuSearchButton = document.getElementById('mobileMenuSearchButton');
+        const mobileMenuSearchResults = document.getElementById('mobileMenuSearchResults');
+        const mobileMenuResultsList = document.getElementById('mobileMenuResultsList');
 
         const themeToggle = document.getElementById('themeToggle');
         const mobileThemeToggle = document.getElementById('mobileThemeToggle');
@@ -1431,6 +1633,7 @@
         let currentLang = localStorage.getItem('osuzLang') || 'ru';
         let productDatabase = [];
         let searchTimer = null;
+        let mobileMenuSearchTimer = null;
 
         const translations = {
             uz: {
@@ -1747,6 +1950,42 @@
                         ? 'Qidirish'
                         : 'Search';
             }
+            const mobileTopSearchInputNode = document.getElementById('mobileTopSearchInput');
+            const mobileTopSearchButtonNode = document.getElementById('mobileTopSearchButton');
+            if (mobileTopSearchInputNode) {
+                mobileTopSearchInputNode.placeholder = currentLang === 'ru'
+                    ? 'Поиск товаров...'
+                    : currentLang === 'uz'
+                        ? 'Mahsulotlarni qidirish...'
+                        : 'Search products...';
+            }
+            if (mobileTopSearchButtonNode) {
+                const mobileTopLabel = currentLang === 'ru'
+                    ? 'Найти'
+                    : currentLang === 'uz'
+                        ? 'Qidirish'
+                        : 'Search';
+                const mobileTopLabelNode = mobileTopSearchButtonNode.querySelector('span');
+                if (mobileTopLabelNode) mobileTopLabelNode.textContent = mobileTopLabel;
+                mobileTopSearchButtonNode.setAttribute('aria-label', mobileTopLabel);
+                mobileTopSearchButtonNode.title = mobileTopLabel;
+            }
+            if (mobileMenuSearchInput) {
+                mobileMenuSearchInput.placeholder = currentLang === 'ru'
+                    ? 'Поиск товаров...'
+                    : currentLang === 'uz'
+                        ? 'Mahsulotlarni qidirish...'
+                        : 'Search products...';
+            }
+            if (mobileMenuSearchButton) {
+                const label = currentLang === 'ru'
+                    ? 'Найти'
+                    : currentLang === 'uz'
+                        ? 'Qidirish'
+                        : 'Search';
+                mobileMenuSearchButton.setAttribute('aria-label', label);
+                mobileMenuSearchButton.title = label;
+            }
             heroPhotoBtn.title = currentLang === 'ru'
                 ? 'Поиск по фото'
                 : currentLang === 'uz'
@@ -2014,11 +2253,79 @@
             }
         }
 
-        heroSearchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(() => heroSearch(e.target.value), 350);
+        async function mobileMenuSearch(query) {
+            const rawQuery = String(query || '').trim();
+
+            if (rawQuery.length < 2) {
+                mobileMenuSearchResults?.classList.add('hidden');
+                if (mobileMenuResultsList) mobileMenuResultsList.innerHTML = '';
+                return;
+            }
+
+            if (!mobileMenuSearchResults || !mobileMenuResultsList) return;
+
+            mobileMenuSearchResults.classList.remove('hidden');
+            mobileMenuResultsList.innerHTML = `<div class="px-4 py-5 text-center text-sm text-gray-500">${escapeHTML(t('Поиск...'))}</div>`;
+
+            try {
+                const results = await searchProducts(rawQuery);
+
+                if (!results.length) {
+                    mobileMenuResultsList.innerHTML = `<div class="px-4 py-5 text-center text-sm text-gray-500">${escapeHTML(t('Товары не найдены'))}</div>`;
+                    return;
+                }
+
+                mobileMenuResultsList.innerHTML = results.map(product => `
+                    <a href="product.html?id=${encodeURIComponent(product.id)}" data-mobile-search-product-id="${Number(product.id)}" class="mobile-menu-search-item">
+                        <span class="mobile-menu-search-thumb">
+                            <img src="${escapeHTML(product.img || 'osuz logo.png')}" alt="${escapeHTML(product.name)}" onerror="this.onerror=null;this.src='osuz logo.png';">
+                        </span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wide text-primary-600 truncate">${escapeHTML(product.brand || '')}</span>
+                            <span class="block text-sm font-bold text-gray-900 truncate">${escapeHTML(product.name)}</span>
+                            <span class="block mt-1 text-xs text-gray-500 truncate">${escapeHTML(product.priceLabel || '')}</span>
+                        </span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+                `).join('');
+
+                mobileMenuResultsList.querySelectorAll('[data-mobile-search-product-id]').forEach(link => {
+                    link.addEventListener('click', () => {
+                        const id = Number(link.dataset.mobileSearchProductId);
+                        const preview = results.find(item => Number(item.id) === id)?.raw;
+                        if (preview) {
+                            sessionStorage.setItem(`osuzProductPreview:${id}`, JSON.stringify(preview));
+                        }
+                        closeMobileMenu();
+                    });
+                });
+
+                lucide.createIcons();
+            } catch (error) {
+                console.error('Mobile menu search failed:', error);
+                mobileMenuResultsList.innerHTML = `<div class="px-4 py-5 text-center text-sm text-red-500">${escapeHTML(t('Ошибка поиска товаров'))}</div>`;
+            }
+        }
+
+        mobileMenuSearchForm?.addEventListener('submit', event => {
+            event.preventDefault();
+            mobileMenuSearch(mobileMenuSearchInput?.value || '');
         });
+
+        // Search is sent only after explicit submit/click/Enter.
+        // Typing itself must not call the backend.
+        mobileMenuSearchInput?.addEventListener('keydown', event => {
+            if (event.key !== 'Enter') return;
+            event.preventDefault();
+            mobileMenuSearch(mobileMenuSearchInput.value || '');
+        });
+
         heroSearchBtn.addEventListener('click', () => heroSearch(heroSearchInput.value));
+        heroSearchInput.addEventListener('keydown', event => {
+            if (event.key !== 'Enter') return;
+            event.preventDefault();
+            heroSearch(heroSearchInput.value);
+        });
 
         heroPhotoBtn.addEventListener('click', () => heroPhotoInput.click());
 
@@ -2454,5 +2761,141 @@
             window.addEventListener('pageshow', bindCartLinks);
         })();
     </script>
+
+    <script>
+        (() => {
+            const form = document.getElementById('mobileTopSearchForm');
+            const input = document.getElementById('mobileTopSearchInput');
+            const resultsBox = document.getElementById('mobileTopSearchResults');
+            const resultsList = document.getElementById('mobileTopResultsList');
+
+            if (!form || !input || !resultsBox || !resultsList) return;
+
+            const API_BASE = typeof CATALOG_API_BASE !== 'undefined'
+                ? CATALOG_API_BASE
+                : 'https://osuz.uz/api/catalog';
+
+            let controller = null;
+
+            function productName(item) {
+                const lang = ['ru', 'uz', 'en'].includes(localStorage.getItem('osuzLang'))
+                    ? localStorage.getItem('osuzLang')
+                    : 'ru';
+
+                if (lang === 'uz') return item.name_uz || item.name_ru || item.name_en || 'Mahsulot';
+                if (lang === 'en') return item.name_en || item.name_ru || item.name_uz || 'Product';
+                return item.name_ru || item.name_en || item.name_uz || 'Товар';
+            }
+
+            function imageUrl(item) {
+                const raw = item?.photo_url || '';
+                if (!raw) return 'osuz logo.png';
+                if (/^https?:\/\//i.test(raw)) return raw;
+                return `https://osuz.uz${raw.startsWith('/') ? '' : '/'}${raw}`;
+            }
+
+            function escapeMobileSearch(value) {
+                return String(value ?? '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#039;');
+            }
+
+            function closeResults() {
+                resultsBox.classList.add('hidden');
+                resultsList.innerHTML = '';
+            }
+
+            function render(items) {
+                if (!items.length) {
+                    resultsList.innerHTML = `
+                        <div class="px-4 py-4 text-sm text-gray-500">
+                            Ничего не найдено
+                        </div>
+                    `;
+                    resultsBox.classList.remove('hidden');
+                    return;
+                }
+
+                resultsList.innerHTML = items.slice(0, 8).map(item => `
+                    <a href="product.html?id=${encodeURIComponent(item.id)}"
+                       class="mobile-menu-search-item">
+                        <div class="mobile-menu-search-thumb">
+                            <img src="${escapeMobileSearch(imageUrl(item))}"
+                                 alt="${escapeMobileSearch(productName(item))}"
+                                 onerror="this.onerror=null;this.src='osuz logo.png';">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="text-sm font-semibold text-gray-900 truncate">
+                                ${escapeMobileSearch(productName(item))}
+                            </div>
+                            <div class="text-xs text-gray-500 truncate mt-1">
+                                ${escapeMobileSearch(item.brand || item.order_code || '')}
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 flex-shrink-0"></i>
+                    </a>
+                `).join('');
+
+                resultsBox.classList.remove('hidden');
+                window.lucide?.createIcons?.();
+            }
+
+            async function searchNow() {
+                const q = input.value.trim();
+
+                if (!q) {
+                    closeResults();
+                    return;
+                }
+
+                if (controller) controller.abort();
+                controller = new AbortController();
+
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/products?q=${encodeURIComponent(q)}&page=1&limit=8`,
+                        {
+                            headers: { Accept: 'application/json' },
+                            cache: 'no-store',
+                            signal: controller.signal
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    render(Array.isArray(data?.items) ? data.items : []);
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+
+                    resultsList.innerHTML = `
+                        <div class="px-4 py-4 text-sm text-red-500">
+                            Не удалось выполнить поиск
+                        </div>
+                    `;
+                    resultsBox.classList.remove('hidden');
+                }
+            }
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                searchNow();
+            });
+
+            // Do not search on each typed character.
+            // The form submit (button or Enter) is the only network trigger.
+            document.addEventListener('click', event => {
+                if (!event.target.closest('.mobile-top-search-wrap')) {
+                    closeResults();
+                }
+            });
+        })();
+    </script>
+
 </body>
 </html>

@@ -608,6 +608,7 @@
     <script>
         const API_ORIGIN = 'https://osuz.uz';
         const CART_API = `${API_ORIGIN}/api/site/cart`;
+        const CATALOG_API = `${API_ORIGIN}/api/catalog`;
         const ORDER_API = `${API_ORIGIN}/api/site/orders`;
         const AUTH_API = `${API_ORIGIN}/api/site-auth`;
         const GUEST_CART_KEY = 'osuzGuestCart';
@@ -624,6 +625,7 @@
         let currentTheme = localStorage.getItem('osuzTheme') || 'light';
         let cart = { sellers: [], grandTotal: 0 };
         let cartBusy = false;
+        const cartStockLimits = new Map();
 
         const ui = {
             ru: {
@@ -667,6 +669,7 @@
                 selectSeller: 'Выбрать все товары продавца',
                 loadingError: 'Не удалось загрузить корзину.',
                 updateError: 'Не удалось обновить корзину.',
+                stockLimit: 'В наличии только {stock} шт.',
                 unauthorized: 'Ваша сессия завершена. Войдите снова.',
                 sum: 'сум'
             },
@@ -711,6 +714,7 @@
                 selectSeller: 'Sotuvchining barcha mahsulotlarini tanlash',
                 loadingError: 'Savatni yuklab bo‘lmadi.',
                 updateError: 'Savatni yangilab bo‘lmadi.',
+                stockLimit: 'Omborda faqat {stock} dona bor.',
                 unauthorized: 'Sessiya tugadi. Qayta kiring.',
                 sum: 'so‘m'
             },
@@ -755,6 +759,7 @@
                 selectSeller: 'Select all products from this seller',
                 loadingError: 'Could not load the cart.',
                 updateError: 'Could not update the cart.',
+                stockLimit: 'Only {stock} item(s) are in stock.',
                 unauthorized: 'Your session has ended. Sign in again.',
                 sum: 'UZS'
             }
@@ -810,6 +815,57 @@
             };
         }
 
+
+        function cartStockKey(tenantId, productId) {
+            return `${Number(tenantId)}:${Number(productId)}`;
+        }
+
+        function stockLimitText(stock) {
+            return String(t('stockLimit'))
+                .replace('{stock}', String(Math.max(0, Number(stock) || 0)));
+        }
+
+        function getKnownStock(tenantId, productId) {
+            const value = cartStockLimits.get(cartStockKey(tenantId, productId));
+            return Number.isFinite(value) ? value : null;
+        }
+
+        async function loadCartStockLimits(cartData) {
+            cartStockLimits.clear();
+
+            const requests = [];
+            for (const seller of cartData?.sellers || []) {
+                const tenantId = getSellerId(seller);
+                for (const item of seller.items || []) {
+                    const productId = getProductId(item);
+                    const stored = Math.max(0, Math.floor(Number(item.maxStock ?? item.max_stock) || 0));
+                    if (stored > 0) {
+                        cartStockLimits.set(cartStockKey(tenantId, productId), stored);
+                    }
+
+                    requests.push((async () => {
+                        try {
+                            const response = await fetch(`${CATALOG_API}/products/${productId}/listings`, {
+                                headers: { 'Accept': 'application/json' },
+                                cache: 'no-store'
+                            });
+                            if (!response.ok) return;
+                            const listings = await response.json();
+                            const listing = Array.isArray(listings)
+                                ? listings.find(entry => Number(entry.tenant_id) === Number(tenantId))
+                                : null;
+                            if (!listing) return;
+                            const stock = Math.max(0, Math.floor(Number(listing.total_stock) || 0));
+                            cartStockLimits.set(cartStockKey(tenantId, productId), stock);
+                        } catch {
+                            // Если каталог временно недоступен, не ломаем саму корзину.
+                        }
+                    })());
+                }
+            }
+
+            await Promise.all(requests);
+        }
 
         function isGuestCartMode() {
             return !localStorage.getItem(storageKeys.accessToken);
@@ -1277,6 +1333,9 @@
                             ${items.map(item => {
                                 const productId = getProductId(item);
                                 const quantity = Math.max(1, Number(item.quantity) || 1);
+                                const knownStock = getKnownStock(tenantId, productId);
+                                const maxAttr = knownStock !== null ? `max="${knownStock}"` : '';
+                                const plusDisabled = knownStock !== null && quantity >= knownStock;
 
                                 return `
                                     <article class="cart-row">
@@ -1305,13 +1364,14 @@
                                                 <input
                                                     type="number"
                                                     min="1"
+                                                    ${maxAttr}
                                                     value="${quantity}"
                                                     data-action="quantity-input"
                                                     data-tenant-id="${tenantId}"
                                                     data-product-id="${productId}"
                                                     aria-label="${escapeHTML(t('quantity'))}"
                                                 >
-                                                <button type="button" data-action="increase" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="+">
+                                                <button type="button" data-action="increase" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="+" ${plusDisabled ? 'disabled' : ''}>
                                                     <i data-lucide="plus" class="w-4 h-4"></i>
                                                 </button>
                                             </div>
@@ -1608,6 +1668,12 @@
                         Number(cartItem.quantity || 1) +
                             (button.dataset.action === 'increase' ? 1 : -1)
                     );
+                    const knownStock = getKnownStock(tenantId, productId);
+
+                    if (button.dataset.action === 'increase' && knownStock !== null && nextQuantity > knownStock) {
+                        showToast(stockLimitText(knownStock), 'error');
+                        return;
+                    }
 
                     if (nextQuantity === 0) {
                         requestRemoveCartItem(tenantId, productId);
@@ -1628,10 +1694,17 @@
                 input.addEventListener('change', () => {
                     const tenantId = Number(input.dataset.tenantId);
                     const productId = Number(input.dataset.productId);
-                    const quantity = Math.max(
+                    let quantity = Math.max(
                         0,
                         Math.floor(Number(input.value) || 0)
                     );
+                    const knownStock = getKnownStock(tenantId, productId);
+
+                    if (knownStock !== null && quantity > knownStock) {
+                        quantity = knownStock;
+                        input.value = String(knownStock);
+                        showToast(stockLimitText(knownStock), 'error');
+                    }
 
                     if (quantity === 0) {
                         const { item } = findCartItem(tenantId, productId);
@@ -1680,12 +1753,14 @@
             if (isGuestCartMode()) {
                 cart = recalculateGuestCart(readGuestCart());
                 document.getElementById('authRequiredState').classList.add('hidden');
+                await loadCartStockLimits(cart);
                 renderCart();
                 return;
             }
 
             try {
                 cart = normalizeCart(await cartRequest());
+                await loadCartStockLimits(cart);
                 renderCart();
 
                 if (sessionStorage.getItem('osuzCheckoutAfterAuth') === '1') {
