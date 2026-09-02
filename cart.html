@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" data-osuz-build="2026-09-02-v13-mobile-catalog-header">
+
+<html data-osuz-build="2026-09-02-v13-mobile-catalog-header" lang="ru">
 <head>
 <script id="osuz-pretheme">
 (function(){
@@ -52,15 +53,14 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 }
 
 </style>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Корзина — OSUZ</title>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Корзина — OSUZ</title>
+<link href="icon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -85,7 +85,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             }
         };
     </script>
-    <style>
+<style>
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -539,7 +539,6 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
         }
 
     </style>
-
 <style id="osuz-final-shared-css">
 :root{--osuz-header:#067890;--osuz-nav:#0b1725;--osuz-cyan:#00bcd4;--osuz-bg:#f8fafc;--osuz-dark:#070b12}
 html,body{min-height:100%}body{margin:0}
@@ -800,7 +799,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
 }
 </style>
 <style id="osuz-mobile-v6-page-css">@media(max-width:767px){main.pt-36{padding-top:122px!important}}</style>
-
 <style id="osuz-mobile-v7-header-final">
 /* V7 FINAL MOBILE HEADER OVERRIDE — keep one compact header on every page. */
 @media (max-width: 767px) {
@@ -1039,8 +1037,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
   .osuz-mobile-header-actions #categoryLanguageToggle { width: 50px !important; min-width: 50px !important; }
 }
 </style>
-
-
 <style id="osuz-mobile-v8-header-final">
 /* V8 — mobile header: no top Catalog button and no duplicated account/order/cart actions. */
 @media (max-width: 767px) {
@@ -1131,8 +1127,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
   .auth-site-header > div { padding-left: 9px !important; padding-right: 9px !important; }
 }
 </style>
-
-
 <style id="osuz-v10-desktop-catalog-mobile-menu">
 /* V10: Catalog is a desktop header action; hamburger is mobile-only. */
 .osuz-desktop-catalog-button { display: inline-flex !important; }
@@ -1145,7 +1139,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
   .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
 }
 </style>
-
 <style id="osuz-v11-catalog-everywhere">
 /* V11: desktop Catalog button is present and visible on every page. */
 @media (min-width: 768px) {
@@ -1184,7 +1177,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
   .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
 }
 </style>
-
 <style id="osuz-v12-mobile-header-laptop-style">
 /* V12 — mobile header uses the same visual language/search as desktop.
    No top Catalog button on phones; Catalog remains in the bottom navigation. */
@@ -1423,8 +1415,6 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
   .osuz-header-search button { padding-left: 12px !important; padding-right: 12px !important; }
 }
 </style>
-
-
 <style id="osuz-v13-mobile-header-unified">
 /* V13 — one mobile header everywhere: laptop layout compressed for phones.
    Catalog lives in the HEADER, not in the bottom navigation. */
@@ -1724,132 +1714,396 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
 }
 </style>
 
+<style id="osuz-v15-header-unified-final">
+/* V15 — one header layout for every page. This block intentionally comes last. */
+:root{--osuz-v15-header:#067890;--osuz-v15-nav:#0b1725}
+.site-header-top,.auth-site-header{background:var(--osuz-v15-header)!important;background-color:var(--osuz-v15-header)!important}
+.site-header-nav,.auth-site-subnav{background:var(--osuz-v15-nav)!important}
+
+/* Desktop: OSUZ -> Catalog -> Search -> actions, everywhere. */
+@media (min-width:768px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+    min-height:82px!important;
+    height:82px!important;
+  }
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{order:0!important;flex:0 0 auto!important;margin:0!important}
+
+  .osuz-desktop-catalog-button{
+    order:1!important;
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    flex:0 0 auto!important;
+    height:46px!important;
+    min-width:112px!important;
+    padding:0 16px!important;
+    border-radius:12px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    background:#0b1725!important;
+    color:#fff!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    font-size:13px!important;
+    font-weight:900!important;
+  }
+  .osuz-desktop-catalog-button svg{width:18px!important;height:18px!important}
+
+  .osuz-desktop-search-slot,
+  .site-header-top .osuz-header-search,
+  .auth-site-header .osuz-header-search,
+  .site-header-top .header-search-wrap{
+    order:2!important;
+    flex:1 1 620px!important;
+    width:auto!important;
+    max-width:620px!important;
+    min-width:220px!important;
+    margin:0!important;
+  }
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .header-actions,
+  .auth-site-header .osuz-mobile-header-actions{
+    order:3!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+  }
+
+  /* Category has a separate real desktop search; hide its mobile clone. */
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:none!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:flex!important}
+
+  /* Nice vertical account/order/cart actions on every desktop header. */
+  .header-actions>a[data-customer-account-link],
+  .header-actions>a[href="orders.html"],
+  .header-actions>a[href="cart.html"],
+  .osuz-mobile-header-actions>a[data-customer-account-link],
+  .osuz-mobile-header-actions>a[href="orders.html"],
+  .osuz-mobile-header-actions>a[href="cart.html"]{
+    display:inline-flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    min-width:58px!important;
+    height:62px!important;
+    min-height:62px!important;
+    padding:7px 8px 6px!important;
+    border-radius:11px!important;
+    color:#fff!important;
+    font-size:10px!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+  }
+  .header-actions>a svg,.osuz-mobile-header-actions>a svg{width:20px!important;height:20px!important;transform:translateY(-2px)!important}
+  .header-actions>a[href="cart.html"] [data-cart-count],
+  .osuz-mobile-header-actions>a[href="cart.html"] [data-cart-count]{top:5px!important;right:7px!important;left:auto!important;margin:0!important}
+
+  /* language/theme stay compact, never vertical */
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle,#themeToggle{
+    flex-direction:row!important;
+  }
+
+  #mobileMenuBtn{display:none!important}
+}
+
+/* Mobile: same visual logic as laptop, compact and consistent. */
+@media (max-width:767px){
+  html,body{overflow-x:hidden!important}
+  body{padding-bottom:68px!important}
+  .site-header-top,.auth-site-header{background:#067890!important;border-bottom:1px solid rgba(255,255,255,.24)!important}
+
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:grid!important;
+    grid-template-columns:auto auto minmax(0,1fr) auto!important;
+    grid-template-rows:50px 46px!important;
+    align-items:center!important;
+    column-gap:8px!important;
+    row-gap:7px!important;
+    width:100%!important;
+    min-height:110px!important;
+    height:110px!important;
+    padding:5px 10px 7px!important;
+    margin:0 auto!important;
+  }
+
+  body[data-osuz-page="index"] .site-header-top>.max-w-\[1400px\]{
+    grid-template-rows:50px!important;
+    min-height:56px!important;
+    height:56px!important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{
+    grid-column:1!important;grid-row:1!important;
+    display:inline-flex!important;align-items:center!important;gap:6px!important;
+    min-width:0!important;margin:0!important;justify-self:start!important
+  }
+  .site-header-top .site-logo-icon,.auth-site-header .site-logo-icon,.auth-site-logo{height:25px!important;width:auto!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:15px!important;letter-spacing:.02em!important;white-space:nowrap!important}
+
+  /* Catalog stays in the header on mobile, exactly after the logo. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle]{
+    grid-column:2!important;grid-row:1!important;
+    display:inline-flex!important;visibility:visible!important;opacity:1!important;
+    width:auto!important;min-width:76px!important;height:40px!important;
+    margin:0!important;padding:0 10px!important;border:0!important;border-radius:10px!important;
+    background:#0b1725!important;color:#fff!important;
+    align-items:center!important;justify-content:center!important;gap:6px!important;
+    font-size:11px!important;font-weight:900!important;white-space:nowrap!important;overflow:visible!important
+  }
+  .osuz-desktop-catalog-button svg{width:16px!important;height:16px!important}
+
+  /* Right side only language + theme; add real breathing room. */
+  .site-header-top .osuz-mobile-header-actions,
+  .site-header-top .header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .auth-site-header .header-actions{
+    grid-column:4!important;grid-row:1!important;
+    justify-self:end!important;align-self:center!important;
+    display:flex!important;align-items:center!important;justify-content:flex-end!important;
+    gap:10px!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important
+  }
+  .osuz-mobile-header-actions>a,
+  .header-actions>a,
+  .osuz-mobile-header-actions>[data-customer-account-link],
+  .osuz-mobile-header-actions>[data-open-cart],
+  .header-actions>[data-customer-account-link],
+  .header-actions>[data-open-cart],
+  #mobileMenuBtn{display:none!important}
+
+  .osuz-language-wrap,
+  .osuz-language-select-wrap{display:inline-flex!important;position:relative!important;flex:0 0 auto!important}
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle{
+    display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+    gap:6px!important;width:auto!important;min-width:58px!important;height:40px!important;min-height:40px!important;
+    padding:0 7px!important;margin:0!important;border-radius:10px!important;font-size:10px!important
+  }
+  .osuz-lang-label::before,.osuz-menu-flag{width:23px!important;height:15px!important}
+  .osuz-lang-code,.osuz-lang-label{font-size:10px!important;line-height:1!important}
+  #themeToggle{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;
+    padding:0!important;margin:0!important;border-radius:10px!important
+  }
+  #themeToggle svg{width:19px!important;height:19px!important;transform:none!important}
+
+  /* Every non-index page uses the same search as row two. */
+  body:not([data-osuz-page="index"]) .osuz-header-search{
+    grid-column:1/-1!important;grid-row:2!important;
+    display:flex!important;width:100%!important;max-width:none!important;min-width:0!important;height:44px!important;
+    margin:0!important;order:initial!important
+  }
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:flex!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:none!important}
+  .osuz-header-search input{font-size:13px!important;min-width:0!important}
+  .osuz-header-search button{height:100%!important;padding:0 14px!important;font-size:12px!important}
+
+  /* Index already has its own mobile search just under row one. */
+  body[data-osuz-page="index"] .header-search-wrap{display:none!important}
+  body[data-osuz-page="index"] .mobile-top-search-wrap{
+    display:block!important;background:#067890!important;padding:0 10px 8px!important;margin:0!important
+  }
+  body[data-osuz-page="index"] .mobile-top-search-shell{height:44px!important;border-radius:11px!important}
+  body[data-osuz-page="index"] .mobile-top-search-shell input{font-size:12px!important}
+  body[data-osuz-page="index"] .mobile-top-search-btn{padding:0 14px!important;font-size:12px!important}
+
+  .site-header-nav,.auth-site-subnav{display:none!important}
+
+  /* Full mobile mega menu: fixed between header and bottom nav, both panes scroll independently. */
+  #osuzCatalogPanel,.osuz-catalog-panel{
+    position:fixed!important;
+    left:0!important;right:0!important;
+    width:100vw!important;
+    transform:none!important;
+    bottom:calc(64px + env(safe-area-inset-bottom))!important;
+    max-height:none!important;
+    height:auto!important;
+    border-radius:0!important;
+    border-left:0!important;border-right:0!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(0,58%) minmax(0,42%)!important;
+    overflow:hidden!important;
+    box-shadow:0 18px 40px rgba(15,23,42,.20)!important;
+    overscroll-behavior:contain!important
+  }
+  #osuzCatalogPanel.open,.osuz-catalog-panel.open{display:grid!important}
+  .osuz-catalog-left{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:8px 10px 16px!important;
+    border-right:0!important;border-bottom:1px solid #dbe4ee!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-right{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:14px 12px 20px!important;
+    background:#f8fafc!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-cat{padding:12px 12px!important;font-size:13px!important}
+  .osuz-catalog-subs{grid-template-columns:1fr 1fr!important;gap:6px 8px!important}
+  .osuz-catalog-sub{padding:10px 8px!important;font-size:12px!important;line-height:1.25!important}
+  body.dark-mode .osuz-catalog-right{background:#0b1420!important}
+  body.osuz-catalog-mobile-open{overflow:hidden!important}
+
+  /* Four bottom actions only. */
+  .osuz-mobile-bottom-final{
+    display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    height:64px!important;padding-bottom:max(3px,env(safe-area-inset-bottom))!important
+  }
+}
+
+@media (max-width:360px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{column-gap:6px!important;padding-left:7px!important;padding-right:7px!important}
+  .osuz-desktop-catalog-button{min-width:70px!important;padding:0 8px!important;font-size:10px!important}
+  .osuz-language-wrap>.header-action,.osuz-language-select-wrap,#languageToggle,#languageButton,#categoryLanguageToggle{min-width:54px!important;padding:0 5px!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:14px!important}
+}
+</style>
+
 </head>
-<body>
-    <header class="fixed top-0 left-0 right-0 z-50">
-        <div class="site-header-top">
-            <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
-                <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
-                    <img src="osuz logo.png" alt="OSUZ" class="site-logo-icon h-8 w-auto" style="filter: brightness(0) invert(1);">
-                    <span class="text-xl font-black tracking-wide text-white">OSUZ</span>
-                </a>
-                <button type="button" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle aria-expanded="false" aria-label="Каталог">
-                    <i data-lucide="layout-grid"></i>
-                    <span data-osuz-catalog-text>Каталог</span>
-                </button>
-                
-                <form class="osuz-header-search" role="search" autocomplete="off"><i data-lucide="search"></i><input data-osuz-search-input type="search" placeholder="Поиск товаров..." autocomplete="off"><button type="submit"><span data-osuz-search-text>Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
-
-                <div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
-                    <label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-osuz-select-flag data-lang="ru" data-code="false"></span><span class="osuz-lang-code" data-osuz-select-code>RU</span><select id="languageSelect" class="header-action bg-transparent outline-none cursor-pointer">
-                        <option value="ru">RU</option>
-                        <option value="uz">UZ</option>
-                        <option value="en">EN</option>
-                    </select></label>
-                    <button id="themeToggle" class="header-action !px-3" aria-label="Сменить тему">
-                        <i data-lucide="moon" class="theme-icon-moon w-5 h-5"></i>
-                        <i data-lucide="sun" class="theme-icon-sun w-5 h-5"></i>
-                    </button>
-                    <a href="auth.html" data-customer-account-link class="header-action hidden sm:inline-flex max-w-[160px]">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                        <span data-customer-account-text class="truncate">Войти</span>
-                    </a>
-                    <a href="orders.html" class="header-action hidden md:inline-flex">
-                        <i data-lucide="package-check" class="w-5 h-5"></i>
-                        <span id="headerOrdersText">Заказы</span>
-                    </a>
-                    <a href="cart.html" data-open-cart class="header-action osuz-cart-link !px-3" aria-label="Корзина">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span id="headerCartText" class="hidden sm:inline">Корзина</span>
-                        <span id="headerCartCount" data-cart-count class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center">0</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="site-header-nav">
-            <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
-                
-                <a href="index.html#partners" class="nav-link text-sm font-semibold">Партнёры</a>
-                <a href="index.html#products" class="nav-link text-sm font-semibold">Товары</a>
-                <a href="index.html#about" class="nav-link text-sm font-semibold">О нас</a>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-14">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
-            <div>
-                <span id="cartEyebrow" class="text-xs font-black uppercase tracking-[.18em] text-primary-600">Покупки</span>
-                <h1 id="cartTitle" class="text-3xl lg:text-4xl font-black text-gray-900 mt-2">Корзина</h1>
-                <p id="cartDescription" class="text-sm text-gray-500 mt-2">Товары сгруппированы по продавцам.</p>
-            </div>
-            <button id="clearCartButton" type="button" class="secondary-button hidden">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                <span>Очистить корзину</span>
-            </button>
-        </div>
-
-        <div id="authRequiredState" class="surface hidden rounded-3xl p-8 lg:p-12 text-center">
-            <div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
-                <i data-lucide="log-in" class="w-8 h-8 text-primary-700"></i>
-            </div>
-            <h2 id="authRequiredTitle" class="text-2xl font-black text-gray-900">Войдите в аккаунт</h2>
-            <p id="authRequiredText" class="text-gray-500 mt-2 mb-6">Корзина доступна только авторизованным покупателям.</p>
-            <a id="authRequiredButton" href="auth.html?return=%2Fcart.html" class="primary-button">Войти</a>
-        </div>
-
-        <div id="loadingState" class="space-y-5">
-            <div class="surface rounded-3xl h-40 animate-pulse"></div>
-            <div class="surface rounded-3xl h-52 animate-pulse"></div>
-        </div>
-
-        <div id="emptyState" class="surface hidden rounded-3xl p-9 lg:p-14 text-center">
-            <div class="w-20 h-20 rounded-3xl bg-primary-50 flex items-center justify-center mx-auto mb-6">
-                <i data-lucide="shopping-cart" class="w-10 h-10 text-primary-700"></i>
-            </div>
-            <h2 id="emptyTitle" class="text-2xl font-black text-gray-900">Корзина пуста</h2>
-            <p id="emptyText" class="text-gray-500 mt-2 mb-6">Добавьте товары у нужных продавцов.</p>
-            <a id="emptyButton" href="#" data-osuz-catalog-open class="primary-button">
+<body data-osuz-page="cart">
+<header class="fixed top-0 left-0 right-0 z-50">
+<div class="site-header-top">
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
+<a class="flex items-center gap-2 flex-shrink-0" href="index.html">
+<img alt="OSUZ" class="site-logo-icon h-8 w-auto" src="osuz logo.png" style="filter: brightness(0) invert(1);"/>
+<span class="text-xl font-black tracking-wide text-white">OSUZ</span>
+</a>
+<button aria-expanded="false" aria-label="Каталог" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle="" type="button">
+<i data-lucide="layout-grid"></i>
+<span data-osuz-catalog-text="">Каталог</span>
+</button>
+<form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
+<div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
+<label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span><span class="osuz-lang-code" data-osuz-select-code="">RU</span><select class="header-action bg-transparent outline-none cursor-pointer" id="languageSelect">
+<option value="ru">RU</option>
+<option value="uz">UZ</option>
+<option value="en">EN</option>
+</select></label>
+<button aria-label="Сменить тему" class="header-action !px-3" id="themeToggle">
+<i class="theme-icon-moon w-5 h-5" data-lucide="moon"></i>
+<i class="theme-icon-sun w-5 h-5" data-lucide="sun"></i>
+</button>
+<a class="header-action hidden sm:inline-flex max-w-[160px]" data-customer-account-link="" href="auth.html">
+<i class="w-4 h-4" data-lucide="user"></i>
+<span class="truncate" data-customer-account-text="">Войти</span>
+</a>
+<a class="header-action hidden md:inline-flex" href="orders.html">
+<i class="w-5 h-5" data-lucide="package-check"></i>
+<span id="headerOrdersText">Заказы</span>
+</a>
+<a aria-label="Корзина" class="header-action osuz-cart-link !px-3" data-open-cart="" href="cart.html">
+<i class="w-5 h-5" data-lucide="shopping-cart"></i>
+<span class="hidden sm:inline" id="headerCartText">Корзина</span>
+<span class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center" data-cart-count="" id="headerCartCount">0</span>
+</a>
+</div>
+</div>
+</div>
+<div class="site-header-nav">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
+<a class="nav-link text-sm font-semibold" href="index.html#partners">Партнёры</a>
+<a class="nav-link text-sm font-semibold" href="index.html#products">Товары</a>
+<a class="nav-link text-sm font-semibold" href="index.html#about">О нас</a>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-14">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-7">
+<div>
+<span class="text-xs font-black uppercase tracking-[.18em] text-primary-600" id="cartEyebrow">Покупки</span>
+<h1 class="text-3xl lg:text-4xl font-black text-gray-900 mt-2" id="cartTitle">Корзина</h1>
+<p class="text-sm text-gray-500 mt-2" id="cartDescription">Товары сгруппированы по продавцам.</p>
+</div>
+<button class="secondary-button hidden" id="clearCartButton" type="button">
+<i class="w-4 h-4" data-lucide="trash-2"></i>
+<span>Очистить корзину</span>
+</button>
+</div>
+<div class="surface hidden rounded-3xl p-8 lg:p-12 text-center" id="authRequiredState">
+<div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
+<i class="w-8 h-8 text-primary-700" data-lucide="log-in"></i>
+</div>
+<h2 class="text-2xl font-black text-gray-900" id="authRequiredTitle">Войдите в аккаунт</h2>
+<p class="text-gray-500 mt-2 mb-6" id="authRequiredText">Корзина доступна только авторизованным покупателям.</p>
+<a class="primary-button" href="auth.html?return=%2Fcart.html" id="authRequiredButton">Войти</a>
+</div>
+<div class="space-y-5" id="loadingState">
+<div class="surface rounded-3xl h-40 animate-pulse"></div>
+<div class="surface rounded-3xl h-52 animate-pulse"></div>
+</div>
+<div class="surface hidden rounded-3xl p-9 lg:p-14 text-center" id="emptyState">
+<div class="w-20 h-20 rounded-3xl bg-primary-50 flex items-center justify-center mx-auto mb-6">
+<i class="w-10 h-10 text-primary-700" data-lucide="shopping-cart"></i>
+</div>
+<h2 class="text-2xl font-black text-gray-900" id="emptyTitle">Корзина пуста</h2>
+<p class="text-gray-500 mt-2 mb-6" id="emptyText">Добавьте товары у нужных продавцов.</p>
+<a class="primary-button" data-osuz-catalog-open="" href="#" id="emptyButton">
                 Перейти в каталог
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-        </div>
-
-        <div id="cartContent" class="hidden grid lg:grid-cols-[minmax(0,1fr)_350px] gap-7 items-start">
-            <div id="sellerGroups" class="space-y-5"></div>
-
-            <aside class="summary-card surface rounded-3xl p-6">
-                <div class="flex items-center justify-between gap-3 mb-5">
-                    <h2 id="summaryTitle" class="text-xl font-black text-gray-900">Итого</h2>
-                    <i data-lucide="receipt-text" class="w-5 h-5 text-primary-600"></i>
-                </div>
-
-                <div class="space-y-3 text-sm">
-                    <div class="flex justify-between gap-4">
-                        <span id="selectedItemsLabel" class="text-gray-500">Выбрано товаров</span>
-                        <strong id="selectedItemsCount" class="text-gray-900">0</strong>
-                    </div>
-                    <div class="border-t border-gray-200 pt-4 flex items-end justify-between gap-4">
-                        <span id="grandTotalLabel" class="text-gray-500">Общая сумма</span>
-                        <strong id="grandTotalValue" class="text-2xl text-gray-900">0 сум</strong>
-                    </div>
-                </div>
-
-                <button id="checkoutButton" type="button" disabled class="primary-button w-full mt-6">
-                    <i data-lucide="credit-card" class="w-5 h-5"></i>
-                    <span>Запрос на наличие</span>
-                </button>
-
-                <div id="checkoutNotice" class="notice mt-4">
+                <i class="w-4 h-4" data-lucide="arrow-right"></i>
+</a>
+</div>
+<div class="hidden grid lg:grid-cols-[minmax(0,1fr)_350px] gap-7 items-start" id="cartContent">
+<div class="space-y-5" id="sellerGroups"></div>
+<aside class="summary-card surface rounded-3xl p-6">
+<div class="flex items-center justify-between gap-3 mb-5">
+<h2 class="text-xl font-black text-gray-900" id="summaryTitle">Итого</h2>
+<i class="w-5 h-5 text-primary-600" data-lucide="receipt-text"></i>
+</div>
+<div class="space-y-3 text-sm">
+<div class="flex justify-between gap-4">
+<span class="text-gray-500" id="selectedItemsLabel">Выбрано товаров</span>
+<strong class="text-gray-900" id="selectedItemsCount">0</strong>
+</div>
+<div class="border-t border-gray-200 pt-4 flex items-end justify-between gap-4">
+<span class="text-gray-500" id="grandTotalLabel">Общая сумма</span>
+<strong class="text-2xl text-gray-900" id="grandTotalValue">0 сум</strong>
+</div>
+</div>
+<button class="primary-button w-full mt-6" disabled="" id="checkoutButton" type="button">
+<i class="w-5 h-5" data-lucide="credit-card"></i>
+<span>Запрос на наличие</span>
+</button>
+<div class="notice mt-4" id="checkoutNotice">
                     Продавцу будет отправлен запрос на наличие выбранных товаров. После ответа можно будет оформить заказ.
                 </div>
-            </aside>
-        </div>
-
-        <div id="errorState" class="notice hidden mt-5"></div>
-    </main>
-
-    <script>
+</aside>
+</div>
+<div class="notice hidden mt-5" id="errorState"></div>
+</main>
+<script>
         const API_ORIGIN = 'https://osuz.uz';
         const CART_API = `${API_ORIGIN}/api/site/cart`;
         const CATALOG_API = `${API_ORIGIN}/api/catalog`;
@@ -3194,29 +3448,24 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
             }, 50);
         })();
     </script>
-
-
-<div id="osuzCatalogPanel" class="osuz-catalog-panel" aria-hidden="true">
-  <div id="osuzCatalogLeft" class="osuz-catalog-left"><div class="px-3 py-4 text-sm text-gray-500">Загрузка категорий…</div></div>
-  <div class="osuz-catalog-right"><div class="osuz-catalog-title" data-osuz-catalog-hint>Подкатегории</div><div id="osuzCatalogRight" class="osuz-catalog-subs"><div class="text-sm text-gray-500">Наведите на категорию слева</div></div></div>
+<div aria-hidden="true" class="osuz-catalog-panel" id="osuzCatalogPanel">
+<div class="osuz-catalog-left" id="osuzCatalogLeft"><div class="px-3 py-4 text-sm text-gray-500">Загрузка категорий…</div></div>
+<div class="osuz-catalog-right"><div class="osuz-catalog-title" data-osuz-catalog-hint="">Подкатегории</div><div class="osuz-catalog-subs" id="osuzCatalogRight"><div class="text-sm text-gray-500">Наведите на категорию слева</div></div></div>
 </div>
-
-<div id="osuzContactBackdrop" class="osuz-contact-backdrop" aria-hidden="true">
-  <div class="osuz-contact-modal" role="dialog" aria-modal="true" aria-labelledby="osuzContactTitle">
-    <div class="osuz-contact-head"><h3 id="osuzContactTitle" class="osuz-contact-title">Связаться с нами</h3><button id="osuzContactClose" type="button" class="osuz-contact-close" aria-label="Закрыть"><i data-lucide="x"></i></button></div>
-    <a class="osuz-contact-row" href="tel:+998918401405"><i data-lucide="phone"></i><span>+998-91-840-14-05</span></a>
-    <a class="osuz-contact-row" href="mailto:info@osuz.uz"><i data-lucide="mail"></i><span>info@osuz.uz</span></a>
-    <a class="osuz-contact-row" href="https://maps.google.com/?q=Tashkent,Uzbekistan" target="_blank" rel="noopener"><i data-lucide="map-pin"></i><span data-osuz-contact-address>Ташкент, Узбекистан</span></a>
-  </div>
+<div aria-hidden="true" class="osuz-contact-backdrop" id="osuzContactBackdrop">
+<div aria-labelledby="osuzContactTitle" aria-modal="true" class="osuz-contact-modal" role="dialog">
+<div class="osuz-contact-head"><h3 class="osuz-contact-title" id="osuzContactTitle">Связаться с нами</h3><button aria-label="Закрыть" class="osuz-contact-close" id="osuzContactClose" type="button"><i data-lucide="x"></i></button></div>
+<a class="osuz-contact-row" href="tel:+998918401405"><i data-lucide="phone"></i><span>+998-91-840-14-05</span></a>
+<a class="osuz-contact-row" href="mailto:info@osuz.uz"><i data-lucide="mail"></i><span>info@osuz.uz</span></a>
+<a class="osuz-contact-row" href="https://maps.google.com/?q=Tashkent,Uzbekistan" rel="noopener" target="_blank"><i data-lucide="map-pin"></i><span data-osuz-contact-address="">Ташкент, Узбекистан</span></a>
 </div>
-
-<nav class="osuz-mobile-bottom-final" aria-label="Мобильная навигация">
-  <a href="index.html" data-mobile-final="home"><i data-lucide="house"></i><span data-mobile-final-label="home">Главная</span></a>
-  <a href="cart.html" data-mobile-final="cart"><i data-lucide="shopping-cart"></i><span data-mobile-final-label="cart">Корзина</span><span data-mobile-cart-count>0</span></a>
-  <a href="orders.html" data-mobile-final="orders"><i data-lucide="package-check"></i><span data-mobile-final-label="orders">Заказы</span></a>
-  <a href="auth.html" data-mobile-final="profile"><i data-lucide="circle-user-round"></i><span data-mobile-final-label="profile">Профиль</span></a>
+</div>
+<nav aria-label="Мобильная навигация" class="osuz-mobile-bottom-final">
+<a data-mobile-final="home" href="index.html"><i data-lucide="house"></i><span data-mobile-final-label="home">Главная</span></a>
+<a data-mobile-final="cart" href="cart.html"><i data-lucide="shopping-cart"></i><span data-mobile-final-label="cart">Корзина</span><span data-mobile-cart-count="">0</span></a>
+<a data-mobile-final="orders" href="orders.html"><i data-lucide="package-check"></i><span data-mobile-final-label="orders">Заказы</span></a>
+<a data-mobile-final="profile" href="auth.html"><i data-lucide="circle-user-round"></i><span data-mobile-final-label="profile">Профиль</span></a>
 </nav>
-
 <script id="osuz-final-shared-js">
 (function(){
  'use strict';
@@ -3355,5 +3604,30 @@ body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc
  window.addEventListener('load',()=>{syncThemeRoot();syncFlags();syncTexts();syncMobileCart()});
 })();
 </script>
+
+<script id="osuz-v15-mobile-catalog-state">
+(function(){
+  function syncCatalogState(){
+    const panel=document.getElementById('osuzCatalogPanel');
+    const mobile=window.matchMedia('(max-width: 767px)').matches;
+    document.body.classList.toggle('osuz-catalog-mobile-open', !!(mobile && panel && panel.classList.contains('open')));
+    if(panel && panel.classList.contains('open') && mobile){
+      const header=document.querySelector('.site-header, header.fixed, .auth-site-header');
+      if(header){ panel.style.top=Math.max(0,header.getBoundingClientRect().bottom)+'px'; }
+    }
+  }
+  function init(){
+    const panel=document.getElementById('osuzCatalogPanel');
+    if(panel){
+      new MutationObserver(syncCatalogState).observe(panel,{attributes:true,attributeFilter:['class']});
+    }
+    document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(btn=>btn.addEventListener('click',()=>setTimeout(syncCatalogState,0)));
+    window.addEventListener('resize',syncCatalogState,{passive:true});
+    syncCatalogState();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+</script>
+
 </body>
 </html>
