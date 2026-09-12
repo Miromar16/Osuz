@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-11-v33-product-card-and-cart-migration" lang="ru">
+<html data-osuz-build="2026-09-12-v38-session-hardfix" lang="ru">
 <head>
+<script id="osuz-local-origin-normalizer">
+(() => {
+  try {
+    if (location.hostname === '127.0.0.1' || location.hostname === '0.0.0.0') {
+      const url = new URL(location.href);
+      url.hostname = 'localhost';
+      location.replace(url.href);
+    }
+  } catch (_) {}
+})();
+</script>
+
 <script id="osuz-pretheme">
 (function(){
   try{
@@ -56,6 +68,67 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Корзина — OSUZ</title>
+<meta content="noindex, follow" name="robots"/>
+<script id="osuz-routing-helpers">
+(() => {
+  'use strict';
+  const localHosts = new Set(['localhost', '127.0.0.1']);
+  const isLocal = localHosts.has(location.hostname);
+
+  function backendUrl(entity) {
+    const value = entity && typeof entity.url === 'string' ? entity.url.trim() : '';
+    if (!value || isLocal) return '';
+    try {
+      const parsed = new URL(value, location.origin);
+      if (parsed.origin !== location.origin && /^https?:\/\//i.test(value)) return value;
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return value;
+    }
+  }
+
+  function entityId(entity) {
+    const value = entity && typeof entity === 'object'
+      ? (entity.id ?? entity.productId ?? entity.product_id ?? entity.categoryId ?? entity.category_id)
+      : entity;
+    const id = Number(value);
+    return Number.isFinite(id) && id > 0 ? id : 0;
+  }
+
+  function product(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/product.html?id=${encodeURIComponent(id)}` : '/category.html';
+  }
+
+  function category(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/category.html?id=${encodeURIComponent(id)}` : '/index.html#products';
+  }
+
+  function search(query) {
+    const q = String(query || '').trim();
+    return q ? `/category.html?q=${encodeURIComponent(q)}` : '/index.html#products';
+  }
+
+  function productIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/product\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return Number(pathId || params.get('id'));
+  }
+
+  function categoryIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/catalog\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return pathId || params.get('id');
+  }
+
+  window.OSUZRoutes = Object.freeze({ product, category, search, productIdFromLocation, categoryIdFromLocation });
+})();
+</script>
 <link href="icon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -2365,6 +2438,144 @@ body.dark-mode .v17-heading{color:#94a3b8}
   .v34-mobile-only { display:none !important; }
 }
 </style>
+
+<style id="osuz-v35-mobile-search-catalog-clean">
+/* V35: final mobile search + clean one-column catalog. */
+@media (max-width:767px){
+  /* Never render desktop catalog panes on phones. */
+  #osuzV34Catalog .v34-desktop-roots,
+  #osuzV34Catalog .v34-desktop-subs{
+    display:none !important;
+    visibility:hidden !important;
+  }
+  #osuzV34Catalog .v34-mobile-only{display:flex !important;}
+  #osuzV34Catalog .v34-cat-list.v34-mobile-only{
+    display:block !important;
+    padding:10px 10px 18px !important;
+    background:#fff !important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-list.v34-mobile-only{background:#0b111b !important;}
+
+  #osuzV34Catalog{
+    left:10px !important;
+    right:10px !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+  }
+  #osuzV34Catalog .v34-cat-head{
+    min-height:54px !important;
+    padding:7px 9px !important;
+  }
+  #osuzV34Catalog .v34-cat-title{
+    font-size:17px !important;
+    font-weight:900 !important;
+  }
+  #osuzV34Catalog .v34-cat-row{
+    box-sizing:border-box !important;
+    width:100% !important;
+    min-height:50px !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    border:0 !important;
+    border-bottom:1px solid #e8eef5 !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    color:#172033 !important;
+    font-size:13px !important;
+    line-height:1.25 !important;
+    font-weight:750 !important;
+    text-align:left !important;
+    white-space:normal !important;
+  }
+  #osuzV34Catalog .v34-cat-row > span{
+    display:block !important;
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    overflow-wrap:anywhere !important;
+  }
+  #osuzV34Catalog .v34-cat-row > svg{
+    display:block !important;
+    flex:0 0 18px !important;
+    width:18px !important;
+    height:18px !important;
+    color:#64748b !important;
+  }
+  #osuzV34Catalog .v34-cat-row-all{
+    min-height:46px !important;
+    margin:0 0 8px !important;
+    border:1px solid #bfeaf0 !important;
+    border-radius:11px !important;
+    background:#effbfd !important;
+    color:#007c91 !important;
+  }
+  #osuzV34Catalog .v34-cat-row:active{background:#eefafd !important;}
+  body.dark-mode #osuzV34Catalog .v34-cat-row{
+    background:#0b111b !important;
+    color:#f8fafc !important;
+    border-bottom-color:#263548 !important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-row-all{
+    background:#102a31 !important;
+    color:#67e8f9 !important;
+    border-color:#23505b !important;
+  }
+
+  /* Index mobile search: force the actual existing search row to be visible. */
+  body[data-osuz-page="index"] nav.site-header > .mobile-top-search-wrap{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:relative !important;
+    z-index:2 !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:53px !important;
+    padding:0 10px 9px !important;
+    margin:0 !important;
+    background:#067890 !important;
+    border:0 !important;
+  }
+  body[data-osuz-page="index"] nav.site-header > .mobile-top-search-wrap > .mobile-top-search-shell,
+  body[data-osuz-page="index"] #mobileTopSearchForm{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    width:100% !important;
+    height:44px !important;
+    min-height:44px !important;
+    margin:0 !important;
+    border-radius:11px !important;
+    overflow:hidden !important;
+    background:#fff !important;
+  }
+  body[data-osuz-page="index"] #mobileTopSearchInput{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    height:100% !important;
+    font-size:12px !important;
+    color:#0f172a !important;
+  }
+  body[data-osuz-page="index"] #mobileTopSearchButton{
+    display:inline-flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    height:100% !important;
+    padding:0 15px !important;
+    background:#111827 !important;
+    color:#fff !important;
+    font-size:12px !important;
+    font-weight:800 !important;
+  }
+}
+</style>
+
 </head>
 <body data-osuz-v16-page="cart" data-osuz-page="cart">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -3083,8 +3294,14 @@ body.dark-mode .v17-heading{color:#94a3b8}
 
                 localStorage.setItem(storageKeys.accessToken, data.accessToken);
                 return data.accessToken;
-            } catch {
-                Object.values(storageKeys).forEach(key => localStorage.removeItem(key));
+            } catch (error) {
+                // Never erase the cached customer because a background token refresh failed.
+                // A network/CORS/5xx problem is not a logout. Even a rejected refresh only
+                // invalidates tokens; the profile cache stays until explicit logout/delete.
+                if (error?.status === 401 || error?.status === 403) {
+                    localStorage.removeItem(storageKeys.accessToken);
+                    localStorage.removeItem(storageKeys.refreshToken);
+                }
                 return '';
             }
         }
@@ -3225,7 +3442,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
                                         >
 
                                         <div class="min-w-0">
-                                            <a href="product.html?id=${productId}" class="font-bold text-gray-900 hover:text-primary-700 line-clamp-2">${escapeHTML(item.name || '')}</a>
+                                            <a href="${OSUZRoutes.product({id:productId})}" class="font-bold text-gray-900 hover:text-primary-700 line-clamp-2">${escapeHTML(item.name || '')}</a>
                                             <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-gray-400">
                                                 <span>${escapeHTML(formatMoney(item.price))}</span>
                                                 <span>${escapeHTML(formatMoney(getLineTotal(item)))}</span>
@@ -3676,23 +3893,11 @@ body.dark-mode .v17-heading{color:#94a3b8}
                     if (!(tenantId > 0 && productId > 0 && target > 0)) continue;
                     let current = serverQuantities.get(key) || 0;
                     try {
-                        if (current <= 0) {
+                        // Backend contract: each POST /api/site/cart adds exactly one unit.
+                        // Repeat until the idempotent target quantity is reached.
+                        while (current < target) {
                             await cartRequest('', { method: 'POST', body: { productId, tenantId } });
-                            current = 1;
-                        }
-                        if (current < target) {
-                            try {
-                                await cartRequest(`/${tenantId}/${productId}`, {
-                                    method: 'PATCH',
-                                    body: { quantity: target, selected: item.selected !== false }
-                                });
-                                current = target;
-                            } catch {
-                                while (current < target) {
-                                    await cartRequest('', { method: 'POST', body: { productId, tenantId } });
-                                    current += 1;
-                                }
-                            }
+                            current += 1;
                         }
                         if (item.selected === false) {
                             try {
@@ -3986,9 +4191,9 @@ body.dark-mode .v17-heading{color:#94a3b8}
  function syncThemeRoot(){const t=document.body?.classList.contains('dark-mode')?'dark':theme();document.documentElement.setAttribute('data-osuz-theme',t);document.documentElement.classList.toggle('osuz-pre-dark',t==='dark')}
  function syncFlags(){const l=lang();document.querySelectorAll('[data-osuz-lang-label]').forEach(el=>{el.dataset.lang=l;if(el.dataset.code!=='false')el.textContent=l.toUpperCase()});document.querySelectorAll('[data-osuz-select-flag]').forEach(el=>el.dataset.lang=l);document.querySelectorAll('[data-osuz-select-code]').forEach(el=>el.textContent=l.toUpperCase())}
  function syncTexts(){const l=lang(),t=TEXT[l]||TEXT.ru;document.querySelectorAll('[data-osuz-catalog-text]').forEach(x=>x.textContent=t.catalog);document.querySelectorAll('[data-osuz-search-text]').forEach(x=>x.textContent=t.find);document.querySelectorAll('[data-osuz-search-input]').forEach(x=>x.placeholder=t.search);document.querySelectorAll('[data-osuz-catalog-hint]').forEach(x=>x.textContent=t.hint);document.querySelectorAll('[data-osuz-contact-open-text]').forEach(x=>x.textContent=t.contact);const ct=document.getElementById('osuzContactTitle');if(ct)ct.textContent=t.contact;document.querySelectorAll('[data-osuz-contact-address]').forEach(x=>x.textContent=t.address);document.querySelectorAll('[data-mobile-final-label]').forEach(x=>{const k=x.dataset.mobileFinalLabel;x.textContent=t[k]||t.catalog})}
- function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=page.startsWith('category')?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
+ function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=(page.startsWith('category')||location.pathname.startsWith('/catalog/'))?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
  function syncMobileCart(){let n=0;document.querySelectorAll('[data-cart-count],#headerCartCount,.osuz-cart-count').forEach(el=>{const v=parseInt((el.textContent||'0').replace(/\D/g,''),10);if(Number.isFinite(v))n=Math.max(n,v)});document.querySelectorAll('[data-mobile-cart-count]').forEach(el=>{el.textContent=String(n);el.style.display=n>0?'inline-flex':'none'})}
- function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href='category.html'+(q?'?q='+encodeURIComponent(q):'')})})}
+ function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href=OSUZRoutes.search(q)})})}
  let catalogLoaded=false,allCats=[];
  function parseNames(c){
    if(!c||typeof c!=='object')return {};
@@ -4053,11 +4258,11 @@ body.dark-mode .v17-heading{color:#94a3b8}
    const subs=allCats.filter(x=>Number(x.parent_id)===rootId);
    right.innerHTML='';
    if(!subs.length){
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(root.id);a.textContent=cname(root);right.appendChild(a);return;
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(root);a.textContent=cname(root);right.appendChild(a);return;
    }
    subs.slice(0,80).forEach(x=>{
      const name=cname(x);if(!name)return;
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(x.id);a.textContent=name;right.appendChild(a)
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(x);a.textContent=name;right.appendChild(a)
    });
  }
  async function loadCatalog(){
@@ -4073,7 +4278,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
        const name=cname(root);if(!name)return;
        const b=document.createElement('button');b.type='button';b.className='osuz-catalog-cat';b.innerHTML='<span></span><i data-lucide="chevron-right"></i>';b.querySelector('span').textContent=name;
        b.addEventListener('mouseenter',()=>showSubs(root,b));b.addEventListener('focus',()=>showSubs(root,b));
-       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href='category.html?id='+encodeURIComponent(root.id)});
+       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href=OSUZRoutes.category(root)});
        left.appendChild(b);if(i===0)showSubs(root,b)
      });
      if(!left.children.length)throw new Error('No named top-level categories');
@@ -4082,7 +4287,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
      catalogLoaded=false;
      console.error('[OSUZ catalog menu]',err);
      left.innerHTML='<div class="px-3 py-4 text-sm text-gray-500">'+(lang()==='en'?'Could not load categories.':lang()==='uz'?'Kategoriyalar yuklanmadi.':'Категории не загрузились.')+'</div>';
-     right.innerHTML='<a class="osuz-catalog-sub" href="category.html">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
+     right.innerHTML='<a class="osuz-catalog-sub" href="/index.html#products">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
    }
  }
  function panelTop(){const header=document.querySelector('.site-header,.auth-site-header,header.fixed,header');if(!header)return 82;const r=header.getBoundingClientRect();return Math.max(0,r.bottom)}
@@ -4162,8 +4367,8 @@ function children(parent){
 function goCategory(id){
   const n=Number(id);if(!Number.isFinite(n))return;
   closeCatalog();
-  const url=new URL('category.html',location.href);url.searchParams.set('id',String(n));
-  location.assign(url.href);
+  const entity=cats.find(c=>Number(c.id)===n)||{id:n};
+  location.assign(OSUZRoutes.category(entity));
 }
 function ensureBottomCatalog(){
   const nav=document.querySelector('.osuz-mobile-bottom-final');if(!nav)return;
@@ -4263,7 +4468,7 @@ async function loadCategories(){
   })();
   return loadPromise;
 }
-function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
 function openCatalog(){
   if(!panel)buildPanel();measureTop();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
@@ -4279,7 +4484,7 @@ function toggleCatalog(){panel?.classList.contains('open')?closeCatalog():openCa
 function bindSearchSafety(){
   /* category search was previously hidden by a legacy mobile override; keep it functional. */
   const categoryBtn=document.getElementById('categoryHeaderSearchButton'),categoryInput=document.getElementById('searchInput');
-  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();const url=new URL('category.html',location.href);if(q)url.searchParams.set('q',q);location.assign(url.href)})}
+  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
 }
 function init(){
   document.documentElement.dataset.osuzBuild='2026-09-11-v34-mobile-catalog-routing';

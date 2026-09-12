@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-11-v35-mobile-search-catalog-clean" lang="ru">
+<html data-osuz-build="2026-09-12-v38-session-hardfix" lang="ru">
 <head>
+<script id="osuz-local-origin-normalizer">
+(() => {
+  try {
+    if (location.hostname === '127.0.0.1' || location.hostname === '0.0.0.0') {
+      const url = new URL(location.href);
+      url.hostname = 'localhost';
+      location.replace(url.href);
+    }
+  } catch (_) {}
+})();
+</script>
+
 <script id="osuz-pretheme">
 (function(){
   try{
@@ -17,7 +29,77 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 </style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>OSUZ — Промышленные решения</title>
+<title>OSUZ — электрооборудование и промышленные товары в Ташкенте</title>
+<script id="osuz-routing-helpers">
+(() => {
+  'use strict';
+  const localHosts = new Set(['localhost', '127.0.0.1']);
+  const isLocal = localHosts.has(location.hostname);
+
+  function backendUrl(entity) {
+    const value = entity && typeof entity.url === 'string' ? entity.url.trim() : '';
+    if (!value || isLocal) return '';
+    try {
+      const parsed = new URL(value, location.origin);
+      if (parsed.origin !== location.origin && /^https?:\/\//i.test(value)) return value;
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return value;
+    }
+  }
+
+  function entityId(entity) {
+    const value = entity && typeof entity === 'object'
+      ? (entity.id ?? entity.productId ?? entity.product_id ?? entity.categoryId ?? entity.category_id)
+      : entity;
+    const id = Number(value);
+    return Number.isFinite(id) && id > 0 ? id : 0;
+  }
+
+  function product(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/product.html?id=${encodeURIComponent(id)}` : '/category.html';
+  }
+
+  function category(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/category.html?id=${encodeURIComponent(id)}` : '/index.html#products';
+  }
+
+  function search(query) {
+    const q = String(query || '').trim();
+    return q ? `/category.html?q=${encodeURIComponent(q)}` : '/index.html#products';
+  }
+
+  function productIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/product\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return Number(pathId || params.get('id'));
+  }
+
+  function categoryIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/catalog\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return pathId || params.get('id');
+  }
+
+  window.OSUZRoutes = Object.freeze({ product, category, search, productIdFromLocation, categoryIdFromLocation });
+})();
+</script>
+<meta content="Каталог электрооборудования, кабеля, светотехники и промышленных товаров. Цены нескольких поставщиков в одном месте, доставка по Узбекистану." name="description"/>
+<link href="https://osuz.uz/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="OSUZ" property="og:site_name"/>
+<meta content="OSUZ — электрооборудование и промышленные товары в Ташкенте" property="og:title"/>
+<meta content="Каталог электрооборудования, кабеля, светотехники и промышленных товаров. Цены нескольких поставщиков в одном месте, доставка по Узбекистану." property="og:description"/>
+<meta content="https://osuz.uz/" property="og:url"/>
+<meta content="https://osuz.uz/osuz%20logo.png" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"OSUZ","url":"https://osuz.uz/","logo":"https://osuz.uz/osuz%20logo.png","address":{"@type":"PostalAddress","addressLocality":"Ташкент","addressCountry":"UZ"}}</script>
 <link href="icon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -3475,7 +3557,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
 <h1 class="text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">Индустриальные решения<br/><span class="gradient-text">для вашего бизнеса</span></h1>
 <p class="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">Более 2 500 000 позиций промышленного оборудования от ведущих мировых брендов.</p>
 <div class="flex flex-wrap gap-4">
-<a class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25" href="category.html">Перейти в каталог <i class="w-5 h-5" data-lucide="arrow-right"></i></a>
+<a class="inline-flex items-center gap-3 px-8 py-4 bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-primary-500/25" href="/index.html#products">Перейти в каталог <i class="w-5 h-5" data-lucide="arrow-right"></i></a>
 </div>
 </div>
 <div class="hidden lg:flex justify-center">
@@ -4218,7 +4300,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
                 desc: [code, category].filter(Boolean).join(' · '),
                 category,
                 orderCode: p.order_code || '',
-                img: buildFileUrl(p.photo_url) || 'osuz logo.png',
+                img: buildFileUrl(p.thumb_url || p.photo_url) || 'osuz logo.png',
                 datasheet: buildFileUrl(p.datasheet_url),
                 priceFrom: p.price_from,
                 priceLabel: formatPrice(p.price_from),
@@ -4234,7 +4316,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
 
             return `
                 <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                    <a href="product.html?id=${encodeURIComponent(p.id)}" data-product-preview-id="${p.id}" class="block h-full">
+                    <a href="${OSUZRoutes.product(p.raw || p)}" data-product-preview-id="${p.id}" class="block h-full">
                         <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
                             ${safeImage
                                 ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
@@ -4357,12 +4439,12 @@ body.dark-mode .v17-heading{color:#94a3b8}
         function goToSearchResults(query) {
             const rawQuery = String(query || '').trim();
             if (!rawQuery) return;
-            window.location.href = `category.html?q=${encodeURIComponent(rawQuery)}`;
+            window.location.href = OSUZRoutes.search(rawQuery);
         }
 
         function suggestListMarkup(results, query) {
             const rows = results.map(p => `
-                <a href="product.html?id=${encodeURIComponent(p.id)}" class="search-suggest-item block px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 truncate">
+                <a href="${OSUZRoutes.product(p.raw || p)}" class="search-suggest-item block px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 truncate">
                     ${escapeHTML(p.name)}
                 </a>
             `).join('');
@@ -4506,7 +4588,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
                 heroAnalysisText.textContent = `${t('Найдено')} ${results.length} ${t('Товары').toLowerCase()}`;
                 heroSearchResults.classList.remove('hidden');
                 heroResultsList.innerHTML = results.length ? results.map(p => `
-                    <a href="product.html?id=${encodeURIComponent(p.id)}" class="search-result-item flex items-center gap-4 rounded-xl group">
+                    <a href="${OSUZRoutes.product(p.raw || p)}" class="search-result-item flex items-center gap-4 rounded-xl group">
                         <div class="result-image bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
                             ${p.img ? `<img src="${p.img}" class="w-full h-full object-contain" alt="${p.name}">` : `<span class="text-xs font-bold text-gray-400">${p.brand.charAt(0)}</span>`}
                         </div>
@@ -4594,7 +4676,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
                     const ruName = c.names?.ru || c.names?.en || name;
                     const color = catColors[i % catColors.length];
                     const imageUrl = getCategoryImage(ruName);
-                    return `<a href="category.html?id=${c.id}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
+                    return `<a href="${OSUZRoutes.category(c)}" class="category-tile group relative rounded-2xl overflow-hidden h-52 block shadow-sm hover:shadow-xl transition-all">
                         <img src="${imageUrl}" alt="${name}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5"></div>
                         <div class="absolute inset-0 opacity-60" style="background: linear-gradient(135deg, ${color}30, transparent 55%);"></div>
@@ -4819,10 +4901,11 @@ body.dark-mode .v17-heading{color:#94a3b8}
 
                     localStorage.setItem(ACCESS_KEY, data.accessToken);
                     return data.accessToken;
-                } catch {
-                    localStorage.removeItem(ACCESS_KEY);
-                    localStorage.removeItem(REFRESH_KEY);
-                    localStorage.removeItem('osuzCustomer');
+                } catch (error) {
+                    // A cart-badge/header refresh is not allowed to log the customer out.
+                    // Network/CORS/5xx errors are transient; auth.html will validate the
+                    // session and clear it only after a confirmed 401/403.
+                    console.warn('[OSUZ session] Background token refresh failed; session preserved.', error);
                     return '';
                 }
             }
@@ -4933,7 +5016,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
             function goToSearchResults(q) {
                 const rawQuery = String(q || '').trim();
                 if (!rawQuery) return;
-                window.location.href = `category.html?q=${encodeURIComponent(rawQuery)}`;
+                window.location.href = OSUZRoutes.search(rawQuery);
             }
 
             function escapeMobileSearch(value) {
@@ -4962,7 +5045,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
                 }
 
                 resultsList.innerHTML = items.slice(0, 8).map(item => `
-                    <a href="product.html?id=${encodeURIComponent(item.id)}"
+                    <a href="${OSUZRoutes.product(item)}"
                        class="block px-4 py-2.5 text-sm text-gray-800 truncate">
                         ${escapeMobileSearch(productName(item))}
                     </a>
@@ -5068,9 +5151,9 @@ body.dark-mode .v17-heading{color:#94a3b8}
  function syncThemeRoot(){const t=document.body?.classList.contains('dark-mode')?'dark':theme();document.documentElement.setAttribute('data-osuz-theme',t);document.documentElement.classList.toggle('osuz-pre-dark',t==='dark')}
  function syncFlags(){const l=lang();document.querySelectorAll('[data-osuz-lang-label]').forEach(el=>{el.dataset.lang=l;if(el.dataset.code!=='false')el.textContent=l.toUpperCase()});document.querySelectorAll('[data-osuz-select-flag]').forEach(el=>el.dataset.lang=l)}
  function syncTexts(){const l=lang(),t=TEXT[l]||TEXT.ru;document.querySelectorAll('[data-osuz-catalog-text]').forEach(x=>x.textContent=t.catalog);document.querySelectorAll('[data-osuz-search-text]').forEach(x=>x.textContent=t.find);document.querySelectorAll('[data-osuz-search-input]').forEach(x=>x.placeholder=t.search);document.querySelectorAll('[data-osuz-catalog-hint]').forEach(x=>x.textContent=t.hint);document.querySelectorAll('[data-osuz-contact-open-text]').forEach(x=>x.textContent=t.contact);const ct=document.getElementById('osuzContactTitle');if(ct)ct.textContent=t.contact;document.querySelectorAll('[data-osuz-contact-address]').forEach(x=>x.textContent=t.address);document.querySelectorAll('[data-mobile-final-label]').forEach(x=>{const k=x.dataset.mobileFinalLabel;x.textContent=t[k]||t.catalog})}
- function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=page.startsWith('category')?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
+ function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=(page.startsWith('category')||location.pathname.startsWith('/catalog/'))?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
  function syncMobileCart(){let n=0;document.querySelectorAll('[data-cart-count],#headerCartCount,.osuz-cart-count').forEach(el=>{const v=parseInt((el.textContent||'0').replace(/\D/g,''),10);if(Number.isFinite(v))n=Math.max(n,v)});document.querySelectorAll('[data-mobile-cart-count]').forEach(el=>{el.textContent=String(n);el.style.display=n>0?'inline-flex':'none'})}
- function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href='category.html'+(q?'?q='+encodeURIComponent(q):'')})})}
+ function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href=OSUZRoutes.search(q)})})}
  let catalogLoaded=false,allCats=[];
  function parseNames(c){
    if(!c||typeof c!=='object')return {};
@@ -5135,11 +5218,11 @@ body.dark-mode .v17-heading{color:#94a3b8}
    const subs=allCats.filter(x=>Number(x.parent_id)===rootId);
    right.innerHTML='';
    if(!subs.length){
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(root.id);a.textContent=cname(root);right.appendChild(a);return;
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(root);a.textContent=cname(root);right.appendChild(a);return;
    }
    subs.slice(0,80).forEach(x=>{
      const name=cname(x);if(!name)return;
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(x.id);a.textContent=name;right.appendChild(a)
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(x);a.textContent=name;right.appendChild(a)
    });
  }
  async function loadCatalog(){
@@ -5155,7 +5238,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
        const name=cname(root);if(!name)return;
        const b=document.createElement('button');b.type='button';b.className='osuz-catalog-cat';b.innerHTML='<span></span><i data-lucide="chevron-right"></i>';b.querySelector('span').textContent=name;
        b.addEventListener('mouseenter',()=>showSubs(root,b));b.addEventListener('focus',()=>showSubs(root,b));
-       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href='category.html?id='+encodeURIComponent(root.id)});
+       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href=OSUZRoutes.category(root)});
        left.appendChild(b);if(i===0)showSubs(root,b)
      });
      if(!left.children.length)throw new Error('No named top-level categories');
@@ -5164,7 +5247,7 @@ body.dark-mode .v17-heading{color:#94a3b8}
      catalogLoaded=false;
      console.error('[OSUZ catalog menu]',err);
      left.innerHTML='<div class="px-3 py-4 text-sm text-gray-500">'+(lang()==='en'?'Could not load categories.':lang()==='uz'?'Kategoriyalar yuklanmadi.':'Категории не загрузились.')+'</div>';
-     right.innerHTML='<a class="osuz-catalog-sub" href="category.html">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
+     right.innerHTML='<a class="osuz-catalog-sub" href="/index.html#products">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
    }
  }
  function panelTop(){const header=document.querySelector('.site-header,.auth-site-header,header.fixed,header');if(!header)return 82;const r=header.getBoundingClientRect();return Math.max(0,r.bottom)}
@@ -5232,8 +5315,8 @@ function children(parent){
 function goCategory(id){
   const n=Number(id);if(!Number.isFinite(n))return;
   closeCatalog();
-  const url=new URL('category.html',location.href);url.searchParams.set('id',String(n));
-  location.assign(url.href);
+  const entity=cats.find(c=>Number(c.id)===n)||{id:n};
+  location.assign(OSUZRoutes.category(entity));
 }
 function ensureBottomCatalog(){
   const nav=document.querySelector('.osuz-mobile-bottom-final');if(!nav)return;
@@ -5333,7 +5416,7 @@ async function loadCategories(){
   })();
   return loadPromise;
 }
-function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
 function openCatalog(){
   if(!panel)buildPanel();measureTop();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
@@ -5349,7 +5432,7 @@ function toggleCatalog(){panel?.classList.contains('open')?closeCatalog():openCa
 function bindSearchSafety(){
   /* category search was previously hidden by a legacy mobile override; keep it functional. */
   const categoryBtn=document.getElementById('categoryHeaderSearchButton'),categoryInput=document.getElementById('searchInput');
-  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();const url=new URL('category.html',location.href);if(q)url.searchParams.set('q',q);location.assign(url.href)})}
+  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
 }
 function init(){
   document.documentElement.dataset.osuzBuild='2026-09-11-v34-mobile-catalog-routing';

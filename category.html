@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-11-v20-category-header-order" lang="ru">
+<html data-osuz-build="2026-09-12-v38-session-hardfix" lang="ru">
 <head>
+<script id="osuz-local-origin-normalizer">
+(() => {
+  try {
+    if (location.hostname === '127.0.0.1' || location.hostname === '0.0.0.0') {
+      const url = new URL(location.href);
+      url.hostname = 'localhost';
+      location.replace(url.href);
+    }
+  } catch (_) {}
+})();
+</script>
+
 <script id="osuz-pretheme">
 (function(){
   try{
@@ -18,6 +30,66 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Категория — OSUZ</title>
+<script id="osuz-routing-helpers">
+(() => {
+  'use strict';
+  const localHosts = new Set(['localhost', '127.0.0.1']);
+  const isLocal = localHosts.has(location.hostname);
+
+  function backendUrl(entity) {
+    const value = entity && typeof entity.url === 'string' ? entity.url.trim() : '';
+    if (!value || isLocal) return '';
+    try {
+      const parsed = new URL(value, location.origin);
+      if (parsed.origin !== location.origin && /^https?:\/\//i.test(value)) return value;
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return value;
+    }
+  }
+
+  function entityId(entity) {
+    const value = entity && typeof entity === 'object'
+      ? (entity.id ?? entity.productId ?? entity.product_id ?? entity.categoryId ?? entity.category_id)
+      : entity;
+    const id = Number(value);
+    return Number.isFinite(id) && id > 0 ? id : 0;
+  }
+
+  function product(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/product.html?id=${encodeURIComponent(id)}` : '/category.html';
+  }
+
+  function category(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/category.html?id=${encodeURIComponent(id)}` : '/index.html#products';
+  }
+
+  function search(query) {
+    const q = String(query || '').trim();
+    return q ? `/category.html?q=${encodeURIComponent(q)}` : '/index.html#products';
+  }
+
+  function productIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/product\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return Number(pathId || params.get('id'));
+  }
+
+  function categoryIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/catalog\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return pathId || params.get('id');
+  }
+
+  window.OSUZRoutes = Object.freeze({ product, category, search, productIdFromLocation, categoryIdFromLocation });
+})();
+</script>
 <link href="icon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -2916,7 +2988,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
 </div>
 </div>
 </div>
-<div class="site-header-nav"><div class="max-w-[1400px] mx-auto px-6 lg:px-8"><div class="header-nav-row hidden lg:flex gap-8"><a class="nav-link active text-sm font-semibold" href="category.html">Категории</a><a class="nav-link text-sm font-medium" href="index.html#solutions">Решения</a><a class="nav-link text-sm font-medium" href="index.html#partners">Бренды</a><a class="nav-link text-sm font-medium" href="index.html#about">О нас</a></div></div></div>
+<div class="site-header-nav"><div class="max-w-[1400px] mx-auto px-6 lg:px-8"><div class="header-nav-row hidden lg:flex gap-8"><a class="nav-link active text-sm font-semibold" href="/index.html#products">Категории</a><a class="nav-link text-sm font-medium" href="index.html#solutions">Решения</a><a class="nav-link text-sm font-medium" href="index.html#partners">Бренды</a><a class="nav-link text-sm font-medium" href="index.html#about">О нас</a></div></div></div>
 </nav>
 <section class="pt-36 pb-8 bg-white">
 <div class="max-w-[1400px] mx-auto px-3 sm:px-6 lg:px-8">
@@ -3042,7 +3114,9 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
         let searchTimeout = null;
 
         const params = new URLSearchParams(window.location.search);
-        const categoryId = params.get('id');
+        // ЧПУ /catalog/<slug>-<id> отдаёт backend; старый ?id=N оставлен fallback.
+        const pathCategoryId = (window.location.pathname.match(/^\/catalog\/(?:.*-)?(\d+)\/?$/) || [])[1];
+        const categoryId = pathCategoryId || params.get('id');
         const categoryName = params.get('name');
         searchQuery = (params.get('q') || '').trim();
 
@@ -3194,7 +3268,8 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
         }[currentLang];
 
         if (!categoryId && !categoryName && !searchQuery) {
-            window.location.href = 'category.html';
+            // Не перезагружаем category.html сам на себя: возвращаем пользователя к каталогу на главной.
+            window.location.replace('/index.html#products');
         }
 
         function escapeHTML(value) {
@@ -3426,7 +3501,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
 
             if (hiddenTrail.length) {
                 const menuItems = hiddenTrail.map(item => `
-                    <a href="category.html?id=${encodeURIComponent(item.id)}" class="breadcrumb-overflow-link">
+                    <a href="${OSUZRoutes.category(item)}" class="breadcrumb-overflow-link">
                         <span>${escapeHTML(localizedObjectValue(item.names, ui.category))}</span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 flex-shrink-0"></i>
                     </a>
@@ -3556,7 +3631,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
                 section.style.display = '';
                 list.innerHTML = childCategories.map(category => `
                     <a
-                        href="category.html?id=${category.id}"
+                        href="${OSUZRoutes.category(category)}"
                         class="subcat-link px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 font-medium bg-white"
                     >
                         ${escapeHTML(localizedObjectValue(category.names, ui.category))}
@@ -3742,7 +3817,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
 
                     return `
                         <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm fade-in">
-                            <a href="product.html?id=${encodeURIComponent(product.id)}" data-product-preview-id="${product.id}" class="block h-full">
+                            <a href="${OSUZRoutes.product(product)}" data-product-preview-id="${product.id}" class="block h-full">
                                 <div class="aspect-square bg-gray-50 flex items-center justify-center overflow-hidden">
                                     ${photo
                                         ? `<img src="${escapeHTML(photo)}" alt="${escapeHTML(name)}" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
@@ -3929,7 +4004,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
                 }
 
                 container.innerHTML = items.map(p => `
-                    <a href="product.html?id=${encodeURIComponent(p.id)}" class="category-search-suggest-item">
+                    <a href="${OSUZRoutes.product(p)}" class="category-search-suggest-item">
                         ${escapeHTML(localizedProductName(p))}
                     </a>
                 `).join('') + `
@@ -4157,10 +4232,11 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
 
                     localStorage.setItem(ACCESS_KEY, data.accessToken);
                     return data.accessToken;
-                } catch {
-                    localStorage.removeItem(ACCESS_KEY);
-                    localStorage.removeItem(REFRESH_KEY);
-                    localStorage.removeItem('osuzCustomer');
+                } catch (error) {
+                    // A cart-badge/header refresh is not allowed to log the customer out.
+                    // Network/CORS/5xx errors are transient; auth.html will validate the
+                    // session and clear it only after a confirmed 401/403.
+                    console.warn('[OSUZ session] Background token refresh failed; session preserved.', error);
                     return '';
                 }
             }
@@ -4275,9 +4351,9 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
  function syncThemeRoot(){const t=document.body?.classList.contains('dark-mode')?'dark':theme();document.documentElement.setAttribute('data-osuz-theme',t);document.documentElement.classList.toggle('osuz-pre-dark',t==='dark')}
  function syncFlags(){const l=lang();document.querySelectorAll('[data-osuz-lang-label]').forEach(el=>{el.dataset.lang=l;if(el.dataset.code!=='false')el.textContent=l.toUpperCase()});document.querySelectorAll('[data-osuz-select-flag]').forEach(el=>el.dataset.lang=l)}
  function syncTexts(){const l=lang(),t=TEXT[l]||TEXT.ru;document.querySelectorAll('[data-osuz-catalog-text]').forEach(x=>x.textContent=t.catalog);document.querySelectorAll('[data-osuz-search-text]').forEach(x=>x.textContent=t.find);document.querySelectorAll('[data-osuz-search-input]').forEach(x=>x.placeholder=t.search);document.querySelectorAll('[data-osuz-catalog-hint]').forEach(x=>x.textContent=t.hint);document.querySelectorAll('[data-osuz-contact-open-text]').forEach(x=>x.textContent=t.contact);const ct=document.getElementById('osuzContactTitle');if(ct)ct.textContent=t.contact;document.querySelectorAll('[data-osuz-contact-address]').forEach(x=>x.textContent=t.address);document.querySelectorAll('[data-mobile-final-label]').forEach(x=>{const k=x.dataset.mobileFinalLabel;x.textContent=t[k]||t.catalog})}
- function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=page.startsWith('category')?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
+ function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=(page.startsWith('category')||location.pathname.startsWith('/catalog/'))?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
  function syncMobileCart(){let n=0;document.querySelectorAll('[data-cart-count],#headerCartCount,.osuz-cart-count').forEach(el=>{const v=parseInt((el.textContent||'0').replace(/\D/g,''),10);if(Number.isFinite(v))n=Math.max(n,v)});document.querySelectorAll('[data-mobile-cart-count]').forEach(el=>{el.textContent=String(n);el.style.display=n>0?'inline-flex':'none'})}
- function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href='category.html'+(q?'?q='+encodeURIComponent(q):'')})})}
+ function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href=OSUZRoutes.search(q)})})}
  let catalogLoaded=false,allCats=[];
  function parseNames(c){
    if(!c||typeof c!=='object')return {};
@@ -4342,11 +4418,11 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
    const subs=allCats.filter(x=>Number(x.parent_id)===rootId);
    right.innerHTML='';
    if(!subs.length){
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(root.id);a.textContent=cname(root);right.appendChild(a);return;
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(root);a.textContent=cname(root);right.appendChild(a);return;
    }
    subs.slice(0,80).forEach(x=>{
      const name=cname(x);if(!name)return;
-     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href='category.html?id='+encodeURIComponent(x.id);a.textContent=name;right.appendChild(a)
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(x);a.textContent=name;right.appendChild(a)
    });
  }
  async function loadCatalog(){
@@ -4362,7 +4438,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
        const name=cname(root);if(!name)return;
        const b=document.createElement('button');b.type='button';b.className='osuz-catalog-cat';b.innerHTML='<span></span><i data-lucide="chevron-right"></i>';b.querySelector('span').textContent=name;
        b.addEventListener('mouseenter',()=>showSubs(root,b));b.addEventListener('focus',()=>showSubs(root,b));
-       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href='category.html?id='+encodeURIComponent(root.id)});
+       b.addEventListener('click',()=>{if(innerWidth<768)showSubs(root,b);else location.href=OSUZRoutes.category(root)});
        left.appendChild(b);if(i===0)showSubs(root,b)
      });
      if(!left.children.length)throw new Error('No named top-level categories');
@@ -4371,7 +4447,7 @@ body[data-osuz-page="category"] .osuz-desktop-search-slot{position:relative!impo
      catalogLoaded=false;
      console.error('[OSUZ catalog menu]',err);
      left.innerHTML='<div class="px-3 py-4 text-sm text-gray-500">'+(lang()==='en'?'Could not load categories.':lang()==='uz'?'Kategoriyalar yuklanmadi.':'Категории не загрузились.')+'</div>';
-     right.innerHTML='<a class="osuz-catalog-sub" href="category.html">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
+     right.innerHTML='<a class="osuz-catalog-sub" href="/index.html#products">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
    }
  }
  function panelTop(){const header=document.querySelector('.site-header,.auth-site-header,header.fixed,header');if(!header)return 82;const r=header.getBoundingClientRect();return Math.max(0,r.bottom)}
@@ -4455,8 +4531,8 @@ function children(parent){
 function goCategory(id){
   const n=Number(id);if(!Number.isFinite(n))return;
   closeCatalog();
-  const url=new URL('category.html',location.href);url.searchParams.set('id',String(n));
-  location.assign(url.href);
+  const entity=cats.find(c=>Number(c.id)===n)||{id:n};
+  location.assign(OSUZRoutes.category(entity));
 }
 function ensureBottomCatalog(){
   const nav=document.querySelector('.osuz-mobile-bottom-final');if(!nav)return;
@@ -4556,7 +4632,7 @@ async function loadCategories(){
   })();
   return loadPromise;
 }
-function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
 function openCatalog(){
   if(!panel)buildPanel();measureTop();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
@@ -4572,7 +4648,7 @@ function toggleCatalog(){panel?.classList.contains('open')?closeCatalog():openCa
 function bindSearchSafety(){
   /* category search was previously hidden by a legacy mobile override; keep it functional. */
   const categoryBtn=document.getElementById('categoryHeaderSearchButton'),categoryInput=document.getElementById('searchInput');
-  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();const url=new URL('category.html',location.href);if(q)url.searchParams.set('q',q);location.assign(url.href)})}
+  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
 }
 function init(){
   document.documentElement.dataset.osuzBuild='2026-09-11-v34-mobile-catalog-routing';
