@@ -1,0 +1,22 @@
+OSUZ V47 — validation report
+Date: 2026-09-13
+Source: "13.09.26 Доправки🏁.docx" (13 pages)
+
+Implemented and rechecked:
+1. Desktop header order/position: OSUZ -> Каталог -> Поиск -> RU -> Тема -> Профиль -> Заказы -> Корзина on all 6 pages.
+2. Category filters: label on the left, control on the right.
+3. No empty subcategory space when there are no child categories.
+4-5. Clicking a main category opens that category; desktop hover/focus still previews subcategories.
+6. Secondary dark navigation strip under the header removed on all breakpoints/pages, with zero reserved height.
+7. Category product-list section changed from py-10 to py-4.
+8. Category vertical gaps reduced approximately by half.
+9. Product hero is three real cards: image / information / commerce.
+10-11. Search magnifier/background hardened for Chrome/Opera GX light theme.
+12. Login/register/reset phone placeholders changed to +998*********.
+13. Account action buttons use horizontal icon + label alignment.
+
+Validation:
+- 53 structural/requirement assertions: PASS
+- 77 inline JavaScript blocks checked with node --check: PASS (0 syntax errors)
+- Duplicate HTML IDs checked on all 6 pages: PASS (0 duplicates)
+- ZIP integrity: checked separately after packaging
