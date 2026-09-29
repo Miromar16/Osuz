@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-13-v43-header-reference-layout" lang="ru">
+<html data-osuz-build="2026-09-29-v52-seo-index-schema" lang="ru">
 <head>
 <script id="osuz-local-origin-normalizer">
 (() => {
@@ -29,6 +29,8 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 </style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" name="robots"/>
+<meta content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" name="googlebot"/>
 <title>Товар — OSUZ</title>
 <script id="osuz-routing-helpers">
 (() => {
@@ -2949,6 +2951,317 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 }
 </style>
 
+
+<style id="osuz-v51-17-09-fixes">
+/* V51 — правки из документа 17.09.26. Этот блок намеренно последний: он нормализует хедер и мобильную навигацию поверх старых версий. */
+.site-header-nav,
+.auth-site-subnav {
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+@media (min-width:768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display:flex !important;
+    min-height:76px !important;
+    height:76px !important;
+    gap:12px !important;
+    align-items:center !important;
+  }
+
+  /* Лого остаётся на месте; визуальный воздух создаём именно перед кнопкой Каталог. */
+  .site-header-top .osuz-desktop-catalog-button,
+  .auth-site-header .osuz-desktop-catalog-button {
+    margin-left:48px !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* На главной и внутренних страницах зона поиска теперь растягивается одинаково. */
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot,
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot,
+  .site-header-top .relative.osuz-desktop-search-slot {
+    flex:1 1 620px !important;
+    width:auto !important;
+    min-width:260px !important;
+    max-width:none !important;
+    margin-left:10px !important;
+    margin-right:16px !important;
+  }
+
+  .site-header-top .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top form.osuz-header-search,
+  .auth-site-header form.osuz-header-search {
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+}
+
+/* Камера — отдельный компактный слот внутри любого поискового поля. */
+.osuz-photo-search-control,
+#heroPhotoBtn.osuz-photo-search-control {
+  position:relative !important;
+  width:44px !important;
+  min-width:44px !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  cursor:pointer !important;
+  border:0 !important;
+  border-left:1px solid rgba(148,163,184,.25) !important;
+  background:transparent !important;
+  color:#0891b2 !important;
+  line-height:1 !important;
+}
+.osuz-photo-search-control:hover,
+#heroPhotoBtn.osuz-photo-search-control:hover { background:rgba(8,145,178,.08) !important; }
+.osuz-photo-search-control svg,
+.osuz-photo-search-control i,
+#heroPhotoBtn.osuz-photo-search-control svg,
+#heroPhotoBtn.osuz-photo-search-control i {
+  width:19px !important;
+  height:19px !important;
+  margin:0 !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.osuz-photo-search-control input[type="file"] { display:none !important; }
+body.dark-mode .osuz-photo-search-control,
+body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
+  color:#67e8f9 !important;
+  border-left-color:#334155 !important;
+}
+
+/* Мобильная нижняя навигация: корзина занимает строго свою колонку и не «съезжает». */
+@media (max-width:767px) {
+  .osuz-mobile-bottom-final {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+  .osuz-mobile-bottom-final > a,
+  .osuz-mobile-bottom-final > button,
+  .osuz-mobile-bottom-final [data-open-cart] {
+    width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding-left:2px !important;
+    padding-right:2px !important;
+    left:auto !important;
+    right:auto !important;
+    transform:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    justify-self:stretch !important;
+  }
+  .osuz-mobile-bottom-final [data-open-cart] > svg,
+  .osuz-mobile-bottom-final [data-open-cart] > i {
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  .osuz-mobile-bottom-final [data-mobile-cart-count],
+  .osuz-mobile-bottom-final [data-cart-count] {
+    position:absolute !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+  .mobile-top-search-shell,
+  .mobile-menu-search-shell,
+  .osuz-header-search {
+    overflow:hidden !important;
+  }
+  .mobile-top-search-shell .osuz-photo-search-control,
+  .mobile-menu-search-shell .osuz-photo-search-control {
+    width:40px !important;
+    min-width:40px !important;
+    flex-basis:40px !important;
+  }
+}
+</style>
+
+
+<style id="osuz-v51-product-card-17-09">
+/* Карточка товара: три реальные секции слева направо — фото / информация / торговый блок. */
+body[data-osuz-page="product"] main {
+  padding-top:20px !important;
+  padding-bottom:36px !important;
+}
+body[data-osuz-page="product"] #productContent { padding-top:0 !important; }
+body[data-osuz-page="product"] #productPreviewNotice { margin-bottom:14px !important; }
+body[data-osuz-page="product"] #breadcrumbs { margin-bottom:16px !important; }
+
+.osuz-product-hero {
+  display:grid !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+.osuz-product-media-card,
+.osuz-product-info-card,
+.osuz-product-action-card {
+  min-width:0 !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+.osuz-product-media-card { display:flex !important; flex-direction:column !important; }
+.osuz-product-main-image-shell { min-height:320px !important; flex:1 1 auto !important; display:flex !important; align-items:center !important; justify-content:center !important; }
+.osuz-product-media-card .main-image { width:100% !important; height:auto !important; max-height:440px !important; object-fit:contain !important; }
+.osuz-product-info-card { display:flex !important; flex-direction:column !important; }
+.osuz-product-info-card #productSpecification { margin:0 !important; max-height:none !important; overflow:visible !important; }
+.osuz-product-info-card #productSpecification .product-spec-row { display:grid !important; }
+.osuz-product-info-card #productSpecification .product-spec-heading { display:flex !important; }
+.osuz-product-info-card #productSpecification .product-spec-box { border:1px solid #dbe4ee !important; border-radius:16px !important; overflow:hidden !important; }
+body.dark-mode .osuz-product-info-card #productSpecification .product-spec-box { border-color:#344256 !important; }
+
+.osuz-product-action-card { display:flex !important; flex-direction:column !important; gap:14px !important; }
+.osuz-product-action-card .product-price-card { margin:0 !important; flex:0 0 auto !important; }
+.osuz-product-sellers { min-height:0 !important; margin:0 !important; display:flex !important; flex-direction:column !important; gap:10px !important; }
+.osuz-product-sellers-head { display:flex !important; align-items:end !important; justify-content:space-between !important; gap:10px !important; }
+.osuz-product-action-card #sellersList {
+  display:flex !important;
+  flex-direction:column !important;
+  gap:9px !important;
+  max-height:330px !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain !important;
+  padding-right:3px !important;
+  scrollbar-width:thin !important;
+}
+.osuz-product-action-card .seller-card { padding:13px !important; border-radius:14px !important; }
+.osuz-product-action-card .seller-card .mb-4 { margin-bottom:9px !important; }
+.osuz-product-action-card .seller-card .text-2xl { font-size:20px !important; margin-bottom:9px !important; }
+.osuz-product-action-card .seller-card .rounded-xl.bg-gray-50 { padding:9px !important; }
+.osuz-product-action-card .seller-cart-area { margin-top:10px !important; }
+.osuz-product-action-card .seller-cart-button { min-height:40px !important; }
+.osuz-product-actions { margin-top:auto !important; }
+.osuz-product-actions > a,
+.osuz-product-actions > button { flex:1 1 130px !important; justify-content:center !important; min-height:42px !important; font-size:12px !important; }
+
+@media (min-width:1100px) {
+  body[data-osuz-page="product"] main { padding-left:20px !important; padding-right:20px !important; }
+  .osuz-product-hero {
+    grid-template-columns:minmax(340px,1.04fr) minmax(310px,.90fr) minmax(300px,.76fr) !important;
+    gap:18px !important;
+    align-items:stretch !important;
+  }
+  .osuz-product-media-card,
+  .osuz-product-info-card,
+  .osuz-product-action-card { min-height:500px !important; }
+}
+
+@media (min-width:768px) and (max-width:1099px) {
+  .osuz-product-hero { grid-template-columns:1fr 1fr !important; gap:16px !important; }
+  .osuz-product-action-card { grid-column:1/-1 !important; }
+  .osuz-product-action-card #sellersList { max-height:280px !important; }
+}
+
+@media (max-width:767px) {
+  body[data-osuz-page="product"] main {
+    padding:16px 14px 26px !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+  body[data-osuz-page="product"] #breadcrumbs { margin-bottom:12px !important; }
+  .osuz-product-hero { grid-template-columns:1fr !important; gap:12px !important; }
+  .osuz-product-media-card,
+  .osuz-product-info-card,
+  .osuz-product-action-card { width:100% !important; max-width:100% !important; padding:14px !important; border-radius:20px !important; }
+  .osuz-product-main-image-shell { min-height:260px !important; }
+  .osuz-product-action-card #sellersList { max-height:none !important; overflow:visible !important; }
+  .osuz-product-actions > a,
+  .osuz-product-actions > button { flex:1 1 100% !important; }
+}
+</style>
+
+
+<style id="osuz-product-image-viewer-fix">
+/* Фото товара увеличивается независимо от страницы. */
+#imageLightbox {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  background: rgba(0, 0, 0, .94) !important;
+  overscroll-behavior: contain !important;
+  touch-action: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+#imageLightbox.hidden { display: none !important; }
+#imageLightbox.osuz-lightbox-visible { display: flex !important; }
+#lightboxStage {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+}
+#lightboxImage {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: calc(100vw - 24px) !important;
+  max-height: calc(100dvh - 24px) !important;
+  object-fit: contain !important;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center center !important;
+  will-change: transform;
+  touch-action: none !important;
+  -webkit-user-drag: none !important;
+  cursor: zoom-in;
+}
+#imageLightbox[data-zoomed="true"] #lightboxImage { cursor: grab; }
+#imageLightbox[data-dragging="true"] #lightboxImage { cursor: grabbing; }
+#lightboxClose {
+  position: absolute !important;
+  z-index: 3 !important;
+  top: max(12px, env(safe-area-inset-top)) !important;
+  right: max(12px, env(safe-area-inset-right)) !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, .76) !important;
+  color: #fff !important;
+  font: 300 34px/1 Arial, sans-serif !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+html.osuz-image-viewer-open,
+body.osuz-image-viewer-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+</style>
+
 </head>
 <body data-osuz-v16-page="product" data-osuz-page="product">
 <nav class="site-header sticky top-0 z-50">
@@ -2956,7 +3269,7 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 <button aria-expanded="false" aria-label="Каталог" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle="" type="button">
 <i data-lucide="layout-grid"></i>
 <span data-osuz-catalog-text="">Каталог</span>
-</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form><div class="header-actions osuz-mobile-header-actions ml-auto flex items-center"><div class="relative osuz-language-wrap"><button class="header-action" id="languageButton"><span class="osuz-lang-label" data-lang="ru" data-osuz-lang-label="" id="languageLabel">RU</span><i class="w-3 h-3" data-lucide="chevron-down"></i></button><div class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl" id="productLanguageMenu"><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="ru"><span class="osuz-menu-flag" data-flag="ru"></span> Русский</button><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="uz"><span class="osuz-menu-flag" data-flag="uz"></span> O‘zbekcha</button><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="en"><span class="osuz-menu-flag" data-flag="en"></span> English</button></div></div><button aria-label="Сменить тему" class="header-action !px-3" id="themeToggle"><i class="theme-icon-moon w-5 h-5" data-lucide="moon"></i><i class="theme-icon-sun w-5 h-5" data-lucide="sun"></i></button><a class="header-action hidden md:inline-flex max-w-[150px]" data-customer-account-link="" href="auth.html"><i class="w-4 h-4" data-lucide="user"></i><span class="truncate" data-customer-account-text="">Войти</span></a><a class="header-action hidden md:inline-flex" href="orders.html">
+</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><label class="osuz-photo-search-control" data-osuz-photo-search="1" title="Поиск по фото" aria-label="Поиск по фото"><i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true"/></label><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form><div class="header-actions osuz-mobile-header-actions ml-auto flex items-center"><div class="relative osuz-language-wrap"><button class="header-action" id="languageButton"><span class="osuz-lang-label" data-lang="ru" data-osuz-lang-label="" id="languageLabel">RU</span><i class="w-3 h-3" data-lucide="chevron-down"></i></button><div class="hidden absolute right-0 top-full mt-3 w-44 rounded-xl border border-gray-100 bg-white p-2 shadow-xl" id="productLanguageMenu"><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="ru"><span class="osuz-menu-flag" data-flag="ru"></span> Русский</button><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="uz"><span class="osuz-menu-flag" data-flag="uz"></span> O‘zbekcha</button><button class="product-language-option w-full rounded-lg px-3 py-2 text-left text-sm text-gray-700 hover:bg-primary-50" data-language="en"><span class="osuz-menu-flag" data-flag="en"></span> English</button></div></div><button aria-label="Сменить тему" class="header-action !px-3" id="themeToggle"><i class="theme-icon-moon w-5 h-5" data-lucide="moon"></i><i class="theme-icon-sun w-5 h-5" data-lucide="sun"></i></button><a class="header-action hidden md:inline-flex max-w-[150px]" data-customer-account-link="" href="auth.html"><i class="w-4 h-4" data-lucide="user"></i><span class="truncate" data-customer-account-text="">Войти</span></a><a class="header-action hidden md:inline-flex" href="orders.html">
 <i class="w-5 h-5" data-lucide="package-check"></i><span>Заказы</span>
 </a>
 <a aria-label="Корзина" class="header-action osuz-cart-link inline-flex !px-3" data-open-cart="" href="cart.html"><i class="w-5 h-5" data-lucide="shopping-cart"></i><span class="hidden md:inline">Корзина</span><span class="hidden absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center" data-cart-count="">0</span></a></div></div></div>
@@ -2984,54 +3297,52 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 <div class="hidden" id="productContent">
 <div class="product-preview-notice hidden mb-6" id="productPreviewNotice"></div>
 <div class="flex flex-wrap items-center gap-2 text-sm text-gray-400 mb-7" id="breadcrumbs"></div>
-<section class="osuz-product-hero grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-stretch">
-<div class="surface osuz-product-media-card rounded-3xl p-4 lg:p-6">
-<div class="relative rounded-2xl bg-gray-50 overflow-hidden">
+<section class="osuz-product-hero grid gap-5 items-stretch">
+<div class="surface osuz-product-media-card rounded-3xl p-4 lg:p-5">
+<div class="relative rounded-2xl bg-gray-50 overflow-hidden osuz-product-main-image-shell">
 <img alt="" class="main-image cursor-zoom-in" id="mainProductImage" onerror="this.onerror=null;this.src='osuz logo.png';"/>
-<button aria-label="Предыдущее изображение" class="gallery-control hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" id="galleryPrev">
-<i class="w-5 h-5" data-lucide="chevron-left"></i>
-</button>
-<button aria-label="Следующее изображение" class="gallery-control hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" id="galleryNext">
-<i class="w-5 h-5" data-lucide="chevron-right"></i>
-</button>
+<button aria-label="Предыдущее изображение" class="gallery-control hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" id="galleryPrev"><i class="w-5 h-5" data-lucide="chevron-left"></i></button>
+<button aria-label="Следующее изображение" class="gallery-control hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/90 rounded-xl border border-gray-200 shadow-lg flex items-center justify-center" id="galleryNext"><i class="w-5 h-5" data-lucide="chevron-right"></i></button>
 <div class="hidden absolute inset-0 items-center justify-center" id="imageFallback"><img alt="OSUZ" class="max-w-[180px] max-h-[120px] object-contain opacity-80" src="osuz logo.png"/></div>
 </div>
-<div class="mt-4 flex flex-wrap gap-3" id="galleryThumbs"></div>
+<div class="mt-3 flex flex-wrap gap-2" id="galleryThumbs"></div>
 </div>
-<div class="hidden fixed inset-0 z-[100] items-center justify-center bg-black/90 p-4 cursor-zoom-out" id="imageLightbox">
-<img alt="" class="max-w-full max-h-full object-contain" id="lightboxImage" src=""/>
+
+<div class="surface osuz-product-info-card rounded-3xl p-5 lg:p-6">
+<div class="text-sm font-black uppercase tracking-widest text-primary-600 mb-2" id="productBrand"></div>
+<h1 class="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-3" id="productTitle"></h1>
+<div class="flex flex-wrap gap-2 mb-4"><span class="chip hidden" id="orderCodeChip"></span><span class="chip hidden" id="seriesChip"></span><span class="chip hidden" id="barcodeChip"></span></div>
+<div class="product-variant-panel hidden" id="productVariants"><div class="product-variant-title" id="productVariantsTitle">Выберите вариант</div><div class="product-variant-options" id="productVariantOptions"></div></div>
+<div id="productSpecification"></div>
 </div>
-<div class="surface osuz-product-info-card rounded-3xl p-6 lg:p-8">
-<div class="text-sm font-black uppercase tracking-widest text-primary-600 mb-3" id="productBrand"></div>
-<h1 class="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-4" id="productTitle"></h1>
-<div class="flex flex-wrap gap-2 mb-6">
-<span class="chip hidden" id="orderCodeChip"></span>
-<span class="chip hidden" id="seriesChip"></span>
-<span class="chip hidden" id="barcodeChip"></span>
-</div>
-<div class="product-variant-panel hidden" id="productVariants">
-<div class="product-variant-title" id="productVariantsTitle">Выберите вариант</div>
-<div class="product-variant-options" id="productVariantOptions"></div>
-</div>
-<div class="product-price-card rounded-2xl bg-primary-50 border border-primary-100 p-5 mb-6">
+
+<aside class="surface osuz-product-action-card rounded-3xl p-5 lg:p-6" aria-label="Торговый блок">
+<div class="product-price-card rounded-2xl bg-primary-50 border border-primary-100 p-5">
 <div class="text-xs font-bold uppercase tracking-wider text-primary-700 mb-1" id="priceCaption">Минимальная цена</div>
 <div class="text-3xl font-black text-gray-900" id="productPrice"></div>
 </div>
-<div class="mb-7" id="productSpecification"></div>
-<div class="flex flex-wrap gap-3">
-<a class="hidden inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" href="#" id="datasheetLink" rel="noopener" target="_blank">
-<i class="w-5 h-5" data-lucide="file-text"></i>
-<span id="datasheetLabel">Документация</span>
-</a>
-<a class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary-500 font-bold text-gray-900" href="#sellers">
-<i class="w-5 h-5" data-lucide="store"></i>
-<span id="sellersButtonLabel">Посмотреть продавцов</span>
-</a>
-<a class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" href="#complementsSection" id="componentsButton"><i class="w-5 h-5" data-lucide="blocks"></i><span id="componentsButtonLabel">Комплектующие</span></a>
-<button class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" id="shareProductButton" type="button"><i class="w-5 h-5" data-lucide="share-2"></i><span id="shareProductLabel">Поделиться</span></button>
+<section class="osuz-product-sellers" id="sellers">
+<div class="osuz-product-sellers-head">
+<div><span class="text-xs font-black uppercase tracking-widest text-primary-600" id="sellersEyebrow">Предложения</span><h2 class="text-lg font-black text-gray-900 mt-1" id="sellersTitle">Продавцы и цены</h2></div>
+<div class="text-xs text-gray-400" id="sellersCount"></div>
 </div>
-</div>
+<div id="sellersList"></div>
+<div class="hidden rounded-2xl p-4 text-center text-sm text-gray-500" id="sellersEmpty"></div>
 </section>
+<div class="osuz-product-actions flex flex-wrap gap-2">
+<a class="hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" href="#" id="datasheetLink" rel="noopener" target="_blank"><i class="w-4 h-4" data-lucide="file-text"></i><span id="datasheetLabel">Документация</span></a>
+<a class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary-500 font-bold text-gray-900" href="#sellers"><i class="w-4 h-4" data-lucide="store"></i><span id="sellersButtonLabel">Посмотреть продавцов</span></a>
+<a class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" href="#complementsSection" id="componentsButton"><i class="w-4 h-4" data-lucide="blocks"></i><span id="componentsButtonLabel">Комплектующие</span></a>
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 font-bold text-gray-700 hover:border-primary-500 hover:text-primary-700" id="shareProductButton" type="button"><i class="w-4 h-4" data-lucide="share-2"></i><span id="shareProductLabel">Поделиться</span></button>
+</div>
+</aside>
+</section>
+<div aria-hidden="true" aria-label="Просмотр изображения" class="hidden" id="imageLightbox" role="dialog">
+<button aria-label="Закрыть изображение" id="lightboxClose" type="button">×</button>
+<div id="lightboxStage">
+<img alt="" draggable="false" id="lightboxImage" src=""/>
+</div>
+</div>
 <section class="surface rounded-3xl p-6 lg:p-8 mt-8 hidden" id="descriptionSection"><div class="flex items-center gap-3 mb-5"><div class="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center"><i class="w-5 h-5 text-primary-600" data-lucide="align-left"></i></div><h2 class="text-2xl font-black text-gray-900" id="descriptionTitle">Описание</h2></div><div class="text-gray-600 leading-7 whitespace-pre-line" id="productDescription"></div></section>
 <section class="surface rounded-3xl p-6 lg:p-8 mt-8 hidden" id="attributesSection">
 <div class="flex items-center gap-3 mb-6">
@@ -3042,17 +3353,7 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 </div>
 <div id="attributesList"></div>
 </section>
-<section class="mt-8" id="sellers">
-<div class="flex items-end justify-between gap-4 mb-5">
-<div>
-<span class="text-xs font-black uppercase tracking-widest text-primary-600" id="sellersEyebrow">Предложения</span>
-<h2 class="text-2xl lg:text-3xl font-black text-gray-900 mt-2" id="sellersTitle">Продавцы и цены</h2>
-</div>
-<div class="text-sm text-gray-400" id="sellersCount"></div>
-</div>
-<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5" id="sellersList"></div>
-<div class="hidden surface rounded-3xl p-8 text-center text-gray-500" id="sellersEmpty"></div>
-</section>
+
 <section class="mt-10 hidden" id="analogsSection">
 <h2 class="text-2xl lg:text-3xl font-black text-gray-900 mb-5" id="analogsTitle">Аналоги</h2>
 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="analogsGrid"></div>
@@ -3090,6 +3391,12 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Тарифы и комиссии</a></li>
 </ul>
 </div>
+</div>
+<div class="mt-10 flex justify-center sm:justify-start" data-osuz-telegram-footer-link>
+<a href="https://t.me/osuz_shop_bot" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram-бот OSUZ @osuz_shop_bot" class="inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-2xl px-5 py-3 font-semibold text-white transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-cyan-300/60" style="background:#229ED9;box-shadow:0 8px 24px rgba(34,158,217,.22)">
+<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false" style="fill:currentColor;flex:0 0 22px"><path d="M21.95 2.54a1.52 1.52 0 0 0-1.53-.18L2.76 9.18c-1.2.47-1.19 1.17-.22 1.47l4.53 1.41 1.74 5.45c.21.61.11.86.72.86.47 0 .68-.21.94-.47l2.17-2.11 4.51 3.33c.83.46 1.43.22 1.64-.77L22.1 3.84c.3-1.22-.46-1.77-.15-1.3ZM8.46 11.74l8.84-5.58c.44-.27.84-.13.51.16l-7.3 6.59-.28 2.95-1.77-4.12Z"/></svg>
+<span>Telegram&nbsp; @osuz_shop_bot</span>
+</a>
 </div>
 <div class="border-t border-white/10 mt-10 pt-6 flex flex-col-reverse md:flex-row justify-between items-center gap-4">
 <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2">
@@ -3447,6 +3754,178 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
                 : currentLang === 'en'
                     ? `${formatted} UZS`
                     : `${formatted} сум`;
+        }
+
+
+        function setSeoMeta(selector, attributes) {
+            let element = document.head.querySelector(selector);
+            if (!element) {
+                element = document.createElement('meta');
+                document.head.appendChild(element);
+            }
+            Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+            return element;
+        }
+
+        function productCanonicalUrl() {
+            const direct = product && typeof product.url === 'string' ? product.url.trim() : '';
+            const fallback = window.OSUZRoutes?.product ? window.OSUZRoutes.product(product || productId) : location.href;
+            try {
+                const url = new URL(direct || fallback || location.href, location.origin);
+                url.hash = '';
+                return url.href;
+            } catch (_) {
+                return location.href.split('#')[0];
+            }
+        }
+
+        function syncProductSeoMeta() {
+            if (!product) return;
+            const name = localizedProductName(product);
+            const description = (getProductDescription(product) || `${name} — цена и предложения продавцов на OSUZ.`)
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 300);
+            const canonicalUrl = productCanonicalUrl();
+            const imageUrl = galleryImages.find(url => /^https?:\/\//i.test(url)) || buildFileUrl(product.photo_url) || '';
+
+            let canonical = document.head.querySelector('link[rel="canonical"]');
+            if (!canonical) {
+                canonical = document.createElement('link');
+                canonical.rel = 'canonical';
+                document.head.appendChild(canonical);
+            }
+            canonical.href = canonicalUrl;
+
+            setSeoMeta('meta[name="description"]', { name: 'description', content: description });
+            setSeoMeta('meta[property="og:type"]', { property: 'og:type', content: 'product' });
+            setSeoMeta('meta[property="og:title"]', { property: 'og:title', content: `${name} — OSUZ` });
+            setSeoMeta('meta[property="og:description"]', { property: 'og:description', content: description });
+            setSeoMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
+            if (imageUrl) setSeoMeta('meta[property="og:image"]', { property: 'og:image', content: imageUrl });
+        }
+
+        function schemaTypeIncludesProduct(value) {
+            if (!value || typeof value !== 'object') return false;
+            const type = value['@type'];
+            return type === 'Product' || (Array.isArray(type) && type.includes('Product'));
+        }
+
+        function takeExistingProductSchema() {
+            let existingProduct = null;
+            document.querySelectorAll('script[type="application/ld+json"]').forEach(script => {
+                let data;
+                try { data = JSON.parse(script.textContent || '{}'); } catch (_) { return; }
+
+                if (schemaTypeIncludesProduct(data)) {
+                    if (!existingProduct) existingProduct = data;
+                    script.remove();
+                    return;
+                }
+
+                if (Array.isArray(data?.['@graph'])) {
+                    const productNodes = data['@graph'].filter(schemaTypeIncludesProduct);
+                    if (!existingProduct && productNodes.length) existingProduct = productNodes[0];
+                    if (productNodes.length) {
+                        const graph = data['@graph'].filter(node => !schemaTypeIncludesProduct(node));
+                        if (graph.length) {
+                            data['@graph'] = graph;
+                            script.textContent = JSON.stringify(data);
+                        } else {
+                            script.remove();
+                        }
+                    }
+                }
+            });
+            return existingProduct;
+        }
+
+        function buildProductOffer(listings = []) {
+            const usable = (Array.isArray(listings) ? listings : [])
+                .map(item => ({
+                    price: Number(item?.price),
+                    stock: Number(item?.total_stock),
+                    requiresStock: listingRequiresStock(item),
+                    seller: String(item?.tenant_name || '').trim()
+                }))
+                .filter(item => Number.isFinite(item.price) && item.price > 0);
+
+            const canonicalUrl = productCanonicalUrl();
+            if (usable.length) {
+                const prices = usable.map(item => item.price);
+                const offer = {
+                    '@type': 'AggregateOffer',
+                    priceCurrency: 'UZS',
+                    lowPrice: Math.min(...prices),
+                    highPrice: Math.max(...prices),
+                    offerCount: usable.length,
+                    url: canonicalUrl
+                };
+                if (usable.some(item => !item.requiresStock || item.stock > 0)) {
+                    offer.availability = 'https://schema.org/InStock';
+                } else {
+                    offer.availability = 'https://schema.org/OutOfStock';
+                }
+                return offer;
+            }
+
+            const fallbackPrice = Number(product?.price_from);
+            if (Number.isFinite(fallbackPrice) && fallbackPrice > 0) {
+                return {
+                    '@type': 'Offer',
+                    price: fallbackPrice,
+                    priceCurrency: 'UZS',
+                    url: canonicalUrl
+                };
+            }
+            return null;
+        }
+
+        function upsertProductStructuredData(listings = []) {
+            if (!product) return;
+
+            // The backend may inject Product JSON-LD for clean URLs. Replace any Product node
+            // with one complete version so Search Console never sees a duplicate invalid Product item.
+            const existing = takeExistingProductSchema() || {};
+            const offer = buildProductOffer(listings);
+            const hasExistingSignal = Boolean(existing.review || existing.aggregateRating);
+
+            // Google requires Product to contain offers, review, or aggregateRating.
+            // If a product genuinely has none of those, omit Product markup instead of publishing invalid data.
+            if (!offer && !hasExistingSignal) return;
+
+            const name = localizedProductName(product);
+            const description = getProductDescription(product);
+            const images = galleryImages
+                .map(url => {
+                    try { return new URL(url, location.origin).href; } catch (_) { return ''; }
+                })
+                .filter(Boolean)
+                .filter((url, index, values) => values.indexOf(url) === index);
+
+            const schema = {
+                '@context': 'https://schema.org',
+                '@type': 'Product',
+                name,
+                url: productCanonicalUrl()
+            };
+            if (description) schema.description = description;
+            if (images.length) schema.image = images;
+            if (product.brand) schema.brand = { '@type': 'Brand', name: String(product.brand) };
+            if (product.order_code) schema.sku = String(product.order_code);
+            const barcode = String(product.barcode || '').replace(/\D/g, '');
+            if (barcode.length === 13) schema.gtin13 = barcode;
+            else if (barcode.length === 12) schema.gtin12 = barcode;
+            else if (barcode.length === 8) schema.gtin8 = barcode;
+            if (offer) schema.offers = offer;
+            if (existing.aggregateRating) schema.aggregateRating = existing.aggregateRating;
+            if (existing.review) schema.review = existing.review;
+
+            const node = document.createElement('script');
+            node.type = 'application/ld+json';
+            node.id = 'osuz-product-jsonld';
+            node.textContent = JSON.stringify(schema);
+            document.head.appendChild(node);
         }
 
         function applyTheme() {
@@ -4075,6 +4554,8 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 
             galleryIndex = 0;
             renderGallery();
+            syncProductSeoMeta();
+            upsertProductStructuredData([]);
         }
 
         function renderChip(id, label, value) {
@@ -4204,25 +4685,180 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
         });
 
         const imageLightbox = document.getElementById('imageLightbox');
+        const lightboxStage = document.getElementById('lightboxStage');
         const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        // Держим просмотрщик прямо в body: так sticky/fixed элементы страницы
+        // и их stacking-context не могут оказаться поверх фотографии.
+        if (imageLightbox.parentElement !== document.body) {
+            document.body.appendChild(imageLightbox);
+        }
+
+        let lightboxScale = 1;
+        let lightboxX = 0;
+        let lightboxY = 0;
+        let pinchStartDistance = 0;
+        let pinchStartScale = 1;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragOriginX = 0;
+        let dragOriginY = 0;
+        let draggingImage = false;
+        let movedImage = false;
+        let lastImageTapAt = 0;
+
+        function clampLightboxScale(value) {
+            return Math.min(5, Math.max(1, value));
+        }
+
+        function applyLightboxTransform(animate = false) {
+            lightboxImage.style.transition = animate ? 'transform 180ms ease' : 'none';
+            lightboxImage.style.transform = `translate3d(${lightboxX}px, ${lightboxY}px, 0) scale(${lightboxScale})`;
+            imageLightbox.dataset.zoomed = lightboxScale > 1.01 ? 'true' : 'false';
+        }
+
+        function resetLightboxZoom(animate = false) {
+            lightboxScale = 1;
+            lightboxX = 0;
+            lightboxY = 0;
+            applyLightboxTransform(animate);
+        }
 
         function openLightbox() {
-            const source = document.getElementById('mainProductImage').src;
+            const mainImage = document.getElementById('mainProductImage');
+            const source = mainImage.currentSrc || mainImage.src;
             if (!source) return;
 
             lightboxImage.src = source;
-            lightboxImage.alt = document.getElementById('mainProductImage').alt;
+            lightboxImage.alt = mainImage.alt || '';
+            resetLightboxZoom(false);
+
             imageLightbox.classList.remove('hidden');
-            imageLightbox.classList.add('flex');
+            imageLightbox.classList.add('osuz-lightbox-visible');
+            imageLightbox.setAttribute('aria-hidden', 'false');
+            document.documentElement.classList.add('osuz-image-viewer-open');
+            document.body.classList.add('osuz-image-viewer-open');
         }
 
         function closeLightbox() {
             imageLightbox.classList.add('hidden');
-            imageLightbox.classList.remove('flex');
+            imageLightbox.classList.remove('osuz-lightbox-visible');
+            imageLightbox.setAttribute('aria-hidden', 'true');
+            document.documentElement.classList.remove('osuz-image-viewer-open');
+            document.body.classList.remove('osuz-image-viewer-open');
+            resetLightboxZoom(false);
         }
 
+        function touchDistance(touchA, touchB) {
+            return Math.hypot(touchB.clientX - touchA.clientX, touchB.clientY - touchA.clientY);
+        }
+
+        // Важно: preventDefault здесь блокирует масштабирование всей веб-страницы.
+        // Жест двумя пальцами меняет transform только у #lightboxImage.
+        lightboxStage.addEventListener('touchstart', (event) => {
+            if (event.touches.length === 2) {
+                event.preventDefault();
+                pinchStartDistance = touchDistance(event.touches[0], event.touches[1]);
+                pinchStartScale = lightboxScale;
+                draggingImage = false;
+                movedImage = true;
+                return;
+            }
+
+            if (event.touches.length === 1 && lightboxScale > 1) {
+                event.preventDefault();
+                draggingImage = true;
+                movedImage = false;
+                dragStartX = event.touches[0].clientX;
+                dragStartY = event.touches[0].clientY;
+                dragOriginX = lightboxX;
+                dragOriginY = lightboxY;
+                imageLightbox.dataset.dragging = 'true';
+            }
+        }, { passive: false });
+
+        lightboxStage.addEventListener('touchmove', (event) => {
+            if (event.touches.length === 2 && pinchStartDistance > 0) {
+                event.preventDefault();
+                const distance = touchDistance(event.touches[0], event.touches[1]);
+                lightboxScale = clampLightboxScale(pinchStartScale * (distance / pinchStartDistance));
+                if (lightboxScale <= 1.01) {
+                    lightboxScale = 1;
+                    lightboxX = 0;
+                    lightboxY = 0;
+                }
+                applyLightboxTransform(false);
+                return;
+            }
+
+            if (event.touches.length === 1 && draggingImage && lightboxScale > 1) {
+                event.preventDefault();
+                const dx = event.touches[0].clientX - dragStartX;
+                const dy = event.touches[0].clientY - dragStartY;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) movedImage = true;
+                lightboxX = dragOriginX + dx;
+                lightboxY = dragOriginY + dy;
+                applyLightboxTransform(false);
+            }
+        }, { passive: false });
+
+        lightboxStage.addEventListener('touchend', (event) => {
+            if (event.touches.length < 2) pinchStartDistance = 0;
+            if (event.touches.length === 0) {
+                draggingImage = false;
+                delete imageLightbox.dataset.dragging;
+                if (lightboxScale <= 1.01) resetLightboxZoom(true);
+            }
+        }, { passive: true });
+
+        // Safari может прислать отдельные gesture-события. Не даём им
+        // масштабировать viewport страницы.
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach((eventName) => {
+            imageLightbox.addEventListener(eventName, (event) => event.preventDefault(), { passive: false });
+        });
+
+        // Двойной тап/клик: быстро 2.5x / обратно 1x.
+        lightboxImage.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (movedImage) {
+                movedImage = false;
+                return;
+            }
+
+            const now = Date.now();
+            if (now - lastImageTapAt < 320) {
+                if (lightboxScale > 1.01) {
+                    resetLightboxZoom(true);
+                } else {
+                    lightboxScale = 2.5;
+                    lightboxX = 0;
+                    lightboxY = 0;
+                    applyLightboxTransform(true);
+                }
+                lastImageTapAt = 0;
+            } else {
+                lastImageTapAt = now;
+            }
+        });
+
+        // Колёсико на ПК масштабирует только фото.
+        imageLightbox.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const factor = event.deltaY < 0 ? 1.15 : 0.87;
+            lightboxScale = clampLightboxScale(lightboxScale * factor);
+            if (lightboxScale <= 1.01) resetLightboxZoom(false);
+            else applyLightboxTransform(false);
+        }, { passive: false });
+
         document.getElementById('mainProductImage').addEventListener('click', openLightbox);
-        imageLightbox.addEventListener('click', closeLightbox);
+        lightboxClose.addEventListener('click', (event) => {
+            event.stopPropagation();
+            closeLightbox();
+        });
+        imageLightbox.addEventListener('click', (event) => {
+            if (event.target === imageLightbox || event.target === lightboxStage) closeLightbox();
+        });
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape' && !imageLightbox.classList.contains('hidden')) {
                 closeLightbox();
@@ -4536,6 +5172,18 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
                 .replace('{stock}', String(Math.max(0, Number(stock) || 0)));
         }
 
+        function listingRequiresStock(listing) {
+            return Number(listing?.require_stock_for_cart ?? listing?.requireStockForCart) === 1;
+        }
+
+        function listingStock(listing) {
+            return Math.max(0, Math.floor(Number(listing?.total_stock) || 0));
+        }
+
+        function listingUnavailableByStock(listing) {
+            return listingRequiresStock(listing) && listingStock(listing) <= 0;
+        }
+
         function getCartItemQuantity(cartData, tenantId, productIdValue) {
             const sellers = Array.isArray(cartData?.sellers) ? cartData.sellers : [];
             const seller = sellers.find(entry =>
@@ -4624,16 +5272,17 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
             }
 
             const price = Number(listing.price);
-            const stock = Math.max(0, Math.floor(Number(listing.total_stock) || 0));
+            const stock = listingStock(listing);
+            const requiresStock = listingRequiresStock(listing);
 
-            if (!Number.isFinite(price) || price <= 0 || stock <= 0) {
+            if (!Number.isFinite(price) || price <= 0 || (requiresStock && stock <= 0)) {
                 throw new Error(ui.listingUnavailable);
             }
 
             const guestCart = readGuestCart();
             const currentQuantity = getCartItemQuantity(guestCart, tenantId, productId);
 
-            if (currentQuantity >= stock) {
+            if (requiresStock && currentQuantity >= stock) {
                 throw new Error(stockLimitMessage(stock));
             }
 
@@ -4658,7 +5307,8 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 
             if (item) {
                 item.quantity = Math.max(1, Number(item.quantity) || 1) + 1;
-                item.maxStock = stock;
+                item.requireStockForCart = requiresStock ? 1 : 0;
+                item.maxStock = requiresStock ? stock : null;
                 item.selected = true;
             } else {
                 item = {
@@ -4666,7 +5316,8 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
                     name: localizedProductName(product),
                     price,
                     quantity: 1,
-                    maxStock: stock,
+                    requireStockForCart: requiresStock ? 1 : 0,
+                    maxStock: requiresStock ? stock : null,
                     lineTotal: price,
                     selected: true
                 };
@@ -4714,16 +5365,17 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 
             try {
                 const listing = sellerListingsByTenant.get(Number(tenantId));
-                const stock = Math.max(0, Math.floor(Number(listing?.total_stock) || 0));
+                const stock = listingStock(listing);
+                const requiresStock = listingRequiresStock(listing);
 
-                if (stock <= 0) {
+                if (requiresStock && stock <= 0) {
                     throw new Error(ui.listingUnavailable);
                 }
 
                 const currentCart = await authorizedCartRequest();
                 const currentQuantity = getCartItemQuantity(currentCart, tenantId, productId);
 
-                if (currentQuantity >= stock) {
+                if (requiresStock && currentQuantity >= stock) {
                     throw new Error(stockLimitMessage(stock));
                 }
 
@@ -4788,13 +5440,14 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
             if (!area || !listing) return;
 
             const qty = Math.max(0, Number(quantity) || 0);
-            const stock = Math.max(0, Math.floor(Number(listing.total_stock) || 0));
+            const stock = listingStock(listing);
+            const unavailableByStock = listingUnavailableByStock(listing);
 
             if (qty <= 0) {
                 area.innerHTML = `
-                    <button type="button" class="seller-cart-button" data-add-listing-to-cart data-tenant-id="${Number(tenantId)}" ${stock <= 0 ? 'disabled' : ''}>
+                    <button type="button" class="seller-cart-button" data-add-listing-to-cart data-tenant-id="${Number(tenantId)}" ${unavailableByStock ? 'disabled' : ''}>
                         <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                        <span>${escapeHTML(stock <= 0 ? ui.outOfStock : ui.addToCart)}</span>
+                        <span>${escapeHTML(unavailableByStock ? ui.outOfStock : ui.addToCart)}</span>
                     </button>
                 `;
                 area.querySelector('[data-add-listing-to-cart]')?.addEventListener('click', event => addListingToCart(event.currentTarget));
@@ -4822,6 +5475,13 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
             const area = document.querySelector(`[data-seller-cart-area="${Number(tenantId)}"]`);
             const current = Math.max(0, Number(area?.querySelector('[data-listing-quantity]')?.dataset?.listingQuantity) || 0);
             const next = Math.max(0, current + Number(delta || 0));
+            const listing = sellerListingsByTenant.get(Number(tenantId));
+            const stock = listingStock(listing);
+
+            if (Number(delta || 0) > 0 && listingRequiresStock(listing) && next > stock) {
+                showCartToast(stockLimitMessage(stock), true);
+                return;
+            }
 
             area?.classList.add('is-busy');
             try {
@@ -4960,6 +5620,7 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
             document.getElementById('sellersButtonLabel')
                 ?.closest('a')
                 ?.classList.remove('hidden');
+            upsertProductStructuredData([]);
         }
 
         function renderSellers(listings) {
@@ -4982,6 +5643,7 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
                 const empty = document.getElementById('sellersEmpty');
                 empty.textContent = ui.noSellers;
                 empty.classList.remove('hidden');
+                upsertProductStructuredData([]);
                 return;
             }
 
@@ -5016,10 +5678,10 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
                                 class="seller-cart-button"
                                 data-add-listing-to-cart
                                 data-tenant-id="${Number(listing.tenant_id)}"
-                                ${Number(listing.total_stock || 0) <= 0 ? 'disabled' : ''}
+                                ${listingUnavailableByStock(listing) ? 'disabled' : ''}
                             >
                                 <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                                <span>${escapeHTML(Number(listing.total_stock || 0) <= 0 ? ui.outOfStock : ui.addToCart)}</span>
+                                <span>${escapeHTML(listingUnavailableByStock(listing) ? ui.outOfStock : ui.addToCart)}</span>
                             </button>
                         </div>
                     </article>
@@ -5028,6 +5690,7 @@ body.dark-mode .product-quick-spec-value,body.dark-mode .product-all-specs-link{
 
             bindSellerCartButtons();
             syncSellerCartControlsFromCart();
+            upsertProductStructuredData(list);
             lucide.createIcons();
         }
 
@@ -5681,5 +6344,61 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   });
 })();
 </script>
+
+<script id="osuz-v51-photo-search-unifier">
+(() => {
+  function addCameraControl(container) {
+    if (!container || container.querySelector('.osuz-photo-search-control')) return;
+
+    const existingHero = container.querySelector('#heroPhotoBtn');
+    if (existingHero) {
+      existingHero.classList.add('osuz-photo-search-control');
+      existingHero.dataset.osuzPhotoSearch = '1';
+      return;
+    }
+
+    const submit = container.querySelector('button[type="submit"], #categoryHeaderSearchButton, .mobile-top-search-btn, .mobile-menu-search-button');
+    const input = container.querySelector('input[type="search"], input[type="text"]');
+    if (!input) return;
+
+    const label = document.createElement('label');
+    label.className = 'osuz-photo-search-control';
+    label.dataset.osuzPhotoSearch = '1';
+    label.title = 'Поиск по фото';
+    label.setAttribute('aria-label', 'Поиск по фото');
+    label.innerHTML = '<i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true">';
+
+    const file = label.querySelector('input[type="file"]');
+    file.addEventListener('change', () => {
+      if (!file.files || !file.files.length) return;
+      label.classList.add('is-selected');
+      window.setTimeout(() => label.classList.remove('is-selected'), 900);
+      /* На главной остаётся полноценный существующий поиск по фото; на остальных страницах
+         кнопка унифицирована визуально и открывает системный выбор изображения. */
+    });
+
+    if (submit) container.insertBefore(label, submit);
+    else container.appendChild(label);
+  }
+
+  function initPhotoSearchControls() {
+    document.querySelectorAll([
+      '.header-search-bar',
+      '.category-header-search',
+      'form.osuz-header-search',
+      '.mobile-top-search-shell',
+      '.mobile-menu-search-shell'
+    ].join(',')).forEach(addCameraControl);
+
+    const hero = document.getElementById('heroPhotoBtn');
+    if (hero) hero.classList.add('osuz-photo-search-control');
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhotoSearchControls, { once:true });
+  else initPhotoSearchControls();
+})();
+</script>
+
 </body>
 </html>

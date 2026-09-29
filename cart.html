@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-13-v47-document-fixes" lang="ru">
+<html data-osuz-build="2026-09-29-v51-17-09-fixes" lang="ru">
 <head>
 <script id="osuz-local-origin-normalizer">
 (() => {
@@ -2973,6 +2973,149 @@ body.dark-mode .osuz-header-search input {
 }
 </style>
 
+
+<style id="osuz-v51-17-09-fixes">
+/* V51 — правки из документа 17.09.26. Этот блок намеренно последний: он нормализует хедер и мобильную навигацию поверх старых версий. */
+.site-header-nav,
+.auth-site-subnav {
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+@media (min-width:768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display:flex !important;
+    min-height:76px !important;
+    height:76px !important;
+    gap:12px !important;
+    align-items:center !important;
+  }
+
+  /* Лого остаётся на месте; визуальный воздух создаём именно перед кнопкой Каталог. */
+  .site-header-top .osuz-desktop-catalog-button,
+  .auth-site-header .osuz-desktop-catalog-button {
+    margin-left:48px !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* На главной и внутренних страницах зона поиска теперь растягивается одинаково. */
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot,
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot,
+  .site-header-top .relative.osuz-desktop-search-slot {
+    flex:1 1 620px !important;
+    width:auto !important;
+    min-width:260px !important;
+    max-width:none !important;
+    margin-left:10px !important;
+    margin-right:16px !important;
+  }
+
+  .site-header-top .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top form.osuz-header-search,
+  .auth-site-header form.osuz-header-search {
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+}
+
+/* Камера — отдельный компактный слот внутри любого поискового поля. */
+.osuz-photo-search-control,
+#heroPhotoBtn.osuz-photo-search-control {
+  position:relative !important;
+  width:44px !important;
+  min-width:44px !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  cursor:pointer !important;
+  border:0 !important;
+  border-left:1px solid rgba(148,163,184,.25) !important;
+  background:transparent !important;
+  color:#0891b2 !important;
+  line-height:1 !important;
+}
+.osuz-photo-search-control:hover,
+#heroPhotoBtn.osuz-photo-search-control:hover { background:rgba(8,145,178,.08) !important; }
+.osuz-photo-search-control svg,
+.osuz-photo-search-control i,
+#heroPhotoBtn.osuz-photo-search-control svg,
+#heroPhotoBtn.osuz-photo-search-control i {
+  width:19px !important;
+  height:19px !important;
+  margin:0 !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.osuz-photo-search-control input[type="file"] { display:none !important; }
+body.dark-mode .osuz-photo-search-control,
+body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
+  color:#67e8f9 !important;
+  border-left-color:#334155 !important;
+}
+
+/* Мобильная нижняя навигация: корзина занимает строго свою колонку и не «съезжает». */
+@media (max-width:767px) {
+  .osuz-mobile-bottom-final {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+  .osuz-mobile-bottom-final > a,
+  .osuz-mobile-bottom-final > button,
+  .osuz-mobile-bottom-final [data-open-cart] {
+    width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding-left:2px !important;
+    padding-right:2px !important;
+    left:auto !important;
+    right:auto !important;
+    transform:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    justify-self:stretch !important;
+  }
+  .osuz-mobile-bottom-final [data-open-cart] > svg,
+  .osuz-mobile-bottom-final [data-open-cart] > i {
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  .osuz-mobile-bottom-final [data-mobile-cart-count],
+  .osuz-mobile-bottom-final [data-cart-count] {
+    position:absolute !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+  .mobile-top-search-shell,
+  .mobile-menu-search-shell,
+  .osuz-header-search {
+    overflow:hidden !important;
+  }
+  .mobile-top-search-shell .osuz-photo-search-control,
+  .mobile-menu-search-shell .osuz-photo-search-control {
+    width:40px !important;
+    min-width:40px !important;
+    flex-basis:40px !important;
+  }
+}
+</style>
+
 </head>
 <body data-osuz-page="cart" data-osuz-v16-page="cart">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -2985,7 +3128,7 @@ body.dark-mode .osuz-header-search input {
 <button aria-expanded="false" aria-label="Каталог" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle="" type="button">
 <i data-lucide="layout-grid"></i>
 <span data-osuz-catalog-text="">Каталог</span>
-</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
+</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><label class="osuz-photo-search-control" data-osuz-photo-search="1" title="Поиск по фото" aria-label="Поиск по фото"><i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true"/></label><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
 <div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
 <label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span><span class="osuz-lang-code" data-osuz-select-code="">RU</span><select class="header-action bg-transparent outline-none cursor-pointer" id="languageSelect">
 <option value="ru">RU</option>
@@ -3318,7 +3461,8 @@ body.dark-mode .osuz-header-search input {
                 for (const item of seller.items || []) {
                     const productId = getProductId(item);
                     const stored = Math.max(0, Math.floor(Number(item.maxStock ?? item.max_stock) || 0));
-                    if (stored > 0) {
+                    const storedRequiresStock = Number(item.requireStockForCart ?? item.require_stock_for_cart) === 1;
+                    if (storedRequiresStock) {
                         cartStockLimits.set(cartStockKey(tenantId, productId), stored);
                     }
 
@@ -3334,8 +3478,23 @@ body.dark-mode .osuz-header-search input {
                                 ? listings.find(entry => Number(entry.tenant_id) === Number(tenantId))
                                 : null;
                             if (!listing) return;
+                            const requiresStock = Number(listing.require_stock_for_cart) === 1;
                             const stock = Math.max(0, Math.floor(Number(listing.total_stock) || 0));
-                            cartStockLimits.set(cartStockKey(tenantId, productId), stock);
+                            const key = cartStockKey(tenantId, productId);
+
+                            // The backend flag is authoritative: when it is 0, total_stock must be ignored.
+                            if (requiresStock) {
+                                cartStockLimits.set(key, stock);
+                            } else {
+                                cartStockLimits.delete(key);
+                            }
+
+                            // Keep guest-cart metadata in sync so a later temporary API failure
+                            // does not resurrect an obsolete stock limit.
+                            if (isGuestCartMode()) {
+                                item.requireStockForCart = requiresStock ? 1 : 0;
+                                item.maxStock = requiresStock ? stock : null;
+                            }
                         } catch {
                             // Если каталог временно недоступен, не ломаем саму корзину.
                         }
@@ -3344,6 +3503,10 @@ body.dark-mode .osuz-header-search input {
             }
 
             await Promise.all(requests);
+
+            if (isGuestCartMode()) {
+                localStorage.setItem(GUEST_CART_KEY, JSON.stringify(recalculateGuestCart(cartData)));
+            }
         }
 
         function isGuestCartMode() {
@@ -3473,6 +3636,10 @@ body.dark-mode .osuz-header-search input {
                             entry => getProductId(entry) !== productId
                         );
                     } else {
+                        const knownStock = getKnownStock(tenantId, productId);
+                        if (knownStock !== null && quantity > knownStock) {
+                            throw new Error(stockLimitText(knownStock));
+                        }
                         item.quantity = quantity;
                     }
                 }
@@ -4157,6 +4324,13 @@ body.dark-mode .osuz-header-search input {
                         Number(cartItem.quantity || 1) +
                             (button.dataset.action === 'increase' ? 1 : -1)
                     );
+                    const knownStock = getKnownStock(tenantId, productId);
+
+                    if (knownStock !== null && nextQuantity > knownStock) {
+                        showToast(stockLimitText(knownStock), 'error');
+                        return;
+                    }
+
                     if (nextQuantity === 0) {
                         requestRemoveCartItem(tenantId, productId);
                         return;
@@ -4184,6 +4358,14 @@ body.dark-mode .osuz-header-search input {
                         const { item } = findCartItem(tenantId, productId);
                         input.value = Math.max(1, Number(item?.quantity) || 1);
                         requestRemoveCartItem(tenantId, productId);
+                        return;
+                    }
+
+                    const knownStock = getKnownStock(tenantId, productId);
+                    if (knownStock !== null && quantity > knownStock) {
+                        const { item } = findCartItem(tenantId, productId);
+                        input.value = Math.max(1, Math.min(Number(item?.quantity) || 1, knownStock || 1));
+                        showToast(stockLimitText(knownStock), 'error');
                         return;
                     }
 
@@ -4971,5 +5153,61 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   setTimeout(enforceHeaderOrder, 500);
 })();
 </script>
+
+<script id="osuz-v51-photo-search-unifier">
+(() => {
+  function addCameraControl(container) {
+    if (!container || container.querySelector('.osuz-photo-search-control')) return;
+
+    const existingHero = container.querySelector('#heroPhotoBtn');
+    if (existingHero) {
+      existingHero.classList.add('osuz-photo-search-control');
+      existingHero.dataset.osuzPhotoSearch = '1';
+      return;
+    }
+
+    const submit = container.querySelector('button[type="submit"], #categoryHeaderSearchButton, .mobile-top-search-btn, .mobile-menu-search-button');
+    const input = container.querySelector('input[type="search"], input[type="text"]');
+    if (!input) return;
+
+    const label = document.createElement('label');
+    label.className = 'osuz-photo-search-control';
+    label.dataset.osuzPhotoSearch = '1';
+    label.title = 'Поиск по фото';
+    label.setAttribute('aria-label', 'Поиск по фото');
+    label.innerHTML = '<i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true">';
+
+    const file = label.querySelector('input[type="file"]');
+    file.addEventListener('change', () => {
+      if (!file.files || !file.files.length) return;
+      label.classList.add('is-selected');
+      window.setTimeout(() => label.classList.remove('is-selected'), 900);
+      /* На главной остаётся полноценный существующий поиск по фото; на остальных страницах
+         кнопка унифицирована визуально и открывает системный выбор изображения. */
+    });
+
+    if (submit) container.insertBefore(label, submit);
+    else container.appendChild(label);
+  }
+
+  function initPhotoSearchControls() {
+    document.querySelectorAll([
+      '.header-search-bar',
+      '.category-header-search',
+      'form.osuz-header-search',
+      '.mobile-top-search-shell',
+      '.mobile-menu-search-shell'
+    ].join(',')).forEach(addCameraControl);
+
+    const hero = document.getElementById('heroPhotoBtn');
+    if (hero) hero.classList.add('osuz-photo-search-control');
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhotoSearchControls, { once:true });
+  else initPhotoSearchControls();
+})();
+</script>
+
 </body>
 </html>

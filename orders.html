@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-osuz-build="2026-09-13-v47-document-fixes" lang="ru">
+<html data-osuz-build="2026-09-29-v51-17-09-fixes" lang="ru">
 <head>
 <script id="osuz-local-origin-normalizer">
 (() => {
@@ -3028,6 +3028,277 @@ body.dark-mode .osuz-header-search input {
 }
 </style>
 
+
+<style id="osuz-v51-17-09-fixes">
+/* V51 — правки из документа 17.09.26. Этот блок намеренно последний: он нормализует хедер и мобильную навигацию поверх старых версий. */
+.site-header-nav,
+.auth-site-subnav {
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+@media (min-width:768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display:flex !important;
+    min-height:76px !important;
+    height:76px !important;
+    gap:12px !important;
+    align-items:center !important;
+  }
+
+  /* Лого остаётся на месте; визуальный воздух создаём именно перед кнопкой Каталог. */
+  .site-header-top .osuz-desktop-catalog-button,
+  .auth-site-header .osuz-desktop-catalog-button {
+    margin-left:48px !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* На главной и внутренних страницах зона поиска теперь растягивается одинаково. */
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot,
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot,
+  .site-header-top .relative.osuz-desktop-search-slot {
+    flex:1 1 620px !important;
+    width:auto !important;
+    min-width:260px !important;
+    max-width:none !important;
+    margin-left:10px !important;
+    margin-right:16px !important;
+  }
+
+  .site-header-top .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top form.osuz-header-search,
+  .auth-site-header form.osuz-header-search {
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+}
+
+/* Камера — отдельный компактный слот внутри любого поискового поля. */
+.osuz-photo-search-control,
+#heroPhotoBtn.osuz-photo-search-control {
+  position:relative !important;
+  width:44px !important;
+  min-width:44px !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  cursor:pointer !important;
+  border:0 !important;
+  border-left:1px solid rgba(148,163,184,.25) !important;
+  background:transparent !important;
+  color:#0891b2 !important;
+  line-height:1 !important;
+}
+.osuz-photo-search-control:hover,
+#heroPhotoBtn.osuz-photo-search-control:hover { background:rgba(8,145,178,.08) !important; }
+.osuz-photo-search-control svg,
+.osuz-photo-search-control i,
+#heroPhotoBtn.osuz-photo-search-control svg,
+#heroPhotoBtn.osuz-photo-search-control i {
+  width:19px !important;
+  height:19px !important;
+  margin:0 !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.osuz-photo-search-control input[type="file"] { display:none !important; }
+body.dark-mode .osuz-photo-search-control,
+body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
+  color:#67e8f9 !important;
+  border-left-color:#334155 !important;
+}
+
+/* Мобильная нижняя навигация: корзина занимает строго свою колонку и не «съезжает». */
+@media (max-width:767px) {
+  .osuz-mobile-bottom-final {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+  .osuz-mobile-bottom-final > a,
+  .osuz-mobile-bottom-final > button,
+  .osuz-mobile-bottom-final [data-open-cart] {
+    width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding-left:2px !important;
+    padding-right:2px !important;
+    left:auto !important;
+    right:auto !important;
+    transform:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    justify-self:stretch !important;
+  }
+  .osuz-mobile-bottom-final [data-open-cart] > svg,
+  .osuz-mobile-bottom-final [data-open-cart] > i {
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  .osuz-mobile-bottom-final [data-mobile-cart-count],
+  .osuz-mobile-bottom-final [data-cart-count] {
+    position:absolute !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+  .mobile-top-search-shell,
+  .mobile-menu-search-shell,
+  .osuz-header-search {
+    overflow:hidden !important;
+  }
+  .mobile-top-search-shell .osuz-photo-search-control,
+  .mobile-menu-search-shell .osuz-photo-search-control {
+    width:40px !important;
+    min-width:40px !important;
+    flex-basis:40px !important;
+  }
+}
+</style>
+
+
+<style id="osuz-orders-mobile-width-fix">
+/* Mobile: prevent the order feed/detail grid from using a min-content width wider than the viewport. */
+@media (max-width: 767px) {
+  main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    overflow-x: clip !important;
+  }
+
+  #loadingState,
+  #ordersContent,
+  .orders-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #ordersContent > *,
+  .order-detail-panel,
+  #orderDetail,
+  #orderDetail > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .order-detail-panel {
+    overflow-x: hidden !important;
+  }
+
+  #orderDetail .grid,
+  #orderDetail .grid > *,
+  #orderDetail .flex-1,
+  #ordersList,
+  .order-row {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #orderDetail h1,
+  #orderDetail h2,
+  #orderDetail h3,
+  #orderDetail p,
+  #orderDetail a,
+  #orderDetail .font-black {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  #orderDetail .status-badge,
+  #orderDetail .item-status {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+</style>
+
+<style id="osuz-orders-list-detail-flow">
+/* Orders UX: show either the order list OR one selected order, never both at once. */
+#ordersContent.osuz-list-view,
+#ordersContent.osuz-detail-view {
+  display: block !important;
+}
+
+#ordersContent.osuz-list-view #ordersListPanel {
+  display: block;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+#ordersContent.osuz-list-view #orderDetailPanel { display: none !important; }
+
+#ordersContent.osuz-detail-view #ordersListPanel { display: none !important; }
+#ordersContent.osuz-detail-view #orderDetailPanel {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#ordersContent.osuz-list-view #ordersList {
+  max-height: none !important;
+  overflow: visible !important;
+  padding-right: 0 !important;
+}
+
+.order-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  margin-bottom: 14px;
+  border: 1px solid #dbe4ee;
+  border-radius: 12px;
+  background: #fff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 900;
+  transition: .18s ease;
+}
+.order-detail-back:hover {
+  border-color: #67d9e5;
+  color: #0e7490;
+  background: #f0fdff;
+}
+body.dark-mode .order-detail-back {
+  background: #0f1722;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+@media (max-width: 767px) {
+  #ordersContent.osuz-list-view #ordersListPanel,
+  #ordersContent.osuz-detail-view #orderDetailPanel {
+    max-width: 100%;
+  }
+  .order-detail-back {
+    margin-bottom: 12px;
+  }
+}
+</style>
+
 </head>
 <body data-osuz-page="orders" data-osuz-v16-page="orders">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -3040,7 +3311,7 @@ body.dark-mode .osuz-header-search input {
 <button aria-expanded="false" aria-label="Каталог" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle="" type="button">
 <i data-lucide="layout-grid"></i>
 <span data-osuz-catalog-text="">Каталог</span>
-</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
+</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><label class="osuz-photo-search-control" data-osuz-photo-search="1" title="Поиск по фото" aria-label="Поиск по фото"><i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true"/></label><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
 <div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
 <label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span><span class="osuz-lang-code" data-osuz-select-code="">RU</span><select class="header-action bg-transparent outline-none cursor-pointer" id="languageSelect">
 <option value="ru">RU</option>
@@ -3116,8 +3387,8 @@ body.dark-mode .osuz-header-search input {
                 <i class="w-4 h-4" data-lucide="arrow-right"></i>
 </a>
 </div>
-<div class="orders-layout hidden grid grid-cols-[360px_minmax(0,1fr)] gap-6 items-start" id="ordersContent">
-<aside class="surface rounded-3xl p-4">
+<div class="orders-layout hidden" id="ordersContent">
+<aside class="surface rounded-3xl p-4" id="ordersListPanel">
 <div class="flex items-center justify-between gap-3 px-2 pt-1 pb-4">
 <h2 class="text-lg font-black text-gray-900" id="ordersListTitle">Все заказы</h2>
 <span class="text-xs font-bold text-gray-400" id="ordersCount">0</span>
@@ -3160,6 +3431,7 @@ body.dark-mode .osuz-header-search input {
         let currentOrder = null;
         let detailPollTimer = null;
         let listPollTimer = null;
+        let openedOrderFromList = false;
         let requestBusy = false;
         let toastTimer = null;
         const receiptPreviewUrls = new Map();
@@ -3831,6 +4103,43 @@ body.dark-mode .osuz-header-search input {
             lucide.createIcons();
         }
 
+        function applyOrdersView() {
+            const content = document.getElementById('ordersContent');
+            if (!content) return;
+
+            const hasSelectedOrder = Number(selectedOrderId) > 0;
+            content.classList.toggle('osuz-list-view', !hasSelectedOrder);
+            content.classList.toggle('osuz-detail-view', hasSelectedOrder);
+
+            if (!hasSelectedOrder) {
+                clearInterval(detailPollTimer);
+                detailPollTimer = null;
+                currentOrder = null;
+
+                document.getElementById('orderDetail')?.classList.add('hidden');
+                document.getElementById('detailPlaceholder')?.classList.remove('hidden');
+            }
+        }
+
+        function showOrdersList({ useHistoryBack = false } = {}) {
+            if (useHistoryBack && openedOrderFromList) {
+                openedOrderFromList = false;
+                history.back();
+                return;
+            }
+
+            selectedOrderId = 0;
+            openedOrderFromList = false;
+
+            const url = new URL(location.href);
+            url.searchParams.delete('order');
+            history.replaceState({ osuzOrdersView: 'list' }, '', url);
+
+            applyOrdersView();
+            renderOrdersList();
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+
         function renderOrdersList() {
             const list = document.getElementById('ordersList');
             document.getElementById('ordersCount').textContent = String(orders.length);
@@ -4072,7 +4381,12 @@ body.dark-mode .osuz-header-search input {
 
         function renderSellerContacts(order) {
             const seller = order?.seller || {};
-            if (order?.status === 'pending') return '';
+
+            // Seller address, phone and landmark are private until the buyer
+            // has actually chosen pickup for this order. Never expose them for
+            // delivery orders, orders that are still being arranged, or cancelled orders.
+            const pickupIsConfirmed = order?.deliveryType === 'pickup';
+            if (!pickupIsConfirmed || order?.status === 'cancelled') return '';
 
             const address = String(seller.address || '').trim();
             const landmark = String(seller.landmark || '').trim();
@@ -4339,6 +4653,10 @@ body.dark-mode .osuz-header-search input {
 
             detail.innerHTML = `
                 <div class="p-5 sm:p-6 lg:p-7 border-b border-gray-200">
+                    <button type="button" class="order-detail-back" data-action="back-to-orders">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>${escapeHTML(t('allOrders'))}</span>
+                    </button>
                     <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                         <div>
                             <div class="text-xs font-black uppercase tracking-[.14em] text-primary-600">
@@ -4609,6 +4927,10 @@ body.dark-mode .osuz-header-search input {
         function bindDetailActions() {
             const root = document.getElementById('orderDetail');
 
+            root.querySelector('[data-action="back-to-orders"]')?.addEventListener('click', () => {
+                showOrdersList({ useHistoryBack: true });
+            });
+
             root.querySelector('[data-action="confirm-order"]')?.addEventListener('click', () => {
                 performAction(
                     async () => {
@@ -4864,8 +5186,11 @@ body.dark-mode .osuz-header-search input {
                 if (error.status === 404) {
                     selectedOrderId = 0;
                     currentOrder = null;
-                    document.getElementById('orderDetail').classList.add('hidden');
-                    document.getElementById('detailPlaceholder').classList.remove('hidden');
+                    const url = new URL(location.href);
+                    url.searchParams.delete('order');
+                    history.replaceState({ osuzOrdersView: 'list' }, '', url);
+                    applyOrdersView();
+                    renderOrdersList();
                     return;
                 }
 
@@ -4893,12 +5218,15 @@ body.dark-mode .osuz-header-search input {
 
         async function selectOrder(orderId) {
             selectedOrderId = Number(orderId);
+            openedOrderFromList = true;
 
             const url = new URL(location.href);
             url.searchParams.set('order', String(selectedOrderId));
-            history.replaceState(null, '', url);
+            history.pushState({ osuzOrdersView: 'detail', orderId: selectedOrderId }, '', url);
 
+            applyOrdersView();
             renderOrdersList();
+            window.scrollTo({ top: 0, behavior: 'auto' });
             await refreshSelectedOrder();
         }
 
@@ -4926,19 +5254,19 @@ body.dark-mode .osuz-header-search input {
                 document.getElementById('emptyState').classList.add('hidden');
                 document.getElementById('ordersContent').classList.remove('hidden');
 
-                if (
-                    !preserveSelection ||
-                    !selectedOrderId ||
-                    !orders.some(order => Number(order.orderId) === Number(selectedOrderId))
-                ) {
-                    selectedOrderId = Number(selectedOrderId) &&
-                        orders.some(order => Number(order.orderId) === Number(selectedOrderId))
-                            ? Number(selectedOrderId)
-                            : Number(orders[0].orderId);
+                const selectedExists = Number(selectedOrderId) > 0 &&
+                    orders.some(order => Number(order.orderId) === Number(selectedOrderId));
+
+                if (!selectedExists) {
+                    selectedOrderId = 0;
                 }
 
+                applyOrdersView();
                 renderOrdersList();
-                await refreshSelectedOrder();
+
+                if (selectedOrderId) {
+                    await refreshSelectedOrder();
+                }
             } catch (error) {
                 document.getElementById('loadingState').classList.add('hidden');
 
@@ -5044,6 +5372,25 @@ body.dark-mode .osuz-header-search input {
                 applyLanguage();
             }
         });
+
+        window.addEventListener('popstate', async () => {
+            const urlOrderId = Number(new URLSearchParams(location.search).get('order')) || 0;
+            selectedOrderId = urlOrderId;
+            openedOrderFromList = false;
+
+            applyOrdersView();
+            renderOrdersList();
+
+            if (selectedOrderId) {
+                await refreshSelectedOrder();
+            }
+        });
+
+        history.replaceState(
+            { osuzOrdersView: selectedOrderId ? 'detail' : 'list', orderId: selectedOrderId || undefined },
+            '',
+            location.href
+        );
 
         applyLanguage();
         applyTheme();
@@ -5607,5 +5954,61 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   setTimeout(enforceHeaderOrder, 500);
 })();
 </script>
+
+<script id="osuz-v51-photo-search-unifier">
+(() => {
+  function addCameraControl(container) {
+    if (!container || container.querySelector('.osuz-photo-search-control')) return;
+
+    const existingHero = container.querySelector('#heroPhotoBtn');
+    if (existingHero) {
+      existingHero.classList.add('osuz-photo-search-control');
+      existingHero.dataset.osuzPhotoSearch = '1';
+      return;
+    }
+
+    const submit = container.querySelector('button[type="submit"], #categoryHeaderSearchButton, .mobile-top-search-btn, .mobile-menu-search-button');
+    const input = container.querySelector('input[type="search"], input[type="text"]');
+    if (!input) return;
+
+    const label = document.createElement('label');
+    label.className = 'osuz-photo-search-control';
+    label.dataset.osuzPhotoSearch = '1';
+    label.title = 'Поиск по фото';
+    label.setAttribute('aria-label', 'Поиск по фото');
+    label.innerHTML = '<i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true">';
+
+    const file = label.querySelector('input[type="file"]');
+    file.addEventListener('change', () => {
+      if (!file.files || !file.files.length) return;
+      label.classList.add('is-selected');
+      window.setTimeout(() => label.classList.remove('is-selected'), 900);
+      /* На главной остаётся полноценный существующий поиск по фото; на остальных страницах
+         кнопка унифицирована визуально и открывает системный выбор изображения. */
+    });
+
+    if (submit) container.insertBefore(label, submit);
+    else container.appendChild(label);
+  }
+
+  function initPhotoSearchControls() {
+    document.querySelectorAll([
+      '.header-search-bar',
+      '.category-header-search',
+      'form.osuz-header-search',
+      '.mobile-top-search-shell',
+      '.mobile-menu-search-shell'
+    ].join(',')).forEach(addCameraControl);
+
+    const hero = document.getElementById('heroPhotoBtn');
+    if (hero) hero.classList.add('osuz-photo-search-control');
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhotoSearchControls, { once:true });
+  else initPhotoSearchControls();
+})();
+</script>
+
 </body>
 </html>
