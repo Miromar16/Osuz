@@ -1,0 +1,15 @@
+/* 2026-10-06 (правки init.docx), только мобильное разрешение */
+@media (max-width:767px){
+  /* 1. Убрать надпись «Покупки» над заголовками «Корзина» и «Мои заказы» */
+  #cartEyebrow,#ordersEyebrow{display:none!important}
+  #cartTitle,#ordersTitle{margin-top:0!important}
+
+  /* 2. Индикатор активной вкладки таббара — на всю ширину ячейки, одинаково у всех вкладок (как у «Каталога») */
+  .osuz-mobile-bottom-final a.active::before,
+  .osuz-mobile-bottom-final button.active::before,
+  .osuz-mobile-bottom-final button[data-v34-mobile-catalog].active::before{
+    content:""!important;position:absolute!important;top:0!important;
+    left:0!important;right:0!important;width:auto!important;height:2px!important;
+    transform:none!important;border-radius:0 0 3px 3px!important;background:#0abbd0!important;
+  }
+}

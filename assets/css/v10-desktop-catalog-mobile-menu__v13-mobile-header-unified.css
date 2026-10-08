@@ -1,0 +1,586 @@
+/* ===== osuz-v10-desktop-catalog-mobile-menu ===== */
+/* V10: Catalog is a desktop header action; hamburger is mobile-only. */
+.osuz-desktop-catalog-button { display: inline-flex !important; }
+@media (min-width: 768px) {
+  .osuz-desktop-catalog-button { display: inline-flex !important; }
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: none !important; }
+}
+@media (max-width: 767px) {
+  .osuz-desktop-catalog-button { display: none !important; }
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
+}
+
+/* ===== osuz-v11-catalog-everywhere ===== */
+/* V11: desktop Catalog button is present and visible on every page. */
+@media (min-width: 768px) {
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child { order: 0 !important; flex: 0 0 auto !important; }
+  .osuz-desktop-catalog-button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: 12px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+  .osuz-desktop-catalog-button:hover { background: #122338 !important; }
+  .osuz-desktop-catalog-button svg { width: 18px !important; height: 18px !important; }
+  .osuz-header-search { order: 2 !important; min-width: 220px !important; }
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions { order: 3 !important; margin-left: auto !important; }
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: none !important; }
+}
+@media (max-width: 767px) {
+  .osuz-desktop-catalog-button { display: none !important; }
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
+}
+
+/* ===== osuz-v12-mobile-header-laptop-style ===== */
+/* V12 — mobile header uses the same visual language/search as desktop.
+   No top Catalog button on phones; Catalog remains in the bottom navigation. */
+@media (max-width: 767px) {
+  .site-header-top,
+  .auth-site-header {
+    background: #067890 !important;
+    border-bottom: 1px solid rgba(255,255,255,.28) !important;
+  }
+
+  /* Absolutely remove the desktop Catalog trigger from the mobile header. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle],
+  .site-header-top [data-osuz-catalog-toggle],
+  .auth-site-header [data-osuz-catalog-toggle] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* One clean controls row + one desktop-style search row. */
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) auto !important;
+    grid-template-rows: 48px 46px !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 7px !important;
+    min-height: 108px !important;
+    height: 108px !important;
+    padding: 5px 12px 7px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    height: 28px !important;
+    width: auto !important;
+    max-width: 36px !important;
+    object-fit: contain !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 17px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .site-header-top .header-actions {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    align-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Account / orders / cart already live in the fixed bottom navigation. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .osuz-mobile-header-actions > [data-customer-account-link],
+  .site-header-top .osuz-mobile-header-actions > [data-open-cart],
+  .site-header-top .header-actions > a,
+  .site-header-top .header-actions > [data-customer-account-link],
+  .site-header-top .header-actions > [data-open-cart],
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > [data-open-cart] {
+    display: none !important;
+  }
+
+  /* Language, theme and hamburger are the only top-right mobile controls. */
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle,
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn {
+    display: inline-flex !important;
+    visibility: visible !important;
+  }
+
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn {
+    min-width: 36px !important;
+    width: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 8px !important;
+    border-radius: 9px !important;
+    gap: 4px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i,
+  #mobileMenuBtn > svg,
+  #mobileMenuBtn > i {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    min-width: 48px !important;
+    width: 48px !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-lang-label,
+  .osuz-mobile-header-actions .osuz-lang-code {
+    font-size: 10px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Reuse the actual desktop search component instead of a second mobile-only imitation. */
+  .header-search-wrap,
+  .osuz-header-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    order: initial !important;
+  }
+
+  form.osuz-header-search {
+    display: flex !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+
+  .header-search-wrap .header-search-bar {
+    display: flex !important;
+    width: 100% !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+
+  .header-search-wrap input,
+  .osuz-header-search input {
+    min-width: 0 !important;
+    font-size: 14px !important;
+    padding-left: 9px !important;
+    padding-right: 8px !important;
+  }
+
+  .header-search-wrap button,
+  .osuz-header-search button {
+    height: 44px !important;
+    padding: 0 15px !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  .header-search-wrap .header-search-bar > svg,
+  .osuz-header-search > svg,
+  .osuz-header-search > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin-left: 12px !important;
+  }
+
+  /* The old extra mobile search strip must never be visible. */
+  .mobile-top-search-wrap,
+  .mobile-top-search-shell,
+  #mobileTopSearchForm {
+    display: none !important;
+  }
+
+  .site-header-nav { display: none !important; }
+  .osuz-catalog-panel { top: 108px !important; }
+
+  body { padding-bottom: 74px !important; }
+}
+
+@media (max-width: 360px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    column-gap: 6px !important;
+  }
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title { font-size: 15px !important; }
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn { padding-left: 6px !important; padding-right: 6px !important; }
+  .header-search-wrap button,
+  .osuz-header-search button { padding-left: 12px !important; padding-right: 12px !important; }
+}
+
+/* ===== osuz-v13-mobile-header-unified ===== */
+/* V13 — one mobile header everywhere: laptop layout compressed for phones.
+   Catalog lives in the HEADER, not in the bottom navigation. */
+.osuz-v13-category-mobile-search { display: none; }
+
+@media (max-width: 767px) {
+  :root { --osuz-mobile-header-h: 108px; --osuz-mobile-bottom-h: 66px; }
+
+  .site-header-top,
+  .auth-site-header {
+    background: #067890 !important;
+    background-color: #067890 !important;
+    border-bottom: 1px solid rgba(255,255,255,.28) !important;
+  }
+
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(0,1fr) !important;
+    grid-template-rows: 46px 46px !important;
+    align-items: center !important;
+    column-gap: 7px !important;
+    row-gap: 7px !important;
+    width: 100% !important;
+    min-height: var(--osuz-mobile-header-h) !important;
+    height: var(--osuz-mobile-header-h) !important;
+    padding: 5px 11px 7px !important;
+    margin: 0 auto !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-self: start !important;
+    align-self: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    width: auto !important;
+    height: 27px !important;
+    max-width: 34px !important;
+    object-fit: contain !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    letter-spacing: .02em !important;
+    white-space: nowrap !important;
+  }
+
+  /* Same Catalog trigger as laptop, now visible on mobile too. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle],
+  .site-header-top [data-osuz-catalog-toggle],
+  .auth-site-header [data-osuz-catalog-toggle] {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    align-items: center !important;
+    justify-content: center !important;
+    justify-self: start !important;
+    width: auto !important;
+    min-width: 76px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    border-radius: 10px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    gap: 5px !important;
+    overflow: visible !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    box-shadow: 0 4px 12px rgba(15,23,42,.16) !important;
+  }
+  .osuz-desktop-catalog-button svg,
+  .osuz-catalog-button[data-osuz-catalog-toggle] svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .site-header-top .header-actions {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    justify-self: end !important;
+    align-self: center !important;
+    gap: 2px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Profile / orders / cart stay only in the bottom bar on phones. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .osuz-mobile-header-actions > [data-customer-account-link],
+  .site-header-top .osuz-mobile-header-actions > [data-open-cart],
+  .site-header-top .header-actions > a,
+  .site-header-top .header-actions > [data-customer-account-link],
+  .site-header-top .header-actions > [data-open-cart],
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > [data-open-cart] {
+    display: none !important;
+  }
+
+  /* Language and theme are compact; hamburger remains on pages that actually have it. */
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle,
+  #mobileMenuBtn {
+    display: inline-flex !important;
+    visibility: visible !important;
+  }
+
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn {
+    min-width: 34px !important;
+    width: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 6px !important;
+    margin: 0 !important;
+    border-radius: 9px !important;
+    gap: 3px !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i,
+  #mobileMenuBtn > svg,
+  #mobileMenuBtn > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    width: 46px !important;
+    min-width: 46px !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label,
+  .osuz-mobile-header-actions .osuz-lang-code {
+    font-size: 9px !important;
+    font-weight: 900 !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label::before,
+  .osuz-mobile-header-actions .osuz-lang-flag-only::before {
+    width: 21px !important;
+    height: 14px !important;
+  }
+  .osuz-mobile-header-actions select {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+  }
+
+  /* One laptop-style search row. */
+  .header-search-wrap,
+  form.osuz-header-search,
+  .osuz-v13-category-mobile-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    margin: 0 !important;
+    order: initial !important;
+  }
+
+  .header-search-wrap { display: block !important; }
+  .header-search-wrap .header-search-bar,
+  form.osuz-header-search {
+    width: 100% !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+  form.osuz-header-search {
+    align-items: center !important;
+    background: #fff !important;
+    border: 1px solid rgba(15,23,42,.28) !important;
+  }
+  .header-search-wrap input,
+  form.osuz-header-search input {
+    min-width: 0 !important;
+    height: 100% !important;
+    flex: 1 1 auto !important;
+    font-size: 13px !important;
+    padding-left: 8px !important;
+    padding-right: 7px !important;
+  }
+  .header-search-wrap button,
+  form.osuz-header-search button {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+  }
+  .header-search-wrap .header-search-bar > svg,
+  form.osuz-header-search > svg,
+  form.osuz-header-search > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin-left: 11px !important;
+    flex: 0 0 auto !important;
+  }
+
+  /* Category page now uses the same search as the rest. */
+  .osuz-mobile-search-row,
+  .mobile-top-search-wrap,
+  .mobile-top-search-shell,
+  #mobileTopSearchForm { display: none !important; }
+
+  .site-header-nav { display: none !important; }
+  .osuz-catalog-panel {
+    top: var(--osuz-mobile-header-h) !important;
+    bottom: var(--osuz-mobile-bottom-h) !important;
+    max-height: none !important;
+  }
+
+  /* Bottom nav: Catalog removed; four equal destinations remain. */
+  .osuz-mobile-bottom-final {
+    height: var(--osuz-mobile-bottom-h) !important;
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  }
+  body { padding-bottom: calc(var(--osuz-mobile-bottom-h) + 4px) !important; }
+}
+
+@media (max-width: 360px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    grid-template-columns: auto auto minmax(0,1fr) !important;
+    column-gap: 5px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title { font-size: 14px !important; }
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle] {
+    min-width: 68px !important;
+    padding: 0 7px !important;
+    font-size: 10px !important;
+  }
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    width: 42px !important;
+    min-width: 42px !important;
+  }
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn { padding-left: 4px !important; padding-right: 4px !important; }
+}
+

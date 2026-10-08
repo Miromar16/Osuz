@@ -1,0 +1,3773 @@
+<!DOCTYPE html>
+
+<html data-osuz-build="2026-09-29-v51-17-09-fixes" lang="ru">
+<head>
+<script id="osuz-local-origin-normalizer">
+(() => {
+  try {
+    if (location.hostname === '127.0.0.1' || location.hostname === '0.0.0.0') {
+      const url = new URL(location.href);
+      url.hostname = 'localhost';
+      location.replace(url.href);
+    }
+  } catch (_) {}
+})();
+</script>
+<script id="osuz-pretheme">
+(function(){
+  try{
+    var theme=localStorage.getItem('osuzTheme')||'light';
+    document.documentElement.setAttribute('data-osuz-theme',theme);
+    if(theme==='dark') document.documentElement.classList.add('osuz-pre-dark');
+  }catch(e){}
+})();
+</script>
+<style id="osuz-pretheme-style">
+html{background:#f8fafc;color-scheme:light}html.osuz-pre-dark,html[data-osuz-theme="dark"]{background:#070b12;color-scheme:dark}
+html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b12!important}
+
+/* v5: stable flag + language code, native select is only the click target */
+.osuz-language-select-wrap{
+    position:relative!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-direction:row!important;
+    gap:6px!important;
+    min-width:70px!important;
+    overflow:visible!important;
+}
+.osuz-language-select-wrap .osuz-lang-code{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:18px!important;
+    font-size:10px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    color:#fff!important;
+    text-transform:uppercase!important;
+    pointer-events:none!important;
+}
+.osuz-language-select-wrap select{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    margin:0!important;
+    padding:0!important;
+    opacity:0!important;
+    cursor:pointer!important;
+    z-index:3!important;
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+}
+
+</style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Политика конфиденциальности — OSUZ</title>
+<meta content="index, follow" name="robots"/>
+<script id="osuz-routing-helpers">
+(() => {
+  'use strict';
+  const localHosts = new Set(['localhost', '127.0.0.1']);
+  const isLocal = localHosts.has(location.hostname);
+
+  function backendUrl(entity) {
+    const value = entity && typeof entity.url === 'string' ? entity.url.trim() : '';
+    if (!value || isLocal) return '';
+    try {
+      const parsed = new URL(value, location.origin);
+      if (parsed.origin !== location.origin && /^https?:\/\//i.test(value)) return value;
+      return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    } catch {
+      return value;
+    }
+  }
+
+  function entityId(entity) {
+    const value = entity && typeof entity === 'object'
+      ? (entity.id ?? entity.productId ?? entity.product_id ?? entity.categoryId ?? entity.category_id)
+      : entity;
+    const id = Number(value);
+    return Number.isFinite(id) && id > 0 ? id : 0;
+  }
+
+  function product(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/product.html?id=${encodeURIComponent(id)}` : '/category.html';
+  }
+
+  function category(entity) {
+    const direct = backendUrl(entity);
+    if (direct) return direct;
+    const id = entityId(entity);
+    return id ? `/category.html?id=${encodeURIComponent(id)}` : '/index.html#products';
+  }
+
+  function search(query) {
+    const q = String(query || '').trim();
+    return q ? `/category.html?q=${encodeURIComponent(q)}` : '/index.html#products';
+  }
+
+  function productIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/product\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return Number(pathId || params.get('id'));
+  }
+
+  function categoryIdFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const pathId = (location.pathname.match(/^\/catalog\/(?:.*-)?(\d+)\/?$/) || [])[1];
+    return pathId || params.get('id');
+  }
+
+  window.OSUZRoutes = Object.freeze({ product, category, search, productIdFromLocation, categoryIdFromLocation });
+})();
+</script>
+<link href="icon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#e0f7fa',
+                            100: '#b2ebf2',
+                            200: '#80deea',
+                            300: '#4dd0e1',
+                            400: '#26c6da',
+                            500: '#00bcd4',
+                            600: '#00acc1',
+                            700: '#0097a7',
+                            800: '#00838f',
+                            900: '#006064'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, system-ui, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .site-header-top { background: #067890; }
+        .site-header-nav {
+            background: #0b1421;
+            border-top: 1px solid rgba(255,255,255,.18);
+        }
+        .header-action {
+            min-height: 44px;
+            padding: 0 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+        .header-action:hover { background: rgba(255,255,255,.15); }
+        .nav-link { color: #cbd5e1; }
+        .nav-link:hover { color: #67e8f9; }
+        .surface {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 8px 28px rgba(15,23,42,.055);
+        }
+        .seller-group {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 22px;
+            overflow: hidden;
+        }
+        .cart-row {
+            display: grid;
+            grid-template-columns: 34px minmax(0,1fr) auto;
+            gap: 14px;
+            align-items: center;
+            padding: 18px 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .quantity-control {
+            display: inline-grid;
+            grid-template-columns: 38px 56px 38px;
+            height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .quantity-control button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            transition: .18s ease;
+        }
+        .quantity-control button:hover { background: #e0f7fa; color: #00838f; }
+        .quantity-control input {
+            min-width: 0;
+            border-inline: 1px solid #e2e8f0;
+            text-align: center;
+            outline: none;
+            font-size: 13px;
+            font-weight: 800;
+            background: transparent;
+        }
+        .cart-checkbox {
+            width: 19px;
+            height: 19px;
+            accent-color: #00bcd4;
+            cursor: pointer;
+        }
+        .danger-button {
+            color: #ef4444;
+            transition: .18s ease;
+        }
+        .danger-button:hover { color: #b91c1c; background: #fef2f2; }
+        .cart-loading {
+            pointer-events: none;
+            opacity: .58;
+        }
+        .summary-card {
+            position: sticky;
+            top: 150px;
+        }
+        .primary-button {
+            min-height: 48px;
+            border-radius: 13px;
+            background: #067890;
+            color: #07111d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 0 18px;
+            font-weight: 900;
+            transition: .2s ease;
+        }
+        .primary-button:hover:not(:disabled) {
+            background: #00acc1;
+            transform: translateY(-1px);
+        }
+        .primary-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .secondary-button {
+            min-height: 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+        .secondary-button:hover { border-color: #00bcd4; color: #00838f; }
+        .notice {
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            background: #fffbeb;
+            color: #92400e;
+            padding: 13px 14px;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+        .theme-icon-sun { display: none; }
+        body.dark-mode {
+            background: #070b12;
+            color: #f8fafc;
+        }
+        body.dark-mode .site-header-nav { background: #070d16; }
+        body.dark-mode .surface,
+        body.dark-mode .seller-group,
+        body.dark-mode .quantity-control,
+        body.dark-mode .secondary-button {
+            background: #0f1722;
+            border-color: #344256;
+        }
+        body.dark-mode .cart-row { border-color: #263241; }
+        body.dark-mode .quantity-control input { border-color: #344256; color: #f8fafc; }
+        body.dark-mode .quantity-control button { color: #cbd5e1; }
+        body.dark-mode .quantity-control button:hover { background: #123b46; color: #67e8f9; }
+        body.dark-mode .text-gray-900,
+        body.dark-mode .text-gray-800,
+        body.dark-mode .text-gray-700 { color: #f8fafc !important; }
+        body.dark-mode .text-gray-600,
+        body.dark-mode .text-gray-500,
+        body.dark-mode .text-gray-400 { color: #aeb9c7 !important; }
+        body.dark-mode .bg-gray-50,
+        body.dark-mode .bg-gray-100,
+        body.dark-mode .bg-white { background: #0f1722 !important; }
+        body.dark-mode .notice {
+            background: rgba(120,53,15,.22);
+            border-color: rgba(251,191,36,.35);
+            color: #fde68a;
+        }
+        body.dark-mode .danger-button:hover { background: rgba(127,29,29,.25); }
+        body.dark-mode .theme-icon-moon { display: none; }
+        body.dark-mode .theme-icon-sun { display: block; }
+        @media (max-width: 767px) {
+            .cart-row { grid-template-columns: 26px minmax(0,1fr); }
+            .cart-row-actions { grid-column: 2; justify-content: space-between; width: 100%; }
+            .summary-card { position: static; }
+        }
+    
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+    
+        .osuz-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(2, 8, 23, .58);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .2s ease, visibility .2s ease;
+        }
+
+        .osuz-modal-backdrop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .osuz-modal {
+            width: min(440px, 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 22px;
+            background: #fff;
+            box-shadow: 0 28px 90px rgba(15,23,42,.28);
+            padding: 22px;
+            transform: translateY(10px) scale(.98);
+            transition: transform .2s ease;
+        }
+
+        .osuz-modal-backdrop.visible .osuz-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .osuz-modal-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fef2f2;
+            color: #dc2626;
+            flex: 0 0 auto;
+        }
+
+        .osuz-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .osuz-modal-button {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 800;
+            transition: .18s ease;
+        }
+
+        .osuz-modal-button.cancel {
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+        }
+
+        .osuz-modal-button.cancel:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .osuz-modal-button.danger {
+            border: 1px solid #dc2626;
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .osuz-modal-button.danger:hover {
+            background: #b91c1c;
+            border-color: #b91c1c;
+        }
+
+        body.dark-mode .osuz-modal {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .osuz-modal-button.cancel {
+            background: #111c2a;
+            border-color: #344256;
+            color: #dbe5f1;
+        }
+
+        body.dark-mode .osuz-modal-button.cancel:hover {
+            background: #172536;
+        }
+
+        body.dark-mode .osuz-modal-icon {
+            background: rgba(127, 29, 29, .28);
+            color: #fca5a5;
+        }
+
+        .osuz-toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 210;
+            width: min(390px, calc(100vw - 32px));
+            border: 1px solid #b7e7ee;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 22px 60px rgba(15,23,42,.22);
+            padding: 15px 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: .22s ease;
+        }
+
+        .osuz-toast.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .osuz-toast.error {
+            border-color: #fecaca;
+        }
+
+        .osuz-toast.success {
+            border-color: #bbf7d0;
+        }
+
+        body.dark-mode .osuz-toast {
+            background: #0f1722;
+            border-color: #344256;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .osuz-toast.error {
+            border-color: rgba(248,113,113,.35);
+        }
+
+        body.dark-mode .osuz-toast.success {
+            border-color: rgba(74,222,128,.35);
+        }
+
+        @media (max-width: 600px) {
+            .osuz-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .osuz-modal-button {
+                width: 100%;
+            }
+        }
+
+    
+        /* 14.08 mobile navigation */
+        .osuz-mobile-bottom-nav { display: none; }
+        .osuz-mobile-cart-badge {
+            position: absolute;
+            top: 4px;
+            right: calc(50% - 25px);
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            padding: 0;
+            border-radius: 6px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            color: #fff;
+            border: 2px solid #fff;
+            font-size: 9px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        /* header cart indicator: compact corner badge */
+        .osuz-cart-link,
+        a[href="cart.html"] {
+            position: relative;
+        }
+        .osuz-cart-link [data-cart-count],
+        a[href="cart.html"] [data-cart-count],
+        #headerCartCount {
+            position: absolute !important;
+            top: 2px !important;
+            right: 1px !important;
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px !important;
+            padding: 0 !important;
+            border-radius: 6px !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1 !important;
+            font-size: 9px !important;
+            border: 2px solid rgba(255,255,255,.95) !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (max-width: 767px) {
+            body { padding-bottom: 72px !important; }
+
+            .osuz-mobile-bottom-nav {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 260;
+                height: 68px;
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0,1fr));
+                background: rgba(8, 15, 25, .97);
+                border-top: 1px solid rgba(148,163,184,.25);
+                box-shadow: 0 -10px 30px rgba(2,8,23,.22);
+                backdrop-filter: blur(14px);
+                padding: 5px max(6px, env(safe-area-inset-right)) max(5px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left));
+            }
+
+            .osuz-mobile-nav-item {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 3px;
+                min-width: 0;
+                border-radius: 12px;
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 10px;
+                font-weight: 700;
+                line-height: 1.05;
+                transition: .18s ease;
+            }
+
+            .osuz-mobile-nav-item svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .osuz-mobile-nav-item.active {
+                color: #67e8f9;
+                background: rgba(0,188,212,.13);
+            }
+
+            body.dark-mode .osuz-mobile-cart-badge {
+                border-color: #08101b !important;
+            }
+        }
+
+    </style>
+<style id="osuz-final-shared-css">
+:root{--osuz-header:#067890;--osuz-nav:#0b1725;--osuz-cyan:#00bcd4;--osuz-bg:#f8fafc;--osuz-dark:#070b12}
+html,body{min-height:100%}body{margin:0}
+.site-header-top,.auth-site-header{background:var(--osuz-header)!important;background-color:var(--osuz-header)!important;border-color:rgba(255,255,255,.28)!important}
+body.dark-mode .site-header-top,body.dark-mode .auth-site-header{background:var(--osuz-header)!important;background-color:var(--osuz-header)!important}
+.site-header-nav{background:var(--osuz-nav)!important;border-color:#263548!important}
+body.dark-mode .site-header-nav{background:#071321!important}
+.site-logo-icon,.auth-site-logo,.site-header-top img[alt="OSUZ"],.auth-site-header img[alt="OSUZ"]{-webkit-filter:brightness(0) invert(1) contrast(200%)!important;filter:brightness(0) invert(1) contrast(200%)!important;opacity:1!important;mix-blend-mode:normal!important;forced-color-adjust:none!important;image-rendering:auto!important}
+.site-logo-text,.auth-site-title{color:#fff!important}
+.site-header-top>.max-w-\[1400px\],.site-header-top>.max-w-\[1200px\],.auth-site-header>div{min-height:82px!important;height:auto!important}
+.header-actions,.auth-site-header .flex.items-center.gap-2,.auth-site-header .flex.items-center.gap-2.lg\:gap-3{align-items:center!important}
+.header-action,.auth-header-action{position:relative!important;display:inline-flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;min-width:54px!important;min-height:62px!important;height:62px!important;padding:7px 8px 6px!important;border-radius:10px!important;color:#fff!important;font-size:11px!important;font-weight:700!important;line-height:1!important;white-space:nowrap!important;transition:background-color .18s ease,transform .18s ease!important;-webkit-appearance:none!important;appearance:none!important}
+.header-action:hover,.auth-header-action:hover{background:rgba(255,255,255,.14)!important}
+.header-action>svg,.header-action>i,.auth-header-action>svg,.auth-header-action>i{width:20px!important;height:20px!important;flex:0 0 auto!important;transform:translateY(-2px)!important;margin:0!important}
+.header-action>span:not([data-cart-count]):not(.osuz-cart-count):not(.osuz-lang-label),.auth-header-action>span:not(.osuz-lang-label){display:block!important;line-height:1.05!important}
+.osuz-catalog-button{height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 16px;border-radius:12px;background:#0b1725;color:#fff;font-size:13px;font-weight:800;white-space:nowrap;border:1px solid rgba(255,255,255,.18);box-shadow:0 4px 14px rgba(2,8,23,.16);transition:.18s ease;flex:0 0 auto}
+.osuz-catalog-button:hover,.osuz-catalog-button[aria-expanded="true"]{background:#101f31;transform:translateY(-1px)}
+.osuz-catalog-button svg{width:18px;height:18px}
+.osuz-header-search{height:46px;min-width:260px;max-width:620px;flex:1 1 520px;display:flex;align-items:center;background:#fff;border:1px solid rgba(15,23,42,.28);border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(15,23,42,.10)}
+.osuz-header-search svg{width:19px;height:19px;color:#64748b;flex:0 0 auto;margin-left:14px}.osuz-header-search input{height:100%;min-width:0;flex:1;padding:0 12px;border:0;outline:0;color:#111827!important;background:#fff!important;caret-color:#067890;font-size:14px;-webkit-appearance:none;appearance:none}.osuz-header-search input::placeholder{color:#94a3b8!important;opacity:1}.osuz-header-search button{height:100%;padding:0 20px;border:0;background:#0b1725!important;color:#fff!important;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;-webkit-appearance:none;appearance:none}.osuz-header-search button:hover{background:#111f31!important}
+body.dark-mode .osuz-header-search{background:#0f1722!important;border-color:#475569!important}body.dark-mode .osuz-header-search input{background:#0f1722!important;color:#f8fafc!important}body.dark-mode .osuz-header-search button{background:#fff!important;color:#0f172a!important}
+.header-search-bar,.category-header-search{border-color:rgba(15,23,42,.28)!important;background:#fff!important;forced-color-adjust:none!important}.header-search-bar input,.category-header-search input{background:#fff!important;color:#111827!important;caret-color:#067890!important;-webkit-appearance:none!important;appearance:none!important}.header-search-bar input:focus,.category-header-search input:focus,.osuz-header-search input:focus{color:#111827!important;background:#fff!important}.header-search-bar input::placeholder,.category-header-search input::placeholder{color:#94a3b8!important;opacity:1!important}.header-search-bar label svg,.header-search-bar [data-lucide="camera"]{color:#00acc1!important;stroke:#00acc1!important}.header-search-bar button,#categoryHeaderSearchButton,#mobileCategorySearchButton{forced-color-adjust:none!important}
+body.dark-mode .header-search-bar,body.dark-mode .category-header-search{background:#0f1722!important;border-color:#475569!important}body.dark-mode .header-search-bar input,body.dark-mode .category-header-search input{background:#0f1722!important;color:#f8fafc!important}body.dark-mode .header-search-bar input:focus,body.dark-mode .category-header-search input:focus{color:#f8fafc!important;background:#0f1722!important}body.dark-mode .header-search-bar #heroSearchBtn,body.dark-mode #categoryHeaderSearchButton,body.dark-mode #mobileCategorySearchButton{background:#fff!important;color:#0f172a!important}
+.header-search-dropdown button:focus,.category-search-suggest button:focus,.header-search-dropdown [tabindex]:focus,.category-search-suggest [tabindex]:focus{color:#0f172a!important;background:#e0f7fa!important;outline:2px solid #00bcd4!important;outline-offset:-2px!important}body.dark-mode .header-search-dropdown button:focus,body.dark-mode .category-search-suggest button:focus{color:#f8fafc!important;background:#12303a!important}
+.osuz-lang-label{display:inline-flex!important;align-items:center;justify-content:center;gap:5px!important;font-size:10px!important;font-weight:900!important;line-height:1!important;min-height:18px}.osuz-lang-label::before,.osuz-menu-flag{content:"";display:inline-block;flex:0 0 auto;width:24px;height:16px;border-radius:3px;background-size:cover;background-position:center;background-repeat:no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.25)}.osuz-lang-label[data-lang="ru"]::before,.osuz-menu-flag[data-flag="ru"]{background-image:url('https://flagcdn.com/w40/ru.png')}.osuz-lang-label[data-lang="uz"]::before,.osuz-menu-flag[data-flag="uz"]{background-image:url('https://flagcdn.com/w40/uz.png')}.osuz-lang-label[data-lang="en"]::before,.osuz-menu-flag[data-flag="en"]{background-image:url('https://flagcdn.com/w40/us.png')}.osuz-lang-flag-only{font-size:0!important}.osuz-lang-flag-only::before{margin:0!important}#languageToggle,#categoryLanguageToggle,#languageButton,.osuz-language-select-wrap{flex-direction:row!important;gap:6px!important}
+.osuz-language-select-wrap select{font-size:10px!important;font-weight:900!important;line-height:1!important;text-align:center!important;padding:0!important;border:0!important;background:transparent!important;color:#fff!important;outline:0!important;cursor:pointer!important;-webkit-appearance:none!important;appearance:none!important}.osuz-language-select-wrap option{color:#111827!important;background:#fff!important}
+.osuz-cart-link,[data-open-cart],a[href="cart.html"]{position:relative}.osuz-cart-link [data-cart-count]:not(.hidden),[data-open-cart] [data-cart-count]:not(.hidden),#headerCartCount:not(.hidden),.osuz-cart-count:not(.hidden){display:inline-flex!important;position:absolute!important;top:7px!important;left:50%!important;right:auto!important;margin-left:5px!important;min-width:18px!important;height:18px!important;padding:0 4px!important;border-radius:999px!important;background:#0b1725!important;color:#fff!important;font-size:9px!important;font-weight:900!important;align-items:center!important;justify-content:center!important;box-shadow:0 0 0 2px var(--osuz-header)!important;z-index:4!important;line-height:1!important}
+.osuz-catalog-panel{position:fixed;z-index:250;left:50%;width:min(1040px,calc(100vw - 28px));max-height:480px;transform:translateX(-50%);display:none;grid-template-columns:320px 1fr;background:#fff;border:1px solid #dbe4ee;border-radius:0 0 18px 18px;box-shadow:0 28px 80px rgba(15,23,42,.28);overflow:hidden}.osuz-catalog-panel.open{display:grid}.osuz-catalog-left{overflow:auto;max-height:480px;padding:10px;border-right:1px solid #e2e8f0}.osuz-catalog-right{overflow:auto;max-height:480px;padding:22px}.osuz-catalog-cat{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:10px;color:#334155;font-size:13px;font-weight:750;text-align:left}.osuz-catalog-cat:hover,.osuz-catalog-cat.active{background:#e0f7fa;color:#067890}.osuz-catalog-cat svg{width:15px;height:15px}.osuz-catalog-title{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin:0 0 12px}.osuz-catalog-subs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}.osuz-catalog-sub{display:block;padding:10px 12px;border-radius:10px;color:#334155;font-size:13px;font-weight:650}.osuz-catalog-sub:hover{background:#f1f5f9;color:#067890}body.dark-mode .osuz-catalog-panel{background:#0f1722;border-color:#344256}body.dark-mode .osuz-catalog-left{border-color:#344256}body.dark-mode .osuz-catalog-cat,body.dark-mode .osuz-catalog-sub{color:#d8e0ea}body.dark-mode .osuz-catalog-cat:hover,body.dark-mode .osuz-catalog-cat.active,body.dark-mode .osuz-catalog-sub:hover{background:#12303a;color:#67e8f9}body.dark-mode .osuz-catalog-title{color:#94a3b8}
+.osuz-contact-backdrop{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,8,23,.72)}.osuz-contact-backdrop.open{display:flex}.osuz-contact-modal{width:min(460px,100%);border-radius:22px;background:#0f172a;color:#fff;padding:24px;box-shadow:0 30px 100px rgba(0,0,0,.42)}.osuz-contact-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}.osuz-contact-title{font-size:22px;font-weight:900}.osuz-contact-close{width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;border-radius:11px;background:rgba(255,255,255,.08);color:#fff}.osuz-contact-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid rgba(255,255,255,.10);color:#cbd5e1}.osuz-contact-row:first-of-type{border-top:0}.osuz-contact-row svg{width:20px;height:20px;color:#94a3b8}
+.osuz-mobile-bottom-final{display:none}
+@media(max-width:767px){body{padding-bottom:74px!important}.site-header-top>.max-w-\[1400px\],.site-header-top>.max-w-\[1200px\],.auth-site-header>div{min-height:70px!important;flex-wrap:wrap!important;padding-bottom:8px!important}.header-action,.auth-header-action{min-width:44px!important;height:52px!important;min-height:52px!important;padding:5px 6px 4px!important;gap:4px!important;font-size:9px!important}.header-action>svg,.header-action>i,.auth-header-action>svg,.auth-header-action>i{width:18px!important;height:18px!important}.osuz-catalog-button{height:42px;padding:0 12px;font-size:12px}.osuz-header-search{order:20;flex:1 0 100%;max-width:none;min-width:100%;height:42px}.osuz-header-search button{padding:0 14px}.osuz-catalog-panel{grid-template-columns:1fr;top:70px!important;bottom:74px;max-height:none;width:100vw;border-radius:0}.osuz-catalog-left{max-height:45%;border-right:0;border-bottom:1px solid #e2e8f0}.osuz-catalog-right{max-height:none}.osuz-catalog-subs{grid-template-columns:1fr 1fr}.osuz-mobile-bottom-final{position:fixed;z-index:350;left:0;right:0;bottom:0;height:68px;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.98);border-top:1px solid #dbe4ee;box-shadow:0 -10px 30px rgba(15,23,42,.08);padding-bottom:max(4px,env(safe-area-inset-bottom))}.osuz-mobile-bottom-final a{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;color:#64748b;font-size:10px;font-weight:800}.osuz-mobile-bottom-final a svg{width:20px;height:20px}.osuz-mobile-bottom-final a.active{color:#067890}.osuz-mobile-bottom-final [data-mobile-cart-count]{position:absolute;top:5px;left:calc(50% + 7px);min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:#ef4444;color:#fff;font-size:9px;font-weight:900;display:none;align-items:center;justify-content:center}body.dark-mode .osuz-mobile-bottom-final{background:rgba(15,23,34,.98);border-color:#344256}.site-header-nav{display:none!important}}
+@media(min-width:768px) and (max-width:1100px){.header-action{min-width:48px!important;padding-left:5px!important;padding-right:5px!important}.osuz-catalog-button{padding:0 12px}.osuz-header-search{min-width:220px}}
+body.dark-mode input,body.dark-mode select,body.dark-mode textarea{color:#f8fafc!important}body.dark-mode input::placeholder,body.dark-mode textarea::placeholder{color:#94a3b8!important;opacity:1!important}body.dark-mode .field,body.dark-mode .auth-input,body.dark-mode .choice-button,body.dark-mode .secondary-button{color:#f8fafc!important;background:#0f1722!important;border-color:#475569!important}body.dark-mode label,body.dark-mode .text-gray-700,body.dark-mode .text-gray-800,body.dark-mode .text-gray-900{color:#f8fafc!important}.notice,.surface,.choice-button,.field,.auth-input{opacity:1!important}
+</style>
+<style id="osuz-checkout-contrast">body.dark-mode .field,body.dark-mode .choice-button,body.dark-mode .secondary-button,body.dark-mode .surface input,body.dark-mode .surface select,body.dark-mode .surface textarea{background:#0f1722!important;color:#f8fafc!important;border-color:#475569!important}body.dark-mode .surface label,body.dark-mode .surface p,body.dark-mode .surface span:not(.status-badge):not(.item-status){opacity:1}body.dark-mode option{background:#0f1722!important;color:#f8fafc!important}.field:focus,.auth-input:focus{color:#0f172a!important}body.dark-mode .field:focus,body.dark-mode .auth-input:focus{color:#f8fafc!important}</style>
+<style id="osuz-mobile-v6-css">
+/* V6: compact mobile header. Desktop layout is intentionally untouched. */
+@media (max-width: 767px) {
+  html, body { overflow-x: hidden; }
+  body { padding-bottom: calc(66px + env(safe-area-inset-bottom)) !important; }
+
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(0,1fr) auto !important;
+    grid-template-rows: 44px auto !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+    row-gap: 8px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 8px 12px 10px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    gap: 7px !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    height: 28px !important;
+    width: auto !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 17px !important;
+    line-height: 1 !important;
+    letter-spacing: .035em !important;
+  }
+
+  .osuz-catalog-button {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 11px !important;
+    gap: 6px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    box-shadow: none !important;
+  }
+  .osuz-catalog-button svg { width: 17px !important; height: 17px !important; }
+
+  .osuz-mobile-header-actions {
+    grid-column: 4 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+    gap: 3px !important;
+    min-width: 0 !important;
+  }
+
+  /* Account/cart/orders are already in the bottom bar, so don't duplicate them in the top bar. */
+  .osuz-mobile-header-actions [data-customer-account-link],
+  .osuz-mobile-header-actions a[href="orders.html"],
+  .osuz-mobile-header-actions a[data-open-cart],
+  .osuz-mobile-header-actions #mobileMenuBtn,
+  .auth-site-header .osuz-mobile-header-actions > a[href="index.html"] {
+    display: none !important;
+  }
+
+  .osuz-language-wrap { display: block !important; }
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    flex-direction: row !important;
+    transform: none !important;
+  }
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i {
+    width: 19px !important;
+    height: 19px !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-wrap .header-action,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    width: 56px !important;
+    min-width: 56px !important;
+    padding: 0 5px !important;
+    gap: 4px !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label::before,
+  .osuz-mobile-header-actions .osuz-lang-flag-only::before {
+    width: 23px !important;
+    height: 15px !important;
+    border-radius: 3px !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label,
+  .osuz-mobile-header-actions .osuz-lang-code {
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+  .osuz-mobile-header-actions .osuz-language-wrap .header-action > svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  /* Search is the only second row in the mobile header. */
+  .osuz-header-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border-radius: 11px !important;
+    box-shadow: none !important;
+  }
+  .osuz-header-search svg { width: 18px !important; height: 18px !important; margin-left: 12px !important; }
+  .osuz-header-search input { font-size: 14px !important; padding: 0 10px !important; }
+  .osuz-header-search button { height: 44px !important; padding: 0 16px !important; font-size: 14px !important; }
+
+  .mobile-top-search-wrap,
+  .osuz-mobile-search-row {
+    display: block !important;
+    width: 100% !important;
+    background: #067890 !important;
+    padding: 0 12px 10px !important;
+    margin: 0 !important;
+  }
+  .mobile-top-search-shell,
+  .osuz-mobile-search-row > .relative > div:first-child {
+    height: 44px !important;
+    border-radius: 11px !important;
+    box-shadow: none !important;
+  }
+  .mobile-top-search-btn,
+  #mobileCategorySearchButton {
+    height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  .site-header-nav { display: none !important; }
+
+  /* Fullscreen catalog sits below the complete two-row mobile header. */
+  .osuz-catalog-panel {
+    top: 106px !important;
+    bottom: calc(62px + env(safe-area-inset-bottom)) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    max-height: none !important;
+    transform: none !important;
+    grid-template-columns: 1fr !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .osuz-catalog-left { max-height: 46% !important; }
+  .osuz-catalog-right { min-height: 0 !important; padding: 16px !important; }
+  .osuz-catalog-subs { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+
+  /* Cleaner bottom navigation, with safe-area support. */
+  .osuz-mobile-bottom-final {
+    height: calc(62px + env(safe-area-inset-bottom)) !important;
+    padding: 4px 4px env(safe-area-inset-bottom) !important;
+    background: rgba(255,255,255,.96) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    backdrop-filter: blur(16px) !important;
+    border-top: 1px solid #dbe4ee !important;
+    box-shadow: 0 -6px 22px rgba(15,23,42,.08) !important;
+  }
+  .osuz-mobile-bottom-final a {
+    gap: 2px !important;
+    min-height: 54px !important;
+    border-radius: 10px !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+    padding: 4px 1px !important;
+  }
+  .osuz-mobile-bottom-final a svg { width: 21px !important; height: 21px !important; }
+  .osuz-mobile-bottom-final a.active {
+    background: transparent !important;
+    color: #067890 !important;
+  }
+  .osuz-mobile-bottom-final a.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 24px;
+    height: 3px;
+    border-radius: 0 0 999px 999px;
+    background: #067890;
+    transform: translateX(-50%);
+  }
+  body.dark-mode .osuz-mobile-bottom-final {
+    background: rgba(15,23,34,.96) !important;
+    border-color: #344256 !important;
+  }
+}
+</style>
+<style id="osuz-mobile-v6-page-css">@media(max-width:767px){main.pt-36{padding-top:122px!important}}</style>
+<style id="osuz-mobile-v7-header-final">
+/* V7 FINAL MOBILE HEADER OVERRIDE — keep one compact header on every page. */
+@media (max-width: 767px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(86px, 1fr) !important;
+    grid-template-rows: 42px 44px !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+    row-gap: 8px !important;
+    width: 100% !important;
+    min-height: 102px !important;
+    height: 102px !important;
+    padding: 6px 12px 8px !important;
+    margin: 0 auto !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    height: 27px !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    letter-spacing: .03em !important;
+    white-space: nowrap !important;
+  }
+
+  .osuz-catalog-button {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: auto !important;
+    min-width: 78px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    gap: 5px !important;
+    font-size: 11px !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+  }
+  .osuz-catalog-button svg { width: 16px !important; height: 16px !important; }
+
+  .osuz-mobile-header-actions {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    justify-self: end !important;
+    gap: 4px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Bottom navigation is the ONLY mobile location for these actions. */
+  .osuz-mobile-header-actions > a,
+  .osuz-mobile-header-actions > button#mobileMenuBtn,
+  .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > a {
+    display: none !important;
+  }
+
+  /* Keep only language + theme in the top-right. */
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle {
+    display: inline-flex !important;
+  }
+
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action {
+    min-width: 38px !important;
+    width: 38px !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    font-size: 0 !important;
+    transform: none !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle {
+    position: relative !important;
+    width: 54px !important;
+    min-width: 54px !important;
+    padding: 0 5px !important;
+    gap: 4px !important;
+    font-size: 10px !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-select-wrap select {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    z-index: 5 !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-lang-code,
+  .osuz-mobile-header-actions .osuz-lang-label {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-flag-only::before,
+  .osuz-mobile-header-actions .osuz-lang-label::before {
+    width: 22px !important;
+    height: 14px !important;
+    border-radius: 3px !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  .osuz-header-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+  .osuz-header-search input {
+    min-width: 0 !important;
+    height: 44px !important;
+    font-size: 13px !important;
+    padding: 0 8px !important;
+  }
+  .osuz-header-search > svg,
+  .osuz-header-search > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin-left: 11px !important;
+    flex: 0 0 auto !important;
+  }
+  .osuz-header-search button {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 13px !important;
+    font-size: 13px !important;
+    border-radius: 0 9px 9px 0 !important;
+  }
+
+  .site-header-nav { display: none !important; }
+
+  /* The catalog starts immediately under the 102px mobile header. */
+  .osuz-catalog-panel {
+    top: 102px !important;
+  }
+
+  /* Content starts below header on fixed-header pages. */
+  header.fixed + main,
+  .site-header.fixed + main {
+    padding-top: 118px !important;
+  }
+
+  /* Auth header is in normal flow, so don't add a fake gap. */
+  .auth-site-header + main {
+    padding-top: 20px !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div { padding-left: 8px !important; padding-right: 8px !important; column-gap: 5px !important; }
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title { font-size: 14px !important; }
+  .osuz-catalog-button { min-width: 72px !important; padding: 0 8px !important; }
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle { width: 50px !important; min-width: 50px !important; }
+}
+</style>
+<style id="osuz-mobile-v8-header-final">
+/* V8 — mobile header: no top Catalog button and no duplicated account/order/cart actions. */
+@media (max-width: 767px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    grid-template-rows: 42px 44px !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 8px !important;
+    min-height: 102px !important;
+    height: 102px !important;
+    padding: 6px 12px 8px !important;
+  }
+
+  /* User requested the top Catalog button removed. Catalog remains in bottom navigation. */
+  .osuz-catalog-button,
+  [data-osuz-catalog-toggle] {
+    display: none !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start !important;
+    align-self: center !important;
+    display: inline-flex !important;
+  }
+
+  .osuz-mobile-header-actions {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    align-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 5px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* These actions already exist in the fixed bottom nav; never duplicate them in mobile header. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .osuz-mobile-header-actions > [data-customer-account-link],
+  .site-header-top .osuz-mobile-header-actions > [data-open-cart],
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > [data-open-cart],
+  .osuz-mobile-header-actions > #mobileMenuBtn {
+    display: none !important;
+  }
+
+  /* Only language and theme stay in the mobile header. */
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle {
+    display: inline-flex !important;
+  }
+
+  .osuz-header-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    margin: 0 !important;
+  }
+
+  .site-header-nav { display: none !important; }
+  .osuz-catalog-panel { top: 102px !important; }
+}
+
+@media (max-width: 350px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div { padding-left: 9px !important; padding-right: 9px !important; }
+}
+</style>
+<style id="osuz-v10-desktop-catalog-mobile-menu">
+/* V10: Catalog is a desktop header action; hamburger is mobile-only. */
+.osuz-desktop-catalog-button { display: inline-flex !important; }
+@media (min-width: 768px) {
+  .osuz-desktop-catalog-button { display: inline-flex !important; }
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: none !important; }
+}
+@media (max-width: 767px) {
+  .osuz-desktop-catalog-button { display: none !important; }
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
+}
+</style>
+<style id="osuz-v11-catalog-everywhere">
+/* V11: desktop Catalog button is present and visible on every page. */
+@media (min-width: 768px) {
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child { order: 0 !important; flex: 0 0 auto !important; }
+  .osuz-desktop-catalog-button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: 12px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+  }
+  .osuz-desktop-catalog-button:hover { background: #122338 !important; }
+  .osuz-desktop-catalog-button svg { width: 18px !important; height: 18px !important; }
+  .osuz-header-search { order: 2 !important; min-width: 220px !important; }
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions { order: 3 !important; margin-left: auto !important; }
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: none !important; }
+}
+@media (max-width: 767px) {
+  .osuz-desktop-catalog-button { display: none !important; }
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn { display: inline-flex !important; }
+}
+</style>
+<style id="osuz-v12-mobile-header-laptop-style">
+/* V12 — mobile header uses the same visual language/search as desktop.
+   No top Catalog button on phones; Catalog remains in the bottom navigation. */
+@media (max-width: 767px) {
+  .site-header-top,
+  .auth-site-header {
+    background: #067890 !important;
+    border-bottom: 1px solid rgba(255,255,255,.28) !important;
+  }
+
+  /* Absolutely remove the desktop Catalog trigger from the mobile header. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle],
+  .site-header-top [data-osuz-catalog-toggle],
+  .auth-site-header [data-osuz-catalog-toggle] {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* One clean controls row + one desktop-style search row. */
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) auto !important;
+    grid-template-rows: 48px 46px !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 7px !important;
+    min-height: 108px !important;
+    height: 108px !important;
+    padding: 5px 12px 7px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: center !important;
+    justify-self: start !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    height: 28px !important;
+    width: auto !important;
+    max-width: 36px !important;
+    object-fit: contain !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 17px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .site-header-top .header-actions {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    align-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 4px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Account / orders / cart already live in the fixed bottom navigation. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .osuz-mobile-header-actions > [data-customer-account-link],
+  .site-header-top .osuz-mobile-header-actions > [data-open-cart],
+  .site-header-top .header-actions > a,
+  .site-header-top .header-actions > [data-customer-account-link],
+  .site-header-top .header-actions > [data-open-cart],
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > [data-open-cart] {
+    display: none !important;
+  }
+
+  /* Language, theme and hamburger are the only top-right mobile controls. */
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle,
+  #mobileMenuBtn,
+  .osuz-mobile-header-actions > #mobileMenuBtn {
+    display: inline-flex !important;
+    visibility: visible !important;
+  }
+
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn {
+    min-width: 36px !important;
+    width: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 8px !important;
+    border-radius: 9px !important;
+    gap: 4px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i,
+  #mobileMenuBtn > svg,
+  #mobileMenuBtn > i {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    min-width: 48px !important;
+    width: 48px !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-lang-label,
+  .osuz-mobile-header-actions .osuz-lang-code {
+    font-size: 10px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Reuse the actual desktop search component instead of a second mobile-only imitation. */
+  .header-search-wrap,
+  .osuz-header-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    order: initial !important;
+  }
+
+  form.osuz-header-search {
+    display: flex !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+
+  .header-search-wrap .header-search-bar {
+    display: flex !important;
+    width: 100% !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+
+  .header-search-wrap input,
+  .osuz-header-search input {
+    min-width: 0 !important;
+    font-size: 14px !important;
+    padding-left: 9px !important;
+    padding-right: 8px !important;
+  }
+
+  .header-search-wrap button,
+  .osuz-header-search button {
+    height: 44px !important;
+    padding: 0 15px !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  .header-search-wrap .header-search-bar > svg,
+  .osuz-header-search > svg,
+  .osuz-header-search > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin-left: 12px !important;
+  }
+
+  /* The old extra mobile search strip must never be visible. */
+  .mobile-top-search-wrap,
+  .mobile-top-search-shell,
+  #mobileTopSearchForm {
+    display: none !important;
+  }
+
+  .site-header-nav { display: none !important; }
+  .osuz-catalog-panel { top: 108px !important; }
+
+  body { padding-bottom: 74px !important; }
+}
+
+@media (max-width: 360px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+    column-gap: 6px !important;
+  }
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title { font-size: 15px !important; }
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn { padding-left: 6px !important; padding-right: 6px !important; }
+  .header-search-wrap button,
+  .osuz-header-search button { padding-left: 12px !important; padding-right: 12px !important; }
+}
+</style>
+<style id="osuz-v13-mobile-header-unified">
+/* V13 — one mobile header everywhere: laptop layout compressed for phones.
+   Catalog lives in the HEADER, not in the bottom navigation. */
+.osuz-v13-category-mobile-search { display: none; }
+
+@media (max-width: 767px) {
+  :root { --osuz-mobile-header-h: 108px; --osuz-mobile-bottom-h: 66px; }
+
+  .site-header-top,
+  .auth-site-header {
+    background: #067890 !important;
+    background-color: #067890 !important;
+    border-bottom: 1px solid rgba(255,255,255,.28) !important;
+  }
+
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(0,1fr) !important;
+    grid-template-rows: 46px 46px !important;
+    align-items: center !important;
+    column-gap: 7px !important;
+    row-gap: 7px !important;
+    width: 100% !important;
+    min-height: var(--osuz-mobile-header-h) !important;
+    height: var(--osuz-mobile-header-h) !important;
+    padding: 5px 11px 7px !important;
+    margin: 0 auto !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-self: start !important;
+    align-self: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .site-header-top .site-logo-icon,
+  .auth-site-header .auth-site-logo,
+  .site-header-top img[alt="OSUZ"],
+  .auth-site-header img[alt="OSUZ"] {
+    width: auto !important;
+    height: 27px !important;
+    max-width: 34px !important;
+    object-fit: contain !important;
+  }
+
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    letter-spacing: .02em !important;
+    white-space: nowrap !important;
+  }
+
+  /* Same Catalog trigger as laptop, now visible on mobile too. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle],
+  .site-header-top [data-osuz-catalog-toggle],
+  .auth-site-header [data-osuz-catalog-toggle] {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    align-items: center !important;
+    justify-content: center !important;
+    justify-self: start !important;
+    width: auto !important;
+    min-width: 76px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    margin: 0 !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    border-radius: 10px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    gap: 5px !important;
+    overflow: visible !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    box-shadow: 0 4px 12px rgba(15,23,42,.16) !important;
+  }
+  .osuz-desktop-catalog-button svg,
+  .osuz-catalog-button[data-osuz-catalog-toggle] svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .site-header-top .header-actions {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    justify-self: end !important;
+    align-self: center !important;
+    gap: 2px !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Profile / orders / cart stay only in the bottom bar on phones. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .osuz-mobile-header-actions > [data-customer-account-link],
+  .site-header-top .osuz-mobile-header-actions > [data-open-cart],
+  .site-header-top .header-actions > a,
+  .site-header-top .header-actions > [data-customer-account-link],
+  .site-header-top .header-actions > [data-open-cart],
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > [data-customer-account-link],
+  .auth-site-header .osuz-mobile-header-actions > [data-open-cart] {
+    display: none !important;
+  }
+
+  /* Language and theme are compact; hamburger remains on pages that actually have it. */
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap,
+  .osuz-mobile-header-actions #languageToggle,
+  .osuz-mobile-header-actions #languageButton,
+  .osuz-mobile-header-actions #categoryLanguageToggle,
+  .osuz-mobile-header-actions #themeToggle,
+  .osuz-mobile-header-actions #categoryThemeToggle,
+  #mobileMenuBtn {
+    display: inline-flex !important;
+    visibility: visible !important;
+  }
+
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn {
+    min-width: 34px !important;
+    width: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    padding: 0 6px !important;
+    margin: 0 !important;
+    border-radius: 9px !important;
+    gap: 3px !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+
+  .osuz-mobile-header-actions .header-action > svg,
+  .osuz-mobile-header-actions .header-action > i,
+  .osuz-mobile-header-actions .auth-header-action > svg,
+  .osuz-mobile-header-actions .auth-header-action > i,
+  #mobileMenuBtn > svg,
+  #mobileMenuBtn > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin: 0 !important;
+  }
+
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    width: 46px !important;
+    min-width: 46px !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label,
+  .osuz-mobile-header-actions .osuz-lang-code {
+    font-size: 9px !important;
+    font-weight: 900 !important;
+  }
+  .osuz-mobile-header-actions .osuz-lang-label::before,
+  .osuz-mobile-header-actions .osuz-lang-flag-only::before {
+    width: 21px !important;
+    height: 14px !important;
+  }
+  .osuz-mobile-header-actions select {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+  }
+
+  /* One laptop-style search row. */
+  .header-search-wrap,
+  form.osuz-header-search,
+  .osuz-v13-category-mobile-search {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 44px !important;
+    margin: 0 !important;
+    order: initial !important;
+  }
+
+  .header-search-wrap { display: block !important; }
+  .header-search-wrap .header-search-bar,
+  form.osuz-header-search {
+    width: 100% !important;
+    height: 44px !important;
+    border-radius: 11px !important;
+    overflow: hidden !important;
+  }
+  form.osuz-header-search {
+    align-items: center !important;
+    background: #fff !important;
+    border: 1px solid rgba(15,23,42,.28) !important;
+  }
+  .header-search-wrap input,
+  form.osuz-header-search input {
+    min-width: 0 !important;
+    height: 100% !important;
+    flex: 1 1 auto !important;
+    font-size: 13px !important;
+    padding-left: 8px !important;
+    padding-right: 7px !important;
+  }
+  .header-search-wrap button,
+  form.osuz-header-search button {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+  }
+  .header-search-wrap .header-search-bar > svg,
+  form.osuz-header-search > svg,
+  form.osuz-header-search > i {
+    width: 17px !important;
+    height: 17px !important;
+    margin-left: 11px !important;
+    flex: 0 0 auto !important;
+  }
+
+  /* Category page now uses the same search as the rest. */
+  .osuz-mobile-search-row,
+  .mobile-top-search-wrap,
+  .mobile-top-search-shell,
+  #mobileTopSearchForm { display: none !important; }
+
+  .site-header-nav { display: none !important; }
+  .osuz-catalog-panel {
+    top: var(--osuz-mobile-header-h) !important;
+    bottom: var(--osuz-mobile-bottom-h) !important;
+    max-height: none !important;
+  }
+
+  /* Bottom nav: Catalog removed; four equal destinations remain. */
+  .osuz-mobile-bottom-final {
+    height: var(--osuz-mobile-bottom-h) !important;
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  }
+  body { padding-bottom: calc(var(--osuz-mobile-bottom-h) + 4px) !important; }
+}
+
+@media (max-width: 360px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > div {
+    grid-template-columns: auto auto minmax(0,1fr) !important;
+    column-gap: 5px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .site-header-top .site-logo-text,
+  .site-header-top > div > a:first-child span,
+  .auth-site-header .auth-site-title { font-size: 14px !important; }
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle] {
+    min-width: 68px !important;
+    padding: 0 7px !important;
+    font-size: 10px !important;
+  }
+  .osuz-mobile-header-actions .osuz-language-wrap,
+  .osuz-mobile-header-actions .osuz-language-select-wrap {
+    width: 42px !important;
+    min-width: 42px !important;
+  }
+  .osuz-mobile-header-actions .header-action,
+  .osuz-mobile-header-actions .auth-header-action,
+  #mobileMenuBtn { padding-left: 4px !important; padding-right: 4px !important; }
+}
+</style>
+<style id="osuz-v15-header-unified-final">
+/* V15 — one header layout for every page. This block intentionally comes last. */
+:root{--osuz-v15-header:#067890;--osuz-v15-nav:#0b1725}
+.site-header-top,.auth-site-header{background:var(--osuz-v15-header)!important;background-color:var(--osuz-v15-header)!important}
+.site-header-nav,.auth-site-subnav{background:var(--osuz-v15-nav)!important}
+
+/* Desktop: OSUZ -> Catalog -> Search -> actions, everywhere. */
+@media (min-width:768px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+    min-height:82px!important;
+    height:82px!important;
+  }
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{order:0!important;flex:0 0 auto!important;margin:0!important}
+
+  .osuz-desktop-catalog-button{
+    order:1!important;
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    flex:0 0 auto!important;
+    height:46px!important;
+    min-width:112px!important;
+    padding:0 16px!important;
+    border-radius:12px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    background:#0b1725!important;
+    color:#fff!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    font-size:13px!important;
+    font-weight:900!important;
+  }
+  .osuz-desktop-catalog-button svg{width:18px!important;height:18px!important}
+
+  .osuz-desktop-search-slot,
+  .site-header-top .osuz-header-search,
+  .auth-site-header .osuz-header-search,
+  .site-header-top .header-search-wrap{
+    order:2!important;
+    flex:1 1 620px!important;
+    width:auto!important;
+    max-width:620px!important;
+    min-width:220px!important;
+    margin:0!important;
+  }
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .header-actions,
+  .auth-site-header .osuz-mobile-header-actions{
+    order:3!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+  }
+
+  /* Category has a separate real desktop search; hide its mobile clone. */
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:none!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:flex!important}
+
+  /* Nice vertical account/order/cart actions on every desktop header. */
+  .header-actions>a[data-customer-account-link],
+  .header-actions>a[href="orders.html"],
+  .header-actions>a[href="cart.html"],
+  .osuz-mobile-header-actions>a[data-customer-account-link],
+  .osuz-mobile-header-actions>a[href="orders.html"],
+  .osuz-mobile-header-actions>a[href="cart.html"]{
+    display:inline-flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    min-width:58px!important;
+    height:62px!important;
+    min-height:62px!important;
+    padding:7px 8px 6px!important;
+    border-radius:11px!important;
+    color:#fff!important;
+    font-size:10px!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+  }
+  .header-actions>a svg,.osuz-mobile-header-actions>a svg{width:20px!important;height:20px!important;transform:translateY(-2px)!important}
+  .header-actions>a[href="cart.html"] [data-cart-count],
+  .osuz-mobile-header-actions>a[href="cart.html"] [data-cart-count]{top:5px!important;right:7px!important;left:auto!important;margin:0!important}
+
+  /* language/theme stay compact, never vertical */
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle,#themeToggle{
+    flex-direction:row!important;
+  }
+
+  #mobileMenuBtn{display:none!important}
+}
+
+/* Mobile: same visual logic as laptop, compact and consistent. */
+@media (max-width:767px){
+  html,body{overflow-x:hidden!important}
+  body{padding-bottom:68px!important}
+  .site-header-top,.auth-site-header{background:#067890!important;border-bottom:1px solid rgba(255,255,255,.24)!important}
+
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:grid!important;
+    grid-template-columns:auto auto minmax(0,1fr) auto!important;
+    grid-template-rows:50px 46px!important;
+    align-items:center!important;
+    column-gap:8px!important;
+    row-gap:7px!important;
+    width:100%!important;
+    min-height:110px!important;
+    height:110px!important;
+    padding:5px 10px 7px!important;
+    margin:0 auto!important;
+  }
+
+  body[data-osuz-page="index"] .site-header-top>.max-w-\[1400px\]{
+    grid-template-rows:50px!important;
+    min-height:56px!important;
+    height:56px!important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{
+    grid-column:1!important;grid-row:1!important;
+    display:inline-flex!important;align-items:center!important;gap:6px!important;
+    min-width:0!important;margin:0!important;justify-self:start!important
+  }
+  .site-header-top .site-logo-icon,.auth-site-header .site-logo-icon,.auth-site-logo{height:25px!important;width:auto!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:15px!important;letter-spacing:.02em!important;white-space:nowrap!important}
+
+  /* Catalog stays in the header on mobile, exactly after the logo. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle]{
+    grid-column:2!important;grid-row:1!important;
+    display:inline-flex!important;visibility:visible!important;opacity:1!important;
+    width:auto!important;min-width:76px!important;height:40px!important;
+    margin:0!important;padding:0 10px!important;border:0!important;border-radius:10px!important;
+    background:#0b1725!important;color:#fff!important;
+    align-items:center!important;justify-content:center!important;gap:6px!important;
+    font-size:11px!important;font-weight:900!important;white-space:nowrap!important;overflow:visible!important
+  }
+  .osuz-desktop-catalog-button svg{width:16px!important;height:16px!important}
+
+  /* Right side only language + theme; add real breathing room. */
+  .site-header-top .osuz-mobile-header-actions,
+  .site-header-top .header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .auth-site-header .header-actions{
+    grid-column:4!important;grid-row:1!important;
+    justify-self:end!important;align-self:center!important;
+    display:flex!important;align-items:center!important;justify-content:flex-end!important;
+    gap:10px!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important
+  }
+  .osuz-mobile-header-actions>a,
+  .header-actions>a,
+  .osuz-mobile-header-actions>[data-customer-account-link],
+  .osuz-mobile-header-actions>[data-open-cart],
+  .header-actions>[data-customer-account-link],
+  .header-actions>[data-open-cart],
+  #mobileMenuBtn{display:none!important}
+
+  .osuz-language-wrap,
+  .osuz-language-select-wrap{display:inline-flex!important;position:relative!important;flex:0 0 auto!important}
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle{
+    display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+    gap:6px!important;width:auto!important;min-width:58px!important;height:40px!important;min-height:40px!important;
+    padding:0 7px!important;margin:0!important;border-radius:10px!important;font-size:10px!important
+  }
+  .osuz-lang-label::before,.osuz-menu-flag{width:23px!important;height:15px!important}
+  .osuz-lang-code,.osuz-lang-label{font-size:10px!important;line-height:1!important}
+  #themeToggle{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;
+    padding:0!important;margin:0!important;border-radius:10px!important
+  }
+  #themeToggle svg{width:19px!important;height:19px!important;transform:none!important}
+
+  /* Every non-index page uses the same search as row two. */
+  body:not([data-osuz-page="index"]) .osuz-header-search{
+    grid-column:1/-1!important;grid-row:2!important;
+    display:flex!important;width:100%!important;max-width:none!important;min-width:0!important;height:44px!important;
+    margin:0!important;order:initial!important
+  }
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:flex!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:none!important}
+  .osuz-header-search input{font-size:13px!important;min-width:0!important}
+  .osuz-header-search button{height:100%!important;padding:0 14px!important;font-size:12px!important}
+
+  /* Index already has its own mobile search just under row one. */
+  body[data-osuz-page="index"] .header-search-wrap{display:none!important}
+  body[data-osuz-page="index"] .mobile-top-search-wrap{
+    display:block!important;background:#067890!important;padding:0 10px 8px!important;margin:0!important
+  }
+  body[data-osuz-page="index"] .mobile-top-search-shell{height:44px!important;border-radius:11px!important}
+  body[data-osuz-page="index"] .mobile-top-search-shell input{font-size:12px!important}
+  body[data-osuz-page="index"] .mobile-top-search-btn{padding:0 14px!important;font-size:12px!important}
+
+  .site-header-nav,.auth-site-subnav{display:none!important}
+
+  /* Full mobile mega menu: fixed between header and bottom nav, both panes scroll independently. */
+  #osuzCatalogPanel,.osuz-catalog-panel{
+    position:fixed!important;
+    left:0!important;right:0!important;
+    width:100vw!important;
+    transform:none!important;
+    bottom:calc(64px + env(safe-area-inset-bottom))!important;
+    max-height:none!important;
+    height:auto!important;
+    border-radius:0!important;
+    border-left:0!important;border-right:0!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(0,58%) minmax(0,42%)!important;
+    overflow:hidden!important;
+    box-shadow:0 18px 40px rgba(15,23,42,.20)!important;
+    overscroll-behavior:contain!important
+  }
+  #osuzCatalogPanel.open,.osuz-catalog-panel.open{display:grid!important}
+  .osuz-catalog-left{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:8px 10px 16px!important;
+    border-right:0!important;border-bottom:1px solid #dbe4ee!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-right{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:14px 12px 20px!important;
+    background:#f8fafc!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-cat{padding:12px 12px!important;font-size:13px!important}
+  .osuz-catalog-subs{grid-template-columns:1fr 1fr!important;gap:6px 8px!important}
+  .osuz-catalog-sub{padding:10px 8px!important;font-size:12px!important;line-height:1.25!important}
+  body.dark-mode .osuz-catalog-right{background:#0b1420!important}
+  body.osuz-catalog-mobile-open{overflow:hidden!important}
+
+  /* Four bottom actions only. */
+  .osuz-mobile-bottom-final{
+    display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    height:64px!important;padding-bottom:max(3px,env(safe-area-inset-bottom))!important
+  }
+}
+
+@media (max-width:360px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{column-gap:6px!important;padding-left:7px!important;padding-right:7px!important}
+  .osuz-desktop-catalog-button{min-width:70px!important;padding:0 8px!important;font-size:10px!important}
+  .osuz-language-wrap>.header-action,.osuz-language-select-wrap,#languageToggle,#languageButton,#categoryLanguageToggle{min-width:54px!important;padding:0 5px!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:14px!important}
+}
+</style>
+<style id="osuz-v16-new-fixes">
+/* V16 — правки из «Правки 09.07.26✳» */
+:root{--osuz-v16-header-h:124px;--osuz-bottom-nav-h:68px}
+
+/* Единый desktop header: логотип слева; каталог + поиск + действия сдвинуты вправо. */
+@media (min-width:768px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:flex!important;align-items:center!important;gap:12px!important;max-width:1400px!important;
+  }
+  .site-header-top .header-brand,
+  .site-header-top a[href="index.html"].flex-shrink-0:first-child,
+  .auth-site-header .header-brand{margin-right:auto!important;flex:0 0 auto!important}
+  .osuz-desktop-catalog-button{
+    order:20!important;display:inline-flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    width:70px!important;min-width:70px!important;height:58px!important;min-height:58px!important;padding:5px 7px!important;gap:4px!important;
+    border-radius:12px!important;line-height:1!important;font-size:11px!important;font-weight:800!important;
+  }
+  .osuz-desktop-catalog-button svg,.osuz-desktop-catalog-button i{width:20px!important;height:20px!important;margin:0!important}
+  .osuz-desktop-search-slot{order:21!important;flex:0 1 560px!important;width:min(560px,40vw)!important;max-width:560px!important;margin:0!important}
+  .header-actions,.osuz-mobile-header-actions{order:22!important;margin-left:4px!important}
+}
+@media (min-width:1200px){.osuz-desktop-search-slot{width:min(590px,42vw)!important;max-width:590px!important;flex-basis:590px!important}}
+
+/* Выпадающий каталог desktop: открывается JS только по клику; подкатегории одной вертикальной колонкой. */
+#osuzCatalogPanel.osuz-v16-catalog-panel{display:none!important;position:fixed!important;z-index:220!important;left:50%!important;transform:translateX(-50%)!important;width:min(1040px,calc(100vw - 40px))!important;max-height:min(620px,calc(100vh - var(--osuz-v16-header-h) - 24px))!important;background:#fff!important;border:1px solid #dbe4ee!important;border-radius:0 0 22px 22px!important;box-shadow:0 28px 65px rgba(15,23,42,.22)!important;overflow:hidden!important}
+#osuzCatalogPanel.osuz-v16-catalog-panel.open{display:block!important}
+.v16-desktop-catalog{display:grid;grid-template-columns:320px minmax(0,1fr);height:min(560px,calc(100vh - var(--osuz-v16-header-h) - 30px))}
+.v16-catalog-roots{overflow-y:auto;padding:12px;border-right:1px solid #e5e7eb;scrollbar-width:thin}
+.v16-catalog-root{width:100%;min-height:44px;padding:10px 12px;border:0;border-radius:10px;background:transparent;color:#27364c;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750;cursor:pointer}
+.v16-catalog-root:hover,.v16-catalog-root.active{background:#dff7fa;color:#067890}
+.v16-catalog-subwrap{min-width:0;overflow-y:auto;padding:22px 24px;scrollbar-width:thin}
+.v16-catalog-heading{font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:12px}
+.v16-catalog-subs{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:2px!important;grid-template-columns:none!important}
+.v16-catalog-sub{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:42px;padding:9px 10px;border-radius:9px;color:#26364d;font-size:14px;font-weight:650;text-decoration:none}
+.v16-catalog-sub:hover{background:#edf9fb;color:#067890}
+.v16-mobile-catalog{display:none}
+body.dark-mode #osuzCatalogPanel.osuz-v16-catalog-panel{background:#0f1722!important;border-color:#334155!important}
+body.dark-mode .v16-catalog-roots{border-color:#334155}
+body.dark-mode .v16-catalog-root,body.dark-mode .v16-catalog-sub{color:#e5edf7}
+body.dark-mode .v16-catalog-root:hover,body.dark-mode .v16-catalog-root.active,body.dark-mode .v16-catalog-sub:hover{background:#15323b!important;color:#fff!important}
+body.dark-mode .v16-catalog-heading{color:#9fb0c4}
+
+/* Явный контраст подсказок поиска в тёмной теме (Firefox / Opera GX / Chromium). */
+body.dark-mode .header-search-dropdown,
+body.dark-mode .category-search-suggest,
+html.osuz-pre-dark .header-search-dropdown,
+html.osuz-pre-dark .category-search-suggest{background:#0d1724!important;border-color:#334155!important;color:#f8fafc!important;color-scheme:dark!important}
+body.dark-mode .header-search-dropdown a:hover,
+body.dark-mode .header-search-dropdown button:hover,
+body.dark-mode .search-suggest-item:hover,
+body.dark-mode .category-search-suggest-item:hover,
+body.dark-mode .category-search-suggest-more:hover,
+body.dark-mode [class*="search-result"]:hover,
+html.osuz-pre-dark .header-search-dropdown a:hover,
+html.osuz-pre-dark .category-search-suggest-item:hover{
+  background:#1b3943!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;forced-color-adjust:none!important
+}
+body.dark-mode .header-search-dropdown a:hover *,body.dark-mode .header-search-dropdown button:hover *,body.dark-mode .category-search-suggest-item:hover *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+
+/* Категория не должна уезжать под фиксированный header. */
+html{scroll-padding-top:calc(var(--osuz-v16-header-h) + 18px)!important}
+body.osuz-v16-category-page>section:first-of-type{padding-top:calc(var(--osuz-v16-header-h) + 26px)!important}
+body.osuz-v16-category-page [class*="sticky"]{scroll-margin-top:calc(var(--osuz-v16-header-h) + 12px)}
+
+/* Карусель — зарезервированное пространство под стрелки, чтобы они не пересекались с контентом. */
+@media (min-width:1024px){
+  #heroCarousel .carousel-track>.min-w-full>.max-w-\[1400px\]{max-width:1300px!important;padding-left:84px!important;padding-right:84px!important}
+  #heroCarousel .hero-slide-image{max-width:530px!important;height:280px!important}
+  #heroCarousel .hero-controls-inner{max-width:1480px!important;padding:0 16px!important}
+  #heroCarousel .hero-side-btn{width:44px!important;height:106px!important;min-width:44px!important;z-index:8!important}
+}
+@media (min-width:1024px) and (max-width:1199px){
+  #heroCarousel .carousel-track>.min-w-full>.max-w-\[1400px\]{padding-left:68px!important;padding-right:68px!important;gap:38px!important}
+  #heroCarousel .hero-slide-image{max-width:450px!important;height:255px!important}
+}
+
+/* Карточка товара: на обычном desktop 100% — изображение, базовая информация и действия видны одновременно. */
+.osuz-product-action-card{display:flex;flex-direction:column;min-width:0}
+@media (min-width:1100px){
+  .osuz-product-hero{grid-template-columns:minmax(0,.98fr) minmax(0,.82fr) minmax(280px,.68fr)!important;gap:18px!important;align-items:stretch!important}
+  .osuz-product-media-card,.osuz-product-info-card,.osuz-product-action-card{height:clamp(418px,56vh,505px)!important;min-height:0!important;max-height:505px!important}
+  .osuz-product-media-card{overflow:hidden!important}
+  .osuz-product-media-card>div:first-child{min-height:0!important;flex:1 1 auto!important}
+  .osuz-product-media-card .main-image{height:100%!important;max-height:390px!important;object-fit:contain!important}
+  .osuz-product-info-card{padding:22px!important;overflow:auto!important;scrollbar-width:thin}
+  #productTitle{font-size:clamp(24px,2.15vw,34px)!important;line-height:1.08!important;margin-bottom:12px!important}
+  #productSpecification{margin-bottom:12px!important;line-height:1.55!important;max-height:150px!important;overflow:auto!important}
+  .osuz-product-action-card{padding:22px!important}
+  .osuz-product-action-card .product-price-card{margin-bottom:16px!important}
+  .osuz-product-action-card>.flex{margin-top:auto!important;display:flex!important;align-content:flex-end!important}
+}
+@media (min-width:768px) and (max-width:1099px){.osuz-product-hero{grid-template-columns:1fr 1fr!important}.osuz-product-action-card{grid-column:1/-1}}
+
+/* Сумма заказа всегда тёмная и читаемая во всех движках. */
+.order-total-card{background:#dff7fa!important;color:#0f172a!important;forced-color-adjust:none!important}
+.order-total-card .text-primary-700{color:#067890!important;-webkit-text-fill-color:#067890!important}
+.order-total-card .text-gray-900,.order-total-card .order-total-value{color:#0f172a!important;-webkit-text-fill-color:#0f172a!important;opacity:1!important}
+body.dark-mode .order-total-card{background:#cdeff4!important;color:#07111f!important}
+body.dark-mode .order-total-card .text-gray-900,body.dark-mode .order-total-card .order-total-value{color:#07111f!important;-webkit-text-fill-color:#07111f!important}
+
+/* Footer buyers */
+.osuz-buyers-footer button,.osuz-buyers-footer a{display:inline-block;line-height:1.45}
+
+/* Mobile: каталог живёт в tabbar и открывает OLX-подобный полноэкранный drill-down. */
+@media (max-width:767px){
+  :root{--osuz-bottom-nav-h:68px}
+  body{padding-bottom:calc(var(--osuz-bottom-nav-h) + env(safe-area-inset-bottom))!important}
+  .osuz-desktop-catalog-button{display:none!important}
+  .site-header-top,.auth-site-header{border-bottom:0!important;box-shadow:none!important}
+  .site-header-top::after,.auth-site-header::after,.site-header::after{display:none!important;content:none!important;border:0!important}
+  .site-header-nav,.auth-site-subnav{display:none!important;border:0!important;height:0!important;min-height:0!important;overflow:hidden!important}
+  .osuz-mobile-bottom-final{grid-template-columns:repeat(5,minmax(0,1fr))!important;height:var(--osuz-bottom-nav-h)!important}
+  .osuz-mobile-bottom-final a,.osuz-mobile-bottom-final button{appearance:none;border:0;background:transparent;position:relative;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;color:#64748b;font:inherit;font-size:9px;font-weight:800;padding:3px 2px;cursor:pointer}
+  .osuz-mobile-bottom-final a svg,.osuz-mobile-bottom-final button svg{width:20px!important;height:20px!important}
+  .osuz-mobile-bottom-final a.active,.osuz-mobile-bottom-final button.active{color:#067890!important}
+  .osuz-mobile-bottom-final a.active::before,.osuz-mobile-bottom-final button.active::before{content:"";position:absolute;top:0;left:28%;right:28%;height:2px;border-radius:0 0 3px 3px;background:#0abbd0}
+  body.dark-mode .osuz-mobile-bottom-final button{color:#94a3b8}
+
+  #osuzCatalogPanel.osuz-v16-catalog-panel{
+    left:0!important;right:0!important;transform:none!important;width:100vw!important;max-width:none!important;border-radius:0!important;border-left:0!important;border-right:0!important;
+    top:var(--osuz-v16-header-h)!important;bottom:calc(var(--osuz-bottom-nav-h) + env(safe-area-inset-bottom))!important;height:auto!important;max-height:none!important;z-index:330!important
+  }
+  #osuzCatalogPanel.osuz-v16-catalog-panel.open{display:block!important}
+  .v16-desktop-catalog{display:none!important}
+  .v16-mobile-catalog{display:flex!important;flex-direction:column;height:100%;min-height:0;background:#fff;color:#172033}
+  .v16-mobile-catalog-head{height:48px;min-height:48px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;padding:0 12px}
+  .v16-mobile-back{width:34px;height:34px;border:0;background:transparent;border-radius:8px;display:flex;align-items:center;justify-content:center;color:inherit}
+  .v16-mobile-back[hidden]{display:none!important}
+  .v16-mobile-title{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v16-mobile-list{overflow-y:auto;overscroll-behavior:contain;flex:1 1 auto;min-height:0;padding:4px 0 18px;scrollbar-width:thin}
+  .v16-mobile-row{width:100%;min-height:52px;border:0;border-bottom:1px solid #edf0f3;background:transparent;color:#172033;padding:0 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750}
+  .v16-mobile-row:active{background:#edfafd}
+  .v16-mobile-row-all{color:#067890;background:#f2fcfd}
+  body.dark-mode .v16-mobile-catalog{background:#0d1724;color:#edf5ff}
+  body.dark-mode .v16-mobile-catalog-head,body.dark-mode .v16-mobile-row{border-color:#2b3a4d}
+  body.dark-mode .v16-mobile-row{color:#edf5ff}
+  body.dark-mode .v16-mobile-row:active,body.dark-mode .v16-mobile-row-all{background:#15323b;color:#fff}
+}
+</style>
+<style id="osuz-v17-catalog-click-fix">
+/* V17: catalog opens immediately on click, independently of API latency. */
+#osuzCatalogPanel.osuz-v17-catalog-panel{display:none!important;position:fixed!important;z-index:460!important;left:50%!important;transform:translateX(-50%)!important;width:min(1040px,calc(100vw - 40px))!important;background:#fff!important;border:1px solid #dbe4ee!important;border-radius:0 0 22px 22px!important;box-shadow:0 28px 65px rgba(15,23,42,.24)!important;overflow:hidden!important}
+#osuzCatalogPanel.osuz-v17-catalog-panel.open{display:block!important}
+.v17-desktop{display:grid;grid-template-columns:320px minmax(0,1fr);height:min(560px,calc(100vh - var(--osuz-v17-top,124px) - 24px));min-height:260px}
+.v17-roots{overflow-y:auto;padding:12px;border-right:1px solid #e5e7eb}
+.v17-root{width:100%;min-height:44px;padding:10px 12px;border:0;border-radius:10px;background:transparent;color:#27364c;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750;cursor:pointer}
+.v17-root:hover,.v17-root.active{background:#dff7fa;color:#067890}
+.v17-right{overflow-y:auto;padding:22px 24px;min-width:0}
+.v17-heading{font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin:0 0 12px}
+.v17-subs{display:flex;flex-direction:column;align-items:stretch;gap:2px}
+.v17-sub{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:42px;padding:9px 10px;border-radius:9px;color:#26364d;font-size:14px;font-weight:650;text-decoration:none}
+.v17-sub:hover{background:#edf9fb;color:#067890}
+.v17-loading,.v17-error{padding:24px;color:#64748b;font-size:14px}
+.v17-mobile{display:none}
+body.dark-mode #osuzCatalogPanel.osuz-v17-catalog-panel{background:#0f1722!important;border-color:#334155!important}
+body.dark-mode .v17-roots{border-color:#334155}
+body.dark-mode .v17-root,body.dark-mode .v17-sub{color:#e5edf7}
+body.dark-mode .v17-root:hover,body.dark-mode .v17-root.active,body.dark-mode .v17-sub:hover{background:#15323b;color:#fff}
+body.dark-mode .v17-heading{color:#94a3b8}
+@media(max-width:767px){
+ #osuzCatalogPanel.osuz-v17-catalog-panel{left:0!important;right:0!important;transform:none!important;width:100vw!important;max-width:none!important;top:var(--osuz-v17-top,104px)!important;bottom:calc(68px + env(safe-area-inset-bottom))!important;height:auto!important;border-radius:0!important;border-left:0!important;border-right:0!important;z-index:460!important}
+ .v17-desktop{display:none!important}.v17-mobile{display:flex!important;flex-direction:column;height:100%;min-height:0;background:#fff;color:#172033}
+ .v17-mobile-head{height:48px;min-height:48px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;padding:0 12px}
+ .v17-back{width:34px;height:34px;border:0;background:transparent;border-radius:8px;display:flex;align-items:center;justify-content:center;color:inherit}.v17-back[hidden]{display:none!important}
+ .v17-title{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v17-list{overflow-y:auto;overscroll-behavior:contain;flex:1 1 auto;min-height:0;padding:4px 0 18px}
+ .v17-row{width:100%;min-height:52px;border:0;border-bottom:1px solid #edf0f3;background:transparent;color:#172033;padding:0 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750;text-decoration:none}.v17-row:active{background:#edfafd}.v17-row-all{color:#067890;background:#f2fcfd}
+ body.dark-mode .v17-mobile{background:#0d1724;color:#edf5ff}body.dark-mode .v17-mobile-head,body.dark-mode .v17-row{border-color:#2b3a4d}body.dark-mode .v17-row{color:#edf5ff}body.dark-mode .v17-row:active,body.dark-mode .v17-row-all{background:#15323b;color:#fff}
+}
+</style>
+<style id="osuz-v34-mobile-header-catalog-fix">
+/* V34 mobile: one clean header/search + bottom catalog; legacy catalog overlays disabled. */
+#osuzCatalogPanel { display:none !important; }
+
+@media (max-width: 767px) {
+  :root { --osuz-v34-bottom: 68px; }
+  body { padding-bottom: calc(var(--osuz-v34-bottom) + env(safe-area-inset-bottom)) !important; }
+
+  /* Catalog is NOT a top-header control on phones. */
+  .site-header-top [data-osuz-catalog-toggle],
+  .auth-site-header [data-osuz-catalog-toggle],
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle] {
+    display:none !important;
+    visibility:hidden !important;
+  }
+
+  /* Compact first row for every non-index page. */
+  body:not([data-osuz-page="index"]) .site-header-top > .max-w-\[1400px\],
+  body:not([data-osuz-page="index"]) .site-header-top > .max-w-\[1200px\],
+  body:not([data-osuz-page="index"]) .auth-site-header > .auth-header-inner,
+  body:not([data-osuz-page="index"]) .auth-site-header > div {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-rows:50px 46px !important;
+    align-items:center !important;
+    column-gap:10px !important;
+    row-gap:8px !important;
+    width:100% !important;
+    min-height:111px !important;
+    height:auto !important;
+    padding:6px 10px 9px !important;
+    margin:0 auto !important;
+  }
+
+  body:not([data-osuz-page="index"]) .site-header-top .header-brand,
+  body:not([data-osuz-page="index"]) .site-header-top > div > a:first-child,
+  body:not([data-osuz-page="index"]) .auth-site-header .header-brand,
+  body:not([data-osuz-page="index"]) .auth-site-header > div > a:first-child {
+    grid-column:1 !important;
+    grid-row:1 !important;
+    justify-self:start !important;
+    margin:0 !important;
+  }
+
+  body:not([data-osuz-page="index"]) .site-header-top .header-actions,
+  body:not([data-osuz-page="index"]) .site-header-top .osuz-mobile-header-actions,
+  body:not([data-osuz-page="index"]) .auth-site-header .header-actions,
+  body:not([data-osuz-page="index"]) .auth-site-header .osuz-mobile-header-actions {
+    grid-column:2 !important;
+    grid-row:1 !important;
+    justify-self:end !important;
+    margin:0 !important;
+    gap:8px !important;
+  }
+
+  /* Keep only language + theme in the upper mobile row. */
+  .site-header-top .osuz-mobile-header-actions > a,
+  .site-header-top .header-actions > a,
+  .auth-site-header .osuz-mobile-header-actions > a,
+  .auth-site-header .header-actions > a,
+  #mobileMenuBtn {
+    display:none !important;
+  }
+
+  /* Search MUST be visible as row two on catalog/product/cart/orders/auth. */
+  body:not([data-osuz-page="index"]) .osuz-desktop-search-slot,
+  body[data-osuz-page="category"] .osuz-desktop-search-slot {
+    grid-column:1 / -1 !important;
+    grid-row:2 !important;
+    display:flex !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    margin:0 !important;
+    order:initial !important;
+  }
+  body:not([data-osuz-page="index"]) form.osuz-header-search,
+  body:not([data-osuz-page="index"]) .category-header-search {
+    display:flex !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    height:44px !important;
+    margin:0 !important;
+  }
+  body[data-osuz-page="category"] .category-header-search { flex:1 1 auto !important; }
+  body[data-osuz-page="category"] .category-search-suggest { top:48px !important; }
+
+  /* Index keeps its own dedicated second-row search and it must always show. */
+  body[data-osuz-page="index"] .site-header-top > .max-w-\[1400px\],
+  body[data-osuz-page="index"] .site-header-top > .max-w-\[1200px\] {
+    min-height:56px !important;
+    height:56px !important;
+    padding:5px 10px !important;
+  }
+  body[data-osuz-page="index"] .header-search-wrap { display:none !important; }
+  body[data-osuz-page="index"] .mobile-top-search-wrap {
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    background:#067890 !important;
+    padding:0 10px 9px !important;
+    margin:0 !important;
+  }
+  body[data-osuz-page="index"] .mobile-top-search-shell {
+    display:flex !important;
+    width:100% !important;
+    height:44px !important;
+    border-radius:11px !important;
+  }
+  body[data-osuz-page="index"] .mobile-top-search-shell input { display:block !important; min-width:0 !important; flex:1 1 auto !important; }
+
+  /* The new catalog sits BELOW the complete header, with breathing room. */
+  #osuzV34Catalog {
+    position:fixed !important;
+    z-index:420 !important;
+    left:8px !important;
+    right:8px !important;
+    top:var(--osuz-v34-catalog-top, 122px) !important;
+    bottom:calc(var(--osuz-v34-bottom) + env(safe-area-inset-bottom) + 8px) !important;
+    display:none !important;
+    flex-direction:column !important;
+    overflow:hidden !important;
+    background:#fff !important;
+    border:1px solid #dbe4ee !important;
+    border-radius:16px !important;
+    box-shadow:0 22px 70px rgba(15,23,42,.22) !important;
+  }
+  #osuzV34Catalog.open { display:flex !important; }
+  body.dark-mode #osuzV34Catalog { background:#0b111b !important; border-color:#334155 !important; color:#f8fafc !important; }
+  body.osuz-v34-catalog-open { overflow:hidden !important; }
+
+  .v34-cat-head {
+    flex:0 0 auto; display:grid; grid-template-columns:40px 1fr 40px; align-items:center;
+    min-height:58px; padding:8px 10px; border-bottom:1px solid #e2e8f0; background:inherit;
+  }
+  body.dark-mode .v34-cat-head { border-color:#263548; }
+  .v34-cat-title { min-width:0; text-align:center; font-size:18px; line-height:1.2; font-weight:900; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .v34-cat-back,.v34-cat-close { width:38px;height:38px;border:0;border-radius:10px;background:#f1f5f9;display:inline-flex;align-items:center;justify-content:center;color:#0f172a; }
+  .v34-cat-back[hidden] { visibility:hidden; display:inline-flex !important; }
+  body.dark-mode .v34-cat-back,body.dark-mode .v34-cat-close { background:#182333;color:#f8fafc; }
+  .v34-cat-back svg,.v34-cat-close svg { width:19px;height:19px; }
+
+  .v34-cat-list { flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 10px 16px; }
+  .v34-cat-row {
+    width:100%; min-height:52px; border:0; border-bottom:1px solid #edf2f7; background:transparent;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 8px;
+    color:#172033; font-size:14px; font-weight:800; text-align:left;
+  }
+  .v34-cat-row:last-child { border-bottom:0; }
+  .v34-cat-row:active { background:#e7f9fc; }
+  .v34-cat-row-all { color:#008aa3; background:#f4fbfc; border-radius:10px; margin-bottom:4px; border-bottom:0; }
+  .v34-cat-row svg { width:18px;height:18px;flex:0 0 auto;color:#64748b; }
+  body.dark-mode .v34-cat-row { color:#f8fafc;border-color:#243142; }
+  body.dark-mode .v34-cat-row-all { background:#102a31;color:#67e8f9; }
+  .v34-cat-state { padding:22px 12px;color:#64748b;font-size:14px;text-align:center; }
+
+  /* Bottom tab has five equal cells; catalog is opened here only. */
+  .osuz-mobile-bottom-final { grid-template-columns:repeat(5,minmax(0,1fr)) !important; }
+  .osuz-mobile-bottom-final button[data-v34-mobile-catalog] {
+    appearance:none;border:0;background:transparent;position:relative;display:flex !important;
+    flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;
+    color:#64748b;font:inherit;font-size:9px;font-weight:800;padding:3px 2px;cursor:pointer;
+  }
+  .osuz-mobile-bottom-final button[data-v34-mobile-catalog] svg { width:20px !important;height:20px !important; }
+  .osuz-mobile-bottom-final button[data-v34-mobile-catalog].active { color:#067890 !important; }
+  .osuz-mobile-bottom-final button[data-v34-mobile-catalog].active::before {
+    content:"";position:absolute;top:0;left:28%;right:28%;height:2px;border-radius:0 0 3px 3px;background:#0abbd0;
+  }
+}
+
+@media (min-width: 768px) {
+  #osuzV34Catalog {
+    position:fixed; z-index:420; left:50%; transform:translateX(-50%); width:min(1040px,calc(100vw - 48px));
+    top:var(--osuz-v34-catalog-top, 124px); display:none; grid-template-columns:320px 1fr;
+    max-height:min(620px,calc(100vh - var(--osuz-v34-catalog-top,124px) - 24px)); overflow:hidden;
+    background:#fff;border:1px solid #dbe4ee;border-radius:0 0 18px 18px;box-shadow:0 28px 80px rgba(15,23,42,.24);
+  }
+  #osuzV34Catalog.open { display:grid; }
+  .v34-desktop-roots { overflow:auto;padding:10px;border-right:1px solid #e2e8f0; }
+  .v34-desktop-subs { overflow:auto;padding:18px 20px; }
+  .v34-desktop-root,.v34-desktop-sub { width:100%;border:0;background:transparent;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border-radius:10px;color:#172033; }
+  .v34-desktop-root { min-height:44px;padding:8px 10px;font-weight:800; }
+  .v34-desktop-root.active,.v34-desktop-root:hover { background:#dff7fb;color:#007d94; }
+  .v34-desktop-sub { min-height:42px;padding:7px 9px;font-weight:700; }
+  .v34-desktop-sub:hover { background:#f3f8fb; }
+  .v34-desktop-root svg,.v34-desktop-sub svg { width:17px;height:17px; }
+  .v34-desktop-heading { margin:2px 0 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b; }
+  body.dark-mode #osuzV34Catalog { background:#0b111b;border-color:#334155;color:#f8fafc; }
+  body.dark-mode .v34-desktop-roots { border-color:#263548; }
+  body.dark-mode .v34-desktop-root,body.dark-mode .v34-desktop-sub { color:#f8fafc; }
+  body.dark-mode .v34-desktop-root.active,body.dark-mode .v34-desktop-root:hover { background:#12313a;color:#67e8f9; }
+  body.dark-mode .v34-desktop-sub:hover { background:#162130; }
+  .v34-mobile-only { display:none !important; }
+}
+</style>
+<style id="osuz-v35-mobile-search-catalog-clean">
+/* V35: final mobile search + clean one-column catalog. */
+@media (max-width:767px){
+  /* Never render desktop catalog panes on phones. */
+  #osuzV34Catalog .v34-desktop-roots,
+  #osuzV34Catalog .v34-desktop-subs{
+    display:none !important;
+    visibility:hidden !important;
+  }
+  #osuzV34Catalog .v34-mobile-only{display:flex !important;}
+  #osuzV34Catalog .v34-cat-list.v34-mobile-only{
+    display:block !important;
+    padding:10px 10px 18px !important;
+    background:#fff !important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-list.v34-mobile-only{background:#0b111b !important;}
+
+  #osuzV34Catalog{
+    left:10px !important;
+    right:10px !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+  }
+  #osuzV34Catalog .v34-cat-head{
+    min-height:54px !important;
+    padding:7px 9px !important;
+  }
+  #osuzV34Catalog .v34-cat-title{
+    font-size:17px !important;
+    font-weight:900 !important;
+  }
+  #osuzV34Catalog .v34-cat-row{
+    box-sizing:border-box !important;
+    width:100% !important;
+    min-height:50px !important;
+    margin:0 !important;
+    padding:0 12px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    border:0 !important;
+    border-bottom:1px solid #e8eef5 !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    color:#172033 !important;
+    font-size:13px !important;
+    line-height:1.25 !important;
+    font-weight:750 !important;
+    text-align:left !important;
+    white-space:normal !important;
+  }
+  #osuzV34Catalog .v34-cat-row > span{
+    display:block !important;
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    overflow-wrap:anywhere !important;
+  }
+  #osuzV34Catalog .v34-cat-row > svg{
+    display:block !important;
+    flex:0 0 18px !important;
+    width:18px !important;
+    height:18px !important;
+    color:#64748b !important;
+  }
+  #osuzV34Catalog .v34-cat-row-all{
+    min-height:46px !important;
+    margin:0 0 8px !important;
+    border:1px solid #bfeaf0 !important;
+    border-radius:11px !important;
+    background:#effbfd !important;
+    color:#007c91 !important;
+  }
+  #osuzV34Catalog .v34-cat-row:active{background:#eefafd !important;}
+  body.dark-mode #osuzV34Catalog .v34-cat-row{
+    background:#0b111b !important;
+    color:#f8fafc !important;
+    border-bottom-color:#263548 !important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-row-all{
+    background:#102a31 !important;
+    color:#67e8f9 !important;
+    border-color:#23505b !important;
+  }
+
+  /* Index mobile search: force the actual existing search row to be visible. */
+  body[data-osuz-page="index"] nav.site-header > .mobile-top-search-wrap{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    position:relative !important;
+    z-index:2 !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:53px !important;
+    padding:0 10px 9px !important;
+    margin:0 !important;
+    background:#067890 !important;
+    border:0 !important;
+  }
+  body[data-osuz-page="index"] nav.site-header > .mobile-top-search-wrap > .mobile-top-search-shell,
+  body[data-osuz-page="index"] #mobileTopSearchForm{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    width:100% !important;
+    height:44px !important;
+    min-height:44px !important;
+    margin:0 !important;
+    border-radius:11px !important;
+    overflow:hidden !important;
+    background:#fff !important;
+  }
+  body[data-osuz-page="index"] #mobileTopSearchInput{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    height:100% !important;
+    font-size:12px !important;
+    color:#0f172a !important;
+  }
+  body[data-osuz-page="index"] #mobileTopSearchButton{
+    display:inline-flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    height:100% !important;
+    padding:0 15px !important;
+    background:#111827 !important;
+    color:#fff !important;
+    font-size:12px !important;
+    font-weight:800 !important;
+  }
+}
+</style>
+<style id="osuz-v43-desktop-header-reference-layout">
+/* V43 desktop header: OSUZ -> Catalog -> Search -> Language -> Theme -> Profile -> Orders -> Cart. */
+@media (min-width: 768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+    min-height: 76px !important;
+    height: 76px !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header > div > a:first-child {
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .osuz-desktop-catalog-button {
+    order: 2 !important;
+    display: inline-flex !important;
+    flex: 0 0 66px !important;
+    width: 66px !important;
+    min-width: 66px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    border-radius: 11px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  .osuz-desktop-catalog-button:hover,
+  .osuz-desktop-catalog-button[aria-expanded="true"] {
+    background: #101f31 !important;
+    transform: none !important;
+  }
+  .osuz-desktop-catalog-button svg,
+  .osuz-desktop-catalog-button i {
+    width: 19px !important;
+    height: 19px !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot {
+    order: 3 !important;
+    flex: 1 1 560px !important;
+    width: auto !important;
+    max-width: 620px !important;
+    min-width: 270px !important;
+    margin: 0 !important;
+  }
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot {
+    display: block !important;
+  }
+  .site-header-top .header-search-wrap .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top .osuz-header-search,
+  .auth-site-header .osuz-header-search {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 46px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+  }
+
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .header-actions,
+  .auth-site-header .osuz-mobile-header-actions {
+    order: 4 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    gap: 4px !important;
+  }
+
+  .site-header-top .header-action,
+  .site-header-top .auth-header-action,
+  .auth-site-header .header-action,
+  .auth-site-header .auth-header-action {
+    min-width: 52px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 6px 7px 5px !important;
+    gap: 4px !important;
+    border-radius: 10px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+  .site-header-top .header-action > svg,
+  .site-header-top .header-action > i,
+  .site-header-top .auth-header-action > svg,
+  .site-header-top .auth-header-action > i,
+  .auth-site-header .header-action > svg,
+  .auth-site-header .header-action > i,
+  .auth-site-header .auth-header-action > svg,
+  .auth-site-header .auth-header-action > i {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  .site-header-top .osuz-language-wrap .header-action,
+  .site-header-top .osuz-language-select-wrap,
+  .auth-site-header .osuz-language-wrap .header-action,
+  .auth-site-header .osuz-language-select-wrap {
+    min-width: 62px !important;
+    width: auto !important;
+    flex-direction: row !important;
+    gap: 5px !important;
+  }
+  .site-header-top #themeToggle,
+  .auth-site-header #themeToggle {
+    min-width: 46px !important;
+    width: 46px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  [data-customer-account-link].header-action,
+  a[href="orders.html"].header-action,
+  a[data-open-cart].header-action,
+  a[href="cart.html"].header-action {
+    flex-direction: column !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1120px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div { gap: 8px !important; }
+
+  .osuz-desktop-catalog-button {
+    flex-basis: 60px !important;
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot {
+    min-width: 220px !important;
+  }
+
+  .site-header-top .header-action,
+  .site-header-top .auth-header-action,
+  .auth-site-header .header-action,
+  .auth-site-header .auth-header-action {
+    min-width: 46px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+}
+</style>
+<style id="osuz-v44-catalog-before-search-hardfix">
+/* V44: desktop order is physically/CSS locked as Brand -> Catalog -> Search -> Actions. */
+@media (min-width: 768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header > div > a:first-child {
+    order: 0 !important;
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .site-header-top > div > .osuz-desktop-catalog-button,
+  .auth-site-header > div > .osuz-desktop-catalog-button {
+    order: 10 !important;
+    flex: 0 0 66px !important;
+    width: 66px !important;
+    min-width: 66px !important;
+    margin: 0 !important;
+  }
+
+  .site-header-top > div > .osuz-desktop-search-slot,
+  .auth-site-header > div > .osuz-desktop-search-slot {
+    order: 20 !important;
+    flex: 1 1 560px !important;
+    min-width: 260px !important;
+    max-width: 620px !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  .site-header-top > div > .header-actions,
+  .site-header-top > div > .osuz-mobile-header-actions,
+  .auth-site-header > div > .header-actions,
+  .auth-site-header > div > .osuz-mobile-header-actions {
+    order: 30 !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+  }
+}
+</style>
+<style id="osuz-v45-header-order-hardlock">
+/* V45: final desktop header order lock. Inline JS below also writes !important styles. */
+@media (min-width:768px){
+  html body nav.site-header .site-header-top > div,
+  html body .auth-site-header > div{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+  }
+  html body nav.site-header .site-header-top > div > :first-child,
+  html body .auth-site-header > div > :first-child{
+    order:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    flex:0 0 auto!important;
+  }
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    order:1!important;
+    display:inline-flex!important;
+    margin:0!important;
+    flex:0 0 66px!important;
+    width:66px!important;
+    min-width:66px!important;
+  }
+  html body nav.site-header .site-header-top > div > .osuz-desktop-search-slot,
+  html body .auth-site-header > div > .osuz-desktop-search-slot{
+    order:2!important;
+    display:block!important;
+    margin:0!important;
+    flex:1 1 560px!important;
+    width:auto!important;
+    min-width:260px!important;
+    max-width:620px!important;
+  }
+  html body nav.site-header .site-header-top > div > .header-actions,
+  html body nav.site-header .site-header-top > div > .osuz-mobile-header-actions,
+  html body .auth-site-header > div > .header-actions,
+  html body .auth-site-header > div > .osuz-mobile-header-actions{
+    order:3!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+  }
+}
+</style>
+
+<style id="osuz-v46-header-group-shift-right">
+/* V46: move the Catalog + Search group to the right as one desktop block. */
+@media (min-width:768px){
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    margin-left:38px!important;
+    margin-right:0!important;
+  }
+}
+@media (min-width:768px) and (max-width:1100px){
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    margin-left:18px!important;
+  }
+}
+</style>
+
+<style id="osuz-v47-document-final">
+/* V47 — 13.09.26 document fixes */
+
+/* 1 + 6: one-row header only. The dark secondary navigation is removed everywhere. */
+.site-header-nav,
+.auth-site-subnav {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+:root { --osuz-v16-header-h: 82px !important; }
+html { scroll-padding-top: 98px !important; }
+
+@media (min-width: 768px) {
+  /* Header order and proportions from page 1:
+     logo -> Catalog -> search -> language -> theme -> profile -> orders -> cart */
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    min-height: 82px !important;
+    height: 82px !important;
+    align-items: center !important;
+  }
+  .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child { order: 1 !important; flex: 0 0 auto !important; }
+  .osuz-desktop-catalog-button {
+    order: 2 !important;
+    margin-left: 38px !important;
+    margin-right: 0 !important;
+    flex: 0 0 auto !important;
+  }
+  .osuz-desktop-search-slot {
+    order: 3 !important;
+    margin-left: 12px !important;
+    margin-right: 18px !important;
+    flex: 1 1 560px !important;
+    min-width: 280px !important;
+    max-width: 640px !important;
+  }
+  .header-actions,
+  .osuz-mobile-header-actions {
+    order: 4 !important;
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  body[data-osuz-page="index"] #solutions {
+    padding-top: 82px !important;
+  }
+  body[data-osuz-page="category"] > section:first-of-type {
+    padding-top: 98px !important;
+  }
+  body[data-osuz-page="product"] main {
+    padding-top: 104px !important;
+  }
+  body[data-osuz-page="cart"] main.pt-36,
+  body[data-osuz-page="orders"] main.pt-36 {
+    padding-top: 104px !important;
+  }
+}
+
+/* 10: stable magnifier styling in Chrome / Opera GX light theme.
+   Never allow the search icon itself to receive a white/native control background. */
+.header-search-bar > [data-lucide="search"],
+.category-header-search > [data-lucide="search"],
+.osuz-header-search > [data-lucide="search"] {
+  display: block !important;
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  padding: 0 !important;
+  color: #64748b !important;
+  stroke: #64748b !important;
+  fill: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  forced-color-adjust: none !important;
+}
+body.dark-mode .header-search-bar > [data-lucide="search"],
+body.dark-mode .category-header-search > [data-lucide="search"],
+body.dark-mode .osuz-header-search > [data-lucide="search"] {
+  color: #94a3b8 !important;
+  stroke: #94a3b8 !important;
+}
+/* One background layer for the whole search control prevents a light square
+   behind the magnifier in Chromium/Opera GX. */
+.header-search-bar input,
+.category-header-search input,
+.osuz-header-search input {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+body.dark-mode .header-search-bar input,
+body.dark-mode .category-header-search input,
+body.dark-mode .osuz-header-search input {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+</style>
+
+
+<style id="osuz-v51-17-09-fixes">
+/* V51 — правки из документа 17.09.26. Этот блок намеренно последний: он нормализует хедер и мобильную навигацию поверх старых версий. */
+.site-header-nav,
+.auth-site-subnav {
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+@media (min-width:768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display:flex !important;
+    min-height:76px !important;
+    height:76px !important;
+    gap:12px !important;
+    align-items:center !important;
+  }
+
+  /* Лого остаётся на месте; визуальный воздух создаём именно перед кнопкой Каталог. */
+  .site-header-top .osuz-desktop-catalog-button,
+  .auth-site-header .osuz-desktop-catalog-button {
+    margin-left:48px !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* На главной и внутренних страницах зона поиска теперь растягивается одинаково. */
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot,
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot,
+  .site-header-top .relative.osuz-desktop-search-slot {
+    flex:1 1 620px !important;
+    width:auto !important;
+    min-width:260px !important;
+    max-width:none !important;
+    margin-left:10px !important;
+    margin-right:16px !important;
+  }
+
+  .site-header-top .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top form.osuz-header-search,
+  .auth-site-header form.osuz-header-search {
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+}
+
+/* Камера — отдельный компактный слот внутри любого поискового поля. */
+.osuz-photo-search-control,
+#heroPhotoBtn.osuz-photo-search-control {
+  position:relative !important;
+  width:44px !important;
+  min-width:44px !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  cursor:pointer !important;
+  border:0 !important;
+  border-left:1px solid rgba(148,163,184,.25) !important;
+  background:transparent !important;
+  color:#0891b2 !important;
+  line-height:1 !important;
+}
+.osuz-photo-search-control:hover,
+#heroPhotoBtn.osuz-photo-search-control:hover { background:rgba(8,145,178,.08) !important; }
+.osuz-photo-search-control svg,
+.osuz-photo-search-control i,
+#heroPhotoBtn.osuz-photo-search-control svg,
+#heroPhotoBtn.osuz-photo-search-control i {
+  width:19px !important;
+  height:19px !important;
+  margin:0 !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.osuz-photo-search-control input[type="file"] { display:none !important; }
+body.dark-mode .osuz-photo-search-control,
+body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
+  color:#67e8f9 !important;
+  border-left-color:#334155 !important;
+}
+
+/* Мобильная нижняя навигация: корзина занимает строго свою колонку и не «съезжает». */
+@media (max-width:767px) {
+  .osuz-mobile-bottom-final {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+  .osuz-mobile-bottom-final > a,
+  .osuz-mobile-bottom-final > button,
+  .osuz-mobile-bottom-final [data-open-cart] {
+    width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding-left:2px !important;
+    padding-right:2px !important;
+    left:auto !important;
+    right:auto !important;
+    transform:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    justify-self:stretch !important;
+  }
+  .osuz-mobile-bottom-final [data-open-cart] > svg,
+  .osuz-mobile-bottom-final [data-open-cart] > i {
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  .osuz-mobile-bottom-final [data-mobile-cart-count],
+  .osuz-mobile-bottom-final [data-cart-count] {
+    position:absolute !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+  .mobile-top-search-shell,
+  .mobile-menu-search-shell,
+  .osuz-header-search {
+    overflow:hidden !important;
+  }
+  .mobile-top-search-shell .osuz-photo-search-control,
+  .mobile-menu-search-shell .osuz-photo-search-control {
+    width:40px !important;
+    min-width:40px !important;
+    flex-basis:40px !important;
+  }
+}
+</style>
+
+<style id="osuz-legal-page">
+.legal-doc{max-width:860px}
+.legal-doc h2{font-size:1.25rem;font-weight:800;color:#0f172a;margin:2rem 0 .75rem}
+.legal-doc h2:first-child{margin-top:0}
+.legal-doc p{color:#334155;line-height:1.7;margin:.5rem 0}
+.legal-doc ul{list-style:disc;padding-left:1.4rem;margin:.25rem 0 .75rem;color:#334155;line-height:1.7}
+.legal-doc li{margin:.2rem 0}
+.legal-doc strong{color:#0f172a}
+.legal-doc a{color:#0f766e;text-decoration:underline}
+body.dark-mode .legal-doc h2,body.dark-mode .legal-doc strong{color:#f8fafc}
+body.dark-mode .legal-doc p,body.dark-mode .legal-doc ul{color:#cbd5e1}
+body.dark-mode .legal-doc a{color:#5eead4}
+</style>
+</head>
+<body data-osuz-page="legal" data-osuz-v16-page="legal" data-legal-doc="privacy">
+<header class="fixed top-0 left-0 right-0 z-50">
+<div class="site-header-top">
+<div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[72px] flex items-center gap-3">
+<a class="flex items-center gap-2 flex-shrink-0" href="index.html">
+<img alt="OSUZ" class="site-logo-icon h-8 w-auto" onerror="this.style.display='none'" src="osuz logo.png" style="filter: brightness(0) invert(1);"/>
+<span class="text-xl font-black tracking-wide text-white">OSUZ</span>
+</a>
+<button aria-expanded="false" aria-label="Каталог" class="osuz-catalog-button osuz-desktop-catalog-button" data-osuz-catalog-toggle="" type="button">
+<i data-lucide="layout-grid"></i>
+<span data-osuz-catalog-text="">Каталог</span>
+</button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><label class="osuz-photo-search-control" data-osuz-photo-search="1" title="Поиск по фото" aria-label="Поиск по фото"><i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true"/></label><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
+<div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
+<label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span><span class="osuz-lang-code" data-osuz-select-code="">RU</span><select class="header-action bg-transparent outline-none cursor-pointer" id="languageSelect">
+<option value="ru">RU</option>
+<option value="uz">UZ</option>
+<option value="en">EN</option>
+</select></label>
+<button aria-label="Сменить тему" class="header-action !px-3" id="themeToggle">
+<i class="theme-icon-moon w-5 h-5" data-lucide="moon"></i>
+<i class="theme-icon-sun w-5 h-5" data-lucide="sun"></i>
+</button>
+<a class="header-action hidden sm:inline-flex max-w-[160px]" data-customer-account-link="" href="auth.html">
+<i class="w-4 h-4" data-lucide="user"></i>
+<span class="truncate" data-customer-account-text="">Войти</span>
+</a>
+<a class="header-action hidden md:inline-flex" href="orders.html">
+<i class="w-5 h-5" data-lucide="package-check"></i>
+<span id="headerOrdersText">Заказы</span>
+</a>
+<a aria-label="Корзина" class="header-action osuz-cart-link !px-3" data-open-cart="" href="cart.html">
+<i class="w-5 h-5" data-lucide="shopping-cart"></i>
+<span class="hidden sm:inline" id="headerCartText">Корзина</span>
+<span class="hidden min-w-5 h-5 px-1 rounded-full bg-gray-900 text-white text-[10px] font-black items-center justify-center" data-cart-count="" id="headerCartCount">0</span>
+</a>
+</div>
+</div>
+</div>
+<div class="site-header-nav">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
+<a class="nav-link text-sm font-semibold" href="index.html#partners">Партнёры</a>
+<a class="nav-link text-sm font-semibold" href="index.html#products">Товары</a>
+<a class="nav-link text-sm font-semibold" href="index.html#about">О нас</a>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-14">
+<div class="mb-7">
+<span class="text-xs font-black uppercase tracking-[.18em] text-primary-600" id="legalEyebrow">Документы</span>
+<h1 class="text-3xl lg:text-4xl font-black text-gray-900 mt-2" id="legalTitle">Политика конфиденциальности</h1>
+</div>
+<article class="surface rounded-3xl p-6 lg:p-10">
+<div class="legal-doc" id="legalBody"></div>
+</article>
+<a class="secondary-button mt-6" href="terms.html" id="legalOtherLink"><i class="w-4 h-4" data-lucide="file-text"></i><span></span></a>
+</main>
+<script src="legal.js"></script>
+<script>
+        (() => {
+            const labels = {
+                ru: { home: 'Главная', catalog: 'Каталог', cart: 'Корзина', profile: 'Профиль' },
+                uz: { home: 'Bosh sahifa', catalog: 'Katalog', cart: 'Savat', profile: 'Profil' },
+                en: { home: 'Home', catalog: 'Catalog', cart: 'Cart', profile: 'Profile' }
+            };
+
+            function currentMobileLang() {
+                const value = localStorage.getItem('osuzLang');
+                return ['ru','uz','en'].includes(value) ? value : 'ru';
+            }
+
+            function syncMobileNavLabels() {
+                const lang = currentMobileLang();
+                document.querySelectorAll('[data-mobile-nav-label]').forEach(node => {
+                    const key = node.dataset.mobileNavLabel;
+                    node.textContent = labels[lang]?.[key] || labels.ru[key];
+                });
+            }
+
+            function mobileNavActiveKey() {
+                const page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+                if (page.includes('cart')) return 'cart';
+                if (page.includes('auth') || page.includes('orders')) return 'profile';
+                if (page.includes('category') || page.includes('product')) return 'catalog';
+                if (page.includes('index') || page === '') {
+                    return location.hash === '#catalog' ? 'catalog' : 'home';
+                }
+                return 'home';
+            }
+
+            function syncMobileNavActive() {
+                const active = mobileNavActiveKey();
+                document.querySelectorAll('[data-mobile-nav]').forEach(link => {
+                    link.classList.toggle('active', link.dataset.mobileNav === active);
+                });
+            }
+
+            function localGuestCartCount() {
+                try {
+                    const cart = JSON.parse(localStorage.getItem('osuzGuestCart') || '{"sellers":[]}');
+                    return (cart.sellers || []).reduce((sum, seller) => {
+                        return sum + (seller.items || []).reduce((itemSum, item) => {
+                            return itemSum + Math.max(0, Number(item.quantity) || 0);
+                        }, 0);
+                    }, 0);
+                } catch {
+                    return 0;
+                }
+            }
+
+            function syncMobileCartBadge() {
+                let count = 0;
+                const source = document.querySelector('[data-cart-count]:not([data-mobile-cart-count]), #headerCartCount');
+
+                if (source && !source.classList.contains('hidden')) {
+                    count = Number(source.textContent) || 0;
+                } else if (!localStorage.getItem('osuzCustomerAccessToken')) {
+                    count = localGuestCartCount();
+                }
+
+                document.querySelectorAll('[data-mobile-cart-count]').forEach(badge => {
+                    const nextText = String(count);
+                    const nextDisplay = count > 0 ? 'flex' : 'none';
+
+                    // Важно: не мутируем DOM без необходимости.
+                    // Иначе MutationObserver ниже сам провоцирует новый callback
+                    // и страница уходит в бесконечный цикл обновлений.
+                    if (badge.textContent !== nextText) {
+                        badge.textContent = nextText;
+                    }
+                    if (badge.style.display !== nextDisplay) {
+                        badge.style.display = nextDisplay;
+                    }
+                });
+            }
+
+            syncMobileNavLabels();
+            syncMobileNavActive();
+            syncMobileCartBadge();
+
+            window.addEventListener('hashchange', syncMobileNavActive);
+            window.addEventListener('storage', event => {
+                if (event.key === 'osuzLang') syncMobileNavLabels();
+                if (['osuzGuestCart','osuzCustomerAccessToken'].includes(event.key)) syncMobileCartBadge();
+            });
+
+            document.addEventListener('click', event => {
+                if (event.target.closest('[data-language]')) {
+                    setTimeout(syncMobileNavLabels, 0);
+                }
+            }, true);
+
+            document.addEventListener('change', event => {
+                if (event.target.matches('#languageSelect, #languageButton, [data-language-select]')) {
+                    setTimeout(syncMobileNavLabels, 0);
+                }
+            }, true);
+
+            const observer = new MutationObserver(() => syncMobileCartBadge());
+            observer.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+
+            setTimeout(() => {
+                syncMobileNavLabels();
+                syncMobileCartBadge();
+                window.lucide?.createIcons?.();
+            }, 50);
+        })();
+    </script>
+<div aria-hidden="true" class="osuz-catalog-panel" id="osuzCatalogPanel">
+<div class="osuz-catalog-left" id="osuzCatalogLeft"><div class="px-3 py-4 text-sm text-gray-500">Загрузка категорий…</div></div>
+<div class="osuz-catalog-right"><div class="osuz-catalog-title" data-osuz-catalog-hint="">Подкатегории</div><div class="osuz-catalog-subs" id="osuzCatalogRight"><div class="text-sm text-gray-500">Наведите на категорию слева</div></div></div>
+</div>
+<div aria-hidden="true" class="osuz-contact-backdrop" id="osuzContactBackdrop">
+<div aria-labelledby="osuzContactTitle" aria-modal="true" class="osuz-contact-modal" role="dialog">
+<div class="osuz-contact-head"><h3 class="osuz-contact-title" id="osuzContactTitle">Связаться с нами</h3><button aria-label="Закрыть" class="osuz-contact-close" id="osuzContactClose" type="button"><i data-lucide="x"></i></button></div>
+<a class="osuz-contact-row" href="tel:+998918401405"><i data-lucide="phone"></i><span>+998-91-840-14-05</span></a>
+<a class="osuz-contact-row" href="mailto:info@osuz.uz"><i data-lucide="mail"></i><span>info@osuz.uz</span></a>
+<a class="osuz-contact-row" href="https://maps.google.com/?q=Tashkent,Uzbekistan" rel="noopener" target="_blank"><i data-lucide="map-pin"></i><span data-osuz-contact-address="">Ташкент, Узбекистан</span></a>
+</div>
+</div>
+<nav aria-label="Мобильная навигация" class="osuz-mobile-bottom-final">
+<a data-mobile-final="home" href="index.html"><i data-lucide="house"></i><span data-mobile-final-label="home">Главная</span></a>
+<a data-mobile-final="cart" href="cart.html"><i data-lucide="shopping-cart"></i><span data-mobile-final-label="cart">Корзина</span><span data-mobile-cart-count="">0</span></a>
+<a data-mobile-final="orders" href="orders.html"><i data-lucide="package-check"></i><span data-mobile-final-label="orders">Заказы</span></a>
+<a data-mobile-final="profile" href="auth.html"><i data-lucide="circle-user-round"></i><span data-mobile-final-label="profile">Профиль</span></a>
+</nav>
+<script id="osuz-final-shared-js">
+(function(){
+ 'use strict';
+ const FLAGS={ru:'ru',uz:'uz',en:'en'};
+ const TEXT={
+  ru:{catalog:'Каталог',search:'Поиск товаров...',find:'Найти',hint:'Подкатегории',hover:'Наведите на категорию слева',contact:'Связаться с нами',address:'Ташкент, Узбекистан',home:'Главная',cart:'Корзина',orders:'Заказы',profile:'Профиль'},
+  uz:{catalog:'Katalog',search:'Mahsulotlarni qidirish...',find:'Topish',hint:'Ichki kategoriyalar',hover:'Chapdagi kategoriyani tanlang',contact:'Biz bilan bog‘lanish',address:'Toshkent, O‘zbekiston',home:'Bosh sahifa',cart:'Savat',orders:'Buyurtmalar',profile:'Profil'},
+  en:{catalog:'Catalog',search:'Search products...',find:'Search',hint:'Subcategories',hover:'Hover a category on the left',contact:'Contact us',address:'Tashkent, Uzbekistan',home:'Home',cart:'Cart',orders:'Orders',profile:'Profile'}
+ };
+ function lang(){try{const x=localStorage.getItem('osuzLang');return ['ru','uz','en'].includes(x)?x:'ru'}catch(e){return 'ru'}}
+ function theme(){try{return localStorage.getItem('osuzTheme')==='dark'?'dark':'light'}catch(e){return 'light'}}
+ function syncThemeRoot(){const t=document.body?.classList.contains('dark-mode')?'dark':theme();document.documentElement.setAttribute('data-osuz-theme',t);document.documentElement.classList.toggle('osuz-pre-dark',t==='dark')}
+ function syncFlags(){const l=lang();document.querySelectorAll('[data-osuz-lang-label]').forEach(el=>{el.dataset.lang=l;if(el.dataset.code!=='false')el.textContent=l.toUpperCase()});document.querySelectorAll('[data-osuz-select-flag]').forEach(el=>el.dataset.lang=l);document.querySelectorAll('[data-osuz-select-code]').forEach(el=>el.textContent=l.toUpperCase())}
+ function syncTexts(){const l=lang(),t=TEXT[l]||TEXT.ru;document.querySelectorAll('[data-osuz-catalog-text]').forEach(x=>x.textContent=t.catalog);document.querySelectorAll('[data-osuz-search-text]').forEach(x=>x.textContent=t.find);document.querySelectorAll('[data-osuz-search-input]').forEach(x=>x.placeholder=t.search);document.querySelectorAll('[data-osuz-catalog-hint]').forEach(x=>x.textContent=t.hint);document.querySelectorAll('[data-osuz-contact-open-text]').forEach(x=>x.textContent=t.contact);const ct=document.getElementById('osuzContactTitle');if(ct)ct.textContent=t.contact;document.querySelectorAll('[data-osuz-contact-address]').forEach(x=>x.textContent=t.address);document.querySelectorAll('[data-mobile-final-label]').forEach(x=>{const k=x.dataset.mobileFinalLabel;x.textContent=t[k]||t.catalog})}
+ function syncMobileActive(){const page=(location.pathname.split('/').pop()||'index.html').toLowerCase();let k=(page.startsWith('category')||location.pathname.startsWith('/catalog/'))?'catalog':page.startsWith('cart')?'cart':page.startsWith('orders')?'orders':page.startsWith('auth')?'profile':'home';document.querySelectorAll('[data-mobile-final]').forEach(a=>a.classList.toggle('active',a.dataset.mobileFinal===k))}
+ function syncMobileCart(){let n=0;document.querySelectorAll('[data-cart-count],#headerCartCount,.osuz-cart-count').forEach(el=>{const v=parseInt((el.textContent||'0').replace(/\D/g,''),10);if(Number.isFinite(v))n=Math.max(n,v)});document.querySelectorAll('[data-mobile-cart-count]').forEach(el=>{el.textContent=String(n);el.style.display=n>0?'inline-flex':'none'})}
+ function initSearchForms(){document.querySelectorAll('form.osuz-header-search').forEach(form=>{if(form.dataset.bound)return;form.dataset.bound='1';form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input');const q=(input?.value||'').trim();location.href=OSUZRoutes.search(q)})})}
+ let catalogLoaded=false,allCats=[];
+ function parseNames(c){
+   if(!c||typeof c!=='object')return {};
+   let names=c.names;
+   if(typeof names==='string'){
+     try{names=JSON.parse(names)}catch(_){names={}}
+   }
+   if(!names||typeof names!=='object'||Array.isArray(names))names={};
+   const clean=v=>v===null||v===undefined?'':String(v).trim();
+   const ru=clean(names.ru)||clean(c.name_ru)||clean(c.title_ru);
+   const uz=clean(names.uz)||clean(c.name_uz)||clean(c.title_uz);
+   const en=clean(names.en)||clean(c.name_en)||clean(c.title_en);
+   return {ru,uz,en};
+ }
+ function normalizeParentId(value){
+   if(value===null||value===undefined||value===''||value==='null')return null;
+   const n=Number(value);return Number.isFinite(n)?n:null;
+ }
+ function normalizeCats(payload){
+   const list=Array.isArray(payload)?payload:
+     Array.isArray(payload?.categories)?payload.categories:
+     Array.isArray(payload?.data)?payload.data:
+     Array.isArray(payload?.items)?payload.items:[];
+   return list.filter(x=>x&&typeof x==='object').map(c=>{
+     const id=Number(c.id);
+     return {...c,id:Number.isFinite(id)?id:c.id,parent_id:normalizeParentId(c.parent_id),names:parseNames(c)};
+   }).filter(c=>c.id!==undefined&&c.id!==null&&Object.values(c.names).some(Boolean));
+ }
+ function cname(c){
+   const names=parseNames(c),l=lang();
+   return names[l]||names.ru||names.en||names.uz||'';
+ }
+ function pageCategoryCache(){
+   try{
+     if(Array.isArray(window.__OSUZ_CATEGORY_CACHE__)&&window.__OSUZ_CATEGORY_CACHE__.length)return normalizeCats(window.__OSUZ_CATEGORY_CACHE__);
+   }catch(_){ }
+   try{
+     if(typeof allCategories!=='undefined'&&Array.isArray(allCategories)&&allCategories.length)return normalizeCats(allCategories);
+   }catch(_){ }
+   return [];
+ }
+ async function getCatalogCategories(){
+   // Единственный источник для mega-menu: публичный backend API из документации OSUZ.
+   // Не используем старые кеши/макеты, чтобы меню не могло подхватить заглушки.
+   const endpoint='https://osuz.uz/api/catalog/categories';
+   const controller=new AbortController();
+   const tm=setTimeout(()=>controller.abort(),12000);
+   try{
+     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+     if(!res.ok)throw new Error('HTTP '+res.status+' '+endpoint);
+     const payload=await res.json();
+     const cats=normalizeCats(payload);
+     if(!cats.length)throw new Error('API returned no named categories');
+     return cats;
+   }finally{clearTimeout(tm)}
+ }
+ function showSubs(root,button){
+   document.querySelectorAll('.osuz-catalog-cat').forEach(x=>x.classList.remove('active'));
+   button?.classList.add('active');
+   const right=document.getElementById('osuzCatalogRight');if(!right)return;
+   const rootId=Number(root.id);
+   const subs=allCats.filter(x=>Number(x.parent_id)===rootId);
+   right.innerHTML='';
+   if(!subs.length){
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(root);a.textContent=cname(root);right.appendChild(a);return;
+   }
+   subs.slice(0,80).forEach(x=>{
+     const name=cname(x);if(!name)return;
+     const a=document.createElement('a');a.className='osuz-catalog-sub';a.href=OSUZRoutes.category(x);a.textContent=name;right.appendChild(a)
+   });
+ }
+ async function loadCatalog(){
+   if(catalogLoaded)return;catalogLoaded=true;
+   const left=document.getElementById('osuzCatalogLeft'),right=document.getElementById('osuzCatalogRight');
+   try{
+     allCats=await getCatalogCategories();
+     console.info('[OSUZ catalog v4] categories', allCats.map(c=>({id:c.id,parent_id:c.parent_id,names:c.names})));
+     const roots=allCats.filter(x=>x.parent_id===null && cname(x));
+     if(!roots.length)throw new Error('No top-level categories');
+     left.innerHTML='';
+     roots.slice(0,60).forEach((root,i)=>{
+       const name=cname(root);if(!name)return;
+       const b=document.createElement('button');b.type='button';b.className='osuz-catalog-cat';b.innerHTML='<span></span><i data-lucide="chevron-right"></i>';b.querySelector('span').textContent=name;
+       b.addEventListener('mouseenter',()=>showSubs(root,b));b.addEventListener('focus',()=>showSubs(root,b));
+       b.addEventListener('click',()=>{location.href=OSUZRoutes.category(root)});
+       left.appendChild(b);if(i===0)showSubs(root,b)
+     });
+     if(!left.children.length)throw new Error('No named top-level categories');
+     if(window.lucide)lucide.createIcons();
+   }catch(err){
+     catalogLoaded=false;
+     console.error('[OSUZ catalog menu]',err);
+     left.innerHTML='<div class="px-3 py-4 text-sm text-gray-500">'+(lang()==='en'?'Could not load categories.':lang()==='uz'?'Kategoriyalar yuklanmadi.':'Категории не загрузились.')+'</div>';
+     right.innerHTML='<a class="osuz-catalog-sub" href="/index.html#products">'+(TEXT[lang()]||TEXT.ru).catalog+' →</a>';
+   }
+ }
+ function panelTop(){const header=document.querySelector('.site-header,.auth-site-header,header.fixed,header');if(!header)return 82;const r=header.getBoundingClientRect();return Math.max(0,r.bottom)}
+ function openCatalog(force){const p=document.getElementById('osuzCatalogPanel');if(!p)return;const should=force===undefined?!p.classList.contains('open'):force;p.classList.toggle('open',should);p.setAttribute('aria-hidden',String(!should));document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(b=>b.setAttribute('aria-expanded',String(should)));if(should){p.style.top=panelTop()+'px';loadCatalog()}}
+ function initCatalog(){document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(btn=>{btn.addEventListener('click',e=>{e.preventDefault();openCatalog()});btn.addEventListener('mouseenter',()=>{if(innerWidth>=768)openCatalog(true)})});const p=document.getElementById('osuzCatalogPanel');p?.addEventListener('mouseleave',()=>{if(innerWidth>=768)setTimeout(()=>{if(!document.querySelector('[data-osuz-catalog-toggle]:hover'))openCatalog(false)},100)});document.addEventListener('click',e=>{if(!e.target.closest('[data-osuz-catalog-toggle]')&&!e.target.closest('#osuzCatalogPanel'))openCatalog(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape')openCatalog(false)});window.addEventListener('resize',()=>{if(p?.classList.contains('open'))p.style.top=panelTop()+'px'})}
+ function initContact(){const back=document.getElementById('osuzContactBackdrop'),close=document.getElementById('osuzContactClose');const open=()=>{back?.classList.add('open');back?.setAttribute('aria-hidden','false')};const shut=()=>{back?.classList.remove('open');back?.setAttribute('aria-hidden','true')};document.querySelectorAll('[data-osuz-contact-open]').forEach(x=>x.addEventListener('click',e=>{e.preventDefault();open()}));close?.addEventListener('click',shut);back?.addEventListener('click',e=>{if(e.target===back)shut()});document.addEventListener('keydown',e=>{if(e.key==='Escape')shut()})}
+
+ function initCatalogOpeners(){
+   document.querySelectorAll('[data-osuz-catalog-open]').forEach(el=>{
+     if(el.dataset.osuzCatalogOpenBound==='1') return;
+     el.dataset.osuzCatalogOpenBound='1';
+     el.addEventListener('click',e=>{
+       e.preventDefault();
+       window.scrollTo({top:0,behavior:'smooth'});
+       setTimeout(()=>openCatalog(true),180);
+     });
+   });
+ }
+
+ function init(){syncThemeRoot();syncFlags();syncTexts();syncMobileActive();initSearchForms();initCatalog();initCatalogOpeners();initContact();syncMobileCart();setTimeout(syncMobileCart,900);if(window.lucide)lucide.createIcons()}
+ document.addEventListener('DOMContentLoaded',init);
+ document.addEventListener('click',e=>{if(e.target.closest('[data-language],.language-option,.product-language-option,.category-language-option'))setTimeout(()=>{syncFlags();syncTexts()},0);if(e.target.closest('#themeToggle,#mobileThemeToggle,#categoryThemeToggle'))setTimeout(syncThemeRoot,0)},true);
+ document.addEventListener('change',e=>{if(e.target.matches('#languageSelect'))setTimeout(()=>{syncFlags();syncTexts()},0)},true);
+ window.addEventListener('storage',e=>{if(e.key==='osuzLang'){syncFlags();syncTexts()}if(e.key==='osuzTheme')syncThemeRoot()});
+ window.addEventListener('load',()=>{syncThemeRoot();syncFlags();syncTexts();syncMobileCart()});
+})();
+</script>
+<script id="osuz-v34-catalog-routing-fix-js">
+(function(){
+'use strict';
+const API='https://osuz.uz/api/catalog/categories';
+const mobile=()=>window.matchMedia('(max-width:767px)').matches;
+const lang=()=>{try{const v=localStorage.getItem('osuzLang');return ['ru','uz','en'].includes(v)?v:'ru'}catch(_){return'ru'}};
+const TXT={
+  ru:{catalog:'Каталог',all:'Все товары категории',sub:'Подкатегории',loading:'Загрузка категорий…',error:'Не удалось загрузить категории',close:'Закрыть',back:'Назад'},
+  uz:{catalog:'Katalog',all:'Kategoriyadagi barcha mahsulotlar',sub:'Ichki kategoriyalar',loading:'Kategoriyalar yuklanmoqda…',error:'Kategoriyalarni yuklab bo‘lmadi',close:'Yopish',back:'Orqaga'},
+  en:{catalog:'Catalog',all:'All products in category',sub:'Subcategories',loading:'Loading categories…',error:'Could not load categories',close:'Close',back:'Back'}
+};
+const tr=k=>TXT[lang()]?.[k]||TXT.ru[k]||k;
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+let cats=[],loadPromise=null,stack=[],panel=null,desktopCurrent=null;
+
+function parsedNames(v){
+  if(v&&typeof v==='object'&&!Array.isArray(v)) return v;
+  if(typeof v==='string'){try{const j=JSON.parse(v);if(j&&typeof j==='object')return j}catch(_){} return {ru:v};}
+  return {};
+}
+function catName(c){
+  const n=parsedNames(c?.names),l=lang();
+  return String(n[l]||n.ru||n.uz||n.en||c?.name_ru||c?.name_uz||c?.name_en||c?.title||c?.name||'').trim();
+}
+function numberOrNull(v){if(v===null||v===undefined||v===''||v==='null')return null;const n=Number(v);return Number.isFinite(n)?n:null}
+function normalizePayload(raw){
+  const top=Array.isArray(raw)?raw:Array.isArray(raw?.categories)?raw.categories:Array.isArray(raw?.items)?raw.items:Array.isArray(raw?.data)?raw.data:[];
+  const out=[],seen=new Set();
+  function walk(node,inferredParent=null){
+    if(!node||typeof node!=='object')return;
+    const id=Number(node.id ?? node.category_id ?? node.pk);
+    if(!Number.isFinite(id))return;
+    const explicitParent=node.parent_id ?? node.parentId ?? (node.parent&&typeof node.parent==='object'?node.parent.id:node.parent);
+    const parent=explicitParent===undefined?inferredParent:numberOrNull(explicitParent);
+    if(!seen.has(id)){
+      seen.add(id);
+      out.push({...node,id,parent_id:parent,names:parsedNames(node.names)});
+    }
+    const nested=[];
+    ['children','subcategories','child_categories','items'].forEach(k=>{if(Array.isArray(node[k]))nested.push(...node[k])});
+    nested.forEach(ch=>walk(ch,id));
+  }
+  top.forEach(n=>walk(n,null));
+  return out.filter(c=>catName(c));
+}
+function children(parent){
+  return cats.filter(c=>parent==null?c.parent_id==null:Number(c.parent_id)===Number(parent));
+}
+function goCategory(id){
+  const n=Number(id);if(!Number.isFinite(n))return;
+  closeCatalog();
+  const entity=cats.find(c=>Number(c.id)===n)||{id:n};
+  location.assign(OSUZRoutes.category(entity));
+}
+function ensureBottomCatalog(){
+  const nav=document.querySelector('.osuz-mobile-bottom-final');if(!nav)return;
+  nav.querySelectorAll('[data-mobile-final="catalog"],[data-v16-mobile-catalog-open],[data-v17-mobile-catalog-open]').forEach(el=>el.remove());
+  const home=nav.querySelector('[data-mobile-final="home"]');
+  const btn=document.createElement('button');
+  btn.type='button';btn.dataset.mobileFinal='catalog';btn.dataset.v34MobileCatalog='1';
+  btn.innerHTML='<i data-lucide="layout-grid"></i><span>'+esc(tr('catalog'))+'</span>';
+  if(home)home.insertAdjacentElement('afterend',btn);else nav.prepend(btn);
+  window.lucide?.createIcons();
+}
+function measureTop(){
+  const header=document.querySelector('.site-header,.auth-site-header,header.fixed');
+  const b=header?Math.ceil(header.getBoundingClientRect().bottom):110;
+  const top=mobile()?b+10:b;
+  document.documentElement.style.setProperty('--osuz-v34-catalog-top',top+'px');
+  if(panel)panel.style.top=top+'px';
+  return top;
+}
+function buildPanel(){
+  document.getElementById('osuzV34Catalog')?.remove();
+  panel=document.createElement('section');panel.id='osuzV34Catalog';panel.setAttribute('aria-hidden','true');
+  panel.innerHTML=`
+    <div class="v34-mobile-only v34-cat-head">
+      <button type="button" class="v34-cat-back" id="v34CatBack" aria-label="${esc(tr('back'))}" hidden><i data-lucide="chevron-left"></i></button>
+      <div class="v34-cat-title" id="v34CatTitle">${esc(tr('catalog'))}</div>
+      <button type="button" class="v34-cat-close" id="v34CatClose" aria-label="${esc(tr('close'))}"><i data-lucide="x"></i></button>
+    </div>
+    <div class="v34-mobile-only v34-cat-list" id="v34CatMobileList"></div>
+    <div class="v34-desktop-roots" id="v34CatRoots"></div>
+    <div class="v34-desktop-subs"><div class="v34-desktop-heading" id="v34CatHeading">${esc(tr('sub'))}</div><div id="v34CatSubs"></div></div>`;
+  document.body.appendChild(panel);
+  panel.addEventListener('click',e=>e.stopPropagation());
+  document.getElementById('v34CatClose')?.addEventListener('click',closeCatalog);
+  document.getElementById('v34CatBack')?.addEventListener('click',()=>{stack.pop();renderMobileLevel()});
+  window.lucide?.createIcons();
+}
+function renderState(text){
+  const m=document.getElementById('v34CatMobileList'),r=document.getElementById('v34CatRoots'),s=document.getElementById('v34CatSubs');
+  if(m)m.innerHTML='<div class="v34-cat-state">'+esc(text)+'</div>';
+  if(r)r.innerHTML='<div class="v34-cat-state">'+esc(text)+'</div>';
+  if(s)s.innerHTML='';
+}
+function renderMobileLevel(){
+  const list=document.getElementById('v34CatMobileList'),title=document.getElementById('v34CatTitle'),back=document.getElementById('v34CatBack');
+  if(!list||!title||!back)return;
+  const pid=stack.length?stack[stack.length-1]:null;
+  const parent=pid==null?null:cats.find(c=>c.id===Number(pid));
+  title.textContent=parent?catName(parent):tr('catalog');back.hidden=!parent;
+  const rows=[];
+  if(parent) rows.push(`<button type="button" class="v34-cat-row v34-cat-row-all" data-v34-go="${parent.id}"><span>${esc(tr('all'))}</span><i data-lucide="arrow-right"></i></button>`);
+  for(const c of children(pid)){
+    const has=children(c.id).length>0;
+    rows.push(`<button type="button" class="v34-cat-row" data-v34-cat="${c.id}"><span>${esc(catName(c))}</span><i data-lucide="${has?'chevron-right':'arrow-right'}"></i></button>`);
+  }
+  list.innerHTML=rows.join('')||'<div class="v34-cat-state">'+esc(tr('error'))+'</div>';
+  list.querySelectorAll('[data-v34-cat]').forEach(btn=>btn.addEventListener('click',e=>{
+    e.preventDefault();e.stopPropagation();
+    // Main category click always opens that category page.
+    // Its child categories are then shown in the category page itself.
+    goCategory(btn.dataset.v34Cat);
+  }));
+  list.querySelectorAll('[data-v34-go]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();goCategory(btn.dataset.v34Go)}));
+  list.scrollTop=0;window.lucide?.createIcons();
+}
+function renderDesktopSubs(root){
+  const box=document.getElementById('v34CatSubs');if(!box)return;desktopCurrent=root.id;
+  const rows=[`<button type="button" class="v34-desktop-sub" data-v34-go="${root.id}"><span>${esc(tr('all'))}</span><i data-lucide="arrow-right"></i></button>`];
+  for(const c of children(root.id))rows.push(`<button type="button" class="v34-desktop-sub" data-v34-go="${c.id}"><span>${esc(catName(c))}</span><i data-lucide="chevron-right"></i></button>`);
+  box.innerHTML=rows.join('');
+  box.querySelectorAll('[data-v34-go]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();goCategory(b.dataset.v34Go)}));
+  document.querySelectorAll('.v34-desktop-root').forEach(b=>b.classList.toggle('active',Number(b.dataset.v34Root)===Number(root.id)));
+  window.lucide?.createIcons();
+}
+function renderDesktop(){
+  const rootBox=document.getElementById('v34CatRoots');if(!rootBox)return;
+  const roots=children(null);
+  rootBox.innerHTML=roots.map((c,i)=>`<button type="button" class="v34-desktop-root${i===0?' active':''}" data-v34-root="${c.id}"><span>${esc(catName(c))}</span><i data-lucide="chevron-right"></i></button>`).join('');
+  rootBox.querySelectorAll('[data-v34-root]').forEach(b=>{
+    const getRoot=()=>cats.find(x=>x.id===Number(b.dataset.v34Root));
+    b.addEventListener('mouseenter',()=>{const c=getRoot();if(c)renderDesktopSubs(c)});
+    b.addEventListener('focus',()=>{const c=getRoot();if(c)renderDesktopSubs(c)});
+    b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();const c=getRoot();if(c)goCategory(c.id)});
+  });
+  if(roots[0])renderDesktopSubs(roots[0]);window.lucide?.createIcons();
+}
+async function loadCategories(){
+  if(cats.length)return cats;if(loadPromise)return loadPromise;
+  loadPromise=(async()=>{
+    try{
+      const cache=Array.isArray(window.__OSUZ_CATEGORY_CACHE__)?window.__OSUZ_CATEGORY_CACHE__:[];
+      if(cache.length)cats=normalizePayload(cache);
+      if(!cats.length){
+        const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
+        if(!res.ok)throw new Error('HTTP '+res.status);
+        cats=normalizePayload(await res.json());
+      }
+      if(!cats.length)throw new Error('No categories');
+      renderMobileLevel();renderDesktop();
+    }catch(err){console.error('[OSUZ V34 catalog]',err);renderState(tr('error'))}
+    finally{loadPromise=null}
+    return cats;
+  })();
+  return loadPromise;
+}
+function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function openCatalog(){
+  if(!panel)buildPanel();measureTop();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+  if(mobile())document.body.classList.add('osuz-v34-catalog-open');
+  document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(b=>b.setAttribute('aria-expanded','true'));
+  stack=[];setCatalogActive(true);
+  if(cats.length){renderMobileLevel();renderDesktop()}else{renderState(tr('loading'));void loadCategories()}
+}
+function closeCatalog(){
+  if(!panel)return;panel.classList.remove('open');panel.setAttribute('aria-hidden','true');document.body.classList.remove('osuz-v34-catalog-open');
+  document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(b=>b.setAttribute('aria-expanded','false'));setCatalogActive(false);
+}
+function toggleCatalog(){panel?.classList.contains('open')?closeCatalog():openCatalog()}
+function bindSearchSafety(){
+  /* category search was previously hidden by a legacy mobile override; keep it functional. */
+  const categoryBtn=document.getElementById('categoryHeaderSearchButton'),categoryInput=document.getElementById('searchInput');
+  if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
+}
+function init(){
+  document.documentElement.dataset.osuzBuild='2026-09-13-v47-document-fixes';
+  ensureBottomCatalog();buildPanel();measureTop();bindSearchSafety();
+  document.addEventListener('click',e=>{
+    const bottom=e.target.closest('[data-v34-mobile-catalog]');
+    const top=e.target.closest('[data-osuz-catalog-toggle]');
+    if(bottom||(top&&!mobile())){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();toggleCatalog()}
+  },true);
+  document.addEventListener('click',e=>{if(panel?.classList.contains('open')&&!e.target.closest('#osuzV34Catalog')&&!e.target.closest('[data-v34-mobile-catalog]')&&!e.target.closest('[data-osuz-catalog-toggle]'))closeCatalog()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCatalog()});
+  window.addEventListener('resize',()=>{measureTop();if(!mobile())document.body.classList.remove('osuz-v34-catalog-open')},{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(measureTop,80),{passive:true});
+  window.addEventListener('load',measureTop,{once:true});
+  window.addEventListener('storage',e=>{if(e.key==='osuzLang'){ensureBottomCatalog();if(panel?.classList.contains('open')){buildPanel();openCatalog()}}});
+  window.lucide?.createIcons();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<script id="osuz-v44-header-dom-order-hardfix">
+(() => {
+  'use strict';
+  function normalizeHeaderOrder() {
+    document.querySelectorAll('.site-header-top > div, .auth-site-header > div').forEach(container => {
+      const children = Array.from(container.children);
+      const catalog = children.find(el => el.classList?.contains('osuz-desktop-catalog-button'));
+      const search = children.find(el => el.classList?.contains('osuz-desktop-search-slot'));
+      if (!catalog || !search) return;
+      if (catalog.nextElementSibling !== search) container.insertBefore(catalog, search);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', normalizeHeaderOrder, { once: true });
+  } else {
+    normalizeHeaderOrder();
+  }
+  window.addEventListener('load', normalizeHeaderOrder, { once: true });
+  setTimeout(normalizeHeaderOrder, 0);
+  setTimeout(normalizeHeaderOrder, 250);
+})();
+</script>
+<script id="osuz-v45-header-order-inline-hardlock">
+(() => {
+  'use strict';
+  function enforceHeaderOrder(){
+    if (!window.matchMedia('(min-width:768px)').matches) return;
+    document.querySelectorAll('.site-header-top > div, .auth-site-header > div').forEach(row => {
+      const kids = Array.from(row.children);
+      const catalog = kids.find(el => el.classList?.contains('osuz-desktop-catalog-button'));
+      const search = kids.find(el => el.classList?.contains('osuz-desktop-search-slot'));
+      const actions = kids.find(el => el.classList?.contains('header-actions') || el.classList?.contains('osuz-mobile-header-actions'));
+      const brand = kids.find(el => el !== catalog && el !== search && el !== actions) || kids[0];
+      if (!catalog || !search || !actions || !brand) return;
+
+      // Physical DOM order: brand -> catalog -> search -> actions.
+      if (brand.nextElementSibling !== catalog) row.insertBefore(catalog, brand.nextElementSibling);
+      if (catalog.nextElementSibling !== search) row.insertBefore(search, catalog.nextElementSibling);
+      if (search.nextElementSibling !== actions) row.insertBefore(actions, search.nextElementSibling);
+
+      // Inline !important beats all legacy V26/V43 order rules.
+      brand.style.setProperty('order','0','important');
+      brand.style.setProperty('margin-right','0','important');
+      catalog.style.setProperty('order','1','important');
+      catalog.style.setProperty('display','inline-flex','important');
+      catalog.style.setProperty('margin-left', window.matchMedia('(max-width:1100px)').matches ? '18px' : '38px','important');
+      catalog.style.setProperty('margin-right','0','important');
+      search.style.setProperty('order','2','important');
+      search.style.setProperty('margin-top','0','important');
+      search.style.setProperty('margin-bottom','0','important');
+      search.style.setProperty('margin-left','12px','important');
+      search.style.setProperty('margin-right','18px','important');
+      actions.style.setProperty('order','3','important');
+      actions.style.setProperty('margin-left','auto','important');
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enforceHeaderOrder, {once:true});
+  else enforceHeaderOrder();
+  window.addEventListener('load', enforceHeaderOrder, {once:true});
+  window.addEventListener('resize', enforceHeaderOrder, {passive:true});
+  setTimeout(enforceHeaderOrder, 0);
+  setTimeout(enforceHeaderOrder, 100);
+  setTimeout(enforceHeaderOrder, 500);
+})();
+</script>
+
+<script id="osuz-v51-photo-search-unifier">
+(() => {
+  function addCameraControl(container) {
+    if (!container || container.querySelector('.osuz-photo-search-control')) return;
+
+    const existingHero = container.querySelector('#heroPhotoBtn');
+    if (existingHero) {
+      existingHero.classList.add('osuz-photo-search-control');
+      existingHero.dataset.osuzPhotoSearch = '1';
+      return;
+    }
+
+    const submit = container.querySelector('button[type="submit"], #categoryHeaderSearchButton, .mobile-top-search-btn, .mobile-menu-search-button');
+    const input = container.querySelector('input[type="search"], input[type="text"]');
+    if (!input) return;
+
+    const label = document.createElement('label');
+    label.className = 'osuz-photo-search-control';
+    label.dataset.osuzPhotoSearch = '1';
+    label.title = 'Поиск по фото';
+    label.setAttribute('aria-label', 'Поиск по фото');
+    label.innerHTML = '<i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true">';
+
+    const file = label.querySelector('input[type="file"]');
+    file.addEventListener('change', () => {
+      if (!file.files || !file.files.length) return;
+      label.classList.add('is-selected');
+      window.setTimeout(() => label.classList.remove('is-selected'), 900);
+      /* На главной остаётся полноценный существующий поиск по фото; на остальных страницах
+         кнопка унифицирована визуально и открывает системный выбор изображения. */
+    });
+
+    if (submit) container.insertBefore(label, submit);
+    else container.appendChild(label);
+  }
+
+  function initPhotoSearchControls() {
+    document.querySelectorAll([
+      '.header-search-bar',
+      '.category-header-search',
+      'form.osuz-header-search',
+      '.mobile-top-search-shell',
+      '.mobile-menu-search-shell'
+    ].join(',')).forEach(addCameraControl);
+
+    const hero = document.getElementById('heroPhotoBtn');
+    if (hero) hero.classList.add('osuz-photo-search-control');
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPhotoSearchControls, { once:true });
+  else initPhotoSearchControls();
+})();
+</script>
+
+</body>
+</html>

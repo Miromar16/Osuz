@@ -1,0 +1,141 @@
+/* ===== osuz-v51-17-09-fixes ===== */
+/* V51 — правки из документа 17.09.26. Этот блок намеренно последний: он нормализует хедер и мобильную навигацию поверх старых версий. */
+.site-header-nav,
+.auth-site-subnav {
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+@media (min-width:768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display:flex !important;
+    min-height:76px !important;
+    height:76px !important;
+    gap:12px !important;
+    align-items:center !important;
+  }
+
+  /* Лого остаётся на месте; визуальный воздух создаём именно перед кнопкой Каталог. */
+  .site-header-top .osuz-desktop-catalog-button,
+  .auth-site-header .osuz-desktop-catalog-button {
+    margin-left:48px !important;
+    margin-right:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  /* На главной и внутренних страницах зона поиска теперь растягивается одинаково. */
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot,
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot,
+  .site-header-top .relative.osuz-desktop-search-slot {
+    flex:1 1 620px !important;
+    width:auto !important;
+    min-width:260px !important;
+    max-width:none !important;
+    margin-left:10px !important;
+    margin-right:16px !important;
+  }
+
+  .site-header-top .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top form.osuz-header-search,
+  .auth-site-header form.osuz-header-search {
+    width:100% !important;
+    height:46px !important;
+    min-height:46px !important;
+  }
+}
+
+/* Камера — отдельный компактный слот внутри любого поискового поля. */
+.osuz-photo-search-control,
+#heroPhotoBtn.osuz-photo-search-control {
+  position:relative !important;
+  width:44px !important;
+  min-width:44px !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 44px !important;
+  cursor:pointer !important;
+  border:0 !important;
+  border-left:1px solid rgba(148,163,184,.25) !important;
+  background:transparent !important;
+  color:#0891b2 !important;
+  line-height:1 !important;
+}
+.osuz-photo-search-control:hover,
+#heroPhotoBtn.osuz-photo-search-control:hover { background:rgba(8,145,178,.08) !important; }
+.osuz-photo-search-control svg,
+.osuz-photo-search-control i,
+#heroPhotoBtn.osuz-photo-search-control svg,
+#heroPhotoBtn.osuz-photo-search-control i {
+  width:19px !important;
+  height:19px !important;
+  margin:0 !important;
+  color:currentColor !important;
+  stroke:currentColor !important;
+}
+.osuz-photo-search-control input[type="file"] { display:none !important; }
+body.dark-mode .osuz-photo-search-control,
+body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
+  color:#67e8f9 !important;
+  border-left-color:#334155 !important;
+}
+
+/* Мобильная нижняя навигация: корзина занимает строго свою колонку и не «съезжает». */
+@media (max-width:767px) {
+  .osuz-mobile-bottom-final {
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+  }
+  .osuz-mobile-bottom-final > a,
+  .osuz-mobile-bottom-final > button,
+  .osuz-mobile-bottom-final [data-open-cart] {
+    width:100% !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding-left:2px !important;
+    padding-right:2px !important;
+    left:auto !important;
+    right:auto !important;
+    transform:none !important;
+    align-items:center !important;
+    justify-content:center !important;
+    justify-self:stretch !important;
+  }
+  .osuz-mobile-bottom-final [data-open-cart] > svg,
+  .osuz-mobile-bottom-final [data-open-cart] > i {
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  .osuz-mobile-bottom-final [data-mobile-cart-count],
+  .osuz-mobile-bottom-final [data-cart-count] {
+    position:absolute !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+  .mobile-top-search-shell,
+  .mobile-menu-search-shell,
+  .osuz-header-search {
+    overflow:hidden !important;
+  }
+  .mobile-top-search-shell .osuz-photo-search-control,
+  .mobile-menu-search-shell .osuz-photo-search-control {
+    width:40px !important;
+    min-width:40px !important;
+    flex-basis:40px !important;
+  }
+}
+

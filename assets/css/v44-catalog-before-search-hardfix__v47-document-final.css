@@ -1,0 +1,226 @@
+/* ===== osuz-v44-catalog-before-search-hardfix ===== */
+/* V44: desktop order is physically/CSS locked as Brand -> Catalog -> Search -> Actions. */
+@media (min-width: 768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header > div > a:first-child {
+    order: 0 !important;
+    flex: 0 0 auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .site-header-top > div > .osuz-desktop-catalog-button,
+  .auth-site-header > div > .osuz-desktop-catalog-button {
+    order: 10 !important;
+    flex: 0 0 66px !important;
+    width: 66px !important;
+    min-width: 66px !important;
+    margin: 0 !important;
+  }
+
+  .site-header-top > div > .osuz-desktop-search-slot,
+  .auth-site-header > div > .osuz-desktop-search-slot {
+    order: 20 !important;
+    flex: 1 1 560px !important;
+    min-width: 260px !important;
+    max-width: 620px !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  .site-header-top > div > .header-actions,
+  .site-header-top > div > .osuz-mobile-header-actions,
+  .auth-site-header > div > .header-actions,
+  .auth-site-header > div > .osuz-mobile-header-actions {
+    order: 30 !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+  }
+}
+
+/* ===== osuz-v45-header-order-hardlock ===== */
+/* V45: final desktop header order lock. Inline JS below also writes !important styles. */
+@media (min-width:768px){
+  html body nav.site-header .site-header-top > div,
+  html body .auth-site-header > div{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+  }
+  html body nav.site-header .site-header-top > div > :first-child,
+  html body .auth-site-header > div > :first-child{
+    order:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    flex:0 0 auto!important;
+  }
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    order:1!important;
+    display:inline-flex!important;
+    margin:0!important;
+    flex:0 0 66px!important;
+    width:66px!important;
+    min-width:66px!important;
+  }
+  html body nav.site-header .site-header-top > div > .osuz-desktop-search-slot,
+  html body .auth-site-header > div > .osuz-desktop-search-slot{
+    order:2!important;
+    display:block!important;
+    margin:0!important;
+    flex:1 1 560px!important;
+    width:auto!important;
+    min-width:260px!important;
+    max-width:620px!important;
+  }
+  html body nav.site-header .site-header-top > div > .header-actions,
+  html body nav.site-header .site-header-top > div > .osuz-mobile-header-actions,
+  html body .auth-site-header > div > .header-actions,
+  html body .auth-site-header > div > .osuz-mobile-header-actions{
+    order:3!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+  }
+}
+
+/* ===== osuz-v46-header-group-shift-right ===== */
+/* V46: move the Catalog + Search group to the right as one desktop block. */
+@media (min-width:768px){
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    margin-left:38px!important;
+    margin-right:0!important;
+  }
+}
+@media (min-width:768px) and (max-width:1100px){
+  html body nav.site-header .site-header-top > div > .osuz-desktop-catalog-button,
+  html body .auth-site-header > div > .osuz-desktop-catalog-button{
+    margin-left:18px!important;
+  }
+}
+
+/* ===== osuz-v47-document-final ===== */
+/* V47 — 13.09.26 document fixes */
+
+/* 1 + 6: one-row header only. The dark secondary navigation is removed everywhere. */
+.site-header-nav,
+.auth-site-subnav {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+:root { --osuz-v16-header-h: 82px !important; }
+html { scroll-padding-top: 98px !important; }
+
+@media (min-width: 768px) {
+  /* Header order and proportions from page 1:
+     logo -> Catalog -> search -> language -> theme -> profile -> orders -> cart */
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    min-height: 82px !important;
+    height: 82px !important;
+    align-items: center !important;
+  }
+  .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header > div > a:first-child { order: 1 !important; flex: 0 0 auto !important; }
+  .osuz-desktop-catalog-button {
+    order: 2 !important;
+    margin-left: 38px !important;
+    margin-right: 0 !important;
+    flex: 0 0 auto !important;
+  }
+  .osuz-desktop-search-slot {
+    order: 3 !important;
+    margin-left: 12px !important;
+    margin-right: 18px !important;
+    flex: 1 1 560px !important;
+    min-width: 280px !important;
+    max-width: 640px !important;
+  }
+  .header-actions,
+  .osuz-mobile-header-actions {
+    order: 4 !important;
+    margin-left: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  body[data-osuz-page="index"] #solutions {
+    padding-top: 82px !important;
+  }
+  body[data-osuz-page="category"] > section:first-of-type {
+    padding-top: 98px !important;
+  }
+  body[data-osuz-page="product"] main {
+    padding-top: 104px !important;
+  }
+  body[data-osuz-page="cart"] main.pt-36,
+  body[data-osuz-page="orders"] main.pt-36 {
+    padding-top: 104px !important;
+  }
+}
+
+/* 10: stable magnifier styling in Chrome / Opera GX light theme.
+   Never allow the search icon itself to receive a white/native control background. */
+.header-search-bar > [data-lucide="search"],
+.category-header-search > [data-lucide="search"],
+.osuz-header-search > [data-lucide="search"] {
+  display: block !important;
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  padding: 0 !important;
+  color: #64748b !important;
+  stroke: #64748b !important;
+  fill: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  forced-color-adjust: none !important;
+}
+body.dark-mode .header-search-bar > [data-lucide="search"],
+body.dark-mode .category-header-search > [data-lucide="search"],
+body.dark-mode .osuz-header-search > [data-lucide="search"] {
+  color: #94a3b8 !important;
+  stroke: #94a3b8 !important;
+}
+/* One background layer for the whole search control prevents a light square
+   behind the magnifier in Chromium/Opera GX. */
+.header-search-bar input,
+.category-header-search input,
+.osuz-header-search input {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+body.dark-mode .header-search-bar input,
+body.dark-mode .category-header-search input,
+body.dark-mode .osuz-header-search input {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+

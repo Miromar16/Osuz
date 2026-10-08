@@ -1,0 +1,177 @@
+/* ===== osuz-v43-desktop-header-reference-layout ===== */
+/* V43 desktop header: OSUZ -> Catalog -> Search -> Language -> Theme -> Profile -> Orders -> Cart. */
+@media (min-width: 768px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+    min-height: 76px !important;
+    height: 76px !important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top > div > a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header > div > a:first-child {
+    order: 1 !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    min-width: max-content !important;
+  }
+
+  .osuz-desktop-catalog-button {
+    order: 2 !important;
+    display: inline-flex !important;
+    flex: 0 0 66px !important;
+    width: 66px !important;
+    min-width: 66px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    border-radius: 11px !important;
+    background: #0b1725 !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  .osuz-desktop-catalog-button:hover,
+  .osuz-desktop-catalog-button[aria-expanded="true"] {
+    background: #101f31 !important;
+    transform: none !important;
+  }
+  .osuz-desktop-catalog-button svg,
+  .osuz-desktop-catalog-button i {
+    width: 19px !important;
+    height: 19px !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot {
+    order: 3 !important;
+    flex: 1 1 560px !important;
+    width: auto !important;
+    max-width: 620px !important;
+    min-width: 270px !important;
+    margin: 0 !important;
+  }
+  .site-header-top .header-search-wrap.osuz-desktop-search-slot {
+    display: block !important;
+  }
+  .site-header-top .header-search-wrap .header-search-bar,
+  .site-header-top .category-header-search,
+  .site-header-top .osuz-header-search,
+  .auth-site-header .osuz-header-search {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 46px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+  }
+
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .header-actions,
+  .auth-site-header .osuz-mobile-header-actions {
+    order: 4 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    gap: 4px !important;
+  }
+
+  .site-header-top .header-action,
+  .site-header-top .auth-header-action,
+  .auth-site-header .header-action,
+  .auth-site-header .auth-header-action {
+    min-width: 52px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    padding: 6px 7px 5px !important;
+    gap: 4px !important;
+    border-radius: 10px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+  }
+  .site-header-top .header-action > svg,
+  .site-header-top .header-action > i,
+  .site-header-top .auth-header-action > svg,
+  .site-header-top .auth-header-action > i,
+  .auth-site-header .header-action > svg,
+  .auth-site-header .header-action > i,
+  .auth-site-header .auth-header-action > svg,
+  .auth-site-header .auth-header-action > i {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  .site-header-top .osuz-language-wrap .header-action,
+  .site-header-top .osuz-language-select-wrap,
+  .auth-site-header .osuz-language-wrap .header-action,
+  .auth-site-header .osuz-language-select-wrap {
+    min-width: 62px !important;
+    width: auto !important;
+    flex-direction: row !important;
+    gap: 5px !important;
+  }
+  .site-header-top #themeToggle,
+  .auth-site-header #themeToggle {
+    min-width: 46px !important;
+    width: 46px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  [data-customer-account-link].header-action,
+  a[href="orders.html"].header-action,
+  a[data-open-cart].header-action,
+  a[href="cart.html"].header-action {
+    flex-direction: column !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1120px) {
+  .site-header-top > .max-w-\[1400px\],
+  .site-header-top > .max-w-\[1200px\],
+  .auth-site-header > .auth-header-inner,
+  .auth-site-header > div { gap: 8px !important; }
+
+  .osuz-desktop-catalog-button {
+    flex-basis: 60px !important;
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+
+  .site-header-top .osuz-desktop-search-slot,
+  .auth-site-header .osuz-desktop-search-slot {
+    min-width: 220px !important;
+  }
+
+  .site-header-top .header-action,
+  .site-header-top .auth-header-action,
+  .auth-site-header .header-action,
+  .auth-site-header .auth-header-action {
+    min-width: 46px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+}
+

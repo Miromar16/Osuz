@@ -1,0 +1,419 @@
+/* ===== osuz-v15-header-unified-final ===== */
+/* V15 — one header layout for every page. This block intentionally comes last. */
+:root{--osuz-v15-header:#067890;--osuz-v15-nav:#0b1725}
+.site-header-top,.auth-site-header{background:var(--osuz-v15-header)!important;background-color:var(--osuz-v15-header)!important}
+.site-header-nav,.auth-site-subnav{background:var(--osuz-v15-nav)!important}
+
+/* Desktop: OSUZ -> Catalog -> Search -> actions, everywhere. */
+@media (min-width:768px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:14px!important;
+    min-height:82px!important;
+    height:82px!important;
+  }
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{order:0!important;flex:0 0 auto!important;margin:0!important}
+
+  .osuz-desktop-catalog-button{
+    order:1!important;
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    flex:0 0 auto!important;
+    height:46px!important;
+    min-width:112px!important;
+    padding:0 16px!important;
+    border-radius:12px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    background:#0b1725!important;
+    color:#fff!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    font-size:13px!important;
+    font-weight:900!important;
+  }
+  .osuz-desktop-catalog-button svg{width:18px!important;height:18px!important}
+
+  .osuz-desktop-search-slot,
+  .site-header-top .osuz-header-search,
+  .auth-site-header .osuz-header-search,
+  .site-header-top .header-search-wrap{
+    order:2!important;
+    flex:1 1 620px!important;
+    width:auto!important;
+    max-width:620px!important;
+    min-width:220px!important;
+    margin:0!important;
+  }
+  .site-header-top .header-actions,
+  .site-header-top .osuz-mobile-header-actions,
+  .auth-site-header .header-actions,
+  .auth-site-header .osuz-mobile-header-actions{
+    order:3!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+  }
+
+  /* Category has a separate real desktop search; hide its mobile clone. */
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:none!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:flex!important}
+
+  /* Nice vertical account/order/cart actions on every desktop header. */
+  .header-actions>a[data-customer-account-link],
+  .header-actions>a[href="orders.html"],
+  .header-actions>a[href="cart.html"],
+  .osuz-mobile-header-actions>a[data-customer-account-link],
+  .osuz-mobile-header-actions>a[href="orders.html"],
+  .osuz-mobile-header-actions>a[href="cart.html"]{
+    display:inline-flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    min-width:58px!important;
+    height:62px!important;
+    min-height:62px!important;
+    padding:7px 8px 6px!important;
+    border-radius:11px!important;
+    color:#fff!important;
+    font-size:10px!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+  }
+  .header-actions>a svg,.osuz-mobile-header-actions>a svg{width:20px!important;height:20px!important;transform:translateY(-2px)!important}
+  .header-actions>a[href="cart.html"] [data-cart-count],
+  .osuz-mobile-header-actions>a[href="cart.html"] [data-cart-count]{top:5px!important;right:7px!important;left:auto!important;margin:0!important}
+
+  /* language/theme stay compact, never vertical */
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle,#themeToggle{
+    flex-direction:row!important;
+  }
+
+  #mobileMenuBtn{display:none!important}
+}
+
+/* Mobile: same visual logic as laptop, compact and consistent. */
+@media (max-width:767px){
+  html,body{overflow-x:hidden!important}
+  body{padding-bottom:68px!important}
+  .site-header-top,.auth-site-header{background:#067890!important;border-bottom:1px solid rgba(255,255,255,.24)!important}
+
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:grid!important;
+    grid-template-columns:auto auto minmax(0,1fr) auto!important;
+    grid-template-rows:50px 46px!important;
+    align-items:center!important;
+    column-gap:8px!important;
+    row-gap:7px!important;
+    width:100%!important;
+    min-height:110px!important;
+    height:110px!important;
+    padding:5px 10px 7px!important;
+    margin:0 auto!important;
+  }
+
+  body[data-osuz-page="index"] .site-header-top>.max-w-\[1400px\]{
+    grid-template-rows:50px!important;
+    min-height:56px!important;
+    height:56px!important;
+  }
+
+  .site-header-top .header-brand,
+  .site-header-top>div>a:first-child,
+  .auth-site-header .header-brand,
+  .auth-site-header>div>a:first-child{
+    grid-column:1!important;grid-row:1!important;
+    display:inline-flex!important;align-items:center!important;gap:6px!important;
+    min-width:0!important;margin:0!important;justify-self:start!important
+  }
+  .site-header-top .site-logo-icon,.auth-site-header .site-logo-icon,.auth-site-logo{height:25px!important;width:auto!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:15px!important;letter-spacing:.02em!important;white-space:nowrap!important}
+
+  /* Catalog stays in the header on mobile, exactly after the logo. */
+  .osuz-desktop-catalog-button,
+  .osuz-catalog-button[data-osuz-catalog-toggle]{
+    grid-column:2!important;grid-row:1!important;
+    display:inline-flex!important;visibility:visible!important;opacity:1!important;
+    width:auto!important;min-width:76px!important;height:40px!important;
+    margin:0!important;padding:0 10px!important;border:0!important;border-radius:10px!important;
+    background:#0b1725!important;color:#fff!important;
+    align-items:center!important;justify-content:center!important;gap:6px!important;
+    font-size:11px!important;font-weight:900!important;white-space:nowrap!important;overflow:visible!important
+  }
+  .osuz-desktop-catalog-button svg{width:16px!important;height:16px!important}
+
+  /* Right side only language + theme; add real breathing room. */
+  .site-header-top .osuz-mobile-header-actions,
+  .site-header-top .header-actions,
+  .auth-site-header .osuz-mobile-header-actions,
+  .auth-site-header .header-actions{
+    grid-column:4!important;grid-row:1!important;
+    justify-self:end!important;align-self:center!important;
+    display:flex!important;align-items:center!important;justify-content:flex-end!important;
+    gap:10px!important;width:auto!important;min-width:0!important;margin:0!important;padding:0!important
+  }
+  .osuz-mobile-header-actions>a,
+  .header-actions>a,
+  .osuz-mobile-header-actions>[data-customer-account-link],
+  .osuz-mobile-header-actions>[data-open-cart],
+  .header-actions>[data-customer-account-link],
+  .header-actions>[data-open-cart],
+  #mobileMenuBtn{display:none!important}
+
+  .osuz-language-wrap,
+  .osuz-language-select-wrap{display:inline-flex!important;position:relative!important;flex:0 0 auto!important}
+  .osuz-language-wrap>.header-action,
+  .osuz-language-select-wrap,
+  #languageToggle,#languageButton,#categoryLanguageToggle{
+    display:inline-flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+    gap:6px!important;width:auto!important;min-width:58px!important;height:40px!important;min-height:40px!important;
+    padding:0 7px!important;margin:0!important;border-radius:10px!important;font-size:10px!important
+  }
+  .osuz-lang-label::before,.osuz-menu-flag{width:23px!important;height:15px!important}
+  .osuz-lang-code,.osuz-lang-label{font-size:10px!important;line-height:1!important}
+  #themeToggle{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;
+    padding:0!important;margin:0!important;border-radius:10px!important
+  }
+  #themeToggle svg{width:19px!important;height:19px!important;transform:none!important}
+
+  /* Every non-index page uses the same search as row two. */
+  body:not([data-osuz-page="index"]) .osuz-header-search{
+    grid-column:1/-1!important;grid-row:2!important;
+    display:flex!important;width:100%!important;max-width:none!important;min-width:0!important;height:44px!important;
+    margin:0!important;order:initial!important
+  }
+  body[data-osuz-page="category"] .osuz-v13-category-mobile-search{display:flex!important}
+  body[data-osuz-page="category"] .osuz-desktop-search-slot{display:none!important}
+  .osuz-header-search input{font-size:13px!important;min-width:0!important}
+  .osuz-header-search button{height:100%!important;padding:0 14px!important;font-size:12px!important}
+
+  /* Index already has its own mobile search just under row one. */
+  body[data-osuz-page="index"] .header-search-wrap{display:none!important}
+  body[data-osuz-page="index"] .mobile-top-search-wrap{
+    display:block!important;background:#067890!important;padding:0 10px 8px!important;margin:0!important
+  }
+  body[data-osuz-page="index"] .mobile-top-search-shell{height:44px!important;border-radius:11px!important}
+  body[data-osuz-page="index"] .mobile-top-search-shell input{font-size:12px!important}
+  body[data-osuz-page="index"] .mobile-top-search-btn{padding:0 14px!important;font-size:12px!important}
+
+  .site-header-nav,.auth-site-subnav{display:none!important}
+
+  /* Full mobile mega menu: fixed between header and bottom nav, both panes scroll independently. */
+  #osuzCatalogPanel,.osuz-catalog-panel{
+    position:fixed!important;
+    left:0!important;right:0!important;
+    width:100vw!important;
+    transform:none!important;
+    bottom:calc(64px + env(safe-area-inset-bottom))!important;
+    max-height:none!important;
+    height:auto!important;
+    border-radius:0!important;
+    border-left:0!important;border-right:0!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:minmax(0,58%) minmax(0,42%)!important;
+    overflow:hidden!important;
+    box-shadow:0 18px 40px rgba(15,23,42,.20)!important;
+    overscroll-behavior:contain!important
+  }
+  #osuzCatalogPanel.open,.osuz-catalog-panel.open{display:grid!important}
+  .osuz-catalog-left{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:8px 10px 16px!important;
+    border-right:0!important;border-bottom:1px solid #dbe4ee!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-right{
+    min-height:0!important;max-height:none!important;height:auto!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:14px 12px 20px!important;
+    background:#f8fafc!important;
+    scrollbar-width:thin!important
+  }
+  .osuz-catalog-cat{padding:12px 12px!important;font-size:13px!important}
+  .osuz-catalog-subs{grid-template-columns:1fr 1fr!important;gap:6px 8px!important}
+  .osuz-catalog-sub{padding:10px 8px!important;font-size:12px!important;line-height:1.25!important}
+  body.dark-mode .osuz-catalog-right{background:#0b1420!important}
+  body.osuz-catalog-mobile-open{overflow:hidden!important}
+
+  /* Four bottom actions only. */
+  .osuz-mobile-bottom-final{
+    display:grid!important;grid-template-columns:repeat(4,1fr)!important;
+    height:64px!important;padding-bottom:max(3px,env(safe-area-inset-bottom))!important
+  }
+}
+
+@media (max-width:360px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{column-gap:6px!important;padding-left:7px!important;padding-right:7px!important}
+  .osuz-desktop-catalog-button{min-width:70px!important;padding:0 8px!important;font-size:10px!important}
+  .osuz-language-wrap>.header-action,.osuz-language-select-wrap,#languageToggle,#languageButton,#categoryLanguageToggle{min-width:54px!important;padding:0 5px!important}
+  .site-header-top .site-logo-text,.auth-site-title{font-size:14px!important}
+}
+
+/* ===== osuz-v16-new-fixes ===== */
+/* V16 — правки из «Правки 09.07.26✳» */
+:root{--osuz-v16-header-h:124px;--osuz-bottom-nav-h:68px}
+
+/* Единый desktop header: логотип слева; каталог + поиск + действия сдвинуты вправо. */
+@media (min-width:768px){
+  .site-header-top>.max-w-\[1400px\],
+  .site-header-top>.max-w-\[1200px\],
+  .auth-site-header>.auth-header-inner,
+  .auth-site-header>div{
+    display:flex!important;align-items:center!important;gap:12px!important;max-width:1400px!important;
+  }
+  .site-header-top .header-brand,
+  .site-header-top a[href="index.html"].flex-shrink-0:first-child,
+  .auth-site-header .header-brand{margin-right:auto!important;flex:0 0 auto!important}
+  .osuz-desktop-catalog-button{
+    order:20!important;display:inline-flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    width:70px!important;min-width:70px!important;height:58px!important;min-height:58px!important;padding:5px 7px!important;gap:4px!important;
+    border-radius:12px!important;line-height:1!important;font-size:11px!important;font-weight:800!important;
+  }
+  .osuz-desktop-catalog-button svg,.osuz-desktop-catalog-button i{width:20px!important;height:20px!important;margin:0!important}
+  .osuz-desktop-search-slot{order:21!important;flex:0 1 560px!important;width:min(560px,40vw)!important;max-width:560px!important;margin:0!important}
+  .header-actions,.osuz-mobile-header-actions{order:22!important;margin-left:4px!important}
+}
+@media (min-width:1200px){.osuz-desktop-search-slot{width:min(590px,42vw)!important;max-width:590px!important;flex-basis:590px!important}}
+
+/* Выпадающий каталог desktop: открывается JS только по клику; подкатегории одной вертикальной колонкой. */
+#osuzCatalogPanel.osuz-v16-catalog-panel{display:none!important;position:fixed!important;z-index:220!important;left:50%!important;transform:translateX(-50%)!important;width:min(1040px,calc(100vw - 40px))!important;max-height:min(620px,calc(100vh - var(--osuz-v16-header-h) - 24px))!important;background:#fff!important;border:1px solid #dbe4ee!important;border-radius:0 0 22px 22px!important;box-shadow:0 28px 65px rgba(15,23,42,.22)!important;overflow:hidden!important}
+#osuzCatalogPanel.osuz-v16-catalog-panel.open{display:block!important}
+.v16-desktop-catalog{display:grid;grid-template-columns:320px minmax(0,1fr);height:min(560px,calc(100vh - var(--osuz-v16-header-h) - 30px))}
+.v16-catalog-roots{overflow-y:auto;padding:12px;border-right:1px solid #e5e7eb;scrollbar-width:thin}
+.v16-catalog-root{width:100%;min-height:44px;padding:10px 12px;border:0;border-radius:10px;background:transparent;color:#27364c;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750;cursor:pointer}
+.v16-catalog-root:hover,.v16-catalog-root.active{background:#dff7fa;color:#067890}
+.v16-catalog-subwrap{min-width:0;overflow-y:auto;padding:22px 24px;scrollbar-width:thin}
+.v16-catalog-heading{font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:12px}
+.v16-catalog-subs{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:2px!important;grid-template-columns:none!important}
+.v16-catalog-sub{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:42px;padding:9px 10px;border-radius:9px;color:#26364d;font-size:14px;font-weight:650;text-decoration:none}
+.v16-catalog-sub:hover{background:#edf9fb;color:#067890}
+.v16-mobile-catalog{display:none}
+body.dark-mode #osuzCatalogPanel.osuz-v16-catalog-panel{background:#0f1722!important;border-color:#334155!important}
+body.dark-mode .v16-catalog-roots{border-color:#334155}
+body.dark-mode .v16-catalog-root,body.dark-mode .v16-catalog-sub{color:#e5edf7}
+body.dark-mode .v16-catalog-root:hover,body.dark-mode .v16-catalog-root.active,body.dark-mode .v16-catalog-sub:hover{background:#15323b!important;color:#fff!important}
+body.dark-mode .v16-catalog-heading{color:#9fb0c4}
+
+/* Явный контраст подсказок поиска в тёмной теме (Firefox / Opera GX / Chromium). */
+body.dark-mode .header-search-dropdown,
+body.dark-mode .category-search-suggest,
+html.osuz-pre-dark .header-search-dropdown,
+html.osuz-pre-dark .category-search-suggest{background:#0d1724!important;border-color:#334155!important;color:#f8fafc!important;color-scheme:dark!important}
+body.dark-mode .header-search-dropdown a:hover,
+body.dark-mode .header-search-dropdown button:hover,
+body.dark-mode .search-suggest-item:hover,
+body.dark-mode .category-search-suggest-item:hover,
+body.dark-mode .category-search-suggest-more:hover,
+body.dark-mode [class*="search-result"]:hover,
+html.osuz-pre-dark .header-search-dropdown a:hover,
+html.osuz-pre-dark .category-search-suggest-item:hover{
+  background:#1b3943!important;color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;forced-color-adjust:none!important
+}
+body.dark-mode .header-search-dropdown a:hover *,body.dark-mode .header-search-dropdown button:hover *,body.dark-mode .category-search-suggest-item:hover *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
+
+/* Категория не должна уезжать под фиксированный header. */
+html{scroll-padding-top:calc(var(--osuz-v16-header-h) + 18px)!important}
+body.osuz-v16-category-page>section:first-of-type{padding-top:calc(var(--osuz-v16-header-h) + 26px)!important}
+body.osuz-v16-category-page [class*="sticky"]{scroll-margin-top:calc(var(--osuz-v16-header-h) + 12px)}
+
+/* Карусель — зарезервированное пространство под стрелки, чтобы они не пересекались с контентом. */
+@media (min-width:1024px){
+  #heroCarousel .carousel-track>.min-w-full>.max-w-\[1400px\]{max-width:1300px!important;padding-left:84px!important;padding-right:84px!important}
+  #heroCarousel .hero-slide-image{max-width:530px!important;height:280px!important}
+  #heroCarousel .hero-controls-inner{max-width:1480px!important;padding:0 16px!important}
+  #heroCarousel .hero-side-btn{width:44px!important;height:106px!important;min-width:44px!important;z-index:8!important}
+}
+@media (min-width:1024px) and (max-width:1199px){
+  #heroCarousel .carousel-track>.min-w-full>.max-w-\[1400px\]{padding-left:68px!important;padding-right:68px!important;gap:38px!important}
+  #heroCarousel .hero-slide-image{max-width:450px!important;height:255px!important}
+}
+
+/* Карточка товара: на обычном desktop 100% — изображение, базовая информация и действия видны одновременно. */
+.osuz-product-action-card{display:flex;flex-direction:column;min-width:0}
+@media (min-width:1100px){
+  .osuz-product-hero{grid-template-columns:minmax(0,.98fr) minmax(0,.82fr) minmax(280px,.68fr)!important;gap:18px!important;align-items:stretch!important}
+  .osuz-product-media-card,.osuz-product-info-card,.osuz-product-action-card{height:clamp(418px,56vh,505px)!important;min-height:0!important;max-height:505px!important}
+  .osuz-product-media-card{overflow:hidden!important}
+  .osuz-product-media-card>div:first-child{min-height:0!important;flex:1 1 auto!important}
+  .osuz-product-media-card .main-image{height:100%!important;max-height:390px!important;object-fit:contain!important}
+  .osuz-product-info-card{padding:22px!important;overflow:auto!important;scrollbar-width:thin}
+  #productTitle{font-size:clamp(24px,2.15vw,34px)!important;line-height:1.08!important;margin-bottom:12px!important}
+  #productSpecification{margin-bottom:12px!important;line-height:1.55!important;max-height:150px!important;overflow:auto!important}
+  .osuz-product-action-card{padding:22px!important}
+  .osuz-product-action-card .product-price-card{margin-bottom:16px!important}
+  .osuz-product-action-card>.flex{margin-top:auto!important;display:flex!important;align-content:flex-end!important}
+}
+@media (min-width:768px) and (max-width:1099px){.osuz-product-hero{grid-template-columns:1fr 1fr!important}.osuz-product-action-card{grid-column:1/-1}}
+
+/* Сумма заказа всегда тёмная и читаемая во всех движках. */
+.order-total-card{background:#dff7fa!important;color:#0f172a!important;forced-color-adjust:none!important}
+.order-total-card .text-primary-700{color:#067890!important;-webkit-text-fill-color:#067890!important}
+.order-total-card .text-gray-900,.order-total-card .order-total-value{color:#0f172a!important;-webkit-text-fill-color:#0f172a!important;opacity:1!important}
+body.dark-mode .order-total-card{background:#cdeff4!important;color:#07111f!important}
+body.dark-mode .order-total-card .text-gray-900,body.dark-mode .order-total-card .order-total-value{color:#07111f!important;-webkit-text-fill-color:#07111f!important}
+
+/* Footer buyers */
+.osuz-buyers-footer button,.osuz-buyers-footer a{display:inline-block;line-height:1.45}
+
+/* Mobile: каталог живёт в tabbar и открывает OLX-подобный полноэкранный drill-down. */
+@media (max-width:767px){
+  :root{--osuz-bottom-nav-h:68px}
+  body{padding-bottom:calc(var(--osuz-bottom-nav-h) + env(safe-area-inset-bottom))!important}
+  .osuz-desktop-catalog-button{display:none!important}
+  .site-header-top,.auth-site-header{border-bottom:0!important;box-shadow:none!important}
+  .site-header-top::after,.auth-site-header::after,.site-header::after{display:none!important;content:none!important;border:0!important}
+  .site-header-nav,.auth-site-subnav{display:none!important;border:0!important;height:0!important;min-height:0!important;overflow:hidden!important}
+  .osuz-mobile-bottom-final{grid-template-columns:repeat(5,minmax(0,1fr))!important;height:var(--osuz-bottom-nav-h)!important}
+  .osuz-mobile-bottom-final a,.osuz-mobile-bottom-final button{appearance:none;border:0;background:transparent;position:relative;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;color:#64748b;font:inherit;font-size:9px;font-weight:800;padding:3px 2px;cursor:pointer}
+  .osuz-mobile-bottom-final a svg,.osuz-mobile-bottom-final button svg{width:20px!important;height:20px!important}
+  .osuz-mobile-bottom-final a.active,.osuz-mobile-bottom-final button.active{color:#067890!important}
+  .osuz-mobile-bottom-final a.active::before,.osuz-mobile-bottom-final button.active::before{content:"";position:absolute;top:0;left:28%;right:28%;height:2px;border-radius:0 0 3px 3px;background:#0abbd0}
+  body.dark-mode .osuz-mobile-bottom-final button{color:#94a3b8}
+
+  #osuzCatalogPanel.osuz-v16-catalog-panel{
+    left:0!important;right:0!important;transform:none!important;width:100vw!important;max-width:none!important;border-radius:0!important;border-left:0!important;border-right:0!important;
+    top:var(--osuz-v16-header-h)!important;bottom:calc(var(--osuz-bottom-nav-h) + env(safe-area-inset-bottom))!important;height:auto!important;max-height:none!important;z-index:330!important
+  }
+  #osuzCatalogPanel.osuz-v16-catalog-panel.open{display:block!important}
+  .v16-desktop-catalog{display:none!important}
+  .v16-mobile-catalog{display:flex!important;flex-direction:column;height:100%;min-height:0;background:#fff;color:#172033}
+  .v16-mobile-catalog-head{height:48px;min-height:48px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;gap:10px;padding:0 12px}
+  .v16-mobile-back{width:34px;height:34px;border:0;background:transparent;border-radius:8px;display:flex;align-items:center;justify-content:center;color:inherit}
+  .v16-mobile-back[hidden]{display:none!important}
+  .v16-mobile-title{font-size:15px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .v16-mobile-list{overflow-y:auto;overscroll-behavior:contain;flex:1 1 auto;min-height:0;padding:4px 0 18px;scrollbar-width:thin}
+  .v16-mobile-row{width:100%;min-height:52px;border:0;border-bottom:1px solid #edf0f3;background:transparent;color:#172033;padding:0 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-size:14px;font-weight:750}
+  .v16-mobile-row:active{background:#edfafd}
+  .v16-mobile-row-all{color:#067890;background:#f2fcfd}
+  body.dark-mode .v16-mobile-catalog{background:#0d1724;color:#edf5ff}
+  body.dark-mode .v16-mobile-catalog-head,body.dark-mode .v16-mobile-row{border-color:#2b3a4d}
+  body.dark-mode .v16-mobile-row{color:#edf5ff}
+  body.dark-mode .v16-mobile-row:active,body.dark-mode .v16-mobile-row-all{background:#15323b;color:#fff}
+}
+

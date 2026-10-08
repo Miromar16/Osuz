@@ -1,0 +1,3 @@
+/* ===== osuz-checkout-contrast ===== */
+body.dark-mode .field,body.dark-mode .choice-button,body.dark-mode .secondary-button,body.dark-mode .surface input,body.dark-mode .surface select,body.dark-mode .surface textarea{background:#0f1722!important;color:#f8fafc!important;border-color:#475569!important}body.dark-mode .surface label,body.dark-mode .surface p,body.dark-mode .surface span:not(.status-badge):not(.item-status){opacity:1}body.dark-mode option{background:#0f1722!important;color:#f8fafc!important}.field:focus,.auth-input:focus{color:#0f172a!important}body.dark-mode .field:focus,body.dark-mode .auth-input:focus{color:#f8fafc!important}
+
