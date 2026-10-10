@@ -4397,6 +4397,190 @@ body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
 }
 </style>
 
+
+<style id="osuz-mobile-header-menu-hotfix-20261009">
+/* Keep dropdown outside header's clipping/stacking contexts on mobile. */
+@media (max-width:767px) {
+  #languageMenu.osuz-floating-lang-menu,
+  #mobileLanguageMenu.osuz-floating-lang-menu {
+    position:fixed!important;
+    z-index:2147483000!important;
+    display:block!important;
+    visibility:visible!important;
+    box-sizing:border-box!important;
+    max-height:min(60dvh,300px)!important;
+    overflow-y:auto!important;
+    min-width:180px!important;
+    width:max-content!important;
+    max-width:calc(100vw - 24px)!important;
+    margin:0!important;
+    padding:8px!important;
+    border-radius:13px!important;
+    background:#fff!important;
+    border:1px solid #cbd5e1!important;
+    color:#0f172a!important;
+    box-shadow:0 14px 42px rgba(0,0,0,.3)!important;
+    transform:none!important;
+  }
+  #languageMenu.osuz-floating-lang-menu.hidden,
+  #mobileLanguageMenu.osuz-floating-lang-menu.hidden { display:none!important; }
+  #languageMenu.osuz-floating-lang-menu .language-option,
+  #mobileLanguageMenu.osuz-floating-lang-menu .language-option {
+    display:flex!important;align-items:center!important;gap:8px!important;
+    width:100%!important;min-height:42px!important;
+    padding:10px!important;white-space:nowrap!important;
+    color:#0f172a!important;background:transparent!important;
+  }
+  #languageMenu.osuz-floating-lang-menu .language-option:hover,
+  #mobileLanguageMenu.osuz-floating-lang-menu .language-option:hover {background:#e6f8fb!important;}
+  /* Suppress the hover tooltip that was covering the camera. */
+  #languageToggle::before,#languageToggle::after,
+  #mobileLanguageToggle::before,#mobileLanguageToggle::after {display:none!important;content:none!important;}
+  .osuz-photo-search-control {z-index:3!important;isolation:isolate!important;}
+  .osuz-photo-search-control svg {display:block!important;visibility:visible!important;opacity:1!important;}
+  body.dark-mode #languageMenu.osuz-floating-lang-menu,
+  body.dark-mode #mobileLanguageMenu.osuz-floating-lang-menu,
+  html[data-osuz-theme="dark"] #languageMenu.osuz-floating-lang-menu,
+  html[data-osuz-theme="dark"] #mobileLanguageMenu.osuz-floating-lang-menu {
+    background:#101c2a!important;color:#f8fafc!important;border-color:#394b5d!important;
+  }
+  body.dark-mode #languageMenu.osuz-floating-lang-menu .language-option,
+  body.dark-mode #mobileLanguageMenu.osuz-floating-lang-menu .language-option,
+  html[data-osuz-theme="dark"] #languageMenu.osuz-floating-lang-menu .language-option,
+  html[data-osuz-theme="dark"] #mobileLanguageMenu.osuz-floating-lang-menu .language-option {color:#f8fafc!important;}
+  body.dark-mode #languageMenu.osuz-floating-lang-menu .language-option:hover,
+  body.dark-mode #mobileLanguageMenu.osuz-floating-lang-menu .language-option:hover {background:#193448!important;}
+}
+</style>
+<style id="osuz-language-selected-contrast-20261009">
+/* Selected language must remain readable in both themes.
+   The locale script toggles bg-primary-50 on the active menu option. */
+#languageMenu .language-option.bg-primary-50,
+#mobileLanguageMenu .language-option.bg-primary-50 {
+  color: #0c3a46 !important;
+  background-color: #dff7f8 !important;
+}
+body.dark-mode #languageMenu .language-option.bg-primary-50,
+body.dark-mode #mobileLanguageMenu .language-option.bg-primary-50,
+html[data-osuz-theme="dark"] #languageMenu .language-option.bg-primary-50,
+html[data-osuz-theme="dark"] #mobileLanguageMenu .language-option.bg-primary-50 {
+  color: #f1fbff !important;
+  background-color: #194052 !important;
+}
+/* Keep menu choices readable independently of theme-dependent Tailwind helpers. */
+body:not(.dark-mode) #languageMenu .language-option:not(.bg-primary-50),
+body:not(.dark-mode) #mobileLanguageMenu .language-option:not(.bg-primary-50) {
+  color: #182a3a !important;
+}
+</style>
+<style id="osuz-mobile-camera-visible-20261009">
+/* The mobile camera is in the HTML itself: no icon library or DOM injection required. */
+@media (max-width:767px) {
+  body[data-osuz-page="index"] #mobileTopSearchForm #mobileTopPhotoBtn {
+    position:relative!important;
+    display:inline-flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    flex:0 0 42px!important;
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+    height:100%!important;
+    min-height:0!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:0!important;
+    margin:0!important;
+    background:transparent!important;
+    border:0!important;
+    border-left:1px solid #e2e8f0!important;
+    border-radius:0!important;
+    color:#087d90!important;
+    cursor:pointer!important;
+    z-index:2!important;
+    overflow:visible!important;
+  }
+  body[data-osuz-page="index"] #mobileTopPhotoBtn svg {
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    position:static!important;
+    width:22px!important;
+    min-width:22px!important;
+    height:22px!important;
+    stroke:currentColor!important;
+    fill:none!important;
+    flex-shrink:0!important;
+    pointer-events:none!important;
+  }
+  body[data-osuz-page="index"] #mobileTopPhotoBtn:active {
+    background:rgba(8,125,144,.12)!important;
+  }
+  /* Avoid language tooltip clipping over the camera and submit button. */
+  nav.site-header [data-tooltip]::before,
+  nav.site-header [data-tooltip]::after {
+    display:none!important;
+    content:none!important;
+    visibility:hidden!important;
+  }
+  body.dark-mode #mobileTopSearchForm #mobileTopPhotoBtn,
+  html[data-osuz-theme="dark"] #mobileTopSearchForm #mobileTopPhotoBtn {
+    color:#67e8f9!important;
+    border-left-color:#334155!important;
+  }
+}
+</style>
+
+<style id="osuz-mobile-catalog-header-and-tabs-final-20261009">
+/* Mobile fullscreen catalog: three stable columns, regardless of old flex overrides. */
+@media (max-width: 767px) {
+  #osuzV34Catalog > .v34-cat-head.v34-mobile-only {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: calc(64px + env(safe-area-inset-top, 0px)) !important;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px !important;
+  }
+  #osuzV34Catalog > .v34-cat-head > .v34-cat-back {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start !important;
+  }
+  #osuzV34Catalog > .v34-cat-head > .v34-cat-back[hidden] {
+    visibility: hidden !important;
+  }
+  #osuzV34Catalog > .v34-cat-head > .v34-cat-title {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    text-align: center !important;
+    line-height: 1.25 !important;
+  }
+  #osuzV34Catalog > .v34-cat-head > .v34-cat-close {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    display: inline-flex !important;
+    flex: none !important;
+    width: 38px !important;
+    height: 38px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* The catalog is a separate view: avoid a second active underline. */
+  body.osuz-v34-catalog-open .osuz-mobile-bottom-final
+    [data-mobile-final]:not([data-mobile-final="catalog"])::before {
+    display: none !important;
+  }
+}
+</style>
 </head>
 <body data-osuz-build="2026-09-29-v52-seo-index-schema" data-osuz-page="index" data-osuz-v16-page="index">
 <nav class="site-header fixed top-0 left-0 right-0 z-50">
@@ -4479,6 +4663,9 @@ body.dark-mode #heroPhotoBtn.osuz-photo-search-control {
 <form autocomplete="off" class="mobile-top-search-shell" id="mobileTopSearchForm">
 <i class="w-4 h-4 text-gray-400 ml-3 flex-shrink-0" data-lucide="search"></i>
 <input autocomplete="off" id="mobileTopSearchInput" placeholder="Поиск товаров..." type="search"/>
+<button aria-label="Поиск по фото" class="osuz-photo-search-control osuz-mobile-photo-button" id="mobileTopPhotoBtn" title="Поиск по фото" type="button">
+<svg aria-hidden="true" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="22" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>
+</button>
 <button aria-label="Найти" class="mobile-top-search-btn" id="mobileTopSearchButton" type="submit">
 <span>Найти</span>
 </button>
@@ -6453,7 +6640,26 @@ async function loadCategories(){
   })();
   return loadPromise;
 }
-function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function setCatalogActive(open){
+  // Treat the full-screen catalog as its own active view, not as an overlay
+  // sharing the active bottom-tab state with the underlying page.
+  const path = location.pathname.toLowerCase();
+  const file = path.split('/').pop() || 'index.html';
+  const current = path.startsWith('/catalog/') || path.startsWith('/product/') ||
+    file === 'category.html' || file === 'product.html' ? 'catalog' :
+    file === 'cart.html' ? 'cart' :
+    file === 'orders.html' ? 'orders' :
+    file === 'auth.html' ? 'profile' : 'home';
+  const active = open ? 'catalog' : current;
+  document.querySelectorAll('.osuz-mobile-bottom-final [data-mobile-final]').forEach(el => {
+    const selected = el.dataset.mobileFinal === active;
+    el.classList.toggle('active', selected);
+    if (selected) el.setAttribute('aria-current', 'page');
+    else el.removeAttribute('aria-current');
+    if (el.dataset.mobileFinal === 'catalog')
+      el.setAttribute('aria-pressed', String(!!open));
+  });
+}
 function openCatalog(){
   if(!panel)buildPanel();measureTop();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
@@ -6644,5 +6850,69 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+
+<script id="osuz-mobile-header-menu-hotfix-js-20261009">
+(() => {
+  'use strict';
+  function setup() {
+    const menus = [
+      [document.getElementById('languageToggle'),document.getElementById('languageMenu')],
+      [document.getElementById('mobileLanguageToggle'),document.getElementById('mobileLanguageMenu')]
+    ];
+    function position(toggle,menu) {
+      if (!toggle || !menu || innerWidth > 767 || menu.classList.contains('hidden')) return;
+      const box=toggle.getBoundingClientRect();
+      const mw=Math.min(Math.max(menu.offsetWidth,180),innerWidth-24);
+      const left=Math.max(12,Math.min(innerWidth-mw-12,box.right-mw));
+      const bottomSpace=innerHeight-box.bottom;
+      const mh=menu.offsetHeight;
+      const top=bottomSpace>=mh+12?box.bottom+8:Math.max(8,box.top-mh-8);
+      menu.style.setProperty('left',`${left}px`,'important');
+      menu.style.setProperty('right','auto','important');
+      menu.style.setProperty('top',`${top}px`,'important');
+      menu.style.setProperty('bottom','auto','important');
+    }
+    menus.forEach(([toggle,menu])=>{
+      if(!toggle||!menu)return;
+      menu.classList.add('osuz-floating-lang-menu');
+      toggle.addEventListener('click',()=>requestAnimationFrame(()=>position(toggle,menu)));
+      menu.querySelectorAll('[data-language]').forEach(b=>b.addEventListener('click',()=>menu.classList.add('hidden')));
+    });
+    const update=()=>menus.forEach(([b,m])=>position(b,m));
+    addEventListener('resize',update,{passive:true});
+    addEventListener('scroll',update,{passive:true,capture:true});
+    // If SVG icon library fails to load, leave a visible accessible camera fallback.
+    document.querySelectorAll('.osuz-photo-search-control').forEach(label=>{
+      if(!label.querySelector('svg')&&!label.querySelector('.osuz-camera-fallback')){
+        const fallback=document.createElement('span');
+        fallback.className='osuz-camera-fallback';fallback.textContent='📷';
+        fallback.setAttribute('aria-hidden','true');
+        fallback.style.fontSize='19px';label.appendChild(fallback);
+      }
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+})();
+</script>
+<script id="osuz-mobile-photo-button-20261009">
+(() => {
+  'use strict';
+  function init() {
+    const button = document.getElementById('mobileTopPhotoBtn');
+    const picker = document.getElementById('heroPhotoInput');
+    if (!button || !picker) return;
+    button.addEventListener('click', () => picker.click());
+    picker.addEventListener('change', () => {
+      // Reuse the original photo-search picker and preview logic.
+      const selected = picker.files && picker.files.length > 0;
+      button.setAttribute('aria-label', selected ? 'Фото выбрано — выбрать другое' : 'Поиск по фото');
+      button.classList.toggle('has-photo', selected);
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
+  else init();
+})();
+</script>
 </body>
 </html>

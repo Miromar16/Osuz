@@ -83,18 +83,21 @@ function buildPanel(){
     <div class="v34-desktop-roots" id="v34CatRoots"></div>
     <div class="v34-desktop-subs"><div class="v34-desktop-heading" id="v34CatHeading">${esc(tr('sub'))}</div><div id="v34CatSubs"></div></div>`;
   document.body.appendChild(panel);
+  ensureMobileListVisible();
   panel.addEventListener('click',e=>e.stopPropagation());
   document.getElementById('v34CatClose')?.addEventListener('click',closeCatalog);
   document.getElementById('v34CatBack')?.addEventListener('click',()=>{stack.pop();renderMobileLevel()});
   window.lucide?.createIcons();
 }
 function renderState(text){
+  ensureMobileListVisible();
   const m=document.getElementById('v34CatMobileList'),r=document.getElementById('v34CatRoots'),s=document.getElementById('v34CatSubs');
   if(m)m.innerHTML='<div class="v34-cat-state">'+esc(text)+'</div>';
   if(r)r.innerHTML='<div class="v34-cat-state">'+esc(text)+'</div>';
   if(s)s.innerHTML='';
 }
 function renderMobileLevel(){
+  ensureMobileListVisible();
   const list=document.getElementById('v34CatMobileList'),title=document.getElementById('v34CatTitle'),back=document.getElementById('v34CatBack');
   if(!list||!title||!back)return;
   const pid=stack.length?stack[stack.length-1]:null;
@@ -144,25 +147,50 @@ async function loadCategories(){
       const cache=Array.isArray(window.__OSUZ_CATEGORY_CACHE__)?window.__OSUZ_CATEGORY_CACHE__:[];
       if(cache.length)cats=normalizePayload(cache);
       if(!cats.length){
-        const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
-        if(!res.ok)throw new Error('HTTP '+res.status);
-        cats=normalizePayload(await res.json());
+        const controller=new AbortController();
+        const timeout=setTimeout(()=>controller.abort(),9000);
+        try {
+          const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store',signal:controller.signal});
+          if(!res.ok)throw new Error('HTTP '+res.status);
+          cats=normalizePayload(await res.json());
+        } finally { clearTimeout(timeout); }
       }
       if(!cats.length)throw new Error('No categories');
       renderMobileLevel();renderDesktop();
-    }catch(err){console.error('[OSUZ V34 catalog]',err);renderState(tr('error'))}
+    }catch(err){console.error('[OSUZ V34 catalog]',err);renderState(tr('error'));const list=document.getElementById('v34CatMobileList');if(list){const a=document.createElement('a');a.href='/index.html#products';a.className='v34-cat-row';a.textContent=tr('all');list.appendChild(a)}}
     finally{loadPromise=null}
     return cats;
   })();
   return loadPromise;
 }
-function setCatalogActive(open){document.querySelectorAll('[data-mobile-final]').forEach(el=>{if(el.dataset.mobileFinal==='catalog')el.classList.toggle('active',open||location.pathname.startsWith('/catalog/')||location.pathname.endsWith('/category.html')||location.pathname.endsWith('category.html'))})}
+function setCatalogActive(open){
+  const path=location.pathname.toLowerCase();
+  const page=path.split('/').pop()||'index.html';
+  const pageKey=path.startsWith('/catalog/')||page==='category.html'||path.startsWith('/product/')||page==='product.html'?'catalog':page==='cart.html'?'cart':page==='orders.html'?'orders':page==='auth.html'?'profile':'home';
+  document.querySelectorAll('.osuz-mobile-bottom-final [data-mobile-final]').forEach(el=>{
+    el.classList.toggle('active',open?el.dataset.mobileFinal==='catalog':el.dataset.mobileFinal===pageKey);
+    if(el.dataset.mobileFinal==='catalog')el.setAttribute('aria-pressed',String(!!open));
+  });
+}
+function ensureMobileListVisible(){
+  const list=document.getElementById('v34CatMobileList');
+  if(!list)return;
+  list.classList.add('v34-mobile-only');
+  // Different generations of the mobile CSS used competing display rules.
+  if(mobile()){
+    list.style.setProperty('display','block','important');
+    list.style.setProperty('flex','1 1 auto','important');
+    list.style.setProperty('min-height','0','important');
+    list.style.setProperty('overflow-y','auto','important');
+    list.style.setProperty('visibility','visible','important');
+  }
+}
 function openCatalog(fromHistory){
   if(!panel)buildPanel();measureTop();panel.classList.add('open');
   if(mobile()&&!fromHistory&&location.hash!=='#catalog'){try{history.pushState({osuzCatalog:1},'',location.pathname+location.search+'#catalog');pushedHash=true}catch(_){}}panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
   document.querySelectorAll('[data-osuz-catalog-toggle]').forEach(b=>b.setAttribute('aria-expanded','true'));
-  stack=[];setCatalogActive(true);
+  stack=[];setCatalogActive(true);ensureMobileListVisible();
   if(cats.length){renderMobileLevel();renderDesktop()}else{renderState(tr('loading'));void loadCategories()}
 }
 function closeCatalog(){
@@ -183,7 +211,7 @@ function bindSearchSafety(){
   if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
 }
 function init(){
-  ensureBottomCatalog();buildPanel();measureTop();bindSearchSafety();
+  ensureBottomCatalog();buildPanel();measureTop();bindSearchSafety();setCatalogActive(false);
   document.addEventListener('click',e=>{
     const bottom=e.target.closest('[data-v34-mobile-catalog]');
     const top=e.target.closest('[data-osuz-catalog-toggle]');

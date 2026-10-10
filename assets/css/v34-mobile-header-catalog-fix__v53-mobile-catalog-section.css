@@ -349,3 +349,43 @@
   body.dark-mode #osuzV34Catalog .v34-cat-head{background:#0b111b!important}
 }
 
+/* OSUZ mobile polish: catalog header alignment and inner-page breathing room.
+   This is intentionally scoped to phones and to cart/orders only. */
+@media (max-width: 767px) {
+  /* The legacy .v34-mobile-only flex rule must not override the header grid. */
+  #osuzV34Catalog .v34-cat-head.v34-mobile-only {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    align-items: center !important;
+    column-gap: 8px !important;
+    min-height: calc(64px + env(safe-area-inset-top, 0px)) !important;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px !important;
+    box-sizing: border-box !important;
+  }
+  #osuzV34Catalog .v34-cat-back {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    justify-self: start !important;
+  }
+  #osuzV34Catalog .v34-cat-title {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+  #osuzV34Catalog .v34-cat-close {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    justify-self: end !important;
+    width: 38px !important;
+    height: 38px !important;
+    flex: none !important;
+  }
+  /* Existing header is fixed. Give headings 24px of breathing room below it. */
+  body[data-osuz-page="orders"] > main.pt-36,
+  body[data-osuz-page="cart"] > main.pt-36 {
+    padding-top: 148px !important;
+  }
+}

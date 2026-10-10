@@ -728,11 +728,8 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 </div>
 <button class="primary-button w-full mt-6" disabled="" id="checkoutButton" type="button">
 <i class="w-5 h-5" data-lucide="credit-card"></i>
-<span>Запрос на наличие</span>
+<span>Продолжить</span>
 </button>
-<div class="notice mt-4" id="checkoutNotice">
-                    Продавцу будет отправлен запрос на наличие выбранных товаров. После ответа можно будет оформить заказ.
-                </div>
 </aside>
 </div>
 <div class="notice hidden mt-5" id="errorState"></div>
@@ -793,22 +790,18 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 selectedItems: 'Выбрано товаров',
                 total: 'Итого',
                 grandTotal: 'Общая сумма',
-                checkout: 'Запрос на наличие',
+                checkout: 'Продолжить',
                 checkoutDirect: 'Оформить заказ',
-                checkoutDirectNotice: 'Заказ будет оформлен без запроса на наличие. Если магазин закрыт, обработка начнётся после открытия.',
                 checkoutDirectCreating: 'Оформляем заказ...',
                 checkoutDirectCreated: 'Заказ создан. Открываем его...',
-                checkoutMixed: 'Оформить / запросить',
-                checkoutMixedNotice: 'Товары с учётом остатков оформляются сразу; по остальным продавцам отправится запрос на наличие.',
+                checkoutMixed: 'Продолжить оформление',
                 checkoutUnknown: 'Продолжить оформление',
-                checkoutUnknownNotice: 'Тип оформления уточняется по данным продавца. Возможно, потребуется подтверждение наличия.',
                 checkoutMixedCreating: 'Создаём заказы...',
                 checkoutMixedCreated: 'Заказы созданы. Открываем их...',
-                checkoutNotice: 'Продавцу будет отправлен запрос на наличие выбранных товаров. После ответа можно будет оформить заказ.',
-                checkoutCreating: 'Отправляем запрос...',
+                checkoutCreating: 'Создаём заявку...',
                 checkoutEmpty: 'Выберите хотя бы один товар для оформления.',
                 checkoutError: 'Не удалось оформить заказ. Попробуйте ещё раз.',
-                checkoutCreated: 'Запрос отправлен. Открываем статус запроса...',
+                checkoutCreated: 'Заявка создана. Открываем детали...',
                 quantity: 'Количество',
                 remove: 'Удалить',
                 selectSeller: 'Выбрать все товары продавца',
@@ -848,22 +841,18 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 selectedItems: 'Tanlangan mahsulotlar',
                 total: 'Jami',
                 grandTotal: 'Umumiy summa',
-                checkout: 'Mavjudligini so‘rash',
+                checkout: 'Davom etish',
                 checkoutDirect: 'Buyurtma berish',
-                checkoutDirectNotice: 'Buyurtma mavjudlik so‘rovisiz rasmiylashtiriladi. Do‘kon yopiq bo‘lsa, ochilgach qayta ishlanadi.',
                 checkoutDirectCreating: 'Buyurtma rasmiylashtirilmoqda...',
                 checkoutDirectCreated: 'Buyurtma yaratildi. Ochilmoqda...',
-                checkoutMixed: 'Buyurtma / so‘rov',
-                checkoutMixedNotice: 'Ombor hisobini yuritadigan sotuvchilar uchun buyurtma darhol rasmiylashtiriladi, boshqalariga mavjudlik so‘rovi yuboriladi.',
+                checkoutMixed: 'Davom etish',
                 checkoutUnknown: 'Davom etish',
-                checkoutUnknownNotice: 'Rasmiylashtirish turi sotuvchi ma’lumotlariga bog‘liq. Mavjudlikni tasdiqlash talab qilinishi mumkin.',
                 checkoutMixedCreating: 'Buyurtmalar yaratilmoqda...',
                 checkoutMixedCreated: 'Buyurtmalar yaratildi. Ochilmoqda...',
-                checkoutNotice: 'Tanlangan mahsulotlarning mavjudligi bo‘yicha sotuvchiga so‘rov yuboriladi. Javobdan keyin buyurtmani rasmiylashtirish mumkin.',
-                checkoutCreating: 'So‘rov yuborilmoqda...',
+                checkoutCreating: 'Ariza yaratilmoqda...',
                 checkoutEmpty: 'Buyurtma uchun kamida bitta mahsulotni tanlang.',
                 checkoutError: 'Buyurtma yaratilmadi. Qayta urinib ko‘ring.',
-                checkoutCreated: 'So‘rov yuborildi. Holati ochilmoqda...',
+                checkoutCreated: 'Ariza yaratildi. Tafsilotlar ochilmoqda...',
                 quantity: 'Miqdor',
                 remove: 'O‘chirish',
                 selectSeller: 'Sotuvchining barcha mahsulotlarini tanlash',
@@ -903,22 +892,18 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 selectedItems: 'Selected items',
                 total: 'Total',
                 grandTotal: 'Grand total',
-                checkout: 'Request availability',
+                checkout: 'Continue',
                 checkoutDirect: 'Place order',
-                checkoutDirectNotice: 'Your order will be placed without an availability request. If the shop is closed, processing starts when it reopens.',
                 checkoutDirectCreating: 'Placing order...',
                 checkoutDirectCreated: 'Order created. Opening details...',
-                checkoutMixed: 'Order / request',
-                checkoutMixedNotice: 'Orders with stock tracking are placed directly; other sellers receive availability requests.',
+                checkoutMixed: 'Continue checkout',
                 checkoutUnknown: 'Continue checkout',
-                checkoutUnknownNotice: 'The order flow depends on the seller’s settings. Some items may need availability confirmation.',
                 checkoutMixedCreating: 'Creating orders...',
                 checkoutMixedCreated: 'Orders created. Opening details...',
-                checkoutNotice: 'An availability request will be sent to each seller for the selected products. You can place the order after the seller responds.',
-                checkoutCreating: 'Sending request...',
+                checkoutCreating: 'Creating order request...',
                 checkoutEmpty: 'Select at least one item to check out.',
                 checkoutError: 'Could not create the order. Try again.',
-                checkoutCreated: 'Request sent. Opening its status...',
+                checkoutCreated: 'Order request created. Opening details...',
                 quantity: 'Quantity',
                 remove: 'Remove',
                 selectSeller: 'Select all products from this seller',
@@ -1025,17 +1010,19 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
         }
 
         function updateCheckoutCopy() {
+            // require_stock_for_cart = 1: real checkout, no availability request.
+            // require_stock_for_cart = 0: backend first creates a request to the seller.
+            // Keep the latter label neutral rather than falsely promising immediate confirmation.
             const mode = getCheckoutMode();
-            const keys = {
-                direct: ['checkoutDirect', 'checkoutDirectNotice'],
-                mixed: ['checkoutMixed', 'checkoutMixedNotice'],
-                unknown: ['checkoutUnknown', 'checkoutUnknownNotice'],
-                request: ['checkout', 'checkoutNotice'],
-                none: ['checkoutUnknown', 'checkoutUnknownNotice']
+            const labels = {
+                direct: 'checkoutDirect',
+                mixed: 'checkoutMixed',
+                unknown: 'checkoutUnknown',
+                request: 'checkout',
+                none: 'checkoutUnknown'
             };
-            const [buttonKey, noticeKey] = keys[mode];
-            document.querySelector('#checkoutButton span').textContent = t(buttonKey);
-            document.getElementById('checkoutNotice').textContent = t(noticeKey);
+            const label = document.querySelector('#checkoutButton span');
+            if (label) label.textContent = t(labels[mode]);
             return mode;
         }
 
