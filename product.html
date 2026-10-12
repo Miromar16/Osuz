@@ -3262,6 +3262,78 @@ body.osuz-image-viewer-open {
 }
 </style>
 
+  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+<style id="osuz-unified-language-v2">
+/* Same custom language picker everywhere. No native browser select popups. */
+.osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
+.osuz-unified-language .osuz-legacy-language-select {display:none!important;visibility:hidden!important}
+.osuz-unified-language-trigger, #languageToggle, #categoryLanguageToggle, #languageButton {
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:5px!important;cursor:pointer!important;white-space:nowrap!important;
+  border-radius:12px!important;min-width:68px!important;min-height:46px!important;
+  padding:8px 9px!important;border:0!important;color:#fff!important;background:transparent!important;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation
+}
+.osuz-unified-language-trigger:hover, #languageToggle:hover, #categoryLanguageToggle:hover, #languageButton:hover,
+.osuz-unified-language-trigger[aria-expanded="true"], #languageToggle[aria-expanded="true"],
+#categoryLanguageToggle[aria-expanded="true"], #languageButton[aria-expanded="true"] {background:rgba(255,255,255,.13)!important}
+.osuz-unified-language-trigger .osuz-lang-label, #languageToggle .osuz-lang-label, #categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  font-size:11px!important;font-weight:800!important;line-height:1.2!important;white-space:nowrap!important
+}
+.osuz-unified-language-trigger .osuz-lang-label::before, .osuz-unified-language-menu .osuz-menu-flag {content:"";display:inline-block;flex:none;width:24px;height:16px;border-radius:3px;background-position:center;background-size:cover;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="ru"]::before,.osuz-unified-language-menu [data-flag="ru"]{background-image:url('https://flagcdn.com/w40/ru.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="uz"]::before,.osuz-unified-language-menu [data-flag="uz"]{background-image:url('https://flagcdn.com/w40/uz.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="en"]::before,.osuz-unified-language-menu [data-flag="en"]{background-image:url('https://flagcdn.com/w40/us.png')}
+.osuz-unified-language-chevron {font-size:18px!important;line-height:12px!important;margin-top:-4px!important;opacity:.95}
+.osuz-unified-language-trigger:focus-visible,#languageToggle:focus-visible,#categoryLanguageToggle:focus-visible,#languageButton:focus-visible {outline:2px solid #67e8f9!important;outline-offset:3px!important}
+/* Fixed portalled popup cannot be clipped by sticky headers, overflow, or transforms. */
+.osuz-unified-language-menu, #languageMenu.osuz-lang-floating, #mobileLanguageMenu.osuz-lang-floating,
+#categoryLanguageMenu.osuz-lang-floating, #productLanguageMenu.osuz-lang-floating {
+  position:fixed!important;z-index:2147483000!important;box-sizing:border-box!important;
+  width:177px!important;min-width:177px!important;max-height:min(60dvh,310px)!important;
+  overflow-y:auto!important;margin:0!important;padding:8px!important;
+  background:#fff!important;color:#17283b!important;border:1px solid #e5e7eb!important;
+  border-radius:14px!important;box-shadow:0 16px 45px rgba(3,24,44,.2)!important;transform:none!important
+}
+.osuz-unified-language-menu.hidden, #languageMenu.osuz-lang-floating.hidden,#mobileLanguageMenu.osuz-lang-floating.hidden,
+#categoryLanguageMenu.osuz-lang-floating.hidden,#productLanguageMenu.osuz-lang-floating.hidden {display:none!important}
+.osuz-unified-language-menu:not(.hidden),#languageMenu.osuz-lang-floating:not(.hidden),#mobileLanguageMenu.osuz-lang-floating:not(.hidden),
+#categoryLanguageMenu.osuz-lang-floating:not(.hidden),#productLanguageMenu.osuz-lang-floating:not(.hidden) {display:block!important}
+.osuz-unified-language-menu button, #languageMenu.osuz-lang-floating button,#mobileLanguageMenu.osuz-lang-floating button,
+#categoryLanguageMenu.osuz-lang-floating button,#productLanguageMenu.osuz-lang-floating button {
+  width:100%!important;min-height:39px!important;padding:9px 11px!important;border:0!important;
+  border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:7px!important;font-size:13px!important;font-weight:500!important;text-align:left!important;
+  line-height:1.25!important;color:#183047!important;background:transparent!important;cursor:pointer!important
+}
+.osuz-unified-language-menu button:hover, #languageMenu.osuz-lang-floating button:hover,#mobileLanguageMenu.osuz-lang-floating button:hover,
+#categoryLanguageMenu.osuz-lang-floating button:hover,#productLanguageMenu.osuz-lang-floating button:hover,
+.osuz-unified-language-menu button[aria-checked="true"], #languageMenu.osuz-lang-floating button.osuz-lang-active,
+#mobileLanguageMenu.osuz-lang-floating button.osuz-lang-active,#categoryLanguageMenu.osuz-lang-floating button.osuz-lang-active,#productLanguageMenu.osuz-lang-floating button.osuz-lang-active {background:#dff6f8!important;color:#0a5262!important;font-weight:700!important}
+/* Active option cannot inherit white text from the dark header. */
+.osuz-unified-language-menu .osuz-menu-flag,#languageMenu.osuz-lang-floating .osuz-menu-flag,#mobileLanguageMenu.osuz-lang-floating .osuz-menu-flag,
+#categoryLanguageMenu.osuz-lang-floating .osuz-menu-flag,#productLanguageMenu.osuz-lang-floating .osuz-menu-flag {display:inline-block!important;width:24px!important;height:16px!important;flex:none!important;border-radius:3px!important}
+body.dark-mode .osuz-unified-language-menu, html[data-osuz-theme="dark"] .osuz-unified-language-menu,
+body.dark-mode .osuz-lang-floating, html[data-osuz-theme="dark"] .osuz-lang-floating {background:#111e2c!important;border-color:#425366!important;color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button, html[data-osuz-theme="dark"] .osuz-unified-language-menu button,
+body.dark-mode .osuz-lang-floating button, html[data-osuz-theme="dark"] .osuz-lang-floating button {color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button:hover,html[data-osuz-theme="dark"] .osuz-unified-language-menu button:hover,
+body.dark-mode .osuz-unified-language-menu button[aria-checked="true"],html[data-osuz-theme="dark"] .osuz-unified-language-menu button[aria-checked="true"],
+body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme="dark"] .osuz-lang-floating button.osuz-lang-active {background:#1b3e4e!important;color:#fff!important}
+/* Native mobile layout: keep flag + code + arrow in header, popup fits viewport. */
+@media(max-width:767px) {
+ .osuz-unified-language, .osuz-mobile-header-actions>.osuz-language-wrap {display:inline-flex!important;min-width:0!important}
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:57px!important;width:auto!important;height:43px!important;min-height:43px!important;padding:5px 6px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label,#languageToggle .osuz-lang-label,#categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {font-size:10px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label::before {width:22px!important;height:15px!important}
+ .osuz-unified-language-chevron {font-size:16px!important}
+ .osuz-unified-language-menu,#languageMenu.osuz-lang-floating,#mobileLanguageMenu.osuz-lang-floating,#categoryLanguageMenu.osuz-lang-floating,#productLanguageMenu.osuz-lang-floating {width:172px!important;min-width:172px!important}
+}
+@media(max-width:359px) {
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
+}
+</style>
 </head>
 <body data-osuz-v16-page="product" data-osuz-page="product">
 <nav class="site-header sticky top-0 z-50">
@@ -3457,6 +3529,9 @@ body.osuz-image-viewer-open {
                 rating: 'Рейтинг',
                 location: 'Локация',
                 workTime: 'График',
+                shopOpen: '🟢 Открыто',
+                shopClosing: '🟡 Скоро закроется',
+                shopClosed: '🔴 Закрыто',
                 everyDay: 'ежедневно',
                 roundClock: '24 часа',
                 analogs: 'Аналоги',
@@ -3523,6 +3598,9 @@ body.osuz-image-viewer-open {
                 rating: 'Reyting',
                 location: 'Joylashuv',
                 workTime: 'Ish vaqti',
+                shopOpen: '🟢 Ochiq',
+                shopClosing: '🟡 Tez orada yopiladi',
+                shopClosed: '🔴 Yopiq',
                 everyDay: 'har kuni',
                 roundClock: '24 soat',
                 analogs: 'Analoglar',
@@ -3589,6 +3667,9 @@ body.osuz-image-viewer-open {
                 rating: 'Rating',
                 location: 'Location',
                 workTime: 'Working hours',
+                shopOpen: '🟢 Open',
+                shopClosing: '🟡 Closing soon',
+                shopClosed: '🔴 Closed',
                 everyDay: 'daily',
                 roundClock: '24 hours',
                 analogs: 'Analogs',
@@ -5657,6 +5738,15 @@ body.osuz-image-viewer-open {
                     : [listing.open_time, listing.close_time]
                         .filter(Boolean)
                         .join('–') || '—';
+                // Backend is the source of truth; do not recalculate shop hours
+                // in the browser (the bot uses the same shop_status value).
+                const shopStatusLabels = {
+                    open: ui.shopOpen,
+                    closing_soon: ui.shopClosing,
+                    closed: ui.shopClosed
+                };
+                const shopStatusLabel = Object.prototype.hasOwnProperty.call(shopStatusLabels, listing.shop_status)
+                    ? shopStatusLabels[listing.shop_status] : '';
 
                 return `
                     <article class="seller-card rounded-2xl p-5">
@@ -5671,6 +5761,7 @@ body.osuz-image-viewer-open {
                             <div class="text-gray-400 mb-1">${escapeHTML(ui.workTime)}</div>
                             <div class="font-bold text-gray-900">${escapeHTML(workTime)}</div>
                             <div class="text-gray-500 mt-1.5">${escapeHTML(formatWorkingDays(listing.work_days))}</div>
+                            ${shopStatusLabel ? `<div class="mt-2 text-xs font-bold text-gray-900" role="status">${escapeHTML(shopStatusLabel)}</div>` : ''}
                         </div>
                         <div class="seller-cart-area mt-4" data-seller-cart-area="${Number(listing.tenant_id)}">
                             <button
@@ -6400,5 +6491,75 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
+  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
+<script id="osuz-unified-language-v2-js">
+(function(){
+ 'use strict';
+ const pairs=[['osuzLanguageTrigger','osuzLanguageMenu'],['languageToggle','languageMenu'],['mobileLanguageToggle','mobileLanguageMenu'],['categoryLanguageToggle','categoryLanguageMenu'],['languageButton','productLanguageMenu']];
+ const languages=['ru','uz','en'];
+ const safeLang=()=>{try{const v=localStorage.getItem('osuzLang');return languages.includes(v)?v:'ru'}catch(_){return 'ru'}};
+ const instances=[];
+ function coords(toggle,menu){
+   const r=toggle.getBoundingClientRect(),w=menu.offsetWidth||177;
+   menu.style.setProperty('left',Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px','important');
+   menu.style.setProperty('top',Math.max(8,Math.min(r.bottom+8,innerHeight-150))+'px','important');
+ }
+ function sync(){
+   const v=safeLang();
+   document.querySelectorAll('#osuzLanguageFlag').forEach(el=>{el.dataset.lang=v;el.textContent=v.toUpperCase()});
+   instances.forEach(({menu,trigger})=>{
+     menu.querySelectorAll('button[data-language]').forEach(b=>{
+       const active=b.dataset.language===v;
+       b.classList.toggle('osuz-lang-active',active);b.setAttribute('aria-checked',String(active));
+     });
+     const flag=trigger.querySelector('.osuz-lang-label');
+     if(flag){flag.dataset.lang=v;flag.textContent=v.toUpperCase()}
+   });
+ }
+ function close(except){instances.forEach(({menu,trigger})=>{if(menu!==except){menu.classList.add('hidden');trigger.setAttribute('aria-expanded','false')}})}
+ function setLang(lang,trigger){
+   if(!languages.includes(lang))return;
+   try{localStorage.setItem('osuzLang',lang)}catch(_){}
+   const select=document.getElementById('languageSelect');
+   if(select){select.value=lang;select.dispatchEvent(new Event('change',{bubbles:true}))}
+   else if((trigger.id==='languageToggle'||trigger.id==='mobileLanguageToggle')&&typeof window.setLanguage==='function'){
+     window.setLanguage(lang);
+   }else{
+     // The catalog and product pages intentionally reload translations on locale changes.
+     location.reload();
+   }
+   close();sync();
+ }
+ function init(){
+   for(const [tid,mid] of pairs){
+     const trigger=document.getElementById(tid),menu=document.getElementById(mid);
+     if(!trigger||!menu)continue;
+     document.body.appendChild(menu);
+     menu.classList.add('osuz-lang-floating');
+     trigger.setAttribute('aria-haspopup','true');trigger.setAttribute('aria-expanded','false');
+     instances.push({trigger,menu});
+     // Capture before the page's previous listeners; avoid double toggles and browser-select popups.
+     trigger.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();
+       const willOpen=menu.classList.contains('hidden');
+       close();menu.classList.toggle('hidden',!willOpen);
+       trigger.setAttribute('aria-expanded',String(willOpen));
+       if(willOpen)coords(trigger,menu);
+     },true);
+     menu.querySelectorAll('button[data-language]').forEach(button=>button.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();setLang(button.dataset.language,trigger);
+     },true));
+   }
+   sync();
+   document.getElementById('languageSelect')?.addEventListener('change',sync);
+   addEventListener('storage',e=>{if(e.key==='osuzLang')sync()});
+   addEventListener('resize',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true});
+   addEventListener('scroll',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true,capture:true});
+   document.addEventListener('click',e=>{if(!instances.some(({trigger,menu})=>trigger.contains(e.target)||menu.contains(e.target)))close()});
+   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body>
 </html>

@@ -825,6 +825,78 @@ body.dark-mode .order-detail-back {
   }
 }
 </style>
+  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+<style id="osuz-unified-language-v2">
+/* Same custom language picker everywhere. No native browser select popups. */
+.osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
+.osuz-unified-language .osuz-legacy-language-select {display:none!important;visibility:hidden!important}
+.osuz-unified-language-trigger, #languageToggle, #categoryLanguageToggle, #languageButton {
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:5px!important;cursor:pointer!important;white-space:nowrap!important;
+  border-radius:12px!important;min-width:68px!important;min-height:46px!important;
+  padding:8px 9px!important;border:0!important;color:#fff!important;background:transparent!important;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation
+}
+.osuz-unified-language-trigger:hover, #languageToggle:hover, #categoryLanguageToggle:hover, #languageButton:hover,
+.osuz-unified-language-trigger[aria-expanded="true"], #languageToggle[aria-expanded="true"],
+#categoryLanguageToggle[aria-expanded="true"], #languageButton[aria-expanded="true"] {background:rgba(255,255,255,.13)!important}
+.osuz-unified-language-trigger .osuz-lang-label, #languageToggle .osuz-lang-label, #categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  font-size:11px!important;font-weight:800!important;line-height:1.2!important;white-space:nowrap!important
+}
+.osuz-unified-language-trigger .osuz-lang-label::before, .osuz-unified-language-menu .osuz-menu-flag {content:"";display:inline-block;flex:none;width:24px;height:16px;border-radius:3px;background-position:center;background-size:cover;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="ru"]::before,.osuz-unified-language-menu [data-flag="ru"]{background-image:url('https://flagcdn.com/w40/ru.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="uz"]::before,.osuz-unified-language-menu [data-flag="uz"]{background-image:url('https://flagcdn.com/w40/uz.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="en"]::before,.osuz-unified-language-menu [data-flag="en"]{background-image:url('https://flagcdn.com/w40/us.png')}
+.osuz-unified-language-chevron {width:12px!important;height:12px!important;flex:0 0 12px!important;display:block!important;stroke:currentColor!important;opacity:1!important;margin:0!important}
+.osuz-unified-language-trigger:focus-visible,#languageToggle:focus-visible,#categoryLanguageToggle:focus-visible,#languageButton:focus-visible {outline:2px solid #67e8f9!important;outline-offset:3px!important}
+/* Fixed portalled popup cannot be clipped by sticky headers, overflow, or transforms. */
+.osuz-unified-language-menu, #languageMenu.osuz-lang-floating, #mobileLanguageMenu.osuz-lang-floating,
+#categoryLanguageMenu.osuz-lang-floating, #productLanguageMenu.osuz-lang-floating {
+  position:fixed!important;z-index:2147483000!important;box-sizing:border-box!important;
+  width:177px!important;min-width:177px!important;max-height:min(60dvh,310px)!important;
+  overflow-y:auto!important;margin:0!important;padding:8px!important;
+  background:#fff!important;color:#17283b!important;border:1px solid #e5e7eb!important;
+  border-radius:14px!important;box-shadow:0 16px 45px rgba(3,24,44,.2)!important;transform:none!important
+}
+.osuz-unified-language-menu.hidden, #languageMenu.osuz-lang-floating.hidden,#mobileLanguageMenu.osuz-lang-floating.hidden,
+#categoryLanguageMenu.osuz-lang-floating.hidden,#productLanguageMenu.osuz-lang-floating.hidden {display:none!important}
+.osuz-unified-language-menu:not(.hidden),#languageMenu.osuz-lang-floating:not(.hidden),#mobileLanguageMenu.osuz-lang-floating:not(.hidden),
+#categoryLanguageMenu.osuz-lang-floating:not(.hidden),#productLanguageMenu.osuz-lang-floating:not(.hidden) {display:block!important}
+.osuz-unified-language-menu button, #languageMenu.osuz-lang-floating button,#mobileLanguageMenu.osuz-lang-floating button,
+#categoryLanguageMenu.osuz-lang-floating button,#productLanguageMenu.osuz-lang-floating button {
+  width:100%!important;min-height:39px!important;padding:9px 11px!important;border:0!important;
+  border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:7px!important;font-size:13px!important;font-weight:500!important;text-align:left!important;
+  line-height:1.25!important;color:#183047!important;background:transparent!important;cursor:pointer!important
+}
+.osuz-unified-language-menu button:hover, #languageMenu.osuz-lang-floating button:hover,#mobileLanguageMenu.osuz-lang-floating button:hover,
+#categoryLanguageMenu.osuz-lang-floating button:hover,#productLanguageMenu.osuz-lang-floating button:hover,
+.osuz-unified-language-menu button[aria-checked="true"], #languageMenu.osuz-lang-floating button.osuz-lang-active,
+#mobileLanguageMenu.osuz-lang-floating button.osuz-lang-active,#categoryLanguageMenu.osuz-lang-floating button.osuz-lang-active,#productLanguageMenu.osuz-lang-floating button.osuz-lang-active {background:#dff6f8!important;color:#0a5262!important;font-weight:700!important}
+/* Active option cannot inherit white text from the dark header. */
+.osuz-unified-language-menu .osuz-menu-flag,#languageMenu.osuz-lang-floating .osuz-menu-flag,#mobileLanguageMenu.osuz-lang-floating .osuz-menu-flag,
+#categoryLanguageMenu.osuz-lang-floating .osuz-menu-flag,#productLanguageMenu.osuz-lang-floating .osuz-menu-flag {display:inline-block!important;width:24px!important;height:16px!important;flex:none!important;border-radius:3px!important}
+body.dark-mode .osuz-unified-language-menu, html[data-osuz-theme="dark"] .osuz-unified-language-menu,
+body.dark-mode .osuz-lang-floating, html[data-osuz-theme="dark"] .osuz-lang-floating {background:#111e2c!important;border-color:#425366!important;color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button, html[data-osuz-theme="dark"] .osuz-unified-language-menu button,
+body.dark-mode .osuz-lang-floating button, html[data-osuz-theme="dark"] .osuz-lang-floating button {color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button:hover,html[data-osuz-theme="dark"] .osuz-unified-language-menu button:hover,
+body.dark-mode .osuz-unified-language-menu button[aria-checked="true"],html[data-osuz-theme="dark"] .osuz-unified-language-menu button[aria-checked="true"],
+body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme="dark"] .osuz-lang-floating button.osuz-lang-active {background:#1b3e4e!important;color:#fff!important}
+/* Native mobile layout: keep flag + code + arrow in header, popup fits viewport. */
+@media(max-width:767px) {
+ .osuz-unified-language, .osuz-mobile-header-actions>.osuz-language-wrap {display:inline-flex!important;min-width:0!important}
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:57px!important;width:auto!important;height:43px!important;min-height:43px!important;padding:5px 6px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label,#languageToggle .osuz-lang-label,#categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {font-size:10px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label::before {width:22px!important;height:15px!important}
+ .osuz-unified-language-chevron {width:12px!important;height:12px!important}
+ .osuz-unified-language-menu,#languageMenu.osuz-lang-floating,#mobileLanguageMenu.osuz-lang-floating,#categoryLanguageMenu.osuz-lang-floating,#productLanguageMenu.osuz-lang-floating {width:172px!important;min-width:172px!important}
+}
+@media(max-width:359px) {
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
+}
+</style>
 </head>
 <body data-osuz-page="orders" data-osuz-v16-page="orders">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -839,11 +911,18 @@ body.dark-mode .order-detail-back {
 <span data-osuz-catalog-text="">Каталог</span>
 </button><form autocomplete="off" class="osuz-header-search osuz-desktop-search-slot" role="search"><i data-lucide="search"></i><input autocomplete="off" data-osuz-search-input="" placeholder="Поиск товаров..." type="search"/><label class="osuz-photo-search-control" data-osuz-photo-search="1" title="Поиск по фото" aria-label="Поиск по фото"><i data-lucide="camera" aria-hidden="true"></i><input type="file" accept="image/*" tabindex="-1" aria-hidden="true"/></label><button type="submit"><span data-osuz-search-text="">Найти</span><i data-lucide="arrow-right" style="width:15px;height:15px;margin:0"></i></button></form>
 <div class="osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
-<label class="header-action auth-header-action osuz-language-select-wrap"><span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span><span class="osuz-lang-code" data-osuz-select-code="">RU</span><select class="header-action bg-transparent outline-none cursor-pointer" id="languageSelect">
-<option value="ru">RU</option>
-<option value="uz">UZ</option>
-<option value="en">EN</option>
-</select></label>
+<div class="osuz-unified-language osuz-language-wrap" data-osuz-language-control>
+  <button class="header-action osuz-unified-language-trigger" id="osuzLanguageTrigger" type="button" aria-label="Выбрать язык" aria-haspopup="true" aria-expanded="false" aria-controls="osuzLanguageMenu">
+    <span class="osuz-lang-label" id="osuzLanguageFlag" data-lang="ru">RU</span>
+    <svg class="osuz-unified-language-chevron" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div class="osuz-unified-language-menu hidden" id="osuzLanguageMenu" role="menu" aria-label="Выбор языка">
+    <button type="button" data-language="ru" role="menuitemradio" aria-checked="true"><span class="osuz-menu-flag" data-flag="ru" aria-hidden="true"></span>Русский</button>
+    <button type="button" data-language="uz" role="menuitemradio" aria-checked="false"><span class="osuz-menu-flag" data-flag="uz" aria-hidden="true"></span>O‘zbekcha</button>
+    <button type="button" data-language="en" role="menuitemradio" aria-checked="false"><span class="osuz-menu-flag" data-flag="en" aria-hidden="true"></span>English</button>
+  </div>
+  <select id="languageSelect" class="osuz-legacy-language-select" aria-hidden="true" tabindex="-1"><option value="ru">RU</option><option value="uz">UZ</option><option value="en">EN</option></select>
+</div>
 <button aria-label="Сменить тему" class="header-action !px-3" id="themeToggle">
 <i class="theme-icon-moon w-5 h-5" data-lucide="moon"></i>
 <i class="theme-icon-sun w-5 h-5" data-lucide="sun"></i>
@@ -956,6 +1035,8 @@ body.dark-mode .order-detail-back {
         let selectedOrderId = Number(new URLSearchParams(location.search).get('order')) || 0;
         let currentOrder = null;
         let detailPollTimer = null;
+        let checkoutClockTimer = null;
+        const checkoutExpiredRefreshOrders = new Set();
         let listPollTimer = null;
         let openedOrderFromList = false;
         let requestBusy = false;
@@ -1018,8 +1099,17 @@ body.dark-mode .order-detail-back {
                 sellerAddress: 'Адрес продавца',
                 sellerPhone: 'Телефон продавца',
                 landmark: 'Ориентир',
+                notSpecified: 'Не указано',
                 pickupWaiting: 'Самовывоз выбран. Ждём подтверждения брони продавцом.',
                 pickupReady: 'Товар забронирован до',
+                pickedUp: 'Забрал товар',
+                closedStoreDeferred: 'Магазин сейчас закрыт. Запрос будет передан продавцу при открытии: {time}.',
+                closingSoon: 'Магазин закрывается через {minutes} мин (в {time}). Если выбираете самовывоз — успейте забрать товар.',
+                checkoutRemaining: 'Подтвердите оформление в течение {time}. Иначе запрос отменится автоматически.',
+                checkoutExpired: 'Время оформления истекло. Проверяем статус запроса…',
+                telegramPrompt: 'Получать ответ продавца в Telegram?',
+                telegramConnect: 'Подключить уведомления',
+                receiptRetry: 'Если продавец отклонил чек, можно отправить новое фото.',
                 getLocation: 'Определить мою геопозицию',
                 latitude: 'Широта',
                 longitude: 'Долгота',
@@ -1041,10 +1131,10 @@ body.dark-mode .order-detail-back {
                 transferSubmit: 'Отправить реквизиты',
                 innInvalid: 'ИНН должен содержать ровно 9 цифр.',
                 receiptTitle: 'Отправка чека',
-                receiptText: 'Нажмите «Отправить чек», выберите фото или PDF до 5 МБ — файл отправится автоматически.',
+                receiptText: 'Нажмите «Отправить чек», выберите фото до 5 МБ — файл отправится автоматически.',
                 receiptChoose: 'Отправить чек',
                 receiptSubmit: 'Отправить чек',
-                receiptInvalid: 'Выберите фото или PDF размером не более 5 МБ.',
+                receiptInvalid: 'Выберите фото размером не более 5 МБ.',
                 receiptPreview: 'Предпросмотр чека',
                 receiptUploaded: 'Отправленный чек',
                 waitingPayment: 'Данные отправлены продавцу. Страница автоматически проверяет изменение статуса.',
@@ -1115,8 +1205,17 @@ body.dark-mode .order-detail-back {
                 sellerAddress: 'Sotuvchi manzili',
                 sellerPhone: 'Sotuvchi telefoni',
                 landmark: 'Mo‘ljal',
+                notSpecified: 'Ko'rsatilmagan',
                 pickupWaiting: 'Olib ketish tanlandi. Sotuvchi bronni tasdiqlashi kutilmoqda.',
                 pickupReady: 'Mahsulot quyidagi vaqtgacha bron qilingan',
+                pickedUp: 'Mahsulotni oldim',
+                closedStoreDeferred: 'Do‘kon hozir yopiq. So‘rovingiz ochilganda sotuvchiga yuboriladi: {time}.',
+                closingSoon: 'Do‘kon {minutes} daqiqadan so‘ng ({time} da) yopiladi. Olib ketmoqchi bo‘lsangiz, mahsulotni vaqtida oling.',
+                checkoutRemaining: '{time} ichida rasmiylashtirishni tasdiqlang. Aks holda so‘rov avtomatik bekor bo‘ladi.',
+                checkoutExpired: 'Rasmiylashtirish vaqti tugadi. So‘rov holati tekshirilmoqda…',
+                telegramPrompt: 'Sotuvchi javobini Telegram orqali olishni xohlaysizmi?',
+                telegramConnect: 'Bildirishnomalarni ulash',
+                receiptRetry: 'Agar sotuvchi chekni rad etsa, yangi surat yuborishingiz mumkin.',
                 getLocation: 'Geolokatsiyamni aniqlash',
                 latitude: 'Kenglik',
                 longitude: 'Uzunlik',
@@ -1138,10 +1237,10 @@ body.dark-mode .order-detail-back {
                 transferSubmit: 'Rekvizitlarni yuborish',
                 innInvalid: 'STIR aynan 9 ta raqamdan iborat bo‘lishi kerak.',
                 receiptTitle: 'Chek yuborish',
-                receiptText: '«Chekni yuborish» tugmasini bosing va 5 MB gacha rasm yoki PDF tanlang — fayl avtomatik yuboriladi.',
+                receiptText: '«Chekni yuborish» tugmasini bosing va 5 MB gacha rasm tanlang — fayl avtomatik yuboriladi.',
                 receiptChoose: 'Chekni yuborish',
                 receiptSubmit: 'Chekni yuborish',
-                receiptInvalid: '5 MB gacha rasm yoki PDF tanlang.',
+                receiptInvalid: '5 MB gacha rasm tanlang.',
                 receiptPreview: 'Chekni oldindan ko‘rish',
                 receiptUploaded: 'Yuborilgan chek',
                 waitingPayment: 'Ma’lumot sotuvchiga yuborildi. Sahifa holatni avtomatik tekshiradi.',
@@ -1212,8 +1311,17 @@ body.dark-mode .order-detail-back {
                 sellerAddress: 'Seller address',
                 sellerPhone: 'Seller phone',
                 landmark: 'Landmark',
+                notSpecified: 'Not specified',
                 pickupWaiting: 'Pickup selected. Waiting for the seller to confirm the reservation.',
                 pickupReady: 'Reserved until',
+                pickedUp: 'I picked it up',
+                closedStoreDeferred: 'The store is closed. Your request will be sent to the seller when it opens: {time}.',
+                closingSoon: 'The store closes in {minutes} min (at {time}). If picking up, make sure you collect the item in time.',
+                checkoutRemaining: 'Confirm checkout within {time} or the request will be cancelled automatically.',
+                checkoutExpired: 'Checkout time has expired. Checking the request status…',
+                telegramPrompt: 'Get the seller’s reply on Telegram?',
+                telegramConnect: 'Enable notifications',
+                receiptRetry: 'If the seller rejects your receipt, you can send a new photo.',
                 getLocation: 'Use my location',
                 latitude: 'Latitude',
                 longitude: 'Longitude',
@@ -1235,10 +1343,10 @@ body.dark-mode .order-detail-back {
                 transferSubmit: 'Send company details',
                 innInvalid: 'TIN must contain exactly 9 digits.',
                 receiptTitle: 'Send receipt',
-                receiptText: 'Press “Send receipt” and choose an image or PDF up to 5 MB. It will upload automatically.',
+                receiptText: 'Press “Send receipt” and choose an image up to 5 MB. It will upload automatically.',
                 receiptChoose: 'Send receipt',
                 receiptSubmit: 'Send receipt',
-                receiptInvalid: 'Choose an image or PDF no larger than 5 MB.',
+                receiptInvalid: 'Choose an image no larger than 5 MB.',
                 receiptPreview: 'Receipt preview',
                 receiptUploaded: 'Submitted receipt',
                 waitingPayment: 'The information was sent to the seller. The page will keep checking the status.',
@@ -1304,6 +1412,42 @@ body.dark-mode .order-detail-back {
                 dateStyle: 'medium',
                 timeStyle: 'short'
             }).format(date);
+        }
+
+        function formatOrderNumber(order) {
+            // orderNumber is intentionally a string, e.g. 000042-003.
+            return escapeHTML(order?.orderNumber || String(order?.tenantOrderNumber || order?.orderId || ''));
+        }
+
+        function shopDate(value, timeOnly = false) {
+            if (!value) return '—';
+            const date = new Date(value);
+            if (!Number.isFinite(date.getTime())) return '—';
+            return new Intl.DateTimeFormat(
+                currentLang === 'uz' ? 'uz-UZ' : currentLang === 'en' ? 'en-GB' : 'ru-RU',
+                { timeZone: 'Asia/Tashkent', ...(timeOnly
+                    ? { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }
+                    : { dateStyle: 'medium', timeStyle: 'short' }) }
+            ).format(date);
+        }
+
+        function remainingCheckoutSeconds(order) {
+            const expiry = new Date(order?.checkoutExpiresAt || '').getTime();
+            return Number.isFinite(expiry) ? Math.max(0, Math.ceil((expiry - Date.now()) / 1000)) : null;
+        }
+
+        function checkoutClock(seconds) {
+            return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+
+        function renderCheckoutCountdown(order) {
+            const seconds = remainingCheckoutSeconds(order);
+            if (seconds === null) return '';
+            return `<div class="notice warning mb-4" role="status" data-checkout-clock>
+                ${escapeHTML(seconds > 0
+                    ? t('checkoutRemaining').replace('{time}', checkoutClock(seconds))
+                    : t('checkoutExpired'))}
+            </div>`;
         }
 
         function statusLabel(status) {
@@ -1650,6 +1794,8 @@ body.dark-mode .order-detail-back {
             if (!hasSelectedOrder) {
                 clearInterval(detailPollTimer);
                 detailPollTimer = null;
+                clearInterval(checkoutClockTimer);
+                checkoutClockTimer = null;
                 currentOrder = null;
 
                 document.getElementById('orderDetail')?.classList.add('hidden');
@@ -1689,7 +1835,7 @@ body.dark-mode .order-detail-back {
                     <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
                             <div class="text-xs font-black uppercase tracking-[.12em] text-primary-600">
-                                ${escapeHTML(t('order'))} #${Number(order.tenantOrderNumber || order.orderId)}
+                                ${escapeHTML(t('order'))} #${formatOrderNumber(order)}
                             </div>
                             <div class="mt-1 font-black text-gray-900 truncate">
                                 ${escapeHTML(order.tenantName || '')}
@@ -1848,6 +1994,14 @@ body.dark-mode .order-detail-back {
             return `
                 <div class="rounded-2xl border border-gray-200 p-5">
                     <h3 class="text-lg font-black text-gray-900">${escapeHTML(t('chooseDelivery'))}</h3>
+                    <div class="notice warning mt-4 ${seller.closingSoonMinutes == null ? 'hidden' : ''}"
+                         data-closing-soon role="alert">
+                        ${seller.closingSoonMinutes != null
+                            ? `⚠️ ${escapeHTML(t('closingSoon')
+                                .replace('{minutes}', String(Math.max(0, Number(seller.closingSoonMinutes))))
+                                .replace('{time}', shopDate(seller.closesAt, true)))}`
+                            : ''}
+                    </div>
                     ${seller.deliveryEnabled ? `
                         <div class="notice warning mt-4">
                             <div class="flex items-start gap-2">
@@ -1918,27 +2072,37 @@ body.dark-mode .order-detail-back {
         function renderSellerContacts(order) {
             const seller = order?.seller || {};
 
-            // Seller address, phone and landmark are private until the buyer
-            // has actually chosen pickup for this order. Never expose them for
-            // delivery orders, orders that are still being arranged, or cancelled orders.
+            // Pickup exposes seller pickup details. Failed payments also need
+            // the seller's phone, but must not expose pickup address/landmark.
             const pickupIsConfirmed = order?.deliveryType === 'pickup';
-            if (!pickupIsConfirmed || order?.status === 'cancelled') return '';
+            if ((!pickupIsConfirmed && order?.status !== 'payment_failed') || order?.status === 'cancelled') return '';
 
-            const address = String(seller.address || '').trim();
-            const landmark = String(seller.landmark || '').trim();
+            const address = pickupIsConfirmed ? String(seller.address || '').trim() : '';
+            const landmark = pickupIsConfirmed ? String(seller.landmark || '').trim() : '';
             const phone = String(seller.phone || '').trim();
             if (!address && !landmark && !phone) return '';
 
+            const fieldCardStyle = 'background:#F7F9FC;border:1px solid #D9E2EC;border-radius:18px;padding:14px 16px;';
+            const labelStyle = 'font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#8A94A6;';
+            const valueStyle = 'margin-top:6px;font-size:16px;line-height:1.45;font-weight:800;color:#0B1730;word-break:break-word;';
+            const placeholderStyle = 'margin-top:6px;font-size:15px;line-height:1.45;font-weight:700;color:#4B5563;opacity:.92;';
+            const sellerName = String(order.tenantName || '').trim() || t('seller');
+            const addressValue = address ? `<div style="${valueStyle}">${escapeHTML(address)}</div>` : `<div style="${placeholderStyle}">${escapeHTML(t('notSpecified'))}</div>`;
+            const phoneValue = phone ? `<div style="margin-top:6px;font-size:16px;line-height:1.45;font-weight:900;color:#0D92B0;word-break:break-word;">${escapeHTML(phone)}</div>` : `<div style="${placeholderStyle}">${escapeHTML(t('notSpecified'))}</div>`;
+            const landmarkValue = landmark ? `<div style="${valueStyle}">${escapeHTML(landmark)}</div>` : `<div style="${placeholderStyle}">${escapeHTML(t('notSpecified'))}</div>`;
+
             return `
-                <div class="rounded-2xl border border-gray-200 p-5">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="w-9 h-9 rounded-xl bg-primary-50 text-primary-700 flex items-center justify-center"><i data-lucide="store" class="w-4 h-4"></i></span>
-                        <h3 class="text-lg font-black text-gray-900">${escapeHTML(order.tenantName || '')}</h3>
+                <div class="rounded-2xl p-5" style="background:rgba(9,21,39,.34);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.03);">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:#EEF9FB;color:#0D92B0;"><i data-lucide="store" class="w-5 h-5"></i></span>
+                        <h3 style="font-size:18px;line-height:1.3;font-weight:900;color:#FFFFFF;word-break:break-word;">${escapeHTML(sellerName)}</h3>
                     </div>
                     <div class="grid gap-3 sm:grid-cols-2">
-                        ${address ? `<div class="rounded-xl bg-gray-50 p-3"><div class="text-[11px] font-black uppercase tracking-wider text-gray-400">${escapeHTML(t('sellerAddress'))}</div><div class="mt-1 text-sm font-bold text-gray-900">${escapeHTML(address)}</div></div>` : ''}
-                        ${phone ? `<a href="tel:${escapeHTML(phone)}" class="rounded-xl bg-gray-50 p-3 hover:bg-primary-50"><div class="text-[11px] font-black uppercase tracking-wider text-gray-400">${escapeHTML(t('sellerPhone'))}</div><div class="mt-1 text-sm font-black text-primary-700">${escapeHTML(phone)}</div></a>` : ''}
-                        ${landmark ? `<div class="rounded-xl bg-gray-50 p-3 sm:col-span-2"><div class="text-[11px] font-black uppercase tracking-wider text-gray-400">${escapeHTML(t('landmark'))}</div><div class="mt-1 text-sm font-bold text-gray-900">${escapeHTML(landmark)}</div></div>` : ''}
+                        <div style="${fieldCardStyle}"><div style="${labelStyle}">${escapeHTML(t('sellerAddress'))}</div>${addressValue}</div>
+                        ${phone ? `<a href="tel:${escapeHTML(phone)}" style="${fieldCardStyle}display:block;text-decoration:none;">` : `<div style="${fieldCardStyle}">`}
+                            <div style="${labelStyle}">${escapeHTML(t('sellerPhone'))}</div>${phoneValue}
+                        ${phone ? `</a>` : `</div>`}
+                        <div class="sm:col-span-2" style="${fieldCardStyle}"><div style="${labelStyle}">${escapeHTML(t('landmark'))}</div>${landmarkValue}</div>
                     </div>
                 </div>
             `;
@@ -2130,15 +2294,31 @@ body.dark-mode .order-detail-back {
                     <label class="primary-button cursor-pointer inline-flex" data-receipt-upload-label>
                         <i data-lucide="send" class="w-4 h-4"></i>
                         <span>${escapeHTML(t('receiptSubmit'))}</span>
-                        <input id="receiptFile" type="file" accept="image/*,application/pdf,.pdf" class="hidden">
+                        <input id="receiptFile" type="file" accept="image/*" class="hidden">
                     </label>
                 </div>
             `;
         }
 
+        function renderTelegramConnectPrompt() {
+            const customer = getStoredCustomer();
+            if (customer?.telegram?.linked !== false) return '';
+            return `<div class="mt-4 rounded-2xl border border-gray-200 p-4 flex flex-wrap items-center justify-between gap-3">
+                <span class="text-sm font-bold text-gray-700">${escapeHTML(t('telegramPrompt'))}</span>
+                <a class="secondary-button" href="auth.html#telegramNotifications">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>${escapeHTML(t('telegramConnect'))}</span>
+                </a>
+            </div>`;
+        }
+
         function renderActionArea(order) {
             if (order.status === 'pending') {
-                return `<div class="notice">${escapeHTML(t('waitingSeller'))}</div>`;
+                const pendingMessage = order.deferredUntil
+                    ? t('closedStoreDeferred').replace('{time}', shopDate(order.deferredUntil))
+                    : t('waitingSeller');
+                return `<div class="notice ${order.deferredUntil ? 'warning' : ''}">${escapeHTML(pendingMessage)}</div>
+                    ${renderTelegramConnectPrompt()}`;
             }
 
             if (order.status === 'cancelled') {
@@ -2162,7 +2342,8 @@ body.dark-mode .order-detail-back {
             }
 
             if (!order.deliveryType) {
-                const confirmed = isLocallyConfirmed(order.orderId);
+                const confirmed = isLocallyConfirmed(order.orderId) ||
+                    (Object.prototype.hasOwnProperty.call(order, 'checkoutExpiresAt') && order.checkoutExpiresAt === null);
 
                 if (confirmed) {
                     return `
@@ -2173,6 +2354,7 @@ body.dark-mode .order-detail-back {
                 if (canProceed(order)) {
                     return `
                         <div class="notice mb-4">${escapeHTML(t('confirmHint'))}</div>
+                        ${renderCheckoutCountdown(order)}
                         <button type="button" class="primary-button" data-action="confirm-order">
                             <i data-lucide="shopping-bag" class="w-4 h-4"></i>
                             <span>${escapeHTML(t('proceed'))}</span>
@@ -2191,6 +2373,11 @@ body.dark-mode .order-detail-back {
                             : escapeHTML(t('pickupWaiting'))
                         }
                     </div>
+                    ${order.pickupDeadline && order.status === 'responded' ? `
+                        <button type="button" class="primary-button mt-4" data-action="received">
+                            <i data-lucide="package-check" class="w-4 h-4"></i>
+                            <span>${escapeHTML(t('pickedUp'))}</span>
+                        </button>` : ''}
                 `;
             }
 
@@ -2217,7 +2404,10 @@ body.dark-mode .order-detail-back {
                                 ${escapeHTML(t('paymentSelected'))}: ${escapeHTML(paymentLabel(order.paymentMethod))}
                             </div>
                             ${hasSubmittedReceipt(order)
-                                ? `<div class="notice success" role="status">${escapeHTML(t('waitingPayment'))}</div>`
+                                ? `<div class="notice success" role="status">${escapeHTML(t('waitingPayment'))}</div>
+                                   <details class="mt-3"><summary class="cursor-pointer text-sm font-bold text-primary-700">${escapeHTML(t('receiptRetry'))}</summary>
+                                     <div class="mt-3">${renderReceiptForm(order)}</div>
+                                   </details>`
                                 : renderReceiptForm(order)}
                         `;
                     }
@@ -2244,6 +2434,34 @@ body.dark-mode .order-detail-back {
             return '';
         }
 
+        function syncCheckoutClock(order) {
+            clearInterval(checkoutClockTimer);
+            checkoutClockTimer = null;
+            const clock = document.querySelector('[data-checkout-clock]');
+            if (!clock || !order?.checkoutExpiresAt) return;
+            let refreshedAfterExpiry = false;
+            const update = () => {
+                const seconds = remainingCheckoutSeconds(order);
+                if (seconds === null) return;
+                clock.textContent = seconds > 0
+                    ? t('checkoutRemaining').replace('{time}', checkoutClock(seconds))
+                    : t('checkoutExpired');
+                if (seconds === 0) {
+                    refreshedAfterExpiry = true;
+                    clearInterval(checkoutClockTimer);
+                    checkoutClockTimer = null;
+                    // Request an immediate status check only once per expired order.
+                    // Normal 12-second polling handles any delayed backend cancellation.
+                    if (!checkoutExpiredRefreshOrders.has(Number(order.orderId))) {
+                        checkoutExpiredRefreshOrders.add(Number(order.orderId));
+                        refreshSelectedOrder();
+                    }
+                }
+            };
+            update();
+            if (!refreshedAfterExpiry) checkoutClockTimer = setInterval(update, 1000);
+        }
+
         function renderOrderDetail(order) {
             destroyDeliveryMap();
             currentOrder = order;
@@ -2261,7 +2479,7 @@ body.dark-mode .order-detail-back {
                     <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                         <div>
                             <div class="text-xs font-black uppercase tracking-[.14em] text-primary-600">
-                                ${escapeHTML(t('order'))} #${Number(order.tenantOrderNumber || order.orderId)}
+                                ${escapeHTML(t('order'))} #${formatOrderNumber(order)}
                             </div>
                             <h2 class="mt-2 text-2xl font-black text-gray-900">${escapeHTML(order.tenantName || '')}</h2>
                             <div class="mt-2 text-sm text-gray-500">${escapeHTML(formatDate(order.createdAt))}</div>
@@ -2271,7 +2489,7 @@ body.dark-mode .order-detail-back {
                             <span class="status-badge status-${escapeHTML(order.status || 'pending')}">
                                 ${escapeHTML(statusLabel(order.status))}
                             </span>
-                            ${!['cancelled','completed','payment_failed'].includes(order.status) ? `
+                            ${(['pending', 'responded'].includes(order.status) && !order.deliveryType) ? `
                                 <button type="button" class="order-cancel-subtle" data-action="cancel-order" title="${escapeHTML(t('cancel'))}">
                                     <i data-lucide="x" class="w-3.5 h-3.5"></i>
                                     <span>${escapeHTML(t('cancel'))}</span>
@@ -2312,6 +2530,7 @@ body.dark-mode .order-detail-back {
             `;
 
             bindDetailActions();
+            syncCheckoutClock(order);
             bindMapFullscreenButtons();
             lucide.createIcons();
         }
@@ -2711,12 +2930,12 @@ body.dark-mode .order-detail-back {
 
             const receiptInput = root.querySelector('#receiptFile');
             receiptInput?.addEventListener('change', () => {
+                if (requestBusy) return;
                 const file = receiptInput.files?.[0];
                 if (!file) return;
 
                 const isImage = file.type.startsWith('image/');
-                const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
-                if ((!isImage && !isPdf) || file.size > 5 * 1024 * 1024) {
+                if (!isImage || file.size > 5 * 1024 * 1024) {
                     receiptInput.value = '';
                     showToast(t('receiptInvalid'), 'error');
                     return;
@@ -2777,6 +2996,14 @@ body.dark-mode .order-detail-back {
 
                 if (canPreserveOpenDeliveryDraft(order)) {
                     currentOrder = order;
+                    const warning = document.querySelector('[data-closing-soon]');
+                    if (warning) {
+                        const minutes = order.seller?.closingSoonMinutes;
+                        warning.textContent = minutes != null
+                            ? '⚠️ ' + t('closingSoon').replace('{minutes}', String(minutes)).replace('{time}', shopDate(order.seller?.closesAt, true))
+                            : '';
+                        warning.classList.toggle('hidden', minutes == null);
+                    }
                     syncPolling(order);
                     return;
                 }
@@ -3174,5 +3401,75 @@ body.dark-mode .order-detail-back {
 <script src="/assets/js/v44-header-dom-order-hardfix__v45-header-order-inline-ha.js?v=aaa87b8e"></script>
 <script src="/assets/js/v51-photo-search-unifier.js?v=b95a3da2"></script>
 
+  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
+<script id="osuz-unified-language-v2-js">
+(function(){
+ 'use strict';
+ const pairs=[['osuzLanguageTrigger','osuzLanguageMenu'],['languageToggle','languageMenu'],['mobileLanguageToggle','mobileLanguageMenu'],['categoryLanguageToggle','categoryLanguageMenu'],['languageButton','productLanguageMenu']];
+ const languages=['ru','uz','en'];
+ const safeLang=()=>{try{const v=localStorage.getItem('osuzLang');return languages.includes(v)?v:'ru'}catch(_){return 'ru'}};
+ const instances=[];
+ function coords(toggle,menu){
+   const r=toggle.getBoundingClientRect(),w=menu.offsetWidth||177;
+   menu.style.setProperty('left',Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px','important');
+   menu.style.setProperty('top',Math.max(8,Math.min(r.bottom+8,innerHeight-150))+'px','important');
+ }
+ function sync(){
+   const v=safeLang();
+   document.querySelectorAll('#osuzLanguageFlag').forEach(el=>{el.dataset.lang=v;el.textContent=v.toUpperCase()});
+   instances.forEach(({menu,trigger})=>{
+     menu.querySelectorAll('button[data-language]').forEach(b=>{
+       const active=b.dataset.language===v;
+       b.classList.toggle('osuz-lang-active',active);b.setAttribute('aria-checked',String(active));
+     });
+     const flag=trigger.querySelector('.osuz-lang-label');
+     if(flag){flag.dataset.lang=v;flag.textContent=v.toUpperCase()}
+   });
+ }
+ function close(except){instances.forEach(({menu,trigger})=>{if(menu!==except){menu.classList.add('hidden');trigger.setAttribute('aria-expanded','false')}})}
+ function setLang(lang,trigger){
+   if(!languages.includes(lang))return;
+   try{localStorage.setItem('osuzLang',lang)}catch(_){}
+   const select=document.getElementById('languageSelect');
+   if(select){select.value=lang;select.dispatchEvent(new Event('change',{bubbles:true}))}
+   else if((trigger.id==='languageToggle'||trigger.id==='mobileLanguageToggle')&&typeof window.setLanguage==='function'){
+     window.setLanguage(lang);
+   }else{
+     // The catalog and product pages intentionally reload translations on locale changes.
+     location.reload();
+   }
+   close();sync();
+ }
+ function init(){
+   for(const [tid,mid] of pairs){
+     const trigger=document.getElementById(tid),menu=document.getElementById(mid);
+     if(!trigger||!menu)continue;
+     document.body.appendChild(menu);
+     menu.classList.add('osuz-lang-floating');
+     trigger.setAttribute('aria-haspopup','true');trigger.setAttribute('aria-expanded','false');
+     instances.push({trigger,menu});
+     // Capture before the page's previous listeners; avoid double toggles and browser-select popups.
+     trigger.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();
+       const willOpen=menu.classList.contains('hidden');
+       close();menu.classList.toggle('hidden',!willOpen);
+       trigger.setAttribute('aria-expanded',String(willOpen));
+       if(willOpen)coords(trigger,menu);
+     },true);
+     menu.querySelectorAll('button[data-language]').forEach(button=>button.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();setLang(button.dataset.language,trigger);
+     },true));
+   }
+   sync();
+   document.getElementById('languageSelect')?.addEventListener('change',sync);
+   addEventListener('storage',e=>{if(e.key==='osuzLang')sync()});
+   addEventListener('resize',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true});
+   addEventListener('scroll',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true,capture:true});
+   document.addEventListener('click',e=>{if(!instances.some(({trigger,menu})=>trigger.contains(e.target)||menu.contains(e.target)))close()});
+   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body>
 </html>

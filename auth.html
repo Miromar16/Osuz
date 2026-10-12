@@ -865,6 +865,78 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 
 <link rel="stylesheet" href="/assets/css/mobile-tabbar-eyebrow-fix.css?v=8f5d1315">
 <link rel="stylesheet" href="/assets/css/tailwind.css?v=a6673b09">
+  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+<style id="osuz-unified-language-v2">
+/* Same custom language picker everywhere. No native browser select popups. */
+.osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
+.osuz-unified-language .osuz-legacy-language-select {display:none!important;visibility:hidden!important}
+.osuz-unified-language-trigger, #languageToggle, #categoryLanguageToggle, #languageButton {
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:5px!important;cursor:pointer!important;white-space:nowrap!important;
+  border-radius:12px!important;min-width:68px!important;min-height:46px!important;
+  padding:8px 9px!important;border:0!important;color:#fff!important;background:transparent!important;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation
+}
+.osuz-unified-language-trigger:hover, #languageToggle:hover, #categoryLanguageToggle:hover, #languageButton:hover,
+.osuz-unified-language-trigger[aria-expanded="true"], #languageToggle[aria-expanded="true"],
+#categoryLanguageToggle[aria-expanded="true"], #languageButton[aria-expanded="true"] {background:rgba(255,255,255,.13)!important}
+.osuz-unified-language-trigger .osuz-lang-label, #languageToggle .osuz-lang-label, #categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  font-size:11px!important;font-weight:800!important;line-height:1.2!important;white-space:nowrap!important
+}
+.osuz-unified-language-trigger .osuz-lang-label::before, .osuz-unified-language-menu .osuz-menu-flag {content:"";display:inline-block;flex:none;width:24px;height:16px;border-radius:3px;background-position:center;background-size:cover;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="ru"]::before,.osuz-unified-language-menu [data-flag="ru"]{background-image:url('https://flagcdn.com/w40/ru.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="uz"]::before,.osuz-unified-language-menu [data-flag="uz"]{background-image:url('https://flagcdn.com/w40/uz.png')}
+.osuz-unified-language-trigger .osuz-lang-label[data-lang="en"]::before,.osuz-unified-language-menu [data-flag="en"]{background-image:url('https://flagcdn.com/w40/us.png')}
+.osuz-unified-language-chevron {width:12px!important;height:12px!important;flex:0 0 12px!important;display:block!important;stroke:currentColor!important;opacity:1!important;margin:0!important}
+.osuz-unified-language-trigger:focus-visible,#languageToggle:focus-visible,#categoryLanguageToggle:focus-visible,#languageButton:focus-visible {outline:2px solid #67e8f9!important;outline-offset:3px!important}
+/* Fixed portalled popup cannot be clipped by sticky headers, overflow, or transforms. */
+.osuz-unified-language-menu, #languageMenu.osuz-lang-floating, #mobileLanguageMenu.osuz-lang-floating,
+#categoryLanguageMenu.osuz-lang-floating, #productLanguageMenu.osuz-lang-floating {
+  position:fixed!important;z-index:2147483000!important;box-sizing:border-box!important;
+  width:177px!important;min-width:177px!important;max-height:min(60dvh,310px)!important;
+  overflow-y:auto!important;margin:0!important;padding:8px!important;
+  background:#fff!important;color:#17283b!important;border:1px solid #e5e7eb!important;
+  border-radius:14px!important;box-shadow:0 16px 45px rgba(3,24,44,.2)!important;transform:none!important
+}
+.osuz-unified-language-menu.hidden, #languageMenu.osuz-lang-floating.hidden,#mobileLanguageMenu.osuz-lang-floating.hidden,
+#categoryLanguageMenu.osuz-lang-floating.hidden,#productLanguageMenu.osuz-lang-floating.hidden {display:none!important}
+.osuz-unified-language-menu:not(.hidden),#languageMenu.osuz-lang-floating:not(.hidden),#mobileLanguageMenu.osuz-lang-floating:not(.hidden),
+#categoryLanguageMenu.osuz-lang-floating:not(.hidden),#productLanguageMenu.osuz-lang-floating:not(.hidden) {display:block!important}
+.osuz-unified-language-menu button, #languageMenu.osuz-lang-floating button,#mobileLanguageMenu.osuz-lang-floating button,
+#categoryLanguageMenu.osuz-lang-floating button,#productLanguageMenu.osuz-lang-floating button {
+  width:100%!important;min-height:39px!important;padding:9px 11px!important;border:0!important;
+  border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  gap:7px!important;font-size:13px!important;font-weight:500!important;text-align:left!important;
+  line-height:1.25!important;color:#183047!important;background:transparent!important;cursor:pointer!important
+}
+.osuz-unified-language-menu button:hover, #languageMenu.osuz-lang-floating button:hover,#mobileLanguageMenu.osuz-lang-floating button:hover,
+#categoryLanguageMenu.osuz-lang-floating button:hover,#productLanguageMenu.osuz-lang-floating button:hover,
+.osuz-unified-language-menu button[aria-checked="true"], #languageMenu.osuz-lang-floating button.osuz-lang-active,
+#mobileLanguageMenu.osuz-lang-floating button.osuz-lang-active,#categoryLanguageMenu.osuz-lang-floating button.osuz-lang-active,#productLanguageMenu.osuz-lang-floating button.osuz-lang-active {background:#dff6f8!important;color:#0a5262!important;font-weight:700!important}
+/* Active option cannot inherit white text from the dark header. */
+.osuz-unified-language-menu .osuz-menu-flag,#languageMenu.osuz-lang-floating .osuz-menu-flag,#mobileLanguageMenu.osuz-lang-floating .osuz-menu-flag,
+#categoryLanguageMenu.osuz-lang-floating .osuz-menu-flag,#productLanguageMenu.osuz-lang-floating .osuz-menu-flag {display:inline-block!important;width:24px!important;height:16px!important;flex:none!important;border-radius:3px!important}
+body.dark-mode .osuz-unified-language-menu, html[data-osuz-theme="dark"] .osuz-unified-language-menu,
+body.dark-mode .osuz-lang-floating, html[data-osuz-theme="dark"] .osuz-lang-floating {background:#111e2c!important;border-color:#425366!important;color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button, html[data-osuz-theme="dark"] .osuz-unified-language-menu button,
+body.dark-mode .osuz-lang-floating button, html[data-osuz-theme="dark"] .osuz-lang-floating button {color:#f8fafc!important}
+body.dark-mode .osuz-unified-language-menu button:hover,html[data-osuz-theme="dark"] .osuz-unified-language-menu button:hover,
+body.dark-mode .osuz-unified-language-menu button[aria-checked="true"],html[data-osuz-theme="dark"] .osuz-unified-language-menu button[aria-checked="true"],
+body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme="dark"] .osuz-lang-floating button.osuz-lang-active {background:#1b3e4e!important;color:#fff!important}
+/* Native mobile layout: keep flag + code + arrow in header, popup fits viewport. */
+@media(max-width:767px) {
+ .osuz-unified-language, .osuz-mobile-header-actions>.osuz-language-wrap {display:inline-flex!important;min-width:0!important}
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:57px!important;width:auto!important;height:43px!important;min-height:43px!important;padding:5px 6px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label,#languageToggle .osuz-lang-label,#categoryLanguageToggle .osuz-lang-label,#languageButton .osuz-lang-label {font-size:10px!important;gap:3px!important}
+ .osuz-unified-language-trigger .osuz-lang-label::before {width:22px!important;height:15px!important}
+ .osuz-unified-language-chevron {width:12px!important;height:12px!important}
+ .osuz-unified-language-menu,#languageMenu.osuz-lang-floating,#mobileLanguageMenu.osuz-lang-floating,#categoryLanguageMenu.osuz-lang-floating,#productLanguageMenu.osuz-lang-floating {width:172px!important;min-width:172px!important}
+}
+@media(max-width:359px) {
+ .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
+}
+</style>
 </head>
 <body data-osuz-build="2026-09-29-v51-17-09-fixes" data-osuz-page="auth" data-osuz-v16-page="auth">
 <header class="auth-site-header">
@@ -885,15 +957,18 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 </button>
 </form>
 <div class="header-actions osuz-mobile-header-actions ml-auto flex items-center gap-1 lg:gap-3">
-<label aria-label="Выбрать язык" class="header-action auth-header-action osuz-language-select-wrap">
-<span class="osuz-lang-label osuz-lang-flag-only" data-code="false" data-lang="ru" data-osuz-select-flag=""></span>
-<span class="osuz-lang-code" data-osuz-select-code="">RU</span>
-<select class="bg-transparent text-white outline-none cursor-pointer" id="languageSelect">
-<option value="ru">RU</option>
-<option value="uz">UZ</option>
-<option value="en">EN</option>
-</select>
-</label>
+<div class="osuz-unified-language osuz-language-wrap" data-osuz-language-control>
+  <button class="header-action osuz-unified-language-trigger" id="osuzLanguageTrigger" type="button" aria-label="Выбрать язык" aria-haspopup="true" aria-expanded="false" aria-controls="osuzLanguageMenu">
+    <span class="osuz-lang-label" id="osuzLanguageFlag" data-lang="ru">RU</span>
+    <svg class="osuz-unified-language-chevron" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div class="osuz-unified-language-menu hidden" id="osuzLanguageMenu" role="menu" aria-label="Выбор языка">
+    <button type="button" data-language="ru" role="menuitemradio" aria-checked="true"><span class="osuz-menu-flag" data-flag="ru" aria-hidden="true"></span>Русский</button>
+    <button type="button" data-language="uz" role="menuitemradio" aria-checked="false"><span class="osuz-menu-flag" data-flag="uz" aria-hidden="true"></span>O‘zbekcha</button>
+    <button type="button" data-language="en" role="menuitemradio" aria-checked="false"><span class="osuz-menu-flag" data-flag="en" aria-hidden="true"></span>English</button>
+  </div>
+  <select id="languageSelect" class="osuz-legacy-language-select" aria-hidden="true" tabindex="-1"><option value="ru">RU</option><option value="uz">UZ</option><option value="en">EN</option></select>
+</div>
 <button aria-label="Сменить тему" class="header-action auth-header-action !px-3" id="themeToggle" type="button">
 <i class="theme-icon-moon h-5 w-5" data-lucide="moon"></i>
 <i class="theme-icon-sun h-5 w-5" data-lucide="sun"></i>
@@ -1223,6 +1298,32 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 </div>
 </div>
 <div class="notice hidden mt-6" id="accountNotice"></div>
+<!-- Telegram notifications: linked to the existing customer account through /api/site-auth. -->
+<section id="telegramNotifications" class="mt-6 rounded-2xl border border-gray-200 p-4 sm:p-5 scroll-mt-28" aria-labelledby="telegramNotificationsTitle">
+<div class="flex items-start gap-3">
+<div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+<i class="h-5 w-5" data-lucide="send"></i>
+</div>
+<div class="min-w-0 flex-1">
+<h2 class="text-lg font-black text-gray-900" id="telegramNotificationsTitle">Уведомления в Telegram</h2>
+<p class="mt-1 text-sm leading-6 text-gray-500" id="telegramNotificationsDescription">Получайте ответы продавцов и изменения статуса заказов в Telegram.</p>
+</div>
+</div>
+<div class="mt-4">
+<button class="primary-button w-full sm:w-auto" id="telegramLinkButton" type="button">
+<i class="h-4 w-4" data-lucide="send"></i>
+<span id="telegramLinkButtonText">Получать уведомления в Telegram</span>
+</button>
+<div id="telegramLinkedControls" class="hidden flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl bg-gray-50 px-4 py-3">
+<p class="text-sm font-bold text-gray-700" id="telegramStatusText" role="status"></p>
+<label class="inline-flex cursor-pointer items-center gap-3 text-sm font-bold text-gray-700" for="telegramNotifyToggle">
+<input type="checkbox" id="telegramNotifyToggle" role="switch" class="h-5 w-5 accent-primary-700" aria-describedby="telegramStatusText">
+<span id="telegramNotifyToggleText">Уведомления включены</span>
+</label>
+</div>
+<div class="notice error hidden mt-3" id="telegramNotice" role="alert"></div>
+</div>
+</section>
 <div class="mt-6 rounded-2xl border border-gray-200 p-4 sm:p-5">
 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 <div>
@@ -1360,6 +1461,12 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             ? localStorage.getItem('osuzLang')
             : 'ru';
         let currentTheme = localStorage.getItem('osuzTheme') || 'light';
+        let telegramSettings = { linked: false, notify: false };
+        let telegramLinkBusy = false;
+        let telegramToggleBusy = false;
+        let telegramRefreshPromise = null;
+        let telegramLastRefreshAt = 0;
+        let telegramHashScrolled = false;
         let registrationPhone = sessionStorage.getItem('osuzRegistrationPhone') || '';
         let registrationTicket = sessionStorage.getItem('osuzRegistrationTicket') || '';
         let registrationStep = registrationTicket ? 3 : registrationPhone ? 2 : 1;
@@ -1433,6 +1540,14 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 accountEmail: 'Email',
                 accountBirth: 'Дата рождения',
                 accountLocation: 'Сохранённая локация',
+                telegramTitle: 'Уведомления в Telegram',
+                telegramDescription: 'Получайте ответы продавцов и изменения статуса заказов в Telegram.',
+                telegramLink: 'Получать уведомления в Telegram',
+                telegramOn: 'Уведомления приходят в Telegram',
+                telegramOff: 'Уведомления в Telegram выключены',
+                telegramToggle: 'Включить уведомления',
+                telegramFailed: 'Не удалось обновить Telegram-уведомления. Попробуйте снова.',
+                telegramBadLink: 'Не удалось открыть ссылку Telegram. Попробуйте снова.',
                 defaultLocationTitle: 'Локация по умолчанию',
                 defaultLocationDescription: 'Выберите точку на карте. Она сохранится в аккаунте и будет подставляться при оформлении доставки.',
                 useMyLocation: 'Моя геопозиция',
@@ -1537,6 +1652,14 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 accountEmail: 'Email',
                 accountBirth: 'Tug‘ilgan sana',
                 accountLocation: 'Saqlangan joylashuv',
+                telegramTitle: 'Telegram bildirishnomalari',
+                telegramDescription: 'Sotuvchilarning javoblari va buyurtma holati haqida Telegramda xabar oling.',
+                telegramLink: 'Telegramda bildirishnomalar olish',
+                telegramOn: 'Bildirishnomalar Telegramga kelmoqda',
+                telegramOff: 'Telegram bildirishnomalari o‘chirilgan',
+                telegramToggle: 'Bildirishnomalarni yoqish',
+                telegramFailed: 'Telegram bildirishnomalarini o‘zgartirib bo‘lmadi. Qayta urinib ko‘ring.',
+                telegramBadLink: 'Telegram havolasini ochib bo‘lmadi. Qayta urinib ko‘ring.',
                 defaultLocationTitle: 'Standart joylashuv',
                 defaultLocationDescription: 'Xaritadan nuqtani tanlang. Ushbu qurilmada yetkazib berishda avtomatik qo‘yiladi.',
                 useMyLocation: 'Mening joylashuvim',
@@ -1641,6 +1764,14 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
                 accountEmail: 'Email',
                 accountBirth: 'Birth date',
                 accountLocation: 'Saved location',
+                telegramTitle: 'Telegram notifications',
+                telegramDescription: 'Receive seller replies and order status updates in Telegram.',
+                telegramLink: 'Get notifications in Telegram',
+                telegramOn: 'Notifications are arriving in Telegram',
+                telegramOff: 'Telegram notifications are turned off',
+                telegramToggle: 'Enable notifications',
+                telegramFailed: 'Could not update Telegram notifications. Please try again.',
+                telegramBadLink: 'Could not open the Telegram link. Please try again.',
                 defaultLocationTitle: 'Default location',
                 defaultLocationDescription: 'Choose a point on the map. It will be prefilled for delivery checkout on this device.',
                 useMyLocation: 'Use my location',
@@ -2291,6 +2422,118 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             }
         }
 
+        function setTelegramNotice(message = '') {
+            const notice = document.getElementById('telegramNotice');
+            if (!notice) return;
+            notice.textContent = message;
+            notice.classList.toggle('hidden', !message);
+        }
+
+        function renderTelegramNotifications(telegram) {
+            if (telegram && typeof telegram === 'object') {
+                telegramSettings = {
+                    linked: telegram.linked === true,
+                    notify: telegram.linked === true && telegram.notify === true
+                };
+            }
+            const isLinked = telegramSettings.linked;
+            const linkButton = document.getElementById('telegramLinkButton');
+            const controls = document.getElementById('telegramLinkedControls');
+            const toggle = document.getElementById('telegramNotifyToggle');
+            linkButton.classList.toggle('hidden', isLinked);
+            linkButton.disabled = telegramLinkBusy;
+            controls.classList.toggle('hidden', !isLinked);
+            controls.classList.toggle('flex', isLinked);
+            toggle.checked = telegramSettings.notify;
+            toggle.disabled = telegramToggleBusy;
+            document.getElementById('telegramStatusText').textContent =
+                text(telegramSettings.notify ? 'telegramOn' : 'telegramOff');
+            document.getElementById('telegramNotifyToggleText').textContent = text('telegramToggle');
+            document.getElementById('telegramNotificationsTitle').textContent = text('telegramTitle');
+            document.getElementById('telegramNotificationsDescription').textContent = text('telegramDescription');
+            document.getElementById('telegramLinkButtonText').textContent = text('telegramLink');
+        }
+
+        // Refresh only the Telegram state after returning from the bot; never reset
+        // the profile form or map and never destroy cached profile on network errors.
+        async function refreshTelegramAfterReturn() {
+            if (document.hidden || document.getElementById('accountPanel').classList.contains('hidden')) return;
+            if (telegramRefreshPromise || Date.now() - telegramLastRefreshAt < 700) return;
+            telegramLastRefreshAt = Date.now();
+            telegramRefreshPromise = (async () => {
+                try {
+                    const customer = await authenticatedAuthRequest('/me');
+                    if (!customer || typeof customer !== 'object') return;
+                    localStorage.setItem(storageKeys.customer, JSON.stringify(customer));
+                    renderTelegramNotifications(customer.telegram);
+                    if (telegramSettings.linked) setTelegramNotice('');
+                } catch (error) {
+                    console.warn('[OSUZ Telegram] Could not refresh link status:', error);
+                }
+            })();
+            try { await telegramRefreshPromise; } finally { telegramRefreshPromise = null; }
+        }
+
+        document.getElementById('telegramLinkButton').addEventListener('click', async () => {
+            if (telegramLinkBusy) return;
+            // Open synchronously on the user gesture to bypass popup blockers.
+            const win = window.open('', '_blank');
+            if (win) win.opener = null;
+            telegramLinkBusy = true;
+            setTelegramNotice('');
+            renderTelegramNotifications();
+            try {
+                const result = await authenticatedAuthRequest('/telegram/link', {
+                    method: 'POST', body: { lang: currentLang }
+                });
+                const target = new URL(result?.url || '');
+                if (target.protocol !== 'https:' || target.hostname !== 't.me' ||
+                    target.pathname !== '/osuz_shop_bot' || !target.searchParams.has('start')) {
+                    throw new Error(text('telegramBadLink'));
+                }
+                if (win && !win.closed) win.location.href = target.href;
+                else location.href = target.href;
+            } catch (error) {
+                try { win?.close(); } catch (_) {}
+                setTelegramNotice(error.message || text('telegramFailed'));
+            } finally {
+                telegramLinkBusy = false;
+                renderTelegramNotifications();
+            }
+        });
+
+        document.getElementById('telegramNotifyToggle').addEventListener('change', async event => {
+            if (telegramToggleBusy) return;
+            const enabled = event.target.checked;
+            telegramToggleBusy = true;
+            setTelegramNotice('');
+            renderTelegramNotifications();
+            try {
+                const result = await authenticatedAuthRequest('/telegram/notify', {
+                    method: 'PATCH', body: { enabled }
+                });
+                if (!result?.telegram) throw new Error(text('telegramFailed'));
+                renderTelegramNotifications(result.telegram);
+                const cached = getStoredCustomer();
+                if (cached) {
+                    cached.telegram = result.telegram;
+                    localStorage.setItem(storageKeys.customer, JSON.stringify(cached));
+                }
+            } catch (error) {
+                renderTelegramNotifications(telegramSettings);
+                setTelegramNotice(error.message || text('telegramFailed'));
+                if (error.status === 409) refreshTelegramAfterReturn();
+            } finally {
+                telegramToggleBusy = false;
+                renderTelegramNotifications();
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) refreshTelegramAfterReturn();
+        });
+        window.addEventListener('focus', refreshTelegramAfterReturn);
+
         function normalizeSessionPayload(data) {
             const root = data && typeof data === 'object' ? data : {};
             const nested = root.data && typeof root.data === 'object' ? root.data : {};
@@ -2340,6 +2583,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
         }
 
         function clearSession() {
+            telegramSettings = { linked: false, notify: false };
             Object.values(storageKeys).forEach(key => localStorage.removeItem(key));
             localStorage.removeItem(CUSTOMER_SESSION_MARKER_KEY);
             localStorage.removeItem(CUSTOMER_LAST_PHONE_KEY);
@@ -3271,6 +3515,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             document.getElementById('accountEmailLabel').textContent = text('accountEmail');
             document.getElementById('accountBirthLabel').textContent = text('accountBirth');
             document.getElementById('accountLocationLabel').textContent = text('accountLocation');
+            renderTelegramNotifications();
             document.getElementById('defaultLocationTitle').textContent = text('defaultLocationTitle');
             document.getElementById('defaultLocationDescription').textContent = text('defaultLocationDescription');
             document.querySelector('#useMyLocationButton span').textContent = text('useMyLocation');
@@ -3558,6 +3803,11 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             document.getElementById('accountPhone').textContent = customer.phone || '';
             document.getElementById('accountEmail').textContent = customer.email || '—';
             document.getElementById('accountBirthDate').textContent = customer.birthDate || '—';
+            renderTelegramNotifications(customer.telegram || { linked: false, notify: false });
+            if (!telegramHashScrolled && window.location.hash === '#telegramNotifications') {
+                telegramHashScrolled = true;
+                requestAnimationFrame(() => document.getElementById('telegramNotifications')?.scrollIntoView({ block: 'start' }));
+            }
 
             const location = validLocation(customer.savedLocation) ? customer.savedLocation : readLocalDefaultLocation();
             document.getElementById('accountLocation').textContent =
@@ -3809,5 +4059,75 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 <script src="/assets/js/v44-header-dom-order-hardfix__v45-header-order-inline-ha.js?v=aaa87b8e"></script>
 <script src="/assets/js/v51-photo-search-unifier.js?v=b95a3da2"></script>
 
+  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
+<script id="osuz-unified-language-v2-js">
+(function(){
+ 'use strict';
+ const pairs=[['osuzLanguageTrigger','osuzLanguageMenu'],['languageToggle','languageMenu'],['mobileLanguageToggle','mobileLanguageMenu'],['categoryLanguageToggle','categoryLanguageMenu'],['languageButton','productLanguageMenu']];
+ const languages=['ru','uz','en'];
+ const safeLang=()=>{try{const v=localStorage.getItem('osuzLang');return languages.includes(v)?v:'ru'}catch(_){return 'ru'}};
+ const instances=[];
+ function coords(toggle,menu){
+   const r=toggle.getBoundingClientRect(),w=menu.offsetWidth||177;
+   menu.style.setProperty('left',Math.max(8,Math.min(innerWidth-w-8,r.right-w))+'px','important');
+   menu.style.setProperty('top',Math.max(8,Math.min(r.bottom+8,innerHeight-150))+'px','important');
+ }
+ function sync(){
+   const v=safeLang();
+   document.querySelectorAll('#osuzLanguageFlag').forEach(el=>{el.dataset.lang=v;el.textContent=v.toUpperCase()});
+   instances.forEach(({menu,trigger})=>{
+     menu.querySelectorAll('button[data-language]').forEach(b=>{
+       const active=b.dataset.language===v;
+       b.classList.toggle('osuz-lang-active',active);b.setAttribute('aria-checked',String(active));
+     });
+     const flag=trigger.querySelector('.osuz-lang-label');
+     if(flag){flag.dataset.lang=v;flag.textContent=v.toUpperCase()}
+   });
+ }
+ function close(except){instances.forEach(({menu,trigger})=>{if(menu!==except){menu.classList.add('hidden');trigger.setAttribute('aria-expanded','false')}})}
+ function setLang(lang,trigger){
+   if(!languages.includes(lang))return;
+   try{localStorage.setItem('osuzLang',lang)}catch(_){}
+   const select=document.getElementById('languageSelect');
+   if(select){select.value=lang;select.dispatchEvent(new Event('change',{bubbles:true}))}
+   else if((trigger.id==='languageToggle'||trigger.id==='mobileLanguageToggle')&&typeof window.setLanguage==='function'){
+     window.setLanguage(lang);
+   }else{
+     // The catalog and product pages intentionally reload translations on locale changes.
+     location.reload();
+   }
+   close();sync();
+ }
+ function init(){
+   for(const [tid,mid] of pairs){
+     const trigger=document.getElementById(tid),menu=document.getElementById(mid);
+     if(!trigger||!menu)continue;
+     document.body.appendChild(menu);
+     menu.classList.add('osuz-lang-floating');
+     trigger.setAttribute('aria-haspopup','true');trigger.setAttribute('aria-expanded','false');
+     instances.push({trigger,menu});
+     // Capture before the page's previous listeners; avoid double toggles and browser-select popups.
+     trigger.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();
+       const willOpen=menu.classList.contains('hidden');
+       close();menu.classList.toggle('hidden',!willOpen);
+       trigger.setAttribute('aria-expanded',String(willOpen));
+       if(willOpen)coords(trigger,menu);
+     },true);
+     menu.querySelectorAll('button[data-language]').forEach(button=>button.addEventListener('click',event=>{
+       event.preventDefault();event.stopImmediatePropagation();setLang(button.dataset.language,trigger);
+     },true));
+   }
+   sync();
+   document.getElementById('languageSelect')?.addEventListener('change',sync);
+   addEventListener('storage',e=>{if(e.key==='osuzLang')sync()});
+   addEventListener('resize',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true});
+   addEventListener('scroll',()=>instances.forEach(({trigger,menu})=>{if(!menu.classList.contains('hidden'))coords(trigger,menu)}),{passive:true,capture:true});
+   document.addEventListener('click',e=>{if(!instances.some(({trigger,menu})=>trigger.contains(e.target)||menu.contains(e.target)))close()});
+   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
 </body>
 </html>
