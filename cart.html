@@ -248,8 +248,17 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             transform: translateY(-1px);
         }
         .primary-button:disabled {
-            opacity: .5;
+            opacity: 1;
+            background: #e8edf2;
+            border: 1px solid #cbd5e1;
+            color: #526274;
             cursor: not-allowed;
+            box-shadow: none;
+        }
+        body.dark-mode .primary-button:disabled {
+            background: #243447;
+            border-color: #3e5062;
+            color: #e2e8f0;
         }
         .secondary-button {
             min-height: 44px;
@@ -596,7 +605,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 <link rel="stylesheet" href="/assets/css/v10-desktop-catalog-mobile-menu__v13-mobile-header-unified.css?v=0d7c83c0">
 <link rel="stylesheet" href="/assets/css/v15-header-unified-final__v16-new-fixes.css?v=b4ad420e">
 <link rel="stylesheet" href="/assets/css/v17-catalog-click-fix.css?v=ffef2e7c">
-<link rel="stylesheet" href="/assets/css/v34-mobile-header-catalog-fix__v53-mobile-catalog-section.css?v=0d593ff0">
+<link rel="stylesheet" href="/assets/css/v34-mobile-header-catalog-fix__v53-mobile-catalog-section.css?v=20261014doc">
 <link rel="stylesheet" href="/assets/css/v43-desktop-header-reference-layout.css?v=d0c938d0">
 <link rel="stylesheet" href="/assets/css/v44-catalog-before-search-hardfix__v47-document-final.css?v=07be5d7a">
 <link rel="stylesheet" href="/assets/css/v51-17-09-fixes.css?v=4957219e">
@@ -806,8 +815,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 </div>
 <button class="primary-button w-full mt-6" disabled="" id="checkoutButton" type="button">
-<i class="w-5 h-5" data-lucide="credit-card"></i>
-<span>Продолжить</span>
+<i class="w-5 h-5" data-lucide="clipboard-check"></i>
+<span>Выберите товар</span>
 </button>
 </aside>
 </div>
@@ -870,6 +879,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 total: 'Итого',
                 grandTotal: 'Общая сумма',
                 checkout: 'Продолжить',
+                checkoutSelectProduct: 'Выберите товар',
+                checkoutRequestStock: 'Запросить наличие',
                 checkoutDirect: 'Оформить заказ',
                 checkoutDirectCreating: 'Оформляем заказ...',
                 checkoutDirectCreated: 'Заказ создан. Открываем его...',
@@ -921,6 +932,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 total: 'Jami',
                 grandTotal: 'Umumiy summa',
                 checkout: 'Davom etish',
+                checkoutSelectProduct: 'Mahsulotni tanlang',
+                checkoutRequestStock: 'Mavjudligini so‘rash',
                 checkoutDirect: 'Buyurtma berish',
                 checkoutDirectCreating: 'Buyurtma rasmiylashtirilmoqda...',
                 checkoutDirectCreated: 'Buyurtma yaratildi. Ochilmoqda...',
@@ -972,6 +985,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 total: 'Total',
                 grandTotal: 'Grand total',
                 checkout: 'Continue',
+                checkoutSelectProduct: 'Select a product',
+                checkoutRequestStock: 'Check availability',
                 checkoutDirect: 'Place order',
                 checkoutDirectCreating: 'Placing order...',
                 checkoutDirectCreated: 'Order created. Opening details...',
@@ -1089,19 +1104,16 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         }
 
         function updateCheckoutCopy() {
-            // require_stock_for_cart = 1: real checkout, no availability request.
-            // require_stock_for_cart = 0: backend first creates a request to the seller.
-            // Keep the latter label neutral rather than falsely promising immediate confirmation.
+            // The CTA describes the customer's first step; the server keeps
+            // handling direct-stock and availability-request modes as before.
             const mode = getCheckoutMode();
-            const labels = {
-                direct: 'checkoutDirect',
-                mixed: 'checkoutMixed',
-                unknown: 'checkoutUnknown',
-                request: 'checkout',
-                none: 'checkoutUnknown'
-            };
-            const label = document.querySelector('#checkoutButton span');
-            if (label) label.textContent = t(labels[mode]);
+            const hasSelection = countSelectedItems(cart) > 0;
+            const button = document.getElementById('checkoutButton');
+            const label = button?.querySelector('span');
+            if (label) label.textContent = t(hasSelection ? 'checkoutRequestStock' : 'checkoutSelectProduct');
+            if (button) {
+                button.setAttribute('aria-label', t(hasSelection ? 'checkoutRequestStock' : 'checkoutSelectProduct'));
+            }
             return mode;
         }
 

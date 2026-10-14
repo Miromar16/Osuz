@@ -654,7 +654,56 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
             }
         }
 
-    </style>
+    
+/* Store location on the order detail page: the map uses only seller.lat/seller.lng. */
+.osuz-seller-location {
+    min-width: 0;
+    overflow: hidden;
+    padding: 18px;
+    border: 1px solid #D9E5EF;
+    border-radius: 20px;
+    background: #F8FCFE;
+    color: #0F172A;
+}
+.osuz-seller-location-head { display:flex; gap:12px; align-items:flex-start; min-width:0; }
+.osuz-seller-location-pin {
+    width:44px; height:44px; border-radius:13px; flex:none; display:flex;
+    align-items:center; justify-content:center; color:#087E99; background:#DDF7FB;
+}
+.osuz-seller-location-title { margin:0; color:#0F172A; font-size:17px; font-weight:900; line-height:1.35; }
+.osuz-seller-location-description { margin-top:4px; color:#52647B; font-size:13px; line-height:1.5; }
+.osuz-seller-map-frame {
+    display:block; width:100%; height:270px; margin-top:16px; border:1px solid #D8E4EE;
+    border-radius:14px; background:#E6EDF4;
+}
+.osuz-seller-location-address {
+    display:flex; align-items:flex-start; gap:8px; margin-top:13px;
+    font-weight:700; font-size:14px; line-height:1.5; color:#22364F; overflow-wrap:anywhere;
+}
+.osuz-seller-location-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
+.osuz-seller-location-link {
+    display:inline-flex; justify-content:center; align-items:center; gap:8px; min-height:44px;
+    padding:10px 15px; text-decoration:none!important; border-radius:12px;
+    border:1px solid #0C829C; background:#0C829C; color:#fff!important;
+    font-size:13px; font-weight:850; line-height:1.25; text-align:center;
+}
+.osuz-seller-location-link:hover { background:#096D84; }
+.osuz-seller-location-link.is-secondary {
+    background:#fff; border-color:#B9D6E2; color:#075F76!important;
+}
+.osuz-seller-location-link.is-secondary:hover { background:#E6F8FC; }
+body.dark-mode .osuz-seller-location { background:#101F2D; border-color:#354B5C; color:#F8FAFC; }
+body.dark-mode .osuz-seller-location-title { color:#F8FAFC; }
+body.dark-mode .osuz-seller-location-description { color:#B5C9D8; }
+body.dark-mode .osuz-seller-location-address { color:#E0ECF3; }
+body.dark-mode .osuz-seller-location-link.is-secondary { background:#142B3B; border-color:#436073; color:#B9F0F8!important; }
+@media(max-width: 480px) {
+    .osuz-seller-location { padding:14px; border-radius:16px; }
+    .osuz-seller-map-frame { height:240px; }
+    .osuz-seller-location-actions { flex-direction:column; }
+    .osuz-seller-location-link { width:100%; }
+}
+</style>
 <link rel="stylesheet" href="/assets/css/final-shared-css.css?v=f34f34d9">
 <link rel="stylesheet" href="/assets/css/checkout-contrast.css?v=1e2e5116">
 <link rel="stylesheet" href="/assets/css/mobile-v6-css.css?v=dbe7b455">
@@ -666,7 +715,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
 <link rel="stylesheet" href="/assets/css/v10-desktop-catalog-mobile-menu__v13-mobile-header-unified.css?v=0d7c83c0">
 <link rel="stylesheet" href="/assets/css/v15-header-unified-final__v16-new-fixes.css?v=b4ad420e">
 <link rel="stylesheet" href="/assets/css/v17-catalog-click-fix.css?v=ffef2e7c">
-<link rel="stylesheet" href="/assets/css/v34-mobile-header-catalog-fix__v53-mobile-catalog-section.css?v=0d593ff0">
+<link rel="stylesheet" href="/assets/css/v34-mobile-header-catalog-fix__v53-mobile-catalog-section.css?v=20261014doc">
 <link rel="stylesheet" href="/assets/css/v43-desktop-header-reference-layout.css?v=d0c938d0">
 <link rel="stylesheet" href="/assets/css/v44-catalog-before-search-hardfix__v47-document-final.css?v=07be5d7a">
 <link rel="stylesheet" href="/assets/css/v51-17-09-fixes.css?v=4957219e">
@@ -960,10 +1009,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     Следите за ответом продавца, выбирайте получение и оплачивайте заказ.
                 </p>
 </div>
-<button class="secondary-button" id="refreshOrdersButton" type="button">
-<i class="w-4 h-4" data-lucide="refresh-cw"></i>
-<span>Обновить</span>
-</button>
 </div>
 <div class="surface hidden rounded-3xl p-9 lg:p-12 text-center" id="authRequiredState">
 <div class="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto mb-5">
@@ -1055,7 +1100,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 eyebrow: 'Покупки',
                 title: 'Мои заказы',
                 description: 'Следите за ответом продавца, выбирайте получение и оплачивайте заказ.',
-                refresh: 'Обновить',
+                request: 'Запрос',
                 authTitle: 'Войдите в аккаунт',
                 authText: 'Для оформления и просмотра заказов нужен аккаунт покупателя.',
                 signIn: 'Войти',
@@ -1096,6 +1141,13 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 delivery: 'Доставка',
                 deliveryText: 'Доставить товар по координатам.',
                 deliverySeparatePrice: 'Стоимость доставки оплачивается отдельно и не входит в цену товара.',
+                sellerLocationTitle: 'Магазин на карте',
+                sellerLocationExact: 'Точка магазина по геолокации продавца',
+                sellerLocationAddressOnly: 'Точная геолокация не указана. Можно найти магазин по адресу.',
+                sellerLocationMissing: 'Продавец пока не указал точку магазина и адрес. Уточните расположение по телефону.',
+                sellerLocationOpen: 'Открыть на карте',
+                sellerLocationRoute: 'Построить маршрут',
+                sellerLocationSearch: 'Найти адрес на карте',
                 sellerAddress: 'Адрес продавца',
                 sellerPhone: 'Телефон продавца',
                 landmark: 'Ориентир',
@@ -1161,7 +1213,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 eyebrow: 'Xaridlar',
                 title: 'Buyurtmalarim',
                 description: 'Sotuvchi javobini kuzating, yetkazib berish va to‘lov usulini tanlang.',
-                refresh: 'Yangilash',
+                request: 'So‘rov',
                 authTitle: 'Akkauntga kiring',
                 authText: 'Buyurtmalarni rasmiylashtirish va ko‘rish uchun xaridor akkaunti kerak.',
                 signIn: 'Kirish',
@@ -1202,10 +1254,17 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 delivery: 'Yetkazib berish',
                 deliveryText: 'Mahsulotni koordinatalar bo‘yicha yetkazish.',
                 deliverySeparatePrice: 'Yetkazib berish narxi alohida to‘lanadi va mahsulot narxiga kirmaydi.',
+                sellerLocationTitle: 'Do‘kon xaritada',
+                sellerLocationExact: 'Sotuvchi ko‘rsatgan do‘kon joylashuvi',
+                sellerLocationAddressOnly: 'Aniq geolokatsiya ko‘rsatilmagan. Do‘konni manzil orqali qidirishingiz mumkin.',
+                sellerLocationMissing: 'Sotuvchi hozircha do‘kon manzili va geolokatsiyasini ko‘rsatmagan. Telefon orqali aniqlashtiring.',
+                sellerLocationOpen: 'Xaritada ochish',
+                sellerLocationRoute: 'Yo‘nalish tuzish',
+                sellerLocationSearch: 'Manzilni xaritada qidirish',
                 sellerAddress: 'Sotuvchi manzili',
                 sellerPhone: 'Sotuvchi telefoni',
                 landmark: 'Mo‘ljal',
-                notSpecified: "Ko'rsatilmagan",
+                notSpecified: 'Ko‘rsatilmagan',
                 pickupWaiting: 'Olib ketish tanlandi. Sotuvchi bronni tasdiqlashi kutilmoqda.',
                 pickupReady: 'Mahsulot quyidagi vaqtgacha bron qilingan',
                 pickedUp: 'Mahsulotni oldim',
@@ -1267,7 +1326,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 eyebrow: 'Shopping',
                 title: 'My orders',
                 description: 'Track the seller response, choose delivery, and complete payment.',
-                refresh: 'Refresh',
+                request: 'Request',
                 authTitle: 'Sign in',
                 authText: 'You need a customer account to place and view orders.',
                 signIn: 'Sign in',
@@ -1308,6 +1367,13 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 delivery: 'Delivery',
                 deliveryText: 'Deliver the products to your coordinates.',
                 deliverySeparatePrice: 'Delivery is paid separately and is not included in the product price.',
+                sellerLocationTitle: 'Store location',
+                sellerLocationExact: 'Store location provided by the seller',
+                sellerLocationAddressOnly: 'Exact coordinates are unavailable. You can search for the store by address.',
+                sellerLocationMissing: 'The seller has not provided a store location or address. Please call the seller for directions.',
+                sellerLocationOpen: 'Open on map',
+                sellerLocationRoute: 'Get directions',
+                sellerLocationSearch: 'Find address on map',
                 sellerAddress: 'Seller address',
                 sellerPhone: 'Seller phone',
                 landmark: 'Landmark',
@@ -1412,6 +1478,12 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 dateStyle: 'medium',
                 timeStyle: 'short'
             }).format(date);
+        }
+
+        function orderDisplayLabel(order) {
+            // An inquiry becomes an order only after the buyer chooses pickup or delivery.
+            // orderNumber remains an unformatted store inquiry number until that step.
+            return t(order?.deliveryType ? 'order' : 'request');
         }
 
         function formatOrderNumber(order) {
@@ -1835,7 +1907,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     <div class="flex items-start justify-between gap-3">
                         <div class="min-w-0">
                             <div class="text-xs font-black uppercase tracking-[.12em] text-primary-600">
-                                ${escapeHTML(t('order'))} #${formatOrderNumber(order)}
+                                ${escapeHTML(orderDisplayLabel(order))} #${formatOrderNumber(order)}
                             </div>
                             <div class="mt-1 font-black text-gray-900 truncate">
                                 ${escapeHTML(order.tenantName || '')}
@@ -2106,6 +2178,87 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     </div>
                 </div>
             `;
+        }
+
+
+        // A missing coordinate must never be converted to zero (the Gulf of Guinea).
+        function sellerGeoCoordinates(seller) {
+            if (!seller || seller.lat == null || seller.lng == null ||
+                String(seller.lat).trim() === '' || String(seller.lng).trim() === '') return null;
+            const lat = Number(seller.lat);
+            const lng = Number(seller.lng);
+            if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+                Math.abs(lat) > 90 || Math.abs(lng) > 180 || (lat === 0 && lng === 0)) return null;
+            return { lat, lng };
+        }
+
+        function renderSellerLocation(order) {
+            const seller = order?.seller || {};
+            const coords = sellerGeoCoordinates(seller);
+            const address = String(seller.address || '').trim();
+            // Before choosing pickup, show the store position to help the buyer decide.
+            // Do not create a fake marker when the API has no coordinates.
+            if (!coords && !address && order?.deliveryType !== 'pickup') return '';
+
+            let mapHtml = '';
+            let linksHtml = '';
+            let description = '';
+            if (coords) {
+                const { lat, lng } = coords;
+                const bbox = [lng - 0.008, lat - 0.005, lng + 0.008, lat + 0.005]
+                    .map(n => n.toFixed(6)).join(',');
+                const embedUrl = 'https://www.openstreetmap.org/export/embed.html?' +
+                    new URLSearchParams({ bbox, layer: 'mapnik', marker: `${lat},${lng}` }).toString();
+                const yandexUrl = 'https://yandex.uz/maps/?' +
+                    new URLSearchParams({ ll: `${lng},${lat}`, pt: `${lng},${lat},pm2rdm`, z: '16', l: 'map' }).toString();
+                const directionsUrl = 'https://www.google.com/maps/dir/?' +
+                    new URLSearchParams({ api: '1', destination: `${lat},${lng}` }).toString();
+                mapHtml = `<iframe class="osuz-seller-map-frame" data-seller-map="${escapeHTML(`${lat},${lng}`)}" src="${escapeHTML(embedUrl)}" title="${escapeHTML(t('sellerLocationTitle'))}" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>`;
+                linksHtml = `<a class="osuz-seller-location-link" href="${escapeHTML(yandexUrl)}" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="w-4 h-4"></i>${escapeHTML(t('sellerLocationOpen'))}</a>
+                    <a class="osuz-seller-location-link is-secondary" href="${escapeHTML(directionsUrl)}" target="_blank" rel="noopener noreferrer"><i data-lucide="navigation" class="w-4 h-4"></i>${escapeHTML(t('sellerLocationRoute'))}</a>`;
+                description = t('sellerLocationExact');
+            } else if (address) {
+                const searchUrl = 'https://www.google.com/maps/search/?' +
+                    new URLSearchParams({ api: '1', query: address }).toString();
+                linksHtml = `<a class="osuz-seller-location-link" href="${escapeHTML(searchUrl)}" target="_blank" rel="noopener noreferrer"><i data-lucide="search" class="w-4 h-4"></i>${escapeHTML(t('sellerLocationSearch'))}</a>`;
+                description = t('sellerLocationAddressOnly');
+            } else {
+                description = t('sellerLocationMissing');
+            }
+            return `
+                <section class="osuz-seller-location" aria-label="${escapeHTML(t('sellerLocationTitle'))}">
+                    <div class="osuz-seller-location-head">
+                        <span class="osuz-seller-location-pin" aria-hidden="true"><i data-lucide="map-pinned" class="w-5 h-5"></i></span>
+                        <div class="min-w-0">
+                            <h3 class="osuz-seller-location-title">${escapeHTML(t('sellerLocationTitle'))}</h3>
+                            <p class="osuz-seller-location-description">${escapeHTML(description)}</p>
+                        </div>
+                    </div>
+                    ${mapHtml}
+                    ${address ? `<div class="osuz-seller-location-address"><i data-lucide="map-pin" class="w-4 h-4 mt-0.5 flex-shrink-0"></i><span>${escapeHTML(address)}</span></div>` : ''}
+                    ${linksHtml ? `<div class="osuz-seller-location-actions">${linksHtml}</div>` : ''}
+                </section>`;
+        }
+
+        // Avoid reloading the embedded map on every 12-second status poll when
+        // only the live store-closing countdown changed.
+        function orderStateSignature(order) {
+            if (!order || typeof order !== 'object') return '';
+            return JSON.stringify({ ...order, seller: {
+                ...(order.seller || {}), closingSoonMinutes: null
+            } });
+        }
+
+        function updateStoreClosingWarning(order) {
+            const warning = document.querySelector('[data-closing-soon]');
+            if (!warning) return;
+            const minutes = order?.seller?.closingSoonMinutes;
+            warning.textContent = minutes != null
+                ? '⚠️ ' + t('closingSoon')
+                    .replace('{minutes}', String(minutes))
+                    .replace('{time}', shopDate(order?.seller?.closesAt, true))
+                : '';
+            warning.classList.toggle('hidden', minutes == null);
         }
 
         function renderPaymentChoice(order) {
@@ -2479,7 +2632,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                         <div>
                             <div class="text-xs font-black uppercase tracking-[.14em] text-primary-600">
-                                ${escapeHTML(t('order'))} #${formatOrderNumber(order)}
+                                ${escapeHTML(orderDisplayLabel(order))} #${formatOrderNumber(order)}
                             </div>
                             <h2 class="mt-2 text-2xl font-black text-gray-900">${escapeHTML(order.tenantName || '')}</h2>
                             <div class="mt-2 text-sm text-gray-500">${escapeHTML(formatDate(order.createdAt))}</div>
@@ -2522,6 +2675,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     ${renderUploadedReceipt(order)}
 
                     ${renderSellerContacts(order)}
+                    ${renderSellerLocation(order)}
 
                     <div id="orderActionArea">
                         ${renderActionArea(order)}
@@ -2996,18 +3150,19 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                 if (canPreserveOpenDeliveryDraft(order)) {
                     currentOrder = order;
-                    const warning = document.querySelector('[data-closing-soon]');
-                    if (warning) {
-                        const minutes = order.seller?.closingSoonMinutes;
-                        warning.textContent = minutes != null
-                            ? '⚠️ ' + t('closingSoon').replace('{minutes}', String(minutes)).replace('{time}', shopDate(order.seller?.closesAt, true))
-                            : '';
-                        warning.classList.toggle('hidden', minutes == null);
-                    }
+                    updateStoreClosingWarning(order);
                     syncPolling(order);
                     return;
                 }
 
+                if (currentOrder &&
+                    Number(order.orderId) === Number(currentOrder.orderId) &&
+                    orderStateSignature(order) === orderStateSignature(currentOrder)) {
+                    currentOrder = order;
+                    updateStoreClosingWarning(order);
+                    syncPolling(order);
+                    return;
+                }
                 renderOrderDetail(order);
                 syncPolling(order);
             } catch (error) {
@@ -3136,7 +3291,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             document.getElementById('ordersEyebrow').textContent = t('eyebrow');
             document.getElementById('ordersTitle').textContent = t('title');
             document.getElementById('ordersDescription').textContent = t('description');
-            document.querySelector('#refreshOrdersButton span').textContent = t('refresh');
             document.getElementById('authRequiredTitle').textContent = t('authTitle');
             document.getElementById('authRequiredText').textContent = t('authText');
             document.getElementById('authRequiredButton').textContent = t('signIn');
@@ -3174,17 +3328,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('osuzTheme', currentTheme);
             applyTheme();
-        });
-
-        document.getElementById('refreshOrdersButton').addEventListener('click', async event => {
-            const button = event.currentTarget;
-            button.disabled = true;
-
-            try {
-                await loadOrders({ preserveSelection: true });
-            } finally {
-                button.disabled = false;
-            }
         });
 
         window.addEventListener('storage', event => {

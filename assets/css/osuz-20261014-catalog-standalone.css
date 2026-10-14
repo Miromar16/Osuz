@@ -1,0 +1,32 @@
+/* Consistent standalone mobile catalog and tab indicator for legacy pages. */
+
+@media (max-width:767px){
+  /* Catalog is a standalone viewport above the persistent 5-tab bottom bar. */
+  #osuzV34Catalog {
+    position:fixed!important;inset:0 0 calc(68px + env(safe-area-inset-bottom,0px)) 0!important;
+    left:0!important;right:0!important;top:0!important;
+    bottom:calc(68px + env(safe-area-inset-bottom,0px))!important;
+    width:100vw!important;width:100dvw!important;
+    max-width:none!important;max-height:none!important;
+    margin:0!important;transform:none!important;
+    border:0!important;border-radius:0!important;box-shadow:none!important;
+    background:#fff!important;z-index:420!important;
+  }
+  body.dark-mode #osuzV34Catalog,
+  html[data-osuz-theme="dark"] #osuzV34Catalog {background:#0b111b!important;}
+  #osuzV34Catalog .v34-cat-head {
+    position:sticky!important;top:0!important;z-index:2!important;
+    background:#fff!important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-head,
+  html[data-osuz-theme="dark"] #osuzV34Catalog .v34-cat-head {background:#0b111b!important;}
+  #osuzV34Catalog .v34-cat-list {flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;}
+  .osuz-mobile-bottom-final {z-index:450!important;}
+  .osuz-mobile-bottom-final > a.active::before,
+  .osuz-mobile-bottom-final > button.active::before {
+    content:""!important;position:absolute!important;top:0!important;
+    left:0!important;right:0!important;width:100%!important;height:3px!important;
+    border-radius:0 0 3px 3px!important;background:#00bcd4!important;transform:none!important;
+  }
+  body.osuz-v34-catalog-open .osuz-mobile-bottom-final [data-mobile-final]:not([data-mobile-final="catalog"])::before {display:none!important;}
+}

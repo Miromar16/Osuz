@@ -4653,6 +4653,174 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
  .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
 }
 </style>
+<style id="osuz-home-10-compact-products-20261014">
+/* Homepage bestsellers: 10 items; two compact cards per row on phones, five on desktop. */
+#products .home-products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+#products .home-product-skeleton { height: 228px; border-radius: 14px; }
+#products .home-product-card { min-width: 0; height: 100%; }
+#products .home-product-link { display: flex; flex-direction: column; min-width: 0; height: 100%; text-decoration: none; }
+#products .home-product-image {
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 112px; height: 112px; padding: 9px;
+  overflow: hidden;
+}
+#products .home-product-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#products .home-product-info { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; padding: 10px 10px 12px; }
+#products .home-product-brand {
+  font-size: 11px; font-weight: 700; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+#products .home-product-name {
+  font-size: 13px; line-height: 1.35; font-weight: 750;
+  min-height: 35px; margin-bottom: 5px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  overflow-wrap: anywhere;
+}
+#products .home-product-description {
+  font-size: 10px; line-height: 1.3; margin-bottom: 9px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+#products .home-product-footer { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: auto; min-width: 0; }
+#products .home-product-price { min-width: 0; overflow-wrap: anywhere; font-size: 12px; line-height: 1.3; font-weight: 800; }
+#products .home-product-arrow {
+  display: flex; align-items: center; justify-content: center; flex: 0 0 27px;
+  width: 27px; height: 27px; border-radius: 9px;
+}
+#products .home-product-arrow svg { width: 15px; height: 15px; }
+@media (min-width: 768px) {
+  #products .home-products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  #products .home-product-image { flex-basis: 145px; height: 145px; padding: 13px; }
+  #products .home-product-info { padding: 12px 13px 14px; }
+  #products .home-product-brand { font-size: 12px; }
+  #products .home-product-name { font-size: 14px; min-height: 38px; }
+  #products .home-product-description { font-size: 11px; }
+  #products .home-product-price { font-size: 13px; }
+  #products .home-product-skeleton { height: 267px; }
+}
+@media (min-width: 1024px) {
+  #products .home-products-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+}
+@media (max-width: 767px) {
+  #products { padding-top: 30px !important; padding-bottom: 40px !important; }
+  #products > .max-w-\[1400px\] { padding-left: 16px !important; padding-right: 16px !important; }
+  #products > .max-w-\[1400px\] > .flex { margin-bottom: 20px !important; }
+  #products .home-product-image { flex-basis: 96px; height: 96px; padding: 6px 10px; }
+  #products .home-product-info { padding: 8px 9px 10px; }
+  #products .home-product-brand { font-size: 10px; margin-bottom: 4px; }
+  #products .home-product-name { font-size: 12px; min-height: 32px; margin-bottom: 5px; }
+  #products .home-product-description { display: none; }
+  #products .home-product-price { font-size: 12px; }
+  #products .home-product-arrow { width: 25px; height: 25px; flex-basis: 25px; }
+  #products .home-product-skeleton { height: 204px; }
+}
+@media (max-width: 359px) {
+  #products .home-products-grid { gap: 9px; }
+  #products .home-product-image { flex-basis: 100px; height: 100px; padding: 7px; }
+  #products .home-product-info { padding: 9px 8px 10px; }
+  #products .home-product-name { font-size: 12px; }
+  #products .home-product-price { font-size: 11px; }
+}
+
+/* Full-catalog link below the ten homepage products, always visible on mobile. */
+#products .home-products-catalog-cta {
+  display: flex;
+  justify-content: center;
+  padding-top: 26px;
+  padding-bottom: 4px;
+}
+#products .home-products-catalog-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 205px;
+  min-height: 50px;
+  padding: 12px 26px;
+  border: 1px solid #03a8bc;
+  border-radius: 14px;
+  background: #00bcd4;
+  color: #071926;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(0,188,212,.12);
+  transition: transform .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+#products .home-products-catalog-link:hover {
+  background: #26c6da;
+  color: #071926;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,188,212,.2);
+}
+#products .home-products-catalog-link:focus-visible {
+  outline: 3px solid #67e8f9;
+  outline-offset: 4px;
+}
+#products .home-products-catalog-link svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+}
+body.dark-mode #products .home-products-catalog-link,
+html[data-osuz-theme="dark"] #products .home-products-catalog-link {
+  background: #22d3ee;
+  color: #071926;
+  border-color: #22d3ee;
+}
+body.dark-mode #products .home-products-catalog-link:hover,
+html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
+  background: #67e8f9;
+  color: #071926;
+}
+@media (max-width: 767px) {
+  #products .home-products-catalog-cta { padding-top: 23px; padding-bottom: 0; }
+  #products .home-products-catalog-link {
+    min-width: 205px;
+    min-height: 49px;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+</style>
+<style id="osuz-doc-20261014-mobile-navigation">
+@media (max-width:767px){
+  /* Catalog is a standalone viewport above the persistent 5-tab bottom bar. */
+  #osuzV34Catalog {
+    position:fixed!important;inset:0 0 calc(68px + env(safe-area-inset-bottom,0px)) 0!important;
+    left:0!important;right:0!important;top:0!important;
+    bottom:calc(68px + env(safe-area-inset-bottom,0px))!important;
+    width:100vw!important;width:100dvw!important;
+    max-width:none!important;max-height:none!important;
+    margin:0!important;transform:none!important;
+    border:0!important;border-radius:0!important;box-shadow:none!important;
+    background:#fff!important;z-index:420!important;
+  }
+  body.dark-mode #osuzV34Catalog,
+  html[data-osuz-theme="dark"] #osuzV34Catalog {background:#0b111b!important;}
+  #osuzV34Catalog .v34-cat-head {
+    position:sticky!important;top:0!important;z-index:2!important;
+    background:#fff!important;
+  }
+  body.dark-mode #osuzV34Catalog .v34-cat-head,
+  html[data-osuz-theme="dark"] #osuzV34Catalog .v34-cat-head {background:#0b111b!important;}
+  #osuzV34Catalog .v34-cat-list {flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;}
+  .osuz-mobile-bottom-final {z-index:450!important;}
+  .osuz-mobile-bottom-final > a.active::before,
+  .osuz-mobile-bottom-final > button.active::before {
+    content:""!important;position:absolute!important;top:0!important;
+    left:0!important;right:0!important;width:100%!important;height:3px!important;
+    border-radius:0 0 3px 3px!important;background:#00bcd4!important;transform:none!important;
+  }
+  body.osuz-v34-catalog-open .osuz-mobile-bottom-final [data-mobile-final]:not([data-mobile-final="catalog"])::before {display:none!important;}
+}
+</style>
 </head>
 <body data-osuz-build="2026-09-29-v52-seo-index-schema" data-osuz-page="index" data-osuz-v16-page="index">
 <nav class="site-header fixed top-0 left-0 right-0 z-50">
@@ -4748,7 +4916,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 <div class="site-header-nav">
 <div class="max-w-[1400px] mx-auto px-6 lg:px-8 h-12 flex items-center gap-8">
-<a class="nav-link text-sm font-semibold" data-section-link="partners" href="#partners">Партнёры</a>
 <a class="nav-link text-sm font-semibold" data-section-link="products" href="#products">Товары</a>
 <a class="nav-link text-sm font-semibold" data-section-link="about" href="#about">О нас</a>
 </div>
@@ -4798,8 +4965,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 <nav class="space-y-1">
 <a class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" href="#solutions">Решения</a>
 <a class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" href="#industries">Отрасли</a>
-<a class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" href="#partners">Партнёры</a>
-<a class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" href="#brands">Бренды</a>
 <a class="mobile-nav-link block text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" href="#products">Товары</a>
 <a class="osuz-cart-link flex items-center justify-between gap-3 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 py-3 px-3 rounded-lg transition-colors" data-open-cart="" href="cart.html">
 <span class="flex items-center gap-3">
@@ -4904,32 +5069,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 </div>
 </section>
-<section class="section-anchor py-16 bg-white" id="products">
-<div class="max-w-[1400px] mx-auto px-6 lg:px-8">
-<div class="flex items-end justify-between mb-10">
-<div>
-<span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Хиты продаж</span>
-<h2 class="text-2xl lg:text-3xl font-bold text-gray-900">Популярные товары</h2>
-</div>
-<a class="hidden md:flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm cta-link" href="#products" id="showAllProductsBtn">Все товары <i class="w-4 h-4" data-lucide="arrow-right"></i></a>
-</div>
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-5" id="popularProductsGrid">
-<div class="rounded-xl h-72 skeleton"></div>
-<div class="rounded-xl h-72 skeleton"></div>
-<div class="rounded-xl h-72 skeleton"></div>
-<div class="rounded-xl h-72 skeleton"></div>
-</div>
-</div>
-</section>
-<section class="section-anchor py-16 border-y border-gray-100 overflow-hidden" id="partners">
-<div class="max-w-[1400px] mx-auto px-6 lg:px-8" id="brands">
-<div class="text-center">
-<span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Партнёры</span>
-<h2 class="text-2xl font-bold text-gray-900">Бренд</h2>
-<div class="mt-8 flex justify-center"><div class="brand-item px-10 py-4 rounded-xl border border-gray-200 flex items-center justify-center min-w-[160px] bg-white"><span class="text-base font-bold text-gray-500">Бренд</span></div></div>
-</div>
-</div>
-</section>
 <section class="py-20 bg-white" id="industries">
 <div class="max-w-[1400px] mx-auto px-6 lg:px-8">
 <div class="text-center mb-14">
@@ -5023,31 +5162,59 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 </div>
 </section>
+<section class="section-anchor py-16 bg-white" id="products">
+<div class="max-w-[1400px] mx-auto px-6 lg:px-8">
+<div class="flex items-end justify-between mb-10">
+<div>
+<span class="text-primary-600 text-sm font-medium tracking-widest uppercase mb-3 block">Хиты продаж</span>
+<h2 class="text-2xl lg:text-3xl font-bold text-gray-900">Популярные товары</h2>
+</div>
+
+</div>
+<div class="home-products-grid" id="popularProductsGrid">
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+<div class="home-product-skeleton skeleton" aria-hidden="true"></div>
+</div>
+<div class="home-products-catalog-cta">
+<a href="category.html" class="home-products-catalog-link">
+<span>Все товары</span><i data-lucide="arrow-right" class="w-5 h-5" aria-hidden="true"></i>
+</a>
+</div>
+</div>
+</section>
+
 <footer class="bg-gray-900 text-white" id="contacts">
 <div class="max-w-[1400px] mx-auto px-6 lg:px-8 py-14">
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-16">
 <div>
 <h4 class="font-semibold text-white mb-5">О нас</h4>
 <ul class="space-y-3">
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="index.html#about">Вакансии</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Новости компании</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="index.html#about">О компании</a></li>
 </ul>
 </div>
 <div class="osuz-buyers-footer">
 <h4 class="font-semibold text-white mb-5" data-osuz-buyers-title="">Покупателям</h4>
 <ul class="space-y-3">
 <li><button class="text-sm text-gray-400 hover:text-primary-300 transition-colors text-left" data-osuz-buyer-link="contact" data-osuz-contact-open="" type="button">Связаться с нами</button></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="delivery" href="#">Условия доставки и оплаты</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="returns" href="#">Правила возврата и обмена товара</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="faq" href="#">Часто задаваемые вопросы (FAQ)</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="delivery" href="delivery.html">Условия доставки и оплаты</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="returns" href="returns.html">Правила возврата и обмена товара</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="faq" href="faq.html">Часто задаваемые вопросы (FAQ)</a></li>
 </ul>
 </div>
 <div>
 <h4 class="font-semibold text-white mb-5">Для предпринимателей</h4>
 <ul class="space-y-3">
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Продавать у нас</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Личный кабинет продавца</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Тарифы и комиссии</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="sellers.html">Продавать у нас</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="https://osuz.uz/admin">Личный кабинет продавца</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="tariffs.html">Тарифы и комиссии</a></li>
 </ul>
 </div>
 </div>
@@ -5225,7 +5392,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'O‘zbekistondagi sanoat uskunalari va ehtiyot qismlar bo‘yicha yirik platforma.',
                 'Компания': 'Kompaniya',
                 'Оплата': 'To‘lov',
-                'Вакансии': 'Vakansiyalar',
+                'О компании': 'Kompaniya haqida',
                 'Контакты': 'Kontaktlar',
                 'Ташкент, Узбекистан': 'Toshkent, O‘zbekiston',
                 'Все права защищены.': 'Barcha huquqlar himoyalangan.',
@@ -5327,7 +5494,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 'Крупнейшая платформа промышленного оборудования и запчастей в Узбекистане.': 'Uzbekistan’s largest platform for industrial equipment and spare parts.',
                 'Компания': 'Company',
                 'Оплата': 'Payment',
-                'Вакансии': 'Careers',
+                'О компании': 'About company',
                 'Контакты': 'Contacts',
                 'Ташкент, Узбекистан': 'Tashkent, Uzbekistan',
                 'Все права защищены.': 'All rights reserved.',
@@ -5606,21 +5773,21 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             const safeImage = escapeHTML(p.img);
 
             return `
-                <article class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-                    <a href="${OSUZRoutes.product(p.raw || p)}" data-product-preview-id="${p.id}" class="block h-full">
-                        <div class="h-44 bg-white flex items-center justify-center p-4 overflow-hidden">
+                <article class="product-card home-product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                    <a href="${OSUZRoutes.product(p.raw || p)}" data-product-preview-id="${p.id}" class="home-product-link">
+                        <div class="home-product-image bg-white">
                             ${safeImage
-                                ? `<img src="${safeImage}" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
+                                ? `<img src="${safeImage}" alt="${safeName}" loading="lazy" onerror="this.onerror=null;this.src='osuz logo.png';">`
                                 : `<div class="text-gray-400 font-bold text-sm">${safeBrand}</div>`
                             }
                         </div>
-                        <div class="p-4">
-                            <div class="text-xs text-primary-600 font-semibold mb-1">${safeBrand}</div>
-                            <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">${safeName}</h3>
-                            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${safeDescription}</p>
-                            <div class="flex items-center justify-between gap-3">
-                                <span class="text-sm font-bold text-gray-900">${safePrice}</span>
-                                <span class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                        <div class="home-product-info">
+                            <div class="home-product-brand text-primary-600">${safeBrand}</div>
+                            <h3 class="home-product-name text-gray-900">${safeName}</h3>
+                            <p class="home-product-description text-gray-500">${safeDescription}</p>
+                            <div class="home-product-footer">
+                                <span class="home-product-price text-gray-900">${safePrice}</span>
+                                <span class="home-product-arrow bg-primary-50" aria-hidden="true">
                                     <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary-600"></i>
                                 </span>
                             </div>
@@ -5629,7 +5796,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 </article>`;
         }
 
-        function renderPopularProducts(products, showAll = false) {
+        function renderPopularProducts(products) {
             const grid = document.getElementById('popularProductsGrid');
             if (!grid) return;
 
@@ -5638,7 +5805,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 return;
             }
 
-            const visibleProducts = showAll ? products : products.slice(0, 4);
+            const visibleProducts = products.slice(0, 10);
             grid.innerHTML = visibleProducts.map(productCardTemplate).join('');
 
             grid.querySelectorAll('[data-product-preview-id]').forEach(link => {
@@ -6001,12 +6168,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             });
         });
 
-        const showAllProductsBtn = document.getElementById('showAllProductsBtn');
-        if (showAllProductsBtn) {
-            showAllProductsBtn.addEventListener('click', () => {
-                renderPopularProducts(productDatabase, true);
-            });
-        }
 
         const languageToggle = document.getElementById('languageToggle');
         const mobileLanguageToggle = document.getElementById('mobileLanguageToggle');
@@ -6423,7 +6584,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 </div>
 <nav aria-label="Мобильная навигация" class="osuz-mobile-bottom-final">
-<a data-mobile-final="home" href="index.html"><i data-lucide="house"></i><span data-mobile-final-label="home">Главная</span></a>
+<a class="active" aria-current="page" data-mobile-final="home" href="index.html"><i data-lucide="house"></i><span data-mobile-final-label="home">Главная</span></a>
 <a data-mobile-final="cart" href="cart.html"><i data-lucide="shopping-cart"></i><span data-mobile-final-label="cart">Корзина</span><span data-mobile-cart-count="">0</span></a>
 <a data-mobile-final="orders" href="orders.html"><i data-lucide="package-check"></i><span data-mobile-final-label="orders">Заказы</span></a>
 <a data-mobile-final="profile" href="auth.html"><i data-lucide="circle-user-round"></i><span data-mobile-final-label="profile">Профиль</span></a>
