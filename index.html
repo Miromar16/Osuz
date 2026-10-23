@@ -4581,7 +4581,7 @@ body:not(.dark-mode) #mobileLanguageMenu .language-option:not(.bg-primary-50) {
   }
 }
 </style>
-  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+
 <style id="osuz-unified-language-v2">
 /* Same custom language picker everywhere. No native browser select popups. */
 .osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
@@ -4820,6 +4820,31 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
   }
   body.osuz-v34-catalog-open .osuz-mobile-bottom-final [data-mobile-final]:not([data-mobile-final="catalog"])::before {display:none!important;}
 }
+</style>
+
+<style id="osuz-metanoia-mobile-language">
+@media(max-width:767px){
+  #languageToggle > svg,#languageButton > svg,#categoryLanguageToggle > svg,
+  #mobileLanguageToggle > svg,#languageBtn > svg,
+  #osuzLanguageTrigger > svg { display:none!important; }
+  #languageToggle > i[data-lucide="chevron-down"],#languageButton > i[data-lucide="chevron-down"],
+  #categoryLanguageToggle > i[data-lucide="chevron-down"],
+  #mobileLanguageToggle > i[data-lucide="chevron-down"],
+  #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
+}
+</style>
+
+<style id="osuz-metanoia-home-mobile-header">
+@media(max-width:767px){
+ #mobileTopSearchForm{background:#fff!important;border-radius:11px!important;border:1px solid rgba(15,23,42,.24)!important;overflow:hidden!important;box-shadow:0 4px 16px rgba(15,23,42,.08)!important;gap:0!important}
+ #mobileTopSearchForm #mobileTopPhotoBtn{border:0!important;border-left:0!important;border-right:0!important;background:#fff!important;box-shadow:none!important;min-width:43px!important;width:43px!important;padding:0 10px!important;margin:0!important}
+ #mobileTopSearchForm #mobileTopPhotoBtn:before,#mobileTopSearchForm #mobileTopPhotoBtn:after{display:none!important}
+ #mobileTopSearchForm #mobileTopSearchButton{background:#0b1725!important;color:#fff!important;border:0!important;box-shadow:none!important;min-width:86px!important}
+}
+.osuz-load-sentinel{min-height:72px;display:flex;align-items:center;justify-content:center;gap:16px;color:#64748b;font-size:14px;padding:20px 0}
+.osuz-load-sentinel.hidden{display:none}
+.osuz-load-retry{border:1px solid #0c93a8;border-radius:10px;color:#067890;font-weight:750;padding:9px 14px;background:#effbfc}
+body.dark-mode .osuz-load-sentinel{color:#cbd5e1}
 </style>
 </head>
 <body data-osuz-build="2026-09-29-v52-seo-index-schema" data-osuz-page="index" data-osuz-v16-page="index">
@@ -5183,10 +5208,9 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
 <div class="home-product-skeleton skeleton" aria-hidden="true"></div>
 <div class="home-product-skeleton skeleton" aria-hidden="true"></div>
 </div>
-<div class="home-products-catalog-cta">
-<a href="category.html" class="home-products-catalog-link">
-<span>Все товары</span><i data-lucide="arrow-right" class="w-5 h-5" aria-hidden="true"></i>
-</a>
+<div id="homeProductsSentinel" class="osuz-load-sentinel" aria-live="polite">
+  <span id="homeProductsLoadStatus"></span>
+  <button type="button" id="homeProductsRetry" class="hidden osuz-load-retry">Повторить загрузку</button>
 </div>
 </div>
 </section>
@@ -5213,7 +5237,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
 <h4 class="font-semibold text-white mb-5">Для предпринимателей</h4>
 <ul class="space-y-3">
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="sellers.html">Продавать у нас</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="https://osuz.uz/admin">Личный кабинет продавца</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="https://seller.osuz.uz">Личный кабинет продавца</a></li>
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="tariffs.html">Тарифы и комиссии</a></li>
 </ul>
 </div>
@@ -5691,6 +5715,9 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                 productDatabase = productDatabase.map(p => p.raw ? normalizeProduct(p.raw) : p);
                 renderPopularProducts(productDatabase);
             }
+            if (document.getElementById('homeProductsRetry') && !document.getElementById('homeProductsRetry').classList.contains('hidden')) {
+                setHomeLoadStatus(currentLang === 'uz' ? 'Yuklab bo‘lmadi.' : currentLang === 'en' ? 'Could not load products.' : 'Не удалось загрузить товары.', true);
+            }
 
             loadCategories();
 
@@ -5796,33 +5823,113 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                 </article>`;
         }
 
+        // Products are loaded by pages, not sliced from one large prefetch.
+        const HOME_BATCH_SIZE = 10;
+        let homePage = 0;
+        let homeLoading = false;
+        let homeFinished = false;
+        let homeLoadError = false;
+        let homeObserver = null;
+        let homeLoadedIds = new Set();
+
         function renderPopularProducts(products) {
             const grid = document.getElementById('popularProductsGrid');
             if (!grid) return;
-
-            if (!products.length) {
-                grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Товары не найдены')}</div>`;
-                return;
-            }
-
-            const visibleProducts = products.slice(0, 10);
-            grid.innerHTML = visibleProducts.map(productCardTemplate).join('');
-
-            grid.querySelectorAll('[data-product-preview-id]').forEach(link => {
-                link.addEventListener('click', () => {
+            grid.innerHTML = products.length
+                ? products.map(productCardTemplate).join('')
+                : `<div class="col-span-full py-10 text-center text-gray-500">${t('Товары не найдены')}</div>`;
+            if (!grid.dataset.previewBound) {
+                grid.dataset.previewBound = '1';
+                grid.addEventListener('click', event => {
+                    const link = event.target.closest('[data-product-preview-id]');
+                    if (!link) return;
                     const id = Number(link.dataset.productPreviewId);
-                    const preview = visibleProducts.find(item => Number(item.id) === id)?.raw;
-
+                    const preview = productDatabase.find(item => item.id === id)?.raw;
                     if (preview) {
-                        sessionStorage.setItem(
-                            `osuzProductPreview:${id}`,
-                            JSON.stringify(preview)
-                        );
+                        try { sessionStorage.setItem(`osuzProductPreview:${id}`, JSON.stringify(preview)); }
+                        catch (_) { /* Storage full or disabled; navigation still works. */ }
                     }
                 });
-            });
+            }
+            window.lucide?.createIcons?.();
+        }
 
-            lucide.createIcons();
+        function setHomeLoadStatus(message = '', retry = false) {
+            const node = document.getElementById('homeProductsLoadStatus');
+            const button = document.getElementById('homeProductsRetry');
+            if (node) node.textContent = message;
+            if (button) {
+                button.classList.toggle('hidden', !retry);
+                button.textContent = currentLang === 'uz' ? 'Qayta urinish' : currentLang === 'en' ? 'Try again' : 'Повторить загрузку';
+            }
+        }
+
+        async function loadNextHomePage() {
+            if (homeLoading || homeFinished) return false;
+            homeLoading = true;
+            homeLoadError = false;
+            setHomeLoadStatus(currentLang === 'uz' ? 'Mahsulotlar yuklanmoqda…' : currentLang === 'en' ? 'Loading products…' : 'Загружаем товары…');
+            try {
+                const page = homePage + 1;
+                const batch = await loadProducts({ page, limit: HOME_BATCH_SIZE });
+                homePage = page;
+                const fresh = batch.filter(item => {
+                    if (!Number.isFinite(item.id) || homeLoadedIds.has(item.id)) return false;
+                    homeLoadedIds.add(item.id);
+                    return true;
+                });
+                productDatabase.push(...fresh);
+                renderPopularProducts(productDatabase);
+                // Short last page, empty page, or no unique entries = end of catalog.
+                homeFinished = batch.length < HOME_BATCH_SIZE || fresh.length === 0;
+                if (homeFinished) {
+                    homeObserver?.disconnect();
+                    document.getElementById('homeProductsSentinel')?.classList.add('hidden');
+                } else {
+                    setHomeLoadStatus('');
+                }
+                return true;
+            } catch (error) {
+                homeLoadError = true;
+                console.error('Failed to load more products:', error);
+                setHomeLoadStatus(
+                    currentLang === 'uz' ? 'Yuklab bo‘lmadi.' : currentLang === 'en' ? 'Could not load products.' : 'Не удалось загрузить товары.',
+                    true
+                );
+                // Pause auto loading until explicit retry to avoid repeated failures.
+                homeObserver?.disconnect();
+                return false;
+            } finally {
+                homeLoading = false;
+            }
+        }
+
+        function setupHomeProductObserver() {
+            const sentinel = document.getElementById('homeProductsSentinel');
+            if (!sentinel) return;
+            const retry = document.getElementById('homeProductsRetry');
+            retry?.addEventListener('click', () => {
+                setHomeLoadStatus('');
+                void loadNextHomePage().then(succeeded => {
+                    if (succeeded && !homeFinished) homeObserver?.observe(sentinel);
+                });
+            });
+            // Scroll fallback also runs alongside IntersectionObserver: some mobile
+            // browsers can miss an intersection after a large DOM append.
+            const onScroll = () => {
+                if (homeLoading || homeFinished || homeLoadError) return;
+                const rect = sentinel.getBoundingClientRect();
+                if (rect.top <= window.innerHeight + 450 && rect.bottom >= 0) void loadNextHomePage();
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll, { passive: true });
+            if ('IntersectionObserver' in window) {
+                homeObserver = new IntersectionObserver(entries => {
+                    if (!homeLoading && !homeLoadError && entries.some(entry => entry.isIntersecting)) void loadNextHomePage();
+                }, { rootMargin: '0px 0px 450px 0px', threshold: 0 });
+                if (!homeLoadError) homeObserver.observe(sentinel);
+            }
+            onScroll();
         }
 
         async function loadProducts({ q = '', page = 1, limit = 48, suggest = false } = {}) {
@@ -5844,7 +5951,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                     {
                         signal: controller.signal,
                         cache: 'no-store',
-                        headers: {
+                        headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                             'Accept': 'application/json'
                         }
                     }
@@ -5863,14 +5970,9 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
         }
 
         async function initProducts() {
-            try {
-                productDatabase = await loadProducts({ limit: 48 });
-                renderPopularProducts(productDatabase);
-            } catch (e) {
-                console.error('Failed to load products:', e);
-                const grid = document.getElementById('popularProductsGrid');
-                if (grid) grid.innerHTML =  `<div class="col-span-full py-10 text-center text-gray-500">${t('Не удалось загрузить товары')}</div>`;
-            }
+            // First request is 10 products; subsequent requests begin only near the bottom.
+            await loadNextHomePage();
+            setupHomeProductObserver();
         }
 
         async function searchProducts(query) {
@@ -6118,7 +6220,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
             const grid = document.getElementById('categoriesGrid');
             if (!grid) return; // old category grid was removed by requirements; mega-menu owns categories now
             try {
-                const res = await fetch(`${CATALOG_API_BASE}/categories`);
+                const res = await fetch(`${CATALOG_API_BASE}/categories`, { headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru' } });
                 const categories = await res.json();
                 window.__OSUZ_CATEGORY_CACHE__ = Array.isArray(categories) ? categories : [];
                 const topLevel = categories.filter(c => !c.parent_id);
@@ -6337,7 +6439,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                 try {
                     const response = await fetch(`${AUTH_API}/refresh`, {
                         method: 'POST',
-                        headers: {
+                        headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
@@ -6366,7 +6468,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                 if (!token) return null;
 
                 const response = await fetch(CART_API, {
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
@@ -6529,7 +6631,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
                     const response = await fetch(
                         `${API_BASE}/products?q=${encodeURIComponent(q)}&suggest=1&limit=8`,
                         {
-                            headers: { Accept: 'application/json' },
+                            headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru', Accept: 'application/json' },
                             cache: 'no-store',
                             signal: controller.signal
                         }
@@ -6654,7 +6756,7 @@ html[data-osuz-theme="dark"] #products .home-products-catalog-link:hover {
    const controller=new AbortController();
    const tm=setTimeout(()=>controller.abort(),12000);
    try{
-     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'}});
      if(!res.ok)throw new Error('HTTP '+res.status+' '+endpoint);
      const payload=await res.json();
      const cats=normalizeCats(payload);
@@ -6861,7 +6963,7 @@ async function loadCategories(){
       const cache=Array.isArray(window.__OSUZ_CATEGORY_CACHE__)?window.__OSUZ_CATEGORY_CACHE__:[];
       if(cache.length)cats=normalizePayload(cache);
       if(!cats.length){
-        const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
+        const res=await fetch(API,{headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'},cache:'no-store'});
         if(!res.ok)throw new Error('HTTP '+res.status);
         cats=normalizePayload(await res.json());
       }
@@ -7147,7 +7249,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   else init();
 })();
 </script>
-  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
+
 <script id="osuz-unified-language-v2-js">
 (function(){
  'use strict';

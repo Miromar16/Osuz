@@ -150,7 +150,7 @@ async function loadCategories(){
         const controller=new AbortController();
         const timeout=setTimeout(()=>controller.abort(),9000);
         try {
-          const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store',signal:controller.signal});
+          const res=await fetch(API,{headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'},cache:'no-store',signal:controller.signal});
           if(!res.ok)throw new Error('HTTP '+res.status);
           cats=normalizePayload(await res.json());
         } finally { clearTimeout(timeout); }

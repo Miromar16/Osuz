@@ -3262,7 +3262,6 @@ body.osuz-image-viewer-open {
 }
 </style>
 
-  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
 <style id="osuz-unified-language-v2">
 /* Same custom language picker everywhere. No native browser select popups. */
 .osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
@@ -3335,6 +3334,37 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 }
 </style>
 <link rel="stylesheet" href="assets/css/osuz-20261014-catalog-standalone.css?v=20261015"/>
+
+<style id="osuz-metanoia-mobile-language">
+@media(max-width:767px){
+  #languageToggle > svg,#languageButton > svg,#categoryLanguageToggle > svg,
+  #mobileLanguageToggle > svg,#languageBtn > svg,
+  #osuzLanguageTrigger > svg { display:none!important; }
+  #languageToggle > i[data-lucide="chevron-down"],#languageButton > i[data-lucide="chevron-down"],
+  #categoryLanguageToggle > i[data-lucide="chevron-down"],
+  #mobileLanguageToggle > i[data-lucide="chevron-down"],
+  #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
+}
+</style>
+
+<style id="osuz-metanoia-product-middle-and-mobile-header">
+#attributesSection{scroll-margin-top:145px}
+.product-all-specs-link{color:#067890!important;text-decoration:underline;text-decoration-color:rgba(6,120,144,.25);text-underline-offset:4px;min-height:32px}
+.product-all-specs-link:focus-visible{outline:2px solid #00bcd4;outline-offset:3px;border-radius:4px}
+.product-quick-spec-row{grid-template-columns:minmax(0,.93fr) minmax(0,1.07fr)}
+@media(max-width:767px){
+ /* Match the home search control: one contiguous pill, no white divider. */
+ .site-header-top form.osuz-header-search{border:1px solid rgba(15,23,42,.24)!important;border-radius:11px!important;background:#fff!important;overflow:hidden!important;box-shadow:0 4px 16px rgba(15,23,42,.08)!important;min-height:46px!important;height:46px!important;width:100%!important;gap:0!important;padding:0!important}
+ .site-header-top form.osuz-header-search>svg{color:#94a3b8!important;margin-left:13px!important;margin-right:9px!important;flex-shrink:0}
+ .site-header-top form.osuz-header-search input[type="search"]{height:100%!important;background:#fff!important;color:#0f172a!important;min-width:0!important;flex:1 1 auto!important;padding:0 4px!important;font-size:12px!important}
+ .site-header-top form.osuz-header-search .osuz-photo-search-control{border:0!important;border-left:0!important;border-right:0!important;box-shadow:none!important;background:#fff!important;margin:0!important;padding:0 10px!important;flex-shrink:0!important;width:44px!important;height:100%!important}
+ .site-header-top form.osuz-header-search .osuz-photo-search-control svg{color:#0898aa!important;width:21px!important;height:21px!important;margin:0!important}
+ .site-header-top form.osuz-header-search>button[type="submit"]{background:#0b1725!important;color:#fff!important;border:0!important;border-radius:0!important;margin:0!important;height:100%!important;min-width:86px!important;padding:0 13px!important;font-size:12px!important;box-shadow:none!important;}
+ .site-header-top form.osuz-header-search>button[type="submit"] svg{width:15px!important;height:15px!important;margin:0!important;color:#fff!important}
+ .site-header-top form.osuz-header-search .osuz-photo-search-control:after,.site-header-top form.osuz-header-search .osuz-photo-search-control:before{display:none!important}
+ #attributesSection{scroll-margin-top:130px}
+}
+</style>
 </head>
 <body data-osuz-v16-page="product" data-osuz-page="product">
 <nav class="site-header sticky top-0 z-50">
@@ -4254,7 +4284,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 const response = await fetch(`${API}${path}`, {
                     signal: controller.signal,
                     cache: 'no-store',
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Accept': 'application/json'
                     }
                 });
@@ -4529,7 +4559,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 return;
             }
 
-            const quickRows = parsedSpecificationRows.slice(0, 3);
+            const quickRows = parsedSpecificationRows.slice(0, 6);
             if (quickRows.length) {
                 container.innerHTML = `
                     <div class="product-spec-box">
@@ -4558,6 +4588,14 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             }
 
             renderAttributes();
+            container.querySelectorAll('.product-all-specs-link').forEach(link => {
+                link.addEventListener('click', event => {
+                    const section = document.getElementById('attributesSection');
+                    if (!section || section.classList.contains('hidden')) return;
+                    event.preventDefault();
+                    section.scrollIntoView({ behavior:'smooth', block:'start' });
+                });
+            });
             if (window.lucide?.createIcons) lucide.createIcons();
         }
 
@@ -5142,6 +5180,25 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 </div>
             `).join('');
             section.classList.remove('hidden');
+
+            // Some products have structured category attributes but no freeform
+            // `specification`. Still show a short preview in the middle card.
+            const preview = document.getElementById('productSpecification');
+            if (preview && !preview.textContent.trim() && rows.length) {
+                preview.innerHTML = `<div class="product-spec-box">
+                    <div class="product-spec-list">
+                        ${rows.slice(0, 5).map(row => `<div class="product-spec-row">
+                            <div class="product-spec-label">${escapeHTML(row.label)}</div>
+                            <div class="product-spec-value">${escapeHTML(row.value)}</div>
+                        </div>`).join('')}
+                    </div>
+                    <a class="product-all-specs-link" href="#attributesSection">
+                        ${escapeHTML(currentLang === 'uz' ? 'Barcha xususiyatlar' : currentLang === 'en' ? 'All specifications' : 'Все характеристики')}
+                        <i data-lucide="arrow-down"></i>
+                    </a>
+                </div>`;
+                window.lucide?.createIcons?.();
+            }
         }
 
 
@@ -5181,9 +5238,10 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 const error = new Error(
                     Array.isArray(data.message)
                         ? data.message.join('. ')
-                        : data.message || data.error || ui.cartError
+                        : data.error || data.message || ui.cartError
                 );
                 error.status = response.status;
+                error.code = typeof data.code === 'string' ? data.code : undefined;
                 throw error;
             }
 
@@ -5197,7 +5255,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             try {
                 const response = await fetch(`${AUTH_API}/refresh`, {
                     method: 'POST',
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -5229,7 +5287,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             const response = await fetch(`${CART_API}${path}`, {
                 method: options.method || 'GET',
-                headers: {
+                headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -6009,7 +6067,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 try {
                     const response = await fetch(`${AUTH_API}/refresh`, {
                         method: 'POST',
-                        headers: {
+                        headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
@@ -6038,7 +6096,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 if (!token) return null;
 
                 const response = await fetch(CART_API, {
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
@@ -6195,7 +6253,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
    const controller=new AbortController();
    const tm=setTimeout(()=>controller.abort(),12000);
    try{
-     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'}});
      if(!res.ok)throw new Error('HTTP '+res.status+' '+endpoint);
      const payload=await res.json();
      const cats=normalizeCats(payload);
@@ -6397,7 +6455,7 @@ async function loadCategories(){
       const cache=Array.isArray(window.__OSUZ_CATEGORY_CACHE__)?window.__OSUZ_CATEGORY_CACHE__:[];
       if(cache.length)cats=normalizePayload(cache);
       if(!cats.length){
-        const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
+        const res=await fetch(API,{headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'},cache:'no-store'});
         if(!res.ok)throw new Error('HTTP '+res.status);
         cats=normalizePayload(await res.json());
       }
@@ -6541,7 +6599,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
 <script id="osuz-unified-language-v2-js">
 (function(){
  'use strict';

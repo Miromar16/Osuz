@@ -63,7 +63,7 @@
    const controller=new AbortController();
    const tm=setTimeout(()=>controller.abort(),12000);
    try{
-     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'}});
      if(!res.ok)throw new Error('HTTP '+res.status+' '+endpoint);
      const payload=await res.json();
      const cats=normalizeCats(payload);

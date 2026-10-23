@@ -3129,7 +3129,7 @@ body.dark-mode .legal-doc h2,body.dark-mode .legal-doc strong{color:#f8fafc}
 body.dark-mode .legal-doc p,body.dark-mode .legal-doc ul{color:#cbd5e1}
 body.dark-mode .legal-doc a{color:#5eead4}
 </style>
-  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+
 <style id="osuz-unified-language-v2">
 /* Same custom language picker everywhere. No native browser select popups. */
 .osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
@@ -3202,6 +3202,18 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 }
 </style>
 <link rel="stylesheet" href="assets/css/osuz-20261014-catalog-standalone.css?v=20261015"/>
+
+<style id="osuz-metanoia-mobile-language">
+@media(max-width:767px){
+  #languageToggle > svg,#languageButton > svg,#categoryLanguageToggle > svg,
+  #mobileLanguageToggle > svg,#languageBtn > svg,
+  #osuzLanguageTrigger > svg { display:none!important; }
+  #languageToggle > i[data-lucide="chevron-down"],#languageButton > i[data-lucide="chevron-down"],
+  #categoryLanguageToggle > i[data-lucide="chevron-down"],
+  #mobileLanguageToggle > i[data-lucide="chevron-down"],
+  #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
+}
+</style>
 </head>
 <body data-osuz-page="legal" data-osuz-v16-page="legal" data-legal-doc="privacy">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -3460,7 +3472,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
    const controller=new AbortController();
    const tm=setTimeout(()=>controller.abort(),12000);
    try{
-     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{Accept:'application/json'}});
+     const res=await fetch(endpoint,{signal:controller.signal,cache:'no-store',headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'}});
      if(!res.ok)throw new Error('HTTP '+res.status+' '+endpoint);
      const payload=await res.json();
      const cats=normalizeCats(payload);
@@ -3679,7 +3691,7 @@ async function loadCategories(){
       const cache=Array.isArray(window.__OSUZ_CATEGORY_CACHE__)?window.__OSUZ_CATEGORY_CACHE__:[];
       if(cache.length)cats=normalizePayload(cache);
       if(!cats.length){
-        const res=await fetch(API,{headers:{Accept:'application/json'},cache:'no-store'});
+        const res=await fetch(API,{headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json'},cache:'no-store'});
         if(!res.ok)throw new Error('HTTP '+res.status);
         cats=normalizePayload(await res.json());
       }
@@ -3849,7 +3861,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 
-  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
 <script id="osuz-unified-language-v2-js">
 (function(){
  'use strict';

@@ -63,6 +63,11 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
     -webkit-appearance:menulist!important;
 }
 
+
+/* Busy feedback for order actions, including mobile checkout controls. */
+.osuz-request-spinner { display:inline-block;width:17px;height:17px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:osuzRequestSpin .7s linear infinite;vertical-align:middle;flex-shrink:0; }
+@keyframes osuzRequestSpin { to { transform:rotate(360deg); } }
+#orderDetail [data-action]:disabled, #orderDetail .is-request-busy { cursor:wait!important;opacity:.65;pointer-events:none; }
 </style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -874,7 +879,7 @@ body.dark-mode .order-detail-back {
   }
 }
 </style>
-  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+
 <style id="osuz-unified-language-v2">
 /* Same custom language picker everywhere. No native browser select popups. */
 .osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
@@ -944,6 +949,18 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 }
 @media(max-width:359px) {
  .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
+}
+</style>
+
+<style id="osuz-metanoia-mobile-language">
+@media(max-width:767px){
+  #languageToggle > svg,#languageButton > svg,#categoryLanguageToggle > svg,
+  #mobileLanguageToggle > svg,#languageBtn > svg,
+  #osuzLanguageTrigger > svg { display:none!important; }
+  #languageToggle > i[data-lucide="chevron-down"],#languageButton > i[data-lucide="chevron-down"],
+  #categoryLanguageToggle > i[data-lucide="chevron-down"],
+  #mobileLanguageToggle > i[data-lucide="chevron-down"],
+  #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
 }
 </style>
 </head>
@@ -1085,6 +1102,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         let listPollTimer = null;
         let openedOrderFromList = false;
         let requestBusy = false;
+        let orderActionRevision = 0;
         let toastTimer = null;
         const receiptPreviewUrls = new Map();
         const uploadedReceiptPreviewOrders = new Set();
@@ -1198,6 +1216,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 paymentFailed: 'Три чека были отклонены. Свяжитесь с продавцом напрямую.',
                 completedText: 'Заказ завершён.',
                 cancelledText: 'Заказ отменён.',
+                sending: 'Отправляем…',
+                requestTimeout: 'Нет ответа от сервера. Проверьте интернет и обновите страницу.',
                 networkError: 'Не удалось загрузить заказы.',
                 actionError: 'Не удалось выполнить действие.',
                 unauthorized: 'Сессия завершена. Войдите снова.',
@@ -1311,6 +1331,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 paymentFailed: 'Uchta chek rad etildi. Sotuvchi bilan bevosita bog‘laning.',
                 completedText: 'Buyurtma yakunlandi.',
                 cancelledText: 'Buyurtma bekor qilindi.',
+                sending: 'Yuborilmoqda…',
+                requestTimeout: 'Serverdan javob yo‘q. Internetni tekshiring va sahifani yangilang.',
                 networkError: 'Buyurtmalarni yuklab bo‘lmadi.',
                 actionError: 'Amalni bajarib bo‘lmadi.',
                 unauthorized: 'Sessiya tugadi. Qayta kiring.',
@@ -1424,6 +1446,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 paymentFailed: 'Three receipts were rejected. Contact the seller directly.',
                 completedText: 'The order is completed.',
                 cancelledText: 'The order is cancelled.',
+                sending: 'Sending…',
+                requestTimeout: 'No response from the server. Check your connection and reload the page.',
                 networkError: 'Could not load orders.',
                 actionError: 'Could not complete the action.',
                 unauthorized: 'Your session has ended. Sign in again.',
@@ -1582,10 +1606,11 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 const error = new Error(
                     Array.isArray(data.message)
                         ? data.message.join('. ')
-                        : data.message || data.error || t('actionError')
+                        : data.error || data.message || t('actionError')
                 );
 
                 error.status = response.status;
+                error.code = typeof data.code === 'string' ? data.code : undefined;
                 throw error;
             }
 
@@ -1599,7 +1624,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             try {
                 const response = await fetch(`${AUTH_API}/refresh`, {
                     method: 'POST',
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -1637,6 +1662,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             const isFormData = options.body instanceof FormData;
             const headers = {
+                'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
             };
@@ -1645,17 +1671,35 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 headers['Content-Type'] = 'application/json';
             }
 
-            const response = await fetch(`${ORDERS_API}${path}`, {
-                method: options.method || 'GET',
-                headers,
-                body: options.body === undefined
-                    ? undefined
-                    : isFormData
-                        ? options.body
-                        : JSON.stringify(options.body),
-                cache: 'no-store',
-                credentials: 'omit'
-            });
+            // A request may have reached the server even if the client times out.
+            // The UI will re-fetch the order instead of repeating POST automatically.
+            const controller = new AbortController();
+            const timeoutMs = isFormData ? 60000 : 20000;
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+            let response;
+            try {
+                response = await fetch(`${ORDERS_API}${path}`, {
+                    method: options.method || 'GET',
+                    headers,
+                    body: options.body === undefined
+                        ? undefined
+                        : isFormData
+                            ? options.body
+                            : JSON.stringify(options.body),
+                    cache: 'no-store',
+                    credentials: 'omit',
+                    signal: controller.signal
+                });
+            } catch (error) {
+                if (controller.signal.aborted) {
+                    const timeoutError = new Error(t('requestTimeout'));
+                    timeoutError.code = 'REQUEST_TIMEOUT';
+                    throw timeoutError;
+                }
+                throw error;
+            } finally {
+                clearTimeout(timeoutId);
+            }
 
             if (response.status === 401 && retry) {
                 token = await refreshAccessToken();
@@ -1678,7 +1722,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             const response = await fetch(`${AUTH_API}/me/location`, {
                 method: 'PATCH',
-                headers: {
+                headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -2193,12 +2237,15 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         }
 
         function renderSellerLocation(order) {
-            const seller = order?.seller || {};
+            // The seller's address and map are private to the pickup flow.
+            // Show them only after the buyer has actually chosen pickup (including
+            // automatic pickup when delivery is unavailable). Do not expose the
+            // seller location for inquiries or for delivery orders.
+            if (order?.deliveryType !== 'pickup' || order?.status === 'cancelled') return '';
+            const seller = order.seller || {};
             const coords = sellerGeoCoordinates(seller);
             const address = String(seller.address || '').trim();
-            // Before choosing pickup, show the store position to help the buyer decide.
             // Do not create a fake marker when the API has no coordinates.
-            if (!coords && !address && order?.deliveryType !== 'pickup') return '';
 
             let mapHtml = '';
             let linksHtml = '';
@@ -2867,34 +2914,104 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             setDeliveryCoordinates(saved.lat, saved.lng);
         }
 
-        async function performAction(callback, successMessage = '') {
+        function setOrderActionBusy(active, clickedControl = null) {
+            const detail = document.getElementById('orderDetail');
+            if (!detail) return;
+            const controls = Array.from(detail.querySelectorAll('[data-action], #receiptFile'));
+            controls.forEach(control => {
+                if (active) {
+                    control.dataset.osuzWasDisabled = control.disabled ? 'true' : 'false';
+                    control.disabled = true;
+                } else {
+                    if (control.dataset.osuzWasDisabled === 'false') control.disabled = false;
+                    delete control.dataset.osuzWasDisabled;
+                }
+            });
+
+            if (!clickedControl || !clickedControl.isConnected) return;
+            const isReceiptLabel = clickedControl.matches('[data-receipt-upload-label]');
+            if (active) {
+                clickedControl.classList.add('is-request-busy');
+                clickedControl.setAttribute('aria-busy', 'true');
+                if (isReceiptLabel) {
+                    // Keep the real file input connected, including its change handler.
+                    const caption = clickedControl.querySelector('span');
+                    if (caption) {
+                        caption.dataset.osuzOriginalText = caption.textContent;
+                        caption.textContent = t('sending');
+                    }
+                    const spinner = document.createElement('span');
+                    spinner.className = 'osuz-request-spinner';
+                    spinner.dataset.osuzTempSpinner = '';
+                    spinner.setAttribute('aria-hidden', 'true');
+                    clickedControl.insertBefore(spinner, caption || clickedControl.firstChild);
+                } else {
+                    clickedControl.dataset.osuzBusyHtml = clickedControl.innerHTML;
+                    clickedControl.innerHTML = `<span class="osuz-request-spinner" aria-hidden="true"></span> <span>${escapeHTML(t('sending'))}</span>`;
+                }
+            } else {
+                if (isReceiptLabel) {
+                    clickedControl.querySelector('[data-osuz-temp-spinner]')?.remove();
+                    const caption = clickedControl.querySelector('span');
+                    if (caption?.dataset.osuzOriginalText !== undefined) {
+                        caption.textContent = caption.dataset.osuzOriginalText;
+                        delete caption.dataset.osuzOriginalText;
+                    }
+                } else if (clickedControl.dataset.osuzBusyHtml !== undefined) {
+                    clickedControl.innerHTML = clickedControl.dataset.osuzBusyHtml;
+                    delete clickedControl.dataset.osuzBusyHtml;
+                }
+                clickedControl.classList.remove('is-request-busy');
+                clickedControl.removeAttribute('aria-busy');
+                if (window.lucide) lucide.createIcons();
+            }
+        }
+
+        async function performAction(callback, successMessage = '', clickedControl = null) {
             if (requestBusy) return;
 
             requestBusy = true;
+            const revision = ++orderActionRevision;
             hidePageError();
+            setOrderActionBusy(true, clickedControl);
+            let shouldRefreshAfterTimeout = false;
+            let shouldUpdateList = false;
 
             try {
                 const result = await callback();
 
-                if (result?.orderId) {
-                    currentOrder = result;
+                // Most action endpoints return the *full updated order*. Render it
+                // immediately: updating currentOrder alone breaks signature-based polling.
+                if (result?.orderId && Array.isArray(result.items)) {
+                    renderOrderDetail(result);
+                    syncPolling(result);
+                } else {
+                    // /cancel responds with only {orderId,status}; always fetch the full order.
+                    await refreshSelectedOrder({ force: true });
                 }
 
-                if (successMessage) {
-                    showToast(successMessage, 'success');
-                }
-
-                await refreshSelectedOrder();
-                await loadOrders({ preserveSelection: true });
+                if (successMessage) showToast(successMessage, 'success');
+                shouldUpdateList = true;
             } catch (error) {
                 if (error.status === 401) {
                     showAuthRequired();
                     return;
                 }
-
                 showToast(error.message || t('actionError'), 'error');
+                if (error.code === 'REQUEST_TIMEOUT' || error.name === 'AbortError') {
+                    // Do not repeat the POST. The backend might have applied it.
+                    shouldRefreshAfterTimeout = true;
+                }
             } finally {
                 requestBusy = false;
+                // Keep UI state and button availability correct even on failed requests.
+                if (revision === orderActionRevision) setOrderActionBusy(false, clickedControl);
+                if (shouldRefreshAfterTimeout && selectedOrderId) {
+                    refreshSelectedOrder({ force: true }).catch(() => {});
+                }
+                if (shouldUpdateList) {
+                    loadOrders({ preserveSelection: true }).catch(() => {});
+                }
             }
         }
 
@@ -2905,7 +3022,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 showOrdersList({ useHistoryBack: true });
             });
 
-            root.querySelector('[data-action="confirm-order"]')?.addEventListener('click', () => {
+            root.querySelector('[data-action="confirm-order"]')?.addEventListener('click', event => {
                 performAction(
                     async () => {
                         const order = await ordersRequest(`/${selectedOrderId}/confirm`, {
@@ -2920,7 +3037,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                         return order;
                     },
-                    t('success')
+                    t('success'), event.currentTarget
                 );
             });
 
@@ -2934,18 +3051,18 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                         () => ordersRequest(`/${selectedOrderId}/cancel`, {
                             method: 'POST'
                         }),
-                        t('success')
+                        t('success'), root.querySelector('[data-action="cancel-order"]')
                     )
                 });
             });
 
-            root.querySelector('[data-action="pickup"]')?.addEventListener('click', () => {
+            root.querySelector('[data-action="pickup"]')?.addEventListener('click', event => {
                 performAction(
                     () => ordersRequest(`/${selectedOrderId}/delivery`, {
                         method: 'POST',
                         body: { type: 'pickup' }
                     }),
-                    t('success')
+                    t('success'), event.currentTarget
                 );
             });
 
@@ -2994,7 +3111,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 });
             });
 
-            root.querySelector('[data-action="confirm-delivery"]')?.addEventListener('click', () => {
+            root.querySelector('[data-action="confirm-delivery"]')?.addEventListener('click', event => {
                 const lat = Number(document.getElementById('deliveryLat')?.value);
                 const lng = Number(document.getElementById('deliveryLng')?.value);
 
@@ -3029,7 +3146,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                         return order;
                     },
-                    t('success')
+                    t('success'), event.currentTarget
                 );
             });
 
@@ -3056,12 +3173,12 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                             return result;
                         },
-                        t('success')
+                        t('success'), button
                     );
                 });
             });
 
-            root.querySelector('[data-action="transfer-info"]')?.addEventListener('click', () => {
+            root.querySelector('[data-action="transfer-info"]')?.addEventListener('click', event => {
                 const company = document.getElementById('transferCompany')?.value.trim() || '';
                 const inn = (document.getElementById('transferInn')?.value || '').replace(/\D/g, '');
 
@@ -3078,7 +3195,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                             inn
                         }
                     }),
-                    t('waitingPayment')
+                    t('waitingPayment'), event.currentTarget
                 );
             });
 
@@ -3097,6 +3214,9 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                 const formData = new FormData();
                 formData.append('photo', file);
+                // Reset the picker before upload so the same image can be chosen again
+                // if the network fails or the seller rejects the receipt.
+                receiptInput.value = '';
                 const label = root.querySelector('[data-receipt-upload-label]');
                 label?.classList.add('is-uploading');
 
@@ -3109,16 +3229,16 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                         rememberSubmittedReceipt(selectedOrderId);
                         return result;
                     },
-                    t('waitingPayment')
+                    t('waitingPayment'), label
                 ).finally(() => label?.classList.remove('is-uploading'));
             });
 
-            root.querySelector('[data-action="received"]')?.addEventListener('click', () => {
+            root.querySelector('[data-action="received"]')?.addEventListener('click', event => {
                 performAction(
                     () => ordersRequest(`/${selectedOrderId}/received`, {
                         method: 'POST'
                     }),
-                    t('success')
+                    t('success'), event.currentTarget
                 );
             });
         }
@@ -3142,11 +3262,16 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 !nextOrder.deliveryType;
         }
 
-        async function refreshSelectedOrder() {
-            if (!selectedOrderId) return;
+        async function refreshSelectedOrder({ force = false } = {}) {
+            if (!selectedOrderId || (requestBusy && !force)) return;
+            const requestedOrderId = selectedOrderId;
+            const startedAtRevision = orderActionRevision;
 
             try {
-                const order = await ordersRequest(`/${selectedOrderId}`);
+                const order = await ordersRequest(`/${requestedOrderId}`);
+                // Ignore outdated GETs that started before a buyer action or a navigation.
+                if (requestedOrderId !== selectedOrderId ||
+                    (!force && (requestBusy || startedAtRevision !== orderActionRevision))) return;
 
                 if (canPreserveOpenDeliveryDraft(order)) {
                     currentOrder = order;
@@ -3166,6 +3291,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 renderOrderDetail(order);
                 syncPolling(order);
             } catch (error) {
+                if (requestedOrderId !== selectedOrderId ||
+                    (!force && startedAtRevision !== orderActionRevision)) return;
                 if (error.status === 404) {
                     selectedOrderId = 0;
                     currentOrder = null;
@@ -3194,9 +3321,14 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             if (!shouldPoll) return;
 
+            // Faster updates while awaiting seller's stock / payment response.
+            const waitingForSeller = order.status === 'pending' ||
+                (order.status === 'responded' && order.deliveryType === 'delivery' &&
+                 ['card', 'payme', 'click', 'qr', 'transfer'].includes(order.paymentMethod) &&
+                 !order.deliveryDeadline);
             detailPollTimer = setInterval(() => {
-                refreshSelectedOrder();
-            }, 12000);
+                if (!document.hidden && !requestBusy) refreshSelectedOrder();
+            }, waitingForSeller ? 4000 : 12000);
         }
 
         async function selectOrder(orderId) {
@@ -3368,15 +3500,16 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         loadOrders();
 
         listPollTimer = setInterval(() => {
-            if (!document.hidden && localStorage.getItem(storageKeys.accessToken)) {
+            if (!document.hidden && !requestBusy && localStorage.getItem(storageKeys.accessToken)) {
                 loadOrders({ preserveSelection: true });
             }
         }, 30000);
 
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && selectedOrderId) {
-                refreshSelectedOrder();
-            }
+            if (!document.hidden && selectedOrderId && !requestBusy) refreshSelectedOrder();
+        });
+        window.addEventListener('focus', () => {
+            if (!document.hidden && selectedOrderId && !requestBusy) refreshSelectedOrder();
         });
 
         lucide.createIcons();
@@ -3535,7 +3668,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
   function count(cart){return (cart?.sellers||[]).reduce((s,g)=>s+(g.items||[]).reduce((x,i)=>x+Math.max(0,Number(i.quantity)||0),0),0)}
   function guest(){try{return JSON.parse(localStorage.getItem(GUEST_KEY)||'{"sellers":[]}')}catch{return {sellers:[]}}}
   function paint(n){n=Math.max(0,Number(n)||0);document.querySelectorAll('[data-cart-count]').forEach(b=>{b.textContent=n>99?'99+':String(n);b.classList.toggle('hidden',n<=0)});document.querySelectorAll('[data-mobile-cart-count]').forEach(b=>{b.textContent=String(n);b.style.display=n>0?'inline-flex':'none'})}
-  async function refresh(){const token=localStorage.getItem(ACCESS_KEY);if(!token){paint(count(guest()));return}try{const r=await fetch(CART_API,{headers:{Accept:'application/json',Authorization:`Bearer ${token}`},cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error(String(r.status));paint(count(await r.json()))}catch{paint(0)}}
+  async function refresh(){const token=localStorage.getItem(ACCESS_KEY);if(!token){paint(count(guest()));return}try{const r=await fetch(CART_API,{headers:{ 'X-Lang': localStorage.getItem('osuzLang') || 'ru',Accept:'application/json',Authorization:`Bearer ${token}`},cache:'no-store',credentials:'omit'});if(!r.ok)throw new Error(String(r.status));paint(count(await r.json()))}catch{paint(0)}}
   document.addEventListener('DOMContentLoaded',refresh);
   window.addEventListener('storage',e=>{if(e.key===ACCESS_KEY||e.key===GUEST_KEY)refresh()});
 })();
@@ -3544,7 +3677,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 <script src="/assets/js/v44-header-dom-order-hardfix__v45-header-order-inline-ha.js?v=aaa87b8e"></script>
 <script src="/assets/js/v51-photo-search-unifier.js?v=b95a3da2"></script>
 
-  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
 <script id="osuz-unified-language-v2-js">
 (function(){
  'use strict';

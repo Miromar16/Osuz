@@ -63,6 +63,24 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
     -webkit-appearance:menulist!important;
 }
 
+
+        /* Blocked sellers remain in the cart for transparency, but cannot be ordered. */
+        .seller-group.is-seller-blocked { border-color: #f1c56a; }
+        .seller-group.is-seller-blocked .cart-row.is-item-blocked > .min-w-0 { opacity: .62; }
+        .seller-group .blocked-seller-notice {
+            display:flex;align-items:flex-start;gap:10px;margin:0 16px 12px;
+            padding:12px 14px;border:1px solid #f3ce7a;border-radius:14px;
+            color:#873a10;background:#fffaea;font-size:13px;line-height:1.45;font-weight:700;
+        }
+        .blocked-seller-notice svg { flex-shrink:0;width:19px;height:19px; }
+        .seller-group .cart-row.is-item-blocked .cart-row-actions { opacity:1; }
+        .seller-group .cart-row.is-item-blocked .quantity-control { opacity:.48; }
+        .seller-group .cart-row.is-item-blocked .cart-checkbox { opacity:.55;cursor:not-allowed; }
+        .seller-group .cart-row.is-item-blocked .danger-button { opacity:1; }
+        .seller-group .cart-row.is-item-blocked .quantity-control button:disabled { cursor:not-allowed; }
+        body.dark-mode .seller-group.is-seller-blocked { border-color:#86612a; }
+        body.dark-mode .seller-group .blocked-seller-notice { background:#3a2b18;border-color:#9b6c2e;color:#ffe0a3; }
+        @media(max-width:480px) { .seller-group .blocked-seller-notice { margin:0 12px 12px;padding:11px 12px; } }
 </style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -636,7 +654,7 @@ html.osuz-pre-dark body,html[data-osuz-theme="dark"] body{background-color:#070b
   }
 }
 </style>
-  <link rel="stylesheet" href="assets/css/osuz-language.css?v=20261012">
+
 <style id="osuz-unified-language-v2">
 /* Same custom language picker everywhere. No native browser select popups. */
 .osuz-unified-language {position:relative!important;display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;overflow:visible!important}
@@ -706,6 +724,18 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 }
 @media(max-width:359px) {
  .osuz-unified-language-trigger,#languageToggle,#categoryLanguageToggle,#languageButton {min-width:53px!important;padding:4px!important}
+}
+</style>
+
+<style id="osuz-metanoia-mobile-language">
+@media(max-width:767px){
+  #languageToggle > svg,#languageButton > svg,#categoryLanguageToggle > svg,
+  #mobileLanguageToggle > svg,#languageBtn > svg,
+  #osuzLanguageTrigger > svg { display:none!important; }
+  #languageToggle > i[data-lucide="chevron-down"],#languageButton > i[data-lucide="chevron-down"],
+  #categoryLanguageToggle > i[data-lucide="chevron-down"],
+  #mobileLanguageToggle > i[data-lucide="chevron-down"],
+  #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
 }
 </style>
 </head>
@@ -880,6 +910,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 grandTotal: 'Общая сумма',
                 checkout: 'Продолжить',
                 checkoutSelectProduct: 'Выберите товар',
+                sellerBlockedFallback: 'Продавец заблокирован — заказать у него сейчас нельзя',
                 checkoutRequestStock: 'Запросить наличие',
                 checkoutDirect: 'Оформить заказ',
                 checkoutDirectCreating: 'Оформляем заказ...',
@@ -890,6 +921,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 checkoutMixedCreated: 'Заказы созданы. Открываем их...',
                 checkoutCreating: 'Создаём заявку...',
                 checkoutEmpty: 'Выберите хотя бы один товар для оформления.',
+                requestTimeout: 'Нет ответа от сервера. Проверьте интернет и обновите страницу.',
                 checkoutError: 'Не удалось оформить заказ. Попробуйте ещё раз.',
                 checkoutCreated: 'Заявка создана. Открываем детали...',
                 quantity: 'Количество',
@@ -933,6 +965,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 grandTotal: 'Umumiy summa',
                 checkout: 'Davom etish',
                 checkoutSelectProduct: 'Mahsulotni tanlang',
+                sellerBlockedFallback: 'Sotuvchi bloklangan — hozir undan buyurtma berib bo‘lmaydi',
                 checkoutRequestStock: 'Mavjudligini so‘rash',
                 checkoutDirect: 'Buyurtma berish',
                 checkoutDirectCreating: 'Buyurtma rasmiylashtirilmoqda...',
@@ -943,6 +976,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 checkoutMixedCreated: 'Buyurtmalar yaratildi. Ochilmoqda...',
                 checkoutCreating: 'Ariza yaratilmoqda...',
                 checkoutEmpty: 'Buyurtma uchun kamida bitta mahsulotni tanlang.',
+                requestTimeout: 'Serverdan javob yo‘q. Internetni tekshiring va sahifani yangilang.',
                 checkoutError: 'Buyurtma yaratilmadi. Qayta urinib ko‘ring.',
                 checkoutCreated: 'Ariza yaratildi. Tafsilotlar ochilmoqda...',
                 quantity: 'Miqdor',
@@ -986,6 +1020,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 grandTotal: 'Grand total',
                 checkout: 'Continue',
                 checkoutSelectProduct: 'Select a product',
+                sellerBlockedFallback: 'This seller is blocked — orders are currently unavailable',
                 checkoutRequestStock: 'Check availability',
                 checkoutDirect: 'Place order',
                 checkoutDirectCreating: 'Placing order...',
@@ -996,6 +1031,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 checkoutMixedCreated: 'Orders created. Opening details...',
                 checkoutCreating: 'Creating order request...',
                 checkoutEmpty: 'Select at least one item to check out.',
+                requestTimeout: 'No response from the server. Check your connection and reload the page.',
                 checkoutError: 'Could not create the order. Try again.',
                 checkoutCreated: 'Order request created. Opening details...',
                 quantity: 'Quantity',
@@ -1038,6 +1074,20 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
         function getSellerName(seller) {
             return seller.tenantName ?? seller.tenant_name ?? '';
+        }
+
+        function isBlockedSeller(seller) {
+            return seller?.blocked === true;
+        }
+
+        function isBlockedCartItem(seller, item) {
+            return isBlockedSeller(seller) || item?.blocked === true;
+        }
+
+        function isCartItemBlocked(tenantId, productId) {
+            const seller = (cart.sellers || []).find(entry => getSellerId(entry) === Number(tenantId));
+            const item = (seller?.items || []).find(entry => getProductId(entry) === Number(productId));
+            return Boolean(item && isBlockedCartItem(seller, item));
         }
 
         function getLineTotal(item) {
@@ -1086,7 +1136,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             let unknown = 0;
             for (const seller of cart.sellers || []) {
                 for (const item of seller.items || []) {
-                    if (!item.selected || Number(item.quantity) <= 0) continue;
+                    if (isBlockedCartItem(seller, item) || !item.selected || Number(item.quantity) <= 0) continue;
                     const key = cartStockKey(getSellerId(seller), getProductId(item));
                     const required = cartCheckoutModes.has(key)
                         ? cartCheckoutModes.get(key)
@@ -1123,6 +1173,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             const requests = [];
             for (const seller of cartData?.sellers || []) {
+                if (isBlockedSeller(seller)) continue;
                 const tenantId = getSellerId(seller);
                 for (const item of seller.items || []) {
                     const productId = getProductId(item);
@@ -1142,7 +1193,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     requests.push((async () => {
                         try {
                             const response = await fetch(`${CATALOG_API}/products/${productId}/listings`, {
-                                headers: { 'Accept': 'application/json' },
+                                headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru', 'Accept': 'application/json' },
                                 cache: 'no-store'
                             });
                             if (!response.ok) return;
@@ -1228,13 +1279,15 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                     const selectedTotal = items.reduce(
                         (sum, item) =>
-                            sum + (item.selected ? item.lineTotal : 0),
+                            sum + (!isBlockedCartItem(seller, item) && item.selected ? item.lineTotal : 0),
                         0
                     );
 
                     return {
                         tenantId: getSellerId(seller),
                         tenantName: getSellerName(seller),
+                        blocked: isBlockedSeller(seller),
+                        blockedNotice: seller.blockedNotice || null,
                         items,
                         sellerTotal,
                         selectedTotal
@@ -1341,7 +1394,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         function countSelectedItems(cartData) {
             return cartData.sellers.reduce((total, seller) => {
                 return total + (seller.items || []).reduce((sum, item) => {
-                    return sum + (item.selected ? Math.max(0, Number(item.quantity) || 0) : 0);
+                    return sum + (!isBlockedCartItem(seller, item) && item.selected ? Math.max(0, Number(item.quantity) || 0) : 0);
                 }, 0);
             }, 0);
         }
@@ -1511,9 +1564,10 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 const error = new Error(
                     Array.isArray(data.message)
                         ? data.message.join('. ')
-                        : data.message || data.error || t('updateError')
+                        : data.error || data.message || t('updateError')
                 );
                 error.status = response.status;
+                error.code = typeof data.code === 'string' ? data.code : undefined;
                 throw error;
             }
 
@@ -1527,7 +1581,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             try {
                 const response = await fetch(`${AUTH_API}/refresh`, {
                     method: 'POST',
-                    headers: {
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
@@ -1564,7 +1618,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
             const response = await fetch(`${CART_API}${path}`, {
                 method: options.method || 'GET',
-                headers: {
+                headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -1642,10 +1696,14 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             document.getElementById('sellerGroups').innerHTML = sellers.map(seller => {
                 const tenantId = getSellerId(seller);
                 const items = Array.isArray(seller.items) ? seller.items : [];
-                const allSelected = items.length > 0 && items.every(item => Boolean(item.selected));
+                const selectableItems = items.filter(item => !isBlockedCartItem(seller, item));
+                const allSelected = selectableItems.length > 0 && selectableItems.every(item => Boolean(item.selected));
+                const blockedSeller = isBlockedSeller(seller);
+                const blockedNotice = typeof seller.blockedNotice === 'string' && seller.blockedNotice.trim()
+                    ? seller.blockedNotice.trim() : t('sellerBlockedFallback');
 
                 return `
-                    <section class="seller-group" data-seller-group="${tenantId}">
+                    <section class="seller-group ${blockedSeller ? 'is-seller-blocked' : ''}" data-seller-group="${tenantId}">
                         <div class="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <label class="flex items-center gap-3 cursor-pointer min-w-0">
                                 <input
@@ -1654,6 +1712,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                                     data-action="select-seller"
                                     data-tenant-id="${tenantId}"
                                     ${allSelected ? 'checked' : ''}
+                                    ${blockedSeller || !selectableItems.length ? 'disabled' : ''}
                                     aria-label="${escapeHTML(t('selectSeller'))}"
                                 >
                                 <span class="min-w-0">
@@ -1667,16 +1726,18 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                             </div>
                         </div>
 
+                        ${blockedSeller ? `<div role="status" class="blocked-seller-notice"><i data-lucide="alert-triangle" aria-hidden="true"></i><span>${escapeHTML(blockedNotice)}</span></div>` : ''}
                         <div>
                             ${items.map(item => {
                                 const productId = getProductId(item);
                                 const quantity = Math.max(1, Number(item.quantity) || 1);
-                                const knownStock = getKnownStock(tenantId, productId);
+                                const blockedItem = isBlockedCartItem(seller, item);
+                                const knownStock = blockedItem ? null : getKnownStock(tenantId, productId);
                                 const maxAttr = knownStock !== null ? `max="${knownStock}"` : '';
                                 const plusDisabled = knownStock !== null && quantity >= knownStock;
 
                                 return `
-                                    <article class="cart-row">
+                                    <article class="cart-row ${blockedItem ? 'is-item-blocked' : ''}">
                                         <input
                                             type="checkbox"
                                             class="cart-checkbox"
@@ -1684,6 +1745,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                                             data-tenant-id="${tenantId}"
                                             data-product-id="${productId}"
                                             ${item.selected ? 'checked' : ''}
+                                            ${blockedItem ? 'disabled' : ''}
                                         >
 
                                         <div class="min-w-0">
@@ -1696,7 +1758,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                                         <div class="cart-row-actions flex items-center justify-end gap-3">
                                             <div class="quantity-control" aria-label="${escapeHTML(t('quantity'))}">
-                                                <button type="button" data-action="decrease" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="-">
+                                                <button type="button" ${blockedItem ? 'disabled' : ''} data-action="decrease" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="-">
                                                     <i data-lucide="minus" class="w-4 h-4"></i>
                                                 </button>
                                                 <input
@@ -1704,12 +1766,13 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                                                     min="1"
                                                     ${maxAttr}
                                                     value="${quantity}"
+                                                    ${blockedItem ? 'disabled' : ''}
                                                     data-action="quantity-input"
                                                     data-tenant-id="${tenantId}"
                                                     data-product-id="${productId}"
                                                     aria-label="${escapeHTML(t('quantity'))}"
                                                 >
-                                                <button type="button" data-action="increase" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="+" ${plusDisabled ? 'disabled' : ''}>
+                                                <button type="button" ${blockedItem ? 'disabled' : ''} data-action="increase" data-tenant-id="${tenantId}" data-product-id="${productId}" aria-label="+" ${plusDisabled ? 'disabled' : ''}>
                                                     <i data-lucide="plus" class="w-4 h-4"></i>
                                                 </button>
                                             </div>
@@ -1756,19 +1819,34 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 throw error;
             }
 
-            const response = await fetch(`${ORDER_API}${path}`, {
-                method: options.method || 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-                    'Authorization': `Bearer ${token}`
-                },
-                body: options.body !== undefined
-                    ? JSON.stringify(options.body)
-                    : undefined,
-                cache: 'no-store',
-                credentials: 'omit'
-            });
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 20000);
+            let response;
+            try {
+                response = await fetch(`${ORDER_API}${path}`, {
+                    method: options.method || 'GET',
+                    headers: { 'X-Lang': localStorage.getItem('osuzLang') || 'ru',
+                        'Accept': 'application/json',
+                        ...(options.body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: options.body !== undefined
+                        ? JSON.stringify(options.body)
+                        : undefined,
+                    cache: 'no-store',
+                    credentials: 'omit',
+                    signal: controller.signal
+                });
+            } catch (error) {
+                if (controller.signal.aborted) {
+                    const timeoutError = new Error(t('requestTimeout'));
+                    timeoutError.code = 'REQUEST_TIMEOUT';
+                    throw timeoutError;
+                }
+                throw error;
+            } finally {
+                clearTimeout(timeoutId);
+            }
 
             if (response.status === 401 && retry) {
                 token = await refreshAccessToken();
@@ -1862,10 +1940,19 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                 if (error.status === 400) {
                     showToast(error.message || t('checkoutEmpty'), 'error');
+                    if (error.code === 'seller_blocked') {
+                        // A seller could be blocked between the last cart GET and checkout.
+                        await loadCart();
+                    }
                     return;
                 }
 
                 showToast(error.message || t('checkoutError'), 'error');
+                if (error.code === 'REQUEST_TIMEOUT') {
+                    // Server may have created the order despite losing the response.
+                    // Reload the cart rather than resubmitting automatically.
+                    loadCart().catch(() => {});
+                }
             } finally {
                 if (document.body.contains(button)) {
                     updateCheckoutCopy();
@@ -1945,6 +2032,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
         function bindCartActions() {
             document.querySelectorAll('[data-action="select-item"]').forEach(input => {
                 input.addEventListener('change', () => {
+                    if (isCartItemBlocked(input.dataset.tenantId, input.dataset.productId)) return;
                     applyCartMutation(
                         `/${Number(input.dataset.tenantId)}/${Number(input.dataset.productId)}`,
                         {
@@ -1961,7 +2049,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 
                     const tenantId = Number(input.dataset.tenantId);
                     const seller = cart.sellers.find(item => getSellerId(item) === tenantId);
-                    if (!seller) return;
+                    if (!seller || isBlockedSeller(seller)) return;
 
                     hideError();
                     setBusy(true);
@@ -1969,13 +2057,13 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     try {
                         if (isGuestCartMode()) {
                             seller.items.forEach(item => {
-                                item.selected = input.checked;
+                                if (!isBlockedCartItem(seller, item)) item.selected = input.checked;
                             });
 
                             cart = saveGuestCart(cart);
                         } else {
                             await Promise.all(
-                                (seller.items || []).map(item => cartRequest(
+                                (seller.items || []).filter(item => !isBlockedCartItem(seller, item)).map(item => cartRequest(
                                     `/${tenantId}/${getProductId(item)}`,
                                     {
                                         method: 'PATCH',
@@ -2004,7 +2092,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                     const productId = Number(button.dataset.productId);
                     const seller = cart.sellers.find(item => getSellerId(item) === tenantId);
                     const cartItem = seller?.items?.find(item => getProductId(item) === productId);
-                    if (!cartItem) return;
+                    if (!cartItem || isBlockedCartItem(seller, cartItem)) return;
 
                     const nextQuantity = Math.max(
                         0,
@@ -2037,6 +2125,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 input.addEventListener('change', () => {
                     const tenantId = Number(input.dataset.tenantId);
                     const productId = Number(input.dataset.productId);
+                    if (isCartItemBlocked(tenantId, productId)) return;
                     let quantity = Math.max(
                         0,
                         Math.floor(Number(input.value) || 0)
@@ -2264,6 +2353,8 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             currentLang = event.target.value;
             localStorage.setItem('osuzLang', currentLang);
             applyLanguage();
+            // blockedNotice is localized by the API, so reload it after switching language.
+            if (!isGuestCartMode() && (cart.sellers || []).some(isBlockedSeller)) loadCart();
         });
 
         document.getElementById('themeToggle').addEventListener('click', () => {
@@ -2447,7 +2538,6 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 <script src="/assets/js/v44-header-dom-order-hardfix__v45-header-order-inline-ha.js?v=aaa87b8e"></script>
 <script src="/assets/js/v51-photo-search-unifier.js?v=b95a3da2"></script>
 
-  <script defer src="assets/js/osuz-language.js?v=20261012"></script>
 <script id="osuz-unified-language-v2-js">
 (function(){
  'use strict';
