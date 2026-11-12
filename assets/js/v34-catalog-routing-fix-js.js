@@ -185,7 +185,17 @@ function ensureMobileListVisible(){
     list.style.setProperty('visibility','visible','important');
   }
 }
+// A floating language picker must never remain above the full-screen catalog.
+function dismissCatalogLanguageMenus(){
+  document.querySelectorAll('#osuzLanguageMenu,#languageMenu,#mobileLanguageMenu,#categoryLanguageMenu,#productLanguageMenu,.osuz-unified-language-menu,.osuz-lang-floating,.osuz-floating-lang-menu').forEach(menu=>{
+    menu.classList.add('hidden');
+  });
+  document.querySelectorAll('#osuzLanguageTrigger,#languageToggle,#mobileLanguageToggle,#categoryLanguageToggle,#languageButton').forEach(trigger=>{
+    trigger.setAttribute('aria-expanded','false');
+  });
+}
 function openCatalog(fromHistory){
+  dismissCatalogLanguageMenus();
   if(!panel)buildPanel();measureTop();panel.classList.add('open');
   if(mobile()&&!fromHistory&&location.hash!=='#catalog'){try{history.pushState({osuzCatalog:1},'',location.pathname+location.search+'#catalog');pushedHash=true}catch(_){}}panel.setAttribute('aria-hidden','false');
   if(mobile())document.body.classList.add('osuz-v34-catalog-open');
@@ -211,6 +221,11 @@ function bindSearchSafety(){
   if(categoryBtn&&categoryInput&&!categoryBtn.dataset.v34Search){categoryBtn.dataset.v34Search='1';categoryBtn.addEventListener('click',()=>{const q=categoryInput.value.trim();location.assign(OSUZRoutes.search(q))})}
 }
 function init(){
+  const catalogMenuStyle = document.createElement('style');
+  catalogMenuStyle.id='osuz-catalog-language-layer-guard';
+  catalogMenuStyle.textContent='@media(max-width:767px){body.osuz-v34-catalog-open #osuzLanguageMenu,body.osuz-v34-catalog-open #languageMenu,body.osuz-v34-catalog-open #mobileLanguageMenu,body.osuz-v34-catalog-open #categoryLanguageMenu,body.osuz-v34-catalog-open #productLanguageMenu,body.osuz-v34-catalog-open .osuz-lang-floating,body.osuz-v34-catalog-open .osuz-floating-lang-menu,body.osuz-v34-catalog-open .osuz-unified-language-menu{display:none!important;pointer-events:none!important}}';
+  if(!document.getElementById(catalogMenuStyle.id)) document.head.appendChild(catalogMenuStyle);
+
   ensureBottomCatalog();buildPanel();measureTop();bindSearchSafety();setCatalogActive(false);
   document.addEventListener('click',e=>{
     const bottom=e.target.closest('[data-v34-mobile-catalog]');
