@@ -5231,6 +5231,7 @@ body.dark-mode .osuz-load-sentinel{color:#cbd5e1}
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="delivery" href="delivery.html">Условия доставки и оплаты</a></li>
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="returns" href="returns.html">Правила возврата и обмена товара</a></li>
 <li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="faq" href="faq.html">Часто задаваемые вопросы (FAQ)</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="orders" href="orders.html">Мои заказы</a></li>
 </ul>
 </div>
 <div>
@@ -7317,6 +7318,26 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="osuz-new-tabs-footer-i18n">
+(() => {
+  const labels = {
+    ru: {orders:'Мои заказы', delivery:'Условия доставки и оплаты', returns:'Правила возврата и обмена товара', faq:'Часто задаваемые вопросы (FAQ)', sell:'Продавать у нас', cabinet:'Личный кабинет продавца', tariffs:'Тарифы и комиссии'},
+    uz: {orders:'Mening buyurtmalarim', delivery:'Yetkazib berish va to‘lov shartlari', returns:'Qaytarish va almashtirish qoidalari', faq:'Ko‘p so‘raladigan savollar (FAQ)', sell:'Bizda soting', cabinet:'Sotuvchi kabineti', tariffs:'Tariflar va komissiyalar'},
+    en: {orders:'My orders', delivery:'Delivery and payment', returns:'Returns and exchanges', faq:'Frequently asked questions (FAQ)', sell:'Sell with us', cabinet:'Seller portal', tariffs:'Plans and commissions'}
+  };
+  const translate=()=>{
+    const lang=localStorage.getItem('osuzLang');
+    const t=labels[lang]||labels.ru;
+    for (const [key,label] of Object.entries(t)) {
+      document.querySelectorAll('[data-osuz-buyer-link="'+key+'"],[data-osuz-extra-footer="'+key+'"]').forEach(el => {el.textContent=label;});
+    }
+  };
+  translate();
+  window.addEventListener('storage',e=>{if(e.key==='osuzLang')translate()});
+  document.addEventListener('click',e=>{if(e.target.closest('[data-lang],.osuz-unified-language-menu, #languageMenu'))queueMicrotask(translate)});
 })();
 </script>
 </body>

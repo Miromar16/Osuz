@@ -3473,25 +3473,25 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 <div>
 <h4 class="font-semibold text-white mb-5">О нас</h4>
 <ul class="space-y-3">
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="index.html#about">Вакансии</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Новости компании</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="index.html#about">О компании</a></li>
 </ul>
 </div>
 <div class="osuz-buyers-footer">
 <h4 class="font-semibold text-white mb-5" data-osuz-buyers-title>Покупателям</h4>
 <ul class="space-y-3">
 <li><button class="text-sm text-gray-400 hover:text-primary-300 transition-colors text-left" data-osuz-contact-open type="button" data-osuz-buyer-link="contact">Связаться с нами</button></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#" data-osuz-buyer-link="delivery">Условия доставки и оплаты</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#" data-osuz-buyer-link="returns">Правила возврата и обмена товара</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#" data-osuz-buyer-link="faq">Часто задаваемые вопросы (FAQ)</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="delivery.html" data-osuz-buyer-link="delivery">Условия доставки и оплаты</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="returns.html" data-osuz-buyer-link="returns">Правила возврата и обмена товара</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="faq.html" data-osuz-buyer-link="faq">Часто задаваемые вопросы (FAQ)</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" data-osuz-buyer-link="orders" href="orders.html">Мои заказы</a></li>
 </ul>
 </div>
 <div>
 <h4 class="font-semibold text-white mb-5">Для предпринимателей</h4>
 <ul class="space-y-3">
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Продавать у нас</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Личный кабинет продавца</a></li>
-<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="#">Тарифы и комиссии</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="sellers.html">Продавать у нас</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="https://seller.osuz.uz">Личный кабинет продавца</a></li>
+<li><a class="text-sm text-gray-400 hover:text-primary-300 transition-colors" href="tariffs.html">Тарифы и комиссии</a></li>
 </ul>
 </div>
 </div>
@@ -3595,7 +3595,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 orders: 'Заказы',
                 cart: 'Корзина',
                 footerAbout: 'О нас',
-                footerVacancies: 'Вакансии',
+                footerVacancies: 'О компании',
                 footerNews: 'Новости компании',
                 footerContact: 'Связаться с нами',
                 footerAddress: 'Ташкент, Узбекистан',
@@ -3664,7 +3664,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 orders: 'Buyurtmalar',
                 cart: 'Savat',
                 footerAbout: 'Biz haqimizda',
-                footerVacancies: 'Vakansiyalar',
+                footerVacancies: 'Kompaniya haqida',
                 footerNews: 'Kompaniya yangiliklari',
                 footerContact: 'Biz bilan bog‘lanish',
                 footerAddress: 'Toshkent, O‘zbekiston',
@@ -3733,7 +3733,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 orders: 'Orders',
                 cart: 'Cart',
                 footerAbout: 'About us',
-                footerVacancies: 'Careers',
+                footerVacancies: 'About company',
                 footerNews: 'Company news',
                 footerContact: 'Contact us',
                 footerAddress: 'Tashkent, Uzbekistan',
@@ -6666,6 +6666,26 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+<script id="osuz-new-tabs-footer-i18n">
+(() => {
+  const labels = {
+    ru: {orders:'Мои заказы', delivery:'Условия доставки и оплаты', returns:'Правила возврата и обмена товара', faq:'Часто задаваемые вопросы (FAQ)', sell:'Продавать у нас', cabinet:'Личный кабинет продавца', tariffs:'Тарифы и комиссии'},
+    uz: {orders:'Mening buyurtmalarim', delivery:'Yetkazib berish va to‘lov shartlari', returns:'Qaytarish va almashtirish qoidalari', faq:'Ko‘p so‘raladigan savollar (FAQ)', sell:'Bizda soting', cabinet:'Sotuvchi kabineti', tariffs:'Tariflar va komissiyalar'},
+    en: {orders:'My orders', delivery:'Delivery and payment', returns:'Returns and exchanges', faq:'Frequently asked questions (FAQ)', sell:'Sell with us', cabinet:'Seller portal', tariffs:'Plans and commissions'}
+  };
+  const translate=()=>{
+    const lang=localStorage.getItem('osuzLang');
+    const t=labels[lang]||labels.ru;
+    for (const [key,label] of Object.entries(t)) {
+      document.querySelectorAll('[data-osuz-buyer-link="'+key+'"],[data-osuz-extra-footer="'+key+'"]').forEach(el => {el.textContent=label;});
+    }
+  };
+  translate();
+  window.addEventListener('storage',e=>{if(e.key==='osuzLang')translate()});
+  document.addEventListener('click',e=>{if(e.target.closest('[data-lang],.osuz-unified-language-menu, #languageMenu'))queueMicrotask(translate)});
 })();
 </script>
 </body>

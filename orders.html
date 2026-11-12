@@ -963,6 +963,34 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
   #languageBtn > i[data-lucide="chevron-down"] { display:none!important; }
 }
 </style>
+
+<style id="osuz-orders-approved-tabs">
+/* Match the new Orders reference: pill categories at left, white detail canvas on right. */
+.osuz-order-filters{display:grid;gap:12px;margin-bottom:16px}
+.osuz-order-filters button{width:100%;min-height:49px;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#111827;font:800 18px/1.2 Inter,system-ui,sans-serif;box-shadow:0 6px 24px rgba(15,23,42,.045);transition:background .18s,border-color .18s,color .18s;cursor:pointer}
+.osuz-order-filters button:hover{border-color:#07b4c8;background:#ecfcfe}
+.osuz-order-filters button.active{background:#03adc2;color:#fff;border-color:#03adc2;box-shadow:0 7px 14px rgba(3,173,194,.15)}
+#ordersContent.osuz-list-view #ordersListPanel{background:transparent;border:0;box-shadow:none;padding:0}
+#ordersContent.osuz-list-view #ordersListPanel>div:first-of-type{padding:2px 4px 10px}
+#ordersContent.osuz-list-view #orderDetailPanel{border-radius:24px;min-height:520px}
+#ordersList .osuz-orders-filter-empty{text-align:center;color:#64748b;padding:24px 12px;border:1px dashed #cedce7;border-radius:16px;background:rgba(255,255,255,.6);line-height:1.5;font-size:13px}
+body.dark-mode .osuz-order-filters button{background:#172436;color:#e2e8f0;border-color:#3c5266}
+body.dark-mode .osuz-order-filters button.active{background:#02a9be;color:white;border-color:#02a9be}
+body.dark-mode #ordersList .osuz-orders-filter-empty{background:#12202d;color:#b8c8d6;border-color:#355165}
+@media(min-width:768px){
+ #ordersContent.osuz-list-view{display:grid!important;grid-template-columns:250px minmax(0,1fr)!important;gap:28px;align-items:start}
+ #ordersContent.osuz-list-view #ordersListPanel{width:100%;max-width:none;margin:0}
+ #ordersContent.osuz-list-view #orderDetailPanel{display:block!important;min-width:0;max-width:none;width:100%;margin:0;min-height:570px}
+ #ordersContent.osuz-list-view #detailPlaceholder{min-height:570px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+ #ordersContent.osuz-list-view #detailPlaceholder h2{font-size:18px}
+}
+@media(max-width:767px){
+ .osuz-order-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:16px}
+ .osuz-order-filters button{min-height:43px;font-size:13px}
+ #ordersContent.osuz-list-view #orderDetailPanel{display:none!important}
+ #ordersContent.osuz-detail-view #ordersListPanel{display:none!important}
+}
+</style>
 </head>
 <body data-osuz-page="orders" data-osuz-v16-page="orders">
 <header class="fixed top-0 left-0 right-0 z-50">
@@ -1056,6 +1084,12 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
 </div>
 <div class="orders-layout hidden" id="ordersContent">
 <aside class="surface rounded-3xl p-4" id="ordersListPanel">
+<nav class="osuz-order-filters" aria-label="Статус заказов">
+<button type="button" data-orders-filter="active" class="active" aria-pressed="true">Активные</button>
+<button type="button" data-orders-filter="requests" aria-pressed="false">Запросы</button>
+<button type="button" data-orders-filter="cancelled" aria-pressed="false">Отменённые</button>
+<button type="button" data-orders-filter="inactive" aria-pressed="false">Не активные</button>
+</nav>
 <div class="flex items-center justify-between gap-3 px-2 pt-1 pb-4">
 <h2 class="text-lg font-black text-gray-900" id="ordersListTitle">Все заказы</h2>
 <span class="text-xs font-bold text-gray-400" id="ordersCount">0</span>
@@ -1938,11 +1972,37 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             window.scrollTo({ top: 0, behavior: 'auto' });
         }
 
+        let ordersFilter = ['active','requests','cancelled','inactive'].includes(new URLSearchParams(location.search).get('filter')) ? new URLSearchParams(location.search).get('filter') : 'active';
+        const ordersFilters = ['active', 'requests', 'cancelled', 'inactive'];
+        const orderFilterLabels = {
+            ru: { active: 'Активные', requests: 'Запросы', cancelled: 'Отменённые', inactive: 'Не активные', empty: 'В этой категории пока нет заказов' },
+            uz: { active: 'Faol', requests: 'So‘rovlar', cancelled: 'Bekor qilingan', inactive: 'Faol emas', empty: 'Bu bo‘limda hozircha buyurtmalar yo‘q' },
+            en: { active: 'Active', requests: 'Requests', cancelled: 'Cancelled', inactive: 'Inactive', empty: 'No orders in this category yet' }
+        };
+        function orderMatchesFilter(order, filter) {
+            const status = order.status;
+            if (filter === 'requests') return status === 'pending' || (status === 'responded' && !order.deliveryType);
+            if (filter === 'active') return status === 'responded' && Boolean(order.deliveryType);
+            if (filter === 'cancelled') return status === 'cancelled';
+            if (filter === 'inactive') return status === 'completed' || status === 'payment_failed';
+            return true;
+        }
+        function updateOrderFilterControls() {
+            const labels=orderFilterLabels[currentLang] || orderFilterLabels.ru;
+            document.querySelectorAll('[data-orders-filter]').forEach(btn=>{
+                const active=btn.dataset.ordersFilter === ordersFilter;
+                btn.classList.toggle('active',active);
+                btn.setAttribute('aria-pressed',String(active));
+                btn.textContent=labels[btn.dataset.ordersFilter];
+            });
+        }
         function renderOrdersList() {
             const list = document.getElementById('ordersList');
-            document.getElementById('ordersCount').textContent = String(orders.length);
+            const filtered = orders.filter(order => orderMatchesFilter(order,ordersFilter));
+            document.getElementById('ordersCount').textContent = String(filtered.length);
+            updateOrderFilterControls();
 
-            list.innerHTML = orders.map(order => `
+            list.innerHTML = filtered.length ? filtered.map(order => `
                 <button
                     type="button"
                     class="order-row ${Number(order.orderId) === Number(selectedOrderId) ? 'active' : ''}"
@@ -1965,7 +2025,7 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                         ${escapeHTML(formatDate(order.createdAt))}
                     </div>
                 </button>
-            `).join('');
+            `).join('') : `<p class="osuz-orders-filter-empty">${escapeHTML((orderFilterLabels[currentLang] || orderFilterLabels.ru).empty)}</p>`;
 
             list.querySelectorAll('[data-order-id]').forEach(button => {
                 button.addEventListener('click', () => {
@@ -3361,8 +3421,12 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
                 document.getElementById('authRequiredState').classList.add('hidden');
 
                 if (!orders.length) {
-                    document.getElementById('ordersContent').classList.add('hidden');
-                    document.getElementById('emptyState').classList.remove('hidden');
+                    // Keep the new status tabs visible even for an empty account.
+                    selectedOrderId = 0;
+                    document.getElementById('emptyState').classList.add('hidden');
+                    document.getElementById('ordersContent').classList.remove('hidden');
+                    applyOrdersView();
+                    renderOrdersList();
                     return;
                 }
 
@@ -3494,6 +3558,16 @@ body.dark-mode .osuz-lang-floating button.osuz-lang-active,html[data-osuz-theme=
             '',
             location.href
         );
+
+
+        document.querySelectorAll('[data-orders-filter]').forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.ordersFilter;
+                if (!ordersFilters.includes(filter)) return;
+                ordersFilter = filter;
+                renderOrdersList();
+            });
+        });
 
         applyLanguage();
         applyTheme();
